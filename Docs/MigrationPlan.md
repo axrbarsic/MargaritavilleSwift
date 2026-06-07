@@ -29,6 +29,9 @@ verification.
 - Settings reset: native Settings owns a reset-to-defaults action that restores
   the current Swift settings snapshot through `AppSettingsStore`, not by
   manually poking UI controls.
+- Settings navigation: the native Settings screen is split into Appearance,
+  Work, Data, and Developer categories so future parity work can land in focused
+  sections instead of one mixed scroll.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings
@@ -139,6 +142,8 @@ available.
      directly inside row views.
    - Keep reset/default behavior in the settings store so future Settings
      categories can share one authoritative default snapshot.
+   - Keep Settings category navigation in small SwiftUI components; category
+     additions should not inflate the main settings view.
    - Keep background effects behind shared SpriteKit/runtime configuration;
      settings sliders must update the existing effect rather than remounting it.
    - Test on real devices before considering visual effects done.

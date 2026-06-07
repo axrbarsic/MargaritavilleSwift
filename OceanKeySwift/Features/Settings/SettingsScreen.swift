@@ -7,6 +7,7 @@ struct SettingsScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
+    @State private var selectedCategory: SettingsCategory = .appearance
     @State private var isChangelogPresented = false
     @State private var isHistoryPresented = false
     @State private var isResetConfirmationPresented = false
@@ -19,13 +20,11 @@ struct SettingsScreen: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     header
-                    appearanceSection
-                    workSection
-                    backgroundSection
-                    developerSection
-                    storageSection
-                    settingsSection
-                    migrationSection
+                    SettingsCategorySelector(selectedCategory: $selectedCategory)
+                        .onChange(of: selectedCategory) { _, _ in
+                            feedback.tap()
+                        }
+                    selectedCategoryContent
                 }
                 .padding(.horizontal, 18)
                 .padding(.top, 18)
@@ -70,6 +69,23 @@ struct SettingsScreen: View {
                 .foregroundStyle(.white)
                 .lineLimit(1)
                 .minimumScaleFactor(0.74)
+        }
+    }
+
+    @ViewBuilder
+    private var selectedCategoryContent: some View {
+        switch selectedCategory {
+        case .appearance:
+            appearanceSection
+            backgroundSection
+            settingsSection
+        case .workflow:
+            workSection
+        case .data:
+            storageSection
+            migrationSection
+        case .developer:
+            developerSection
         }
     }
 

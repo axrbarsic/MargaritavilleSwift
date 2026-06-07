@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (50)",
+            date: "2026-06-07",
+            changes: [
+                "Settings now uses native category navigation instead of one long mixed scroll.",
+                "Appearance, Work, Data, and Developer settings are separated into focused sections to keep the Swift rewrite ready for more Flutter settings parity.",
+                "Added dedicated SwiftUI category selector components so the Settings screen does not keep growing as one monolithic view."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (49)",
             date: "2026-06-07",
             changes: [

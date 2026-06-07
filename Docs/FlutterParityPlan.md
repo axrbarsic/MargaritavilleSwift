@@ -183,3 +183,6 @@ Simulator unless explicitly allowed.
 - Settings now includes a native reset-to-defaults action with confirmation,
   restoring appearance, workflow, palette, and Matrix settings as one coherent
   settings snapshot.
+- Settings now has native category navigation for Appearance, Work, Data, and
+  Developer areas, matching the product intent of the Flutter categorized
+  settings screen without copying its widget architecture.
