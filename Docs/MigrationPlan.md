@@ -65,6 +65,15 @@ available.
    - Move the production bundle identifier only after the native app is stable
      enough to replace the Flutter app.
 
+## Agent Continuation Rule
+
+The migration is the global goal. A single finished subtask is only a checkpoint,
+not a stopping point. After each coherent build/install/commit checkpoint, the
+agent should continue to the next highest-priority migration gap unless Alex
+explicitly pauses the work or a real external blocker requires his action.
+
+Project-level execution details are captured in `AGENTS.md`.
+
 ## Signing Note
 
 The current Mac has an Apple Development certificate but no local provisioning
