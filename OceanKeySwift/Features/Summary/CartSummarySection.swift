@@ -3,6 +3,7 @@ import SwiftUI
 struct CartSummarySection: View {
     @Binding var cart: CartSection
     @Binding var expandedActionMenuRoomID: RoomCell.ID?
+    let onOpenCartDetails: (CartSection.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onOpenToggle: (RoomCell.ID) -> Void
     let onTaskToggle: (RoomTask, RoomCell.ID) -> Void
@@ -21,6 +22,10 @@ struct CartSummarySection: View {
             .foregroundStyle(.white)
             .padding(.horizontal, 8)
             .padding(.bottom, 3)
+            .contentShape(Rectangle())
+            .onLongPressGesture {
+                onOpenCartDetails(cart.id)
+            }
 
             ForEach($cart.rooms) { $room in
                 RoomCellView(
@@ -48,6 +53,7 @@ struct CartSummarySection: View {
     return CartSummarySection(
         cart: $cart,
         expandedActionMenuRoomID: $expanded,
+        onOpenCartDetails: { _ in },
         onOpenDetails: { _, _ in },
         onOpenToggle: { _ in },
         onTaskToggle: { _, _ in },

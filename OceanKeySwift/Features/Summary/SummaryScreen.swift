@@ -4,6 +4,7 @@ struct SummaryScreen: View {
     @Bindable var workSession: WorkSessionStore
     @State private var expandedActionMenuRoomID: RoomCell.ID?
     @State private var roomDetailsRoute: RoomDetailsRoute?
+    @State private var cartDetailsRoute: CartDetailsRoute?
     @State private var isSettingsPresented = false
 
     var body: some View {
@@ -23,6 +24,10 @@ struct SummaryScreen: View {
                             CartSummarySection(
                                 cart: $cart,
                                 expandedActionMenuRoomID: $expandedActionMenuRoomID,
+                                onOpenCartDetails: { cartID in
+                                    expandedActionMenuRoomID = nil
+                                    cartDetailsRoute = CartDetailsRoute(cartID: cartID)
+                                },
                                 onOpenDetails: { roomID, mode in
                                     expandedActionMenuRoomID = nil
                                     roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
@@ -43,6 +48,10 @@ struct SummaryScreen: View {
         }
         .sheet(item: $roomDetailsRoute) { route in
             RoomDetailsScreen(route: route, workSession: workSession)
+                .preferredColorScheme(.dark)
+        }
+        .sheet(item: $cartDetailsRoute) { route in
+            CartDetailsScreen(route: route, workSession: workSession)
                 .preferredColorScheme(.dark)
         }
         .sheet(isPresented: $isSettingsPresented) {

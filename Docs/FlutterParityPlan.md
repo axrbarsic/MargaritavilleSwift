@@ -60,3 +60,5 @@ Simulator unless explicitly allowed.
   local storage status.
 - Room details text notes and voice-transcript drafts are now domain data and
   persist through the local work-session repository.
+- Long press on a cart header opens a native cart details screen with persistent
+  cart note, consumables placeholder, and media action slots.

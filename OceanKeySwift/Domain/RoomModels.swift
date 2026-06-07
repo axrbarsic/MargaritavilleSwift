@@ -53,6 +53,8 @@ struct CartSection: Codable, Identifiable, Equatable {
     let id: Int
     var building: String
     var rooms: [RoomCell]
+    var note: String?
+    var noteUpdatedAt: Date?
 }
 
 struct RoomTimeline: Codable, Equatable {

@@ -90,6 +90,10 @@ final class WorkSessionStore {
         carts.lazy.flatMap(\.rooms).first { $0.id == roomId }
     }
 
+    func cart(id cartId: CartSection.ID) -> CartSection? {
+        carts.first { $0.id == cartId }
+    }
+
     func updateTextNote(_ text: String, roomId: RoomCell.ID) {
         mutateRoom(roomId) { room in
             let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -104,6 +108,20 @@ final class WorkSessionStore {
             room.voiceTranscript = trimmed.isEmpty ? nil : text
             room.voiceTranscriptUpdatedAt = trimmed.isEmpty ? nil : Date()
         }
+    }
+
+    func updateCartNote(_ text: String, cartId: CartSection.ID) {
+        mutateCart(cartId) { cart in
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            cart.note = trimmed.isEmpty ? nil : text
+            cart.noteUpdatedAt = trimmed.isEmpty ? nil : Date()
+        }
+    }
+
+    private func mutateCart(_ cartId: CartSection.ID, update: (inout CartSection) -> Void) {
+        guard let cartIndex = carts.firstIndex(where: { $0.id == cartId }) else { return }
+        update(&carts[cartIndex])
+        persist()
     }
 
     private func mutateRoom(_ roomId: RoomCell.ID, update: (inout RoomCell) -> Void) {
