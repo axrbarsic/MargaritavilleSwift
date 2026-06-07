@@ -10,9 +10,10 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
-            version: "0.2.0 (15)",
+            version: "0.2.0 (16)",
             date: "2026-06-06",
             changes: [
+                "Added the native first work setup screen for selecting carts, territory, and rooms before opening the summary.",
                 "Added native domain rules for room catalog, cart binding, room selection, duplicate blocking, and workday locking.",
                 "Moved local persistence to a work-session snapshot that stores selection and carts together, with legacy cart-list restore support.",
                 "Aligned core room task invariants: S/L/B require an open room and ready status requires open plus all tasks.",

@@ -21,11 +21,13 @@
 		392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */; };
 		39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC54D512493ADEF1EB26177 /* GameplayKit.framework */; };
 		42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */; };
+		527B878A69C30E46C76091E1 /* WorkSetupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */; };
 		53CE312477D9329530227EB4 /* MediaThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */; };
 		5BEF0B9F1E9F30B6E70FA14F /* WorkSessionSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F7B231FDD457CE44ED5D8 /* WorkSessionSelection.swift */; };
 		630D9BF8C070EDF39CF079C6 /* WorkSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */; };
 		714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */; };
 		7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */; };
+		799665048AEA94BD4F3094DB /* WorkSetupComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */; };
 		7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */; };
 		7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */; };
 		8547E85F7C729B1350CF7C3B /* RoomCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E3CFB6CDA7132DA0EFA9B9 /* RoomCatalog.swift */; };
@@ -61,6 +63,7 @@
 		1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPPulseOverlay.swift; sourceTree = "<group>"; };
 		2997A598AB1E6A8F5F843FE2 /* CartDetailsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsRoute.swift; sourceTree = "<group>"; };
 		2E24D2B3912DAF9638A767BD /* MatrixRainBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainBackground.swift; sourceTree = "<group>"; };
+		34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupScreen.swift; sourceTree = "<group>"; };
 		35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsScreen.swift; sourceTree = "<group>"; };
 		3CC54D512493ADEF1EB26177 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
@@ -72,6 +75,7 @@
 		6FCD901EC6DF0D77D2187C6D /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		723F7B231FDD457CE44ED5D8 /* WorkSessionSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionSelection.swift; sourceTree = "<group>"; };
 		77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
+		7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupComponents.swift; sourceTree = "<group>"; };
 		8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaThumbnailView.swift; sourceTree = "<group>"; };
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
 		868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeySwiftApp.swift; sourceTree = "<group>"; };
@@ -139,6 +143,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		413336AA0FE19306CB5650C1 /* WorkSetup */ = {
+			isa = PBXGroup;
+			children = (
+				7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */,
+				34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */,
+			);
+			path = WorkSetup;
+			sourceTree = "<group>";
+		};
 		4463822596AA3844DBFE4AB1 /* Design */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +195,7 @@
 				50353B0126AC75763D1495BF /* RoomDetails */,
 				F2F23DD9DD0CDA6C3A957425 /* Settings */,
 				DB4465BBE8548B26B6954744 /* Summary */,
+				413336AA0FE19306CB5650C1 /* WorkSetup */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -401,6 +415,8 @@
 				20634D173CAF4424922CA0DB /* WorkSessionSnapshot.swift in Sources */,
 				D044CA9E18FAD578A0FB0238 /* WorkSessionStore+Selection.swift in Sources */,
 				BA7C18EBFE93F08708C52938 /* WorkSessionStore.swift in Sources */,
+				799665048AEA94BD4F3094DB /* WorkSetupComponents.swift in Sources */,
+				527B878A69C30E46C76091E1 /* WorkSetupScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,7 +502,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -545,7 +561,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

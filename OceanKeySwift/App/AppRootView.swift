@@ -6,7 +6,11 @@ struct AppRootView: View {
 
     var body: some View {
         NavigationStack {
-            SummaryScreen(workSession: workSession, appSettings: appSettings)
+            if workSession.selection.workdayLocked {
+                SummaryScreen(workSession: workSession, appSettings: appSettings)
+            } else {
+                WorkSetupScreen(workSession: workSession, appSettings: appSettings)
+            }
         }
         .preferredColorScheme(.dark)
     }
