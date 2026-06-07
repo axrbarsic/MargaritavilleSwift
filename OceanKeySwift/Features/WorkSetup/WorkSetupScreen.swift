@@ -3,6 +3,7 @@ import SwiftUI
 struct WorkSetupScreen: View {
     @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
+    @Bindable var performanceTelemetry: PerformanceTelemetryStore
     @Environment(\.interactionFeedback) private var feedback
 
     @State private var selectedCartNumber = 1
@@ -62,7 +63,11 @@ struct WorkSetupScreen: View {
             .padding(.top, 18)
         }
         .sheet(isPresented: $isSettingsPresented) {
-            SettingsScreen(workSession: workSession, appSettings: appSettings)
+            SettingsScreen(
+                workSession: workSession,
+                appSettings: appSettings,
+                performanceTelemetry: performanceTelemetry
+            )
                 .preferredColorScheme(.dark)
         }
     }
@@ -109,6 +114,10 @@ struct WorkSetupScreen: View {
 }
 
 #Preview {
-    WorkSetupScreen(workSession: .preview(), appSettings: AppSettingsStore())
+    WorkSetupScreen(
+        workSession: .preview(),
+        appSettings: AppSettingsStore(),
+        performanceTelemetry: PerformanceTelemetryStore()
+    )
         .preferredColorScheme(.dark)
 }

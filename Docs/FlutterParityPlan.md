@@ -137,3 +137,6 @@ Simulator unless explicitly allowed.
   main screen.
 - Settings exposes the first native history viewer with timestamped cards and a
   compact visual snapshot preview that highlights the changed room when present.
+- Settings now exposes lightweight live performance telemetry: FPS target,
+  current FPS, recent slow frames, total slow frames, and recent worst frame
+  time.

@@ -4,6 +4,7 @@ import SwiftUI
 struct OceanKeySwiftApp: App {
     @State private var workSession: WorkSessionStore
     @State private var appSettings: AppSettingsStore
+    @State private var performanceTelemetry: PerformanceTelemetryStore
     @State private var didRequestWorkSessionLoad = false
     private let workSessionRepository: SwiftDataWorkSessionRepository
     private let interactionFeedback = InteractionFeedbackService()
@@ -14,13 +15,21 @@ struct OceanKeySwiftApp: App {
         workSessionRepository = repository
         _workSession = State(initialValue: WorkSessionStore.bootstrapping(repository: repository))
         _appSettings = State(initialValue: AppSettingsStore.load())
+        _performanceTelemetry = State(initialValue: PerformanceTelemetryStore())
     }
 
     var body: some Scene {
         WindowGroup {
-            AppRootView(workSession: workSession, appSettings: appSettings)
+            AppRootView(
+                workSession: workSession,
+                appSettings: appSettings,
+                performanceTelemetry: performanceTelemetry
+            )
                 .environment(\.interactionFeedback, .live(interactionFeedback))
                 .environment(\.scheduleNotifications, .live(scheduleNotifications))
+                .onAppear {
+                    performanceTelemetry.start()
+                }
                 .task {
                     await loadWorkSessionIfNeeded()
                 }

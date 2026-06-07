@@ -39,6 +39,9 @@ verification.
 - Startup loading: saved work-session state is fetched off the main thread and
   applied on the main actor, so first render is not blocked by SwiftData or
   legacy JSON IO.
+- Performance telemetry: a lightweight app-wide CADisplayLink sampler tracks
+  current FPS, slow frames, and worst recent frame without invalidating SwiftUI
+  on every display tick.
 - Physical iPhone install is active through the local Apple Development profile
   for `com.alex.oceankey.swift`
 - Project generation: XcodeGen through `project.yml`

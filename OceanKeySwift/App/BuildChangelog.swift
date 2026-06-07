@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (38)",
+            date: "2026-06-07",
+            changes: [
+                "Added a lightweight app-wide performance telemetry store for live FPS and slow-frame tracking.",
+                "Settings now shows the current FPS target, recent slow frames, total slow frames, and worst recent frame time.",
+                "Telemetry updates SwiftUI once per sampling window instead of invalidating screens on every display frame."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (37)",
             date: "2026-06-07",
             changes: [

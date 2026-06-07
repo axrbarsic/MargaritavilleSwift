@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsScreen: View {
     @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
+    @Bindable var performanceTelemetry: PerformanceTelemetryStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
@@ -67,6 +68,13 @@ struct SettingsScreen: View {
             .buttonStyle(.plain)
             SettingsInfoRow(title: "Движок", value: "SpriteKit + SwiftUI", systemName: "sparkles")
             SettingsInfoRow(title: "Цель", value: "Физический iPhone", systemName: "iphone")
+            SettingsInfoRow(title: "FPS", value: performanceFPSLabel, systemName: "speedometer")
+            SettingsInfoRow(title: "Просадки", value: performanceSlowFrameLabel, systemName: "waveform.path.ecg")
+            SettingsInfoRow(title: "Худший кадр", value: performanceWorstFrameLabel, systemName: "timer")
+            Button(action: resetPerformanceCounters) {
+                SettingsInfoRow(title: "Метрики", value: "Сбросить", systemName: "arrow.counterclockwise")
+            }
+            .buttonStyle(.plain)
         }
     }
 
@@ -135,6 +143,19 @@ struct SettingsScreen: View {
         return "Активно"
     }
 
+    private var performanceFPSLabel: String {
+        let currentFPS = performanceTelemetry.currentFPS == 0 ? "..." : "\(performanceTelemetry.currentFPS)"
+        return "\(currentFPS) / \(performanceTelemetry.targetFPS)"
+    }
+
+    private var performanceSlowFrameLabel: String {
+        "\(performanceTelemetry.recentSlowFrames) сейчас, \(performanceTelemetry.totalSlowFrames) всего"
+    }
+
+    private var performanceWorstFrameLabel: String {
+        String(format: "%.1f ms", performanceTelemetry.recentWorstFrameMS)
+    }
+
     private func unlockWorkdayForEditing() {
         feedback.confirm()
         workSession.unlockWorkdayForEditing()
@@ -149,6 +170,11 @@ struct SettingsScreen: View {
     private func openHistory() {
         feedback.tap()
         isHistoryPresented = true
+    }
+
+    private func resetPerformanceCounters() {
+        feedback.confirm()
+        performanceTelemetry.resetCounters()
     }
 }
 
@@ -207,6 +233,10 @@ private struct SettingsInfoRow: View {
 }
 
 #Preview {
-    SettingsScreen(workSession: .preview(), appSettings: AppSettingsStore())
+    SettingsScreen(
+        workSession: .preview(),
+        appSettings: AppSettingsStore(),
+        performanceTelemetry: PerformanceTelemetryStore()
+    )
         .preferredColorScheme(.dark)
 }

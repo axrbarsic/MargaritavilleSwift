@@ -5,6 +5,7 @@ struct SummaryScreen: View {
 
     @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
+    @Bindable var performanceTelemetry: PerformanceTelemetryStore
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.scheduleNotifications) private var scheduleNotifications
     @State private var expandedActionMenuRoomID: RoomCell.ID?
@@ -68,7 +69,11 @@ struct SummaryScreen: View {
                 .preferredColorScheme(.dark)
         }
         .sheet(isPresented: $isSettingsPresented) {
-            SettingsScreen(workSession: workSession, appSettings: appSettings)
+            SettingsScreen(
+                workSession: workSession,
+                appSettings: appSettings,
+                performanceTelemetry: performanceTelemetry
+            )
                 .preferredColorScheme(.dark)
         }
         .onAppear {
@@ -127,5 +132,9 @@ struct SummaryScreen: View {
 }
 
 #Preview {
-    SummaryScreen(workSession: .preview(), appSettings: AppSettingsStore())
+    SummaryScreen(
+        workSession: .preview(),
+        appSettings: AppSettingsStore(),
+        performanceTelemetry: PerformanceTelemetryStore()
+    )
 }
