@@ -3,6 +3,7 @@ import Foundation
 enum RoomDetailsMode: String, Identifiable {
     case text
     case voice
+    case media
 
     var id: String { rawValue }
 
@@ -12,6 +13,8 @@ enum RoomDetailsMode: String, Identifiable {
             "Заметки"
         case .voice:
             "Голосовая"
+        case .media:
+            "Медиа"
         }
     }
 }
@@ -24,4 +27,3 @@ struct RoomDetailsRoute: Identifiable, Equatable {
         "\(roomID)-\(mode.rawValue)"
     }
 }
-

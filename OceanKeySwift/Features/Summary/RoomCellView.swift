@@ -6,6 +6,7 @@ struct RoomCellView: View {
     let onActionMenuToggle: () -> Void
     let onOpenNotes: () -> Void
     let onOpenVoice: () -> Void
+    let onOpenMedia: () -> Void
     let onOpenToggle: () -> Void
     let onTaskToggle: (RoomTask) -> Void
     let onVIPToggle: () -> Void
@@ -20,6 +21,7 @@ struct RoomCellView: View {
                     room: room,
                     onNotes: onOpenNotes,
                     onVoice: onOpenVoice,
+                    onMedia: onOpenMedia,
                     onVIPToggle: onVIPToggle,
                     onScheduleToggle: onScheduleToggle
                 )
@@ -140,6 +142,7 @@ private extension RoomCell {
         onActionMenuToggle: {},
         onOpenNotes: {},
         onOpenVoice: {},
+        onOpenMedia: {},
         onOpenToggle: {},
         onTaskToggle: { _ in },
         onVIPToggle: {},

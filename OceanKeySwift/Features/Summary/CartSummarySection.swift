@@ -36,6 +36,7 @@ struct CartSummarySection: View {
                     },
                     onOpenNotes: { onOpenDetails(room.id, .text) },
                     onOpenVoice: { onOpenDetails(room.id, .voice) },
+                    onOpenMedia: { onOpenDetails(room.id, .media) },
                     onOpenToggle: { onOpenToggle(room.id) },
                     onTaskToggle: { task in onTaskToggle(task, room.id) },
                     onVIPToggle: { onVIPToggle(room.id) },

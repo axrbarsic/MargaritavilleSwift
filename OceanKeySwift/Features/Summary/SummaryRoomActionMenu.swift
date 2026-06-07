@@ -4,6 +4,7 @@ struct SummaryRoomActionMenu: View {
     let room: RoomCell
     let onNotes: () -> Void
     let onVoice: () -> Void
+    let onMedia: () -> Void
     let onVIPToggle: () -> Void
     let onScheduleToggle: () -> Void
 
@@ -28,8 +29,7 @@ struct SummaryRoomActionMenu: View {
                     selected: room.scheduledTime != nil,
                     action: onScheduleToggle
                 )
-                actionButton(systemName: "ellipsis", title: nil, enabled: false, action: {})
-                    .frame(width: 58)
+                actionButton(systemName: "camera.fill", title: "Медиа", action: onMedia)
             }
 
             RoomTimelineStrip(room: room)
@@ -151,4 +151,3 @@ private extension RoomCell {
         return formatter.string(from: scheduledTime)
     }
 }
-

@@ -7,6 +7,8 @@ struct RoomDetailsScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var draftText = ""
     @State private var draftVoiceTranscript = ""
+    @State private var captureKind: MediaKind?
+    @State private var mediaError: String?
 
     var body: some View {
         ZStack {
@@ -27,6 +29,8 @@ struct RoomDetailsScreen: View {
 
                     if route.mode == .voice {
                         voicePlaceholder
+                    } else if route.mode == .media {
+                        mediaSection
                     } else {
                         textEditor(text: $draftText, placeholder: "Текстовая заметка")
                     }
@@ -53,6 +57,14 @@ struct RoomDetailsScreen: View {
         .onChange(of: draftVoiceTranscript) { _, newValue in
             guard route.mode == .voice else { return }
             workSession.updateVoiceTranscript(newValue, roomId: route.roomID)
+        }
+        .fullScreenCover(item: $captureKind) { kind in
+            CameraCaptureView(
+                kind: kind,
+                onCapture: saveCapturedMedia,
+                onCancel: { captureKind = nil }
+            )
+            .ignoresSafeArea()
         }
     }
 
@@ -97,6 +109,56 @@ struct RoomDetailsScreen: View {
         }
     }
 
+    private var mediaSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 10) {
+                mediaAction(systemName: "camera.fill", title: "Фото", kind: .photo)
+                mediaAction(systemName: "video.fill", title: "Видео", kind: .video)
+            }
+
+            if let mediaError {
+                Text(mediaError)
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.pending)
+            }
+
+            if mediaAttachments.isEmpty {
+                Text("Фото и видео сохраняются локально и не синхронизируются.")
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.secondaryText)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(mediaAttachments) { attachment in
+                            MediaThumbnailView(attachment: attachment)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func mediaAction(systemName: String, title: String, kind: MediaKind) -> some View {
+        Button(action: { captureKind = kind }) {
+            VStack(spacing: 8) {
+                Image(systemName: systemName)
+                    .font(.system(size: 26, weight: .black))
+                Text(title)
+                    .font(.system(size: 15, weight: .black, design: .rounded))
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 86)
+            .foregroundStyle(OceanKeyTheme.secondaryText)
+            .background(OceanKeyTheme.accent.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(OceanKeyTheme.accent.opacity(0.20), lineWidth: 1)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
     private func textEditor(text: Binding<String>, placeholder: String) -> some View {
         ZStack(alignment: .topLeading) {
             TextEditor(text: text)
@@ -129,9 +191,31 @@ struct RoomDetailsScreen: View {
         draftVoiceTranscript = room?.voiceTranscript ?? ""
     }
 
+    private var mediaAttachments: [MediaAttachment] {
+        workSession.room(id: route.roomID)?.mediaAttachments ?? []
+    }
+
+    private func saveCapturedMedia(_ capturedMedia: CapturedMedia) {
+        do {
+            let attachment = try LocalMediaFileStore().save(capturedMedia: capturedMedia)
+            workSession.addRoomMedia(attachment, roomId: route.roomID)
+            mediaError = nil
+        } catch {
+            mediaError = error.localizedDescription
+        }
+        captureKind = nil
+    }
+
     private var updatedLabel: String? {
         let room = workSession.room(id: route.roomID)
-        let date = route.mode == .voice ? room?.voiceTranscriptUpdatedAt : room?.textNoteUpdatedAt
+        let date: Date? = switch route.mode {
+        case .text:
+            room?.textNoteUpdatedAt
+        case .voice:
+            room?.voiceTranscriptUpdatedAt
+        case .media:
+            room?.mediaAttachments?.first?.createdAt
+        }
         guard let date else { return nil }
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")

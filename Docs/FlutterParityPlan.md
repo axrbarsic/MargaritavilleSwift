@@ -65,3 +65,5 @@ Simulator unless explicitly allowed.
 - Cart details media can capture local-only photos/videos through the native
   camera bridge, stores files in Application Support, and shows vertical
   thumbnail previews.
+- Room swipe menu now opens the same native local media capture flow for room
+  photo/video attachments.
