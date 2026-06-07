@@ -63,7 +63,9 @@ enum PersistentWorkSessionMapper {
             opened: record.opened,
             completedTasks: taskSet(from: record.completedTaskValues),
             isVIP: record.isVIP,
+            vipUpdatedAt: record.vipUpdatedAt,
             scheduledTime: record.scheduledTime,
+            scheduledUpdatedAt: record.scheduledUpdatedAt,
             timeline: RoomTimeline(
                 selectedAt: record.selectedAt,
                 openedAt: record.openedAt,
@@ -203,7 +205,9 @@ enum PersistentWorkSessionMapper {
                     opened: room.opened,
                     completedTaskValues: taskValues(from: room.completedTasks),
                     isVIP: room.isVIP,
-                    scheduledTime: room.scheduledTime
+                    vipUpdatedAt: room.vipUpdatedAt,
+                    scheduledTime: room.scheduledTime,
+                    scheduledUpdatedAt: room.scheduledUpdatedAt
                 )
                 context.insert(record)
                 existing[room.id] = record
@@ -215,7 +219,9 @@ enum PersistentWorkSessionMapper {
             record.opened = room.opened
             record.completedTaskValues = taskValues(from: room.completedTasks)
             record.isVIP = room.isVIP
+            record.vipUpdatedAt = room.vipUpdatedAt
             record.scheduledTime = room.scheduledTime
+            record.scheduledUpdatedAt = room.scheduledUpdatedAt
             record.selectedAt = room.timeline.selectedAt
             record.openedAt = room.timeline.openedAt
             record.strippedAt = room.timeline.strippedAt

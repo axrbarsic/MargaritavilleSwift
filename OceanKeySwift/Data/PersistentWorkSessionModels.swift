@@ -96,7 +96,9 @@ final class PersistentRoom {
     var opened: Bool
     var completedTaskValues: String
     var isVIP: Bool
+    var vipUpdatedAt: Date?
     var scheduledTime: Date?
+    var scheduledUpdatedAt: Date?
     var selectedAt: Date?
     var openedAt: Date?
     var strippedAt: Date?
@@ -115,7 +117,9 @@ final class PersistentRoom {
         opened: Bool,
         completedTaskValues: String,
         isVIP: Bool,
+        vipUpdatedAt: Date? = nil,
         scheduledTime: Date? = nil,
+        scheduledUpdatedAt: Date? = nil,
         mediaAttachments: [PersistentMediaAttachment] = []
     ) {
         self.roomID = roomID
@@ -123,7 +127,9 @@ final class PersistentRoom {
         self.opened = opened
         self.completedTaskValues = completedTaskValues
         self.isVIP = isVIP
+        self.vipUpdatedAt = vipUpdatedAt
         self.scheduledTime = scheduledTime
+        self.scheduledUpdatedAt = scheduledUpdatedAt
         self.mediaAttachments = mediaAttachments
     }
 }

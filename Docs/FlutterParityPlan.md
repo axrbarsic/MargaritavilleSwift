@@ -140,3 +140,6 @@ Simulator unless explicitly allowed.
 - Settings now exposes lightweight live performance telemetry: FPS target,
   current FPS, recent slow frames, total slow frames, and recent worst frame
   time.
+- Room VIP state and scheduled room time now carry field-level update
+  timestamps and persist them through SwiftData, closing another prerequisite
+  for local-first Apple sync merges.

@@ -21,7 +21,9 @@ struct RoomCell: Codable, Identifiable, Equatable, Sendable {
     var opened: Bool
     var completedTasks: Set<RoomTask>
     var isVIP: Bool
+    var vipUpdatedAt: Date?
     var scheduledTime: Date? = nil
+    var scheduledUpdatedAt: Date?
     var timeline = RoomTimeline()
     var textNote: String?
     var textNoteUpdatedAt: Date?

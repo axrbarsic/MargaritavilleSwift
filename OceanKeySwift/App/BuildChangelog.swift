@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (39)",
+            date: "2026-06-07",
+            changes: [
+                "Added field-level update timestamps for room VIP state and scheduled room time.",
+                "SwiftData now persists those timestamps so future iCloud/CloudKit merges can compare individual room fields instead of whole-session snapshots.",
+                "Added regression tests for VIP/schedule timestamp mutations and SwiftData round-trip persistence."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (38)",
             date: "2026-06-07",
             changes: [

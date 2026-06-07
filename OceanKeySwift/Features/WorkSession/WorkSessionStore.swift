@@ -97,8 +97,9 @@ final class WorkSessionStore {
                 .roomVIPChanged,
                 "\(after.id): VIP \(after.isVIP ? "включен" : "выключен")"
             )
-        }) { room in
+        }) { room, changedAt in
             room.isVIP.toggle()
+            room.vipUpdatedAt = changedAt
         }
     }
 
@@ -109,12 +110,13 @@ final class WorkSessionStore {
                 .roomScheduleChanged,
                 "\(after.id): время \(after.scheduledTime == nil ? "снято" : "установлено")"
             )
-        }) { room in
+        }) { room, changedAt in
             if room.scheduledTime == nil {
-                room.scheduledTime = Calendar.current.date(byAdding: .minute, value: 15, to: Date())
+                room.scheduledTime = Calendar.current.date(byAdding: .minute, value: 15, to: changedAt)
             } else {
                 room.scheduledTime = nil
             }
+            room.scheduledUpdatedAt = changedAt
         }
     }
 
@@ -125,8 +127,9 @@ final class WorkSessionStore {
                 .roomScheduleChanged,
                 "\(after.id): время \(after.scheduledTime == nil ? "снято" : "установлено")"
             )
-        }) { room in
+        }) { room, changedAt in
             room.scheduledTime = scheduledTime
+            room.scheduledUpdatedAt = changedAt
         }
     }
 
@@ -141,6 +144,7 @@ final class WorkSessionStore {
                 guard scheduledTime <= now else { continue }
                 guard !room.opened, room.completedTasks.isEmpty else {
                     room.scheduledTime = nil
+                    room.scheduledUpdatedAt = now
                     carts[cartIndex].rooms[roomIndex] = room
                     didMutate = true
                     continue
@@ -148,6 +152,7 @@ final class WorkSessionStore {
 
                 room.opened = true
                 room.scheduledTime = nil
+                room.scheduledUpdatedAt = now
                 room.timeline.openedAt = room.timeline.openedAt ?? now
                 carts[cartIndex].rooms[roomIndex] = room
                 openedRoomIDs.append(room.id)

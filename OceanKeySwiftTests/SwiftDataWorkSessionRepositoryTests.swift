@@ -53,6 +53,8 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
     let openedAt = Date(timeIntervalSince1970: 1_801_003_600)
     let noteAt = Date(timeIntervalSince1970: 1_801_007_200)
     let mediaAt = Date(timeIntervalSince1970: 1_801_010_800)
+    let vipAt = Date(timeIntervalSince1970: 1_801_012_000)
+    let scheduleAt = Date(timeIntervalSince1970: 1_801_013_000)
     let roomMediaID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
     let cartMediaID = UUID(uuidString: "22222222-2222-2222-2222-222222222222")!
 
@@ -66,7 +68,9 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
                     opened: true,
                     completedTasks: [.stripped],
                     isVIP: true,
+                    vipUpdatedAt: vipAt,
                     scheduledTime: nil,
+                    scheduledUpdatedAt: nil,
                     timeline: RoomTimeline(
                         selectedAt: selectedAt,
                         openedAt: openedAt,
@@ -94,7 +98,9 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
                     opened: false,
                     completedTasks: [],
                     isVIP: false,
+                    vipUpdatedAt: nil,
                     scheduledTime: Date(timeIntervalSince1970: 1_801_014_400),
+                    scheduledUpdatedAt: scheduleAt,
                     timeline: RoomTimeline(selectedAt: selectedAt),
                     textNote: nil,
                     textNoteUpdatedAt: nil,

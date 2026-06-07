@@ -71,7 +71,22 @@ func scheduledRoomOpensAndClearsScheduleWhenDue() {
     #expect(openedRoomIDs == ["401"])
     #expect(room?.opened == true)
     #expect(room?.scheduledTime == nil)
+    #expect(room?.scheduledUpdatedAt != nil)
     #expect(room?.timeline.openedAt != nil)
+}
+
+@Test
+func vipAndScheduleMutationsRecordFieldTimestamps() {
+    let store = WorkSessionStore.preview()
+
+    store.toggleVIP(roomId: "401")
+    store.setSchedule(Date(timeIntervalSinceNow: 900), roomId: "401")
+
+    let room = store.room(id: "401")
+    #expect(room?.isVIP == true)
+    #expect(room?.vipUpdatedAt != nil)
+    #expect(room?.scheduledTime != nil)
+    #expect(room?.scheduledUpdatedAt != nil)
 }
 
 @Test

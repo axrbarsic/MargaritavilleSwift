@@ -42,6 +42,9 @@ verification.
 - Performance telemetry: a lightweight app-wide CADisplayLink sampler tracks
   current FPS, slow frames, and worst recent frame without invalidating SwiftUI
   on every display tick.
+- Sync metadata: room VIP state and scheduled room time now carry field-level
+  update timestamps in domain data and SwiftData persistence, so future
+  CloudKit conflict resolution can merge individual fields.
 - Physical iPhone install is active through the local Apple Development profile
   for `com.alex.oceankey.swift`
 - Project generation: XcodeGen through `project.yml`
