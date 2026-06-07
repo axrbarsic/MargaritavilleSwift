@@ -33,6 +33,21 @@ func swiftDataRepositoryUpdatesExistingGraphWithoutKeepingStaleChildren() throws
     #expect(loaded == updatedSnapshot)
 }
 
+@Test
+func inMemoryCloudKitModeFallsBackToLocalStorage() throws {
+    let repository = try SwiftDataWorkSessionRepository(
+        inMemory: true,
+        syncMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift")
+    )
+    let snapshot = makePersistentTestSnapshot()
+
+    try repository.saveImmediately(snapshot: snapshot)
+
+    #expect(repository.syncMode == .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"))
+    let loaded = try #require(try repository.loadSnapshot())
+    #expect(loaded == snapshot)
+}
+
 private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
     let selectedAt = Date(timeIntervalSince1970: 1_801_000_000)
     let openedAt = Date(timeIntervalSince1970: 1_801_003_600)

@@ -3,7 +3,7 @@ import OSLog
 import SwiftData
 
 final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Sendable {
-    enum SyncMode: Sendable {
+    enum SyncMode: Equatable, Sendable {
         case localOnly
         case privateCloudKit(containerIdentifier: String)
     }
@@ -16,19 +16,22 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     private let container: ModelContainer
     private let writer: SwiftDataWorkSessionWriter
     private let legacyRepository: LocalWorkSessionRepository?
+    let syncMode: SyncMode
 
     init(
-        container: ModelContainer = SwiftDataWorkSessionRepository.makeDefaultContainer(),
+        syncMode: SyncMode = .localOnly,
+        container: ModelContainer? = nil,
         legacyRepository: LocalWorkSessionRepository? = LocalWorkSessionRepository()
     ) {
-        self.container = container
-        self.writer = SwiftDataWorkSessionWriter(container: container)
+        self.syncMode = syncMode
+        self.container = container ?? SwiftDataWorkSessionRepository.makeDefaultContainer(syncMode: syncMode)
+        self.writer = SwiftDataWorkSessionWriter(container: self.container)
         self.legacyRepository = legacyRepository
     }
 
-    convenience init(inMemory: Bool) throws {
-        let container = try SwiftDataWorkSessionRepository.makeContainer(inMemory: inMemory)
-        self.init(container: container, legacyRepository: nil)
+    convenience init(inMemory: Bool, syncMode: SyncMode = .localOnly) throws {
+        let container = try SwiftDataWorkSessionRepository.makeContainer(inMemory: inMemory, syncMode: syncMode)
+        self.init(syncMode: syncMode, container: container, legacyRepository: nil)
     }
 
     func loadSnapshot() throws -> WorkSessionSnapshot? {
@@ -60,16 +63,16 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         return try context.fetch(descriptor).first.map(PersistentWorkSessionMapper.snapshot(from:))
     }
 
-    private static func makeDefaultContainer() -> ModelContainer {
+    private static func makeDefaultContainer(syncMode: SyncMode) -> ModelContainer {
         do {
-            return try makeContainer(inMemory: false)
+            return try makeContainer(inMemory: false, syncMode: syncMode)
         } catch {
             logger.error("Persistent SwiftData container failed, falling back to memory: \(error.localizedDescription, privacy: .public)")
-            return try! makeContainer(inMemory: true)
+            return try! makeContainer(inMemory: true, syncMode: .localOnly)
         }
     }
 
-    private static func makeContainer(inMemory: Bool) throws -> ModelContainer {
+    private static func makeContainer(inMemory: Bool, syncMode: SyncMode) throws -> ModelContainer {
         let schema = Schema([
             PersistentWorkSession.self,
             PersistentCartBinding.self,
@@ -83,9 +86,22 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: inMemory,
-            cloudKitDatabase: .none
+            cloudKitDatabase: cloudKitDatabase(for: syncMode, inMemory: inMemory)
         )
         return try ModelContainer(for: schema, configurations: [configuration])
+    }
+
+    private static func cloudKitDatabase(
+        for syncMode: SyncMode,
+        inMemory: Bool
+    ) -> ModelConfiguration.CloudKitDatabase {
+        guard !inMemory else { return .none }
+        switch syncMode {
+        case .localOnly:
+            return .none
+        case .privateCloudKit(let containerIdentifier):
+            return .private(containerIdentifier)
+        }
     }
 }
 

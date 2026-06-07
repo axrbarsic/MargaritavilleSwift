@@ -45,6 +45,8 @@ be added behind that boundary after the domain model and input flow are stable.
      CloudKit can process related changes in its own order.
    - Current installed builds keep SwiftData explicitly local-only until iCloud
      entitlements/container setup and conflict policy are enabled deliberately.
+   - `SwiftDataWorkSessionRepository.SyncMode` is now the explicit boundary for
+     that future switch; default app construction still uses `.localOnly`.
    - Fallback candidate: direct CloudKit `CKRecord`/custom zones if event log
      ordering and conflict rules need explicit control.
 
@@ -64,4 +66,7 @@ Before implementing CloudKit:
   import existing local JSON without losing current installs.
 - SwiftData schema is CloudKit-ready at the model-shape level, but the active
   store remains local-only until sync is intentionally enabled.
+- The repository can now accept a future private CloudKit container identifier
+  through a sync-mode parameter, while tests keep this path isolated from real
+  iCloud by forcing in-memory storage to local-only.
 - A documented conflict policy exists for two iPhones editing the same workday.
