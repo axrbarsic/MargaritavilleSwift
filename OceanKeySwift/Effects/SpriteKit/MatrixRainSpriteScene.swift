@@ -6,14 +6,24 @@ final class MatrixRainSpriteScene: SKScene, ResizableSpriteScene {
     private var columns: [RainColumn] = []
     private var lastGlyphTick = -1
     private var random = GKLinearCongruentialRandomSource(seed: UInt64(Date().timeIntervalSinceReferenceDate))
+    private var configuration: MatrixRainConfiguration
+
+    init(size: CGSize, configuration: MatrixRainConfiguration = .default) {
+        self.configuration = configuration
+        super.init(size: size)
+        scaleMode = .resizeFill
+        backgroundColor = .black
+    }
 
     override init(size: CGSize) {
+        self.configuration = .default
         super.init(size: size)
         scaleMode = .resizeFill
         backgroundColor = .black
     }
 
     required init?(coder: NSCoder) {
+        self.configuration = .default
         super.init(coder: coder)
         scaleMode = .resizeFill
         backgroundColor = .black
@@ -63,6 +73,11 @@ final class MatrixRainSpriteScene: SKScene, ResizableSpriteScene {
         addChild(veil)
     }
 
+    func apply(configuration: MatrixRainConfiguration) {
+        guard self.configuration != configuration else { return }
+        self.configuration = configuration
+    }
+
     override func update(_ currentTime: TimeInterval) {
         let glyphTick = Int(currentTime * 7)
         let shouldUpdateGlyphs = glyphTick != lastGlyphTick
@@ -79,9 +94,18 @@ final class MatrixRainSpriteScene: SKScene, ResizableSpriteScene {
 
                 let normalizedTrail = CGFloat(row) / CGFloat(max(column.labels.count - 1, 1))
                 let alpha = max(0.04, 0.72 - normalizedTrail * 0.72)
+                let richness = configuration.normalizedColorRichness
+                let green = min(1.0, 0.58 + richness * 0.26)
+                let blue = min(0.68, 0.18 + richness * 0.10)
+                let adjustedAlpha = min(0.96, alpha * (0.72 + richness * 0.32))
                 label.fontColor = row == 0
-                    ? UIColor.white.withAlphaComponent(0.86)
-                    : UIColor(red: 0.0, green: 1.0, blue: 0.36, alpha: alpha)
+                    ? UIColor(
+                        red: min(1.0, 0.64 + richness * 0.18),
+                        green: 1.0,
+                        blue: min(1.0, 0.68 + richness * 0.14),
+                        alpha: min(0.98, 0.70 + richness * 0.12)
+                    )
+                    : UIColor(red: 0.0, green: green, blue: blue, alpha: adjustedAlpha)
 
                 if shouldUpdateGlyphs, row % 3 == glyphTick % 3 {
                     label.text = randomGlyph()
@@ -115,4 +139,3 @@ private extension CGFloat {
         return range.lowerBound + (range.upperBound - range.lowerBound) * value
     }
 }
-

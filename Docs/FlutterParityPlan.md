@@ -54,7 +54,9 @@ Simulator unless explicitly allowed.
   using professional Swift/iOS architecture rather than mirroring Flutter widget
   structure or lifecycle.
 - SpriteKit/GameplayKit effect host exists.
-- Main screen uses a SpriteKit Matrix background.
+- App screens use a single SpriteKit Matrix wallpaper path; the older
+  Canvas/Timeline fallback was removed so live-background work goes through one
+  native runtime.
 - Room cells now use the Flutter status palette.
 - Room cells support open state, S/L/B task toggles, VIP toggle, schedule toggle,
   timeline fields, schedule badge, and a right-swipe action menu.
@@ -165,3 +167,6 @@ Simulator unless explicitly allowed.
 - Native iOS now also declares the ProMotion Info.plist opt-in so supported
   iPhones can request frame rates above the system default; Matrix/SpriteKit
   and telemetry target the device maximum rather than assuming 60 Hz.
+- Settings now has a dedicated app-background section with a persisted Matrix
+  color richness slider. The slider updates the shared SpriteKit scene
+  configuration instead of recreating the wallpaper engine.

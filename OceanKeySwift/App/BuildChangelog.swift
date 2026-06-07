@@ -10,6 +10,16 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (46)",
+            date: "2026-06-07",
+            changes: [
+                "Moved Matrix Rain to a single SpriteKit wallpaper path and removed the old Canvas/Timeline fallback implementation.",
+                "Added a persisted Matrix color richness slider under the new app background settings section.",
+                "Matrix wallpaper settings now flow through a shared environment configuration so all screens update the existing SpriteKit scene without recreating the engine.",
+                "Started the native Settings refactor by moving reusable settings rows, panels, and slider controls into a separate component file."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (45)",
             date: "2026-06-07",
             changes: [

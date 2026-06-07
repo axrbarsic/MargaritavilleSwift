@@ -7,14 +7,21 @@ enum SpriteKitEffectKind {
 
 @MainActor
 struct SpriteKitEffectView: UIViewRepresentable {
-    let effect: SpriteKitEffectKind
+    @Environment(\.matrixRainConfiguration) private var environmentMatrixConfiguration
 
-    init(_ effect: SpriteKitEffectKind) {
+    let effect: SpriteKitEffectKind
+    let matrixConfiguration: MatrixRainConfiguration?
+
+    init(
+        _ effect: SpriteKitEffectKind,
+        matrixConfiguration: MatrixRainConfiguration? = nil
+    ) {
         self.effect = effect
+        self.matrixConfiguration = matrixConfiguration
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(effect: effect)
+        Coordinator(effect: effect, matrixConfiguration: effectiveMatrixConfiguration)
     }
 
     func makeUIView(context: Context) -> EffectSKView {
@@ -29,18 +36,27 @@ struct SpriteKitEffectView: UIViewRepresentable {
     }
 
     func updateUIView(_ view: EffectSKView, context: Context) {
+        context.coordinator.update(matrixConfiguration: effectiveMatrixConfiguration)
         view.resizeScene()
+    }
+
+    private var effectiveMatrixConfiguration: MatrixRainConfiguration {
+        matrixConfiguration ?? environmentMatrixConfiguration
     }
 
     @MainActor
     final class Coordinator {
         let scene: SKScene
 
-        init(effect: SpriteKitEffectKind) {
+        init(effect: SpriteKitEffectKind, matrixConfiguration: MatrixRainConfiguration) {
             switch effect {
             case .matrixRain:
-                scene = MatrixRainSpriteScene(size: .zero)
+                scene = MatrixRainSpriteScene(size: .zero, configuration: matrixConfiguration)
             }
+        }
+
+        func update(matrixConfiguration: MatrixRainConfiguration) {
+            (scene as? MatrixRainSpriteScene)?.apply(configuration: matrixConfiguration)
         }
     }
 }

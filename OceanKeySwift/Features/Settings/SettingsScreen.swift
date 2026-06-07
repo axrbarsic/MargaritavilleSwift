@@ -19,6 +19,7 @@ struct SettingsScreen: View {
                 VStack(alignment: .leading, spacing: 18) {
                     header
                     appearanceSection
+                    backgroundSection
                     developerSection
                     storageSection
                     migrationSection
@@ -110,6 +111,20 @@ struct SettingsScreen: View {
         }
     }
 
+    private var backgroundSection: some View {
+        SettingsPanel(title: "Фон приложения") {
+            SettingsInfoRow(title: "Заставка", value: "Matrix Rain", systemName: "grid")
+            SettingsSliderRow(
+                title: "Сочность",
+                valueLabel: "\(Int((appSettings.matrixColorRichness * 100).rounded()))%",
+                systemName: "paintpalette.fill",
+                range: 0.65...2.40,
+                defaultValue: MatrixRainConfiguration.default.colorRichness,
+                value: $appSettings.matrixColorRichness
+            )
+        }
+    }
+
     private var storageSection: some View {
         SettingsPanel(title: "Локальные данные") {
             SettingsInfoRow(title: "Ячеек", value: "\(workSession.counts.total)", systemName: "rectangle.grid.1x2")
@@ -177,60 +192,6 @@ struct SettingsScreen: View {
     private func resetPerformanceCounters() {
         feedback.confirm()
         performanceTelemetry.resetCounters()
-    }
-}
-
-private struct SettingsPanel<Content: View>: View {
-    let title: String
-    @ViewBuilder let content: Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.system(size: 22, weight: .black, design: .rounded))
-                .foregroundStyle(.white)
-
-            VStack(spacing: 0) {
-                content
-            }
-            .padding(14)
-            .background(OceanKeyTheme.surface.opacity(0.84))
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(OceanKeyTheme.accent.opacity(0.22), lineWidth: 1)
-            }
-        }
-    }
-}
-
-private struct SettingsInfoRow: View {
-    let title: String
-    let value: String
-    let systemName: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: systemName)
-                .font(.system(size: 18, weight: .black))
-                .frame(width: 34, height: 34)
-                .foregroundStyle(OceanKeyTheme.accent)
-                .background(OceanKeyTheme.accent.opacity(0.09))
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-
-            Text(title)
-                .font(.system(size: 17, weight: .black, design: .rounded))
-                .foregroundStyle(.white)
-
-            Spacer(minLength: 12)
-
-            Text(value)
-                .font(.system(size: 15, weight: .bold, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
-        }
-        .frame(minHeight: 48)
     }
 }
 
