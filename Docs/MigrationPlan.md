@@ -21,6 +21,7 @@ verification.
 - Visual effects foundation: SpriteKit + GameplayKit hosted inside SwiftUI
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
+- Notifications: local UserNotifications for due scheduled room openings
 - Project generation: XcodeGen through `project.yml`
 
 The bundle identifier is intentionally different from the existing Flutter app

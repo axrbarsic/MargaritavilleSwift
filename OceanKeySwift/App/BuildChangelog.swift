@@ -10,6 +10,17 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (19)",
+            date: "2026-06-06",
+            changes: [
+                "Replaced the temporary +15 minute schedule toggle with a native time picker for hour, 00/15/30/45 minutes, and AM/PM.",
+                "Scheduled rooms now always render as pink while a schedule is attached, matching the Flutter behavior.",
+                "Scheduled rooms automatically open and clear their schedule when the chosen time is due.",
+                "Added local iOS notifications for scheduled room opening times, including foreground banner presentation.",
+                "Added regression coverage for scheduled status priority, due-time opening, and quarter-hour AM/PM selection."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (18)",
             date: "2026-06-06",
             changes: [

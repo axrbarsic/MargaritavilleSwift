@@ -6,9 +6,11 @@ struct SummaryScreen: View {
     @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
     @Environment(\.interactionFeedback) private var feedback
+    @Environment(\.scheduleNotifications) private var scheduleNotifications
     @State private var expandedActionMenuRoomID: RoomCell.ID?
     @State private var roomDetailsRoute: RoomDetailsRoute?
     @State private var cartDetailsRoute: CartDetailsRoute?
+    @State private var scheduleRoute: RoomScheduleRoute?
     @State private var isSettingsPresented = false
 
     var body: some View {
@@ -38,10 +40,10 @@ struct SummaryScreen: View {
                                     expandedActionMenuRoomID = nil
                                     roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
                                 },
-                                onOpenToggle: workSession.toggleOpen,
+                                onOpenToggle: toggleOpen,
                                 onTaskToggle: workSession.toggleTask,
                                 onVIPToggle: workSession.toggleVIP,
-                                onScheduleToggle: workSession.toggleSchedule
+                                onScheduleToggle: openSchedule
                             )
                         }
                     }
@@ -60,21 +62,61 @@ struct SummaryScreen: View {
             CartDetailsScreen(route: route, workSession: workSession)
                 .preferredColorScheme(.dark)
         }
+        .sheet(item: $scheduleRoute) { route in
+            RoomScheduleSheet(route: route, onSet: setSchedule, onClear: clearSchedule)
+                .preferredColorScheme(.dark)
+        }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsScreen(workSession: workSession, appSettings: appSettings)
                 .preferredColorScheme(.dark)
         }
         .onAppear {
-            workSession.advanceScheduledRooms()
+            advanceScheduledRooms()
         }
         .onReceive(scheduleTimer) { date in
-            workSession.advanceScheduledRooms(now: date)
+            advanceScheduledRooms(now: date)
         }
     }
 
     private func openSettings() {
         feedback.tap()
         isSettingsPresented = true
+    }
+
+    private func toggleOpen(roomID: RoomCell.ID) {
+        let hadSchedule = workSession.room(id: roomID)?.scheduledTime != nil
+        workSession.toggleOpen(roomId: roomID)
+        if hadSchedule, workSession.room(id: roomID)?.scheduledTime == nil {
+            scheduleNotifications.cancelRoom(roomID)
+        }
+    }
+
+    private func openSchedule(roomID: RoomCell.ID) {
+        scheduleRoute = RoomScheduleRoute(
+            roomID: roomID,
+            initialDate: workSession.room(id: roomID)?.scheduledTime
+        )
+    }
+
+    private func setSchedule(roomID: RoomCell.ID, dueAt: Date) {
+        workSession.setSchedule(dueAt, roomId: roomID)
+        if dueAt <= Date() {
+            advanceScheduledRooms()
+        } else {
+            scheduleNotifications.scheduleRoom(roomID, dueAt)
+        }
+    }
+
+    private func clearSchedule(roomID: RoomCell.ID) {
+        workSession.setSchedule(nil, roomId: roomID)
+        scheduleNotifications.cancelRoom(roomID)
+    }
+
+    private func advanceScheduledRooms(now: Date = Date()) {
+        let openedRoomIDs = workSession.advanceScheduledRooms(now: now)
+        for roomID in openedRoomIDs {
+            scheduleNotifications.cancelRoom(roomID)
+        }
     }
 }
 

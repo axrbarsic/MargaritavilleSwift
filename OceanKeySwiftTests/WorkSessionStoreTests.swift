@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 @testable import OceanKeySwift
 
 @Test
@@ -35,6 +36,55 @@ func readyStatusRequiresOpenRoom() {
 
     #expect(room.isReady == false)
     #expect(room.status == .inProgress)
+}
+
+@Test
+func scheduledStatusOverridesCurrentRoomWork() {
+    let room = RoomCell(
+        id: "999",
+        opened: true,
+        completedTasks: Set(RoomTask.allCases),
+        isVIP: false,
+        scheduledTime: Date()
+    )
+
+    #expect(room.status == .scheduled)
+}
+
+@Test
+func scheduledRoomOpensAndClearsScheduleWhenDue() {
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "B5",
+                rooms: [RoomCell(id: "401", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ]
+    )
+    let dueAt = Date(timeIntervalSinceNow: -60)
+    store.setSchedule(dueAt, roomId: "401")
+
+    let openedRoomIDs = store.advanceScheduledRooms(now: Date())
+
+    let room = store.room(id: "401")
+    #expect(openedRoomIDs == ["401"])
+    #expect(room?.opened == true)
+    #expect(room?.scheduledTime == nil)
+    #expect(room?.timeline.openedAt != nil)
+}
+
+@Test
+func roomScheduleSelectionUsesQuarterHourAndPeriod() {
+    let calendar = Calendar(identifier: .gregorian)
+    let date = calendar.date(from: DateComponents(year: 2026, month: 6, day: 6, hour: 13, minute: 31))!
+
+    let selection = RoomScheduleSelection(date: date, calendar: calendar)
+
+    #expect(selection.hour == 1)
+    #expect(selection.minute == 30)
+    #expect(selection.period == .pm)
+    #expect(selection.displayLabel == "1:30 PM")
 }
 
 @Test

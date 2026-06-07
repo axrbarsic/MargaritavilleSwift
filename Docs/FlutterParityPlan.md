@@ -92,5 +92,8 @@ Simulator unless explicitly allowed.
 - Native interaction feedback now mirrors the Flutter foundation: UIKit haptics,
   bundled click/pressed WAV sounds, ambient mixed audio, protected long-press
   room controls by default, and clean haptic feedback for right-swipe menus.
+- Room scheduling now uses a native hour/minute/AM-PM sheet with 15-minute
+  increments, pink schedule status priority, automatic due-time opening, and
+  local iOS notifications.
 - Sync direction is Apple-first for the native rewrite. Firebase should not be
   used as the architecture reference for Swift sync.

@@ -91,6 +91,12 @@ final class WorkSessionStore {
         }
     }
 
+    func setSchedule(_ scheduledTime: Date?, roomId: RoomCell.ID) {
+        mutateRoom(roomId) { room in
+            room.scheduledTime = scheduledTime
+        }
+    }
+
     @discardableResult
     func advanceScheduledRooms(now: Date = Date()) -> [RoomCell.ID] {
         var openedRoomIDs: [RoomCell.ID] = []

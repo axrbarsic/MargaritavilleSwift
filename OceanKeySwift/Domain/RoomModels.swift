@@ -38,7 +38,7 @@ struct RoomCell: Codable, Identifiable, Equatable {
     }
 
     var status: RoomStatus {
-        if scheduledTime != nil, !opened, completedTasks.isEmpty {
+        if scheduledTime != nil {
             return .scheduled
         }
         if isReady {
