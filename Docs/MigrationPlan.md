@@ -45,6 +45,9 @@ verification.
 - ProMotion readiness: the app opts out of the iPhone minimum-frame-duration
   cap and requests the physical display's maximum cadence for SpriteKit and
   telemetry, with 120 Hz as the supported-device target.
+- Settings surfaces runtime diagnostics for ProMotion opt-in and Apple sync
+  readiness, so device builds expose whether these platform capabilities are
+  active or blocked.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

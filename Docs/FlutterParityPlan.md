@@ -143,6 +143,9 @@ Simulator unless explicitly allowed.
 - Settings now exposes lightweight live performance telemetry: FPS target,
   current FPS, recent slow frames, total slow frames, and recent worst frame
   time.
+- Settings now also exposes runtime diagnostics for ProMotion opt-in and the
+  current Apple sync state, so installed builds show whether 120 Hz and iCloud
+  are actually active rather than implied.
 - Room VIP state and scheduled room time now carry field-level update
   timestamps and persist them through SwiftData, closing another prerequisite
   for local-first Apple sync merges.

@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (45)",
+            date: "2026-06-07",
+            changes: [
+                "Settings now shows a real ProMotion diagnostic row based on the installed app's Info.plist opt-in and the physical display's maximum refresh rate.",
+                "Settings now shows the current Apple sync state as local-only while the iCloud provisioning profile is not ready.",
+                "Added regression tests for the runtime diagnostics label so 120 Hz status is not just hardcoded UI text."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (44)",
             date: "2026-06-07",
             changes: [

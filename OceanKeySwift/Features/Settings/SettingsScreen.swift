@@ -68,6 +68,7 @@ struct SettingsScreen: View {
             .buttonStyle(.plain)
             SettingsInfoRow(title: "Движок", value: "SpriteKit + SwiftUI", systemName: "sparkles")
             SettingsInfoRow(title: "Цель", value: "Физический iPhone", systemName: "iphone")
+            SettingsInfoRow(title: "ProMotion", value: RuntimeDiagnostics.currentProMotionStatusLabel(), systemName: "display")
             SettingsInfoRow(title: "FPS", value: performanceFPSLabel, systemName: "speedometer")
             SettingsInfoRow(title: "Просадки", value: performanceSlowFrameLabel, systemName: "waveform.path.ecg")
             SettingsInfoRow(title: "Худший кадр", value: performanceWorstFrameLabel, systemName: "timer")
@@ -118,6 +119,7 @@ struct SettingsScreen: View {
             }
             .buttonStyle(.plain)
             SettingsInfoRow(title: "Хранилище", value: persistenceStatus, systemName: "externaldrive.fill")
+            SettingsInfoRow(title: "iCloud", value: RuntimeDiagnostics.appleSyncStatusLabel, systemName: "icloud.slash.fill")
             if workSession.selection.workdayLocked {
                 Button(action: unlockWorkdayForEditing) {
                     SettingsInfoRow(title: "Рабочий список", value: "Редактировать", systemName: "square.and.pencil")
