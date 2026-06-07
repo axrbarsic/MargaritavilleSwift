@@ -10,6 +10,24 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (29)",
+            date: "2026-06-06",
+            changes: [
+                "Removed debug traps from interaction sound setup so optional click audio cannot crash the app.",
+                "Voice recording start and stop now use haptic-only feedback to avoid competing with the microphone audio session.",
+                "Kept build 28's Apple-style Speech recording session and voice recorder diagnostics."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (28)",
+            date: "2026-06-06",
+            changes: [
+                "Aligned live speech startup with Apple's documented AVAudioSession record/measurement pattern.",
+                "Removed interaction sound playback from the voice record button so AVAudioPlayer no longer races Speech startup.",
+                "Added structured voice-recorder runtime logs for start, stop, finish, and failure diagnosis."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (27)",
             date: "2026-06-06",
             changes: [

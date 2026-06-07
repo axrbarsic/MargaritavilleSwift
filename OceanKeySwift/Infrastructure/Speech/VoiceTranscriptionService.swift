@@ -1,4 +1,5 @@
 import AVFoundation
+import OSLog
 import Speech
 
 private enum VoiceTranscriptionError: LocalizedError {
@@ -36,6 +37,8 @@ private func requestMicrophonePermission() async -> Bool {
 
 @MainActor
 final class VoiceTranscriptionService: VoiceTranscriptionServicing {
+    private static let logger = Logger(subsystem: "com.alex.oceankey.swift", category: "VoiceTranscription")
+
     private let recognizer: SFSpeechRecognizer?
     private var audioEngine: AVAudioEngine?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -76,6 +79,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         hasDeliveredTranscript = false
 
         phase = .requestingPermission
+        Self.logger.info("voice.start permission")
         onStatus("Проверяю доступ...")
 
         let speechAllowed = await requestSpeechRecognitionPermission()
@@ -102,6 +106,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         }
 
         phase = .starting
+        Self.logger.info("voice.start audio")
         onStatus("Запускаю микрофон...")
 
         let engine = AVAudioEngine()
@@ -127,8 +132,10 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
             try engine.start()
             guard isCurrentSession(sessionID) else { return }
             phase = .recording
+            Self.logger.info("voice.recording")
             onStatus("Слушаю...")
         } catch {
+            Self.logger.error("voice.start.failed \(error.localizedDescription, privacy: .public)")
             fail("Ошибка микрофона: \(error.localizedDescription)")
         }
     }
@@ -136,6 +143,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     func stop() {
         guard phase == .recording || phase == .starting else { return }
         phase = .finishing
+        Self.logger.info("voice.stop")
         onStatus?("Завершаю расшифровку...")
         audioPipe?.finishAudio()
         stopAudioEngine()
@@ -195,11 +203,13 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         cleanupTask = nil
         cleanupExistingSession(cancelTask: cancelTask)
         phase = .idle
+        Self.logger.info("voice.finish \(status, privacy: .public)")
         onStatus?(status)
         restoreInteractionAudioSession()
     }
 
     private func fail(_ message: String) {
+        Self.logger.error("voice.fail \(message, privacy: .public)")
         cleanupExistingSession(cancelTask: true)
         phase = .failed(message)
         onStatus?(message)
@@ -229,9 +239,9 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     private func configureRecordingSession() throws {
         let session = AVAudioSession.sharedInstance()
         try session.setCategory(
-            .playAndRecord,
+            .record,
             mode: .measurement,
-            options: [.allowBluetoothHFP, .defaultToSpeaker, .mixWithOthers]
+            options: []
         )
         try session.setActive(true)
     }

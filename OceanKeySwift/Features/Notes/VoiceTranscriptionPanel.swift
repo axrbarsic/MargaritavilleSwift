@@ -56,9 +56,9 @@ struct VoiceTranscriptionPanel: View {
 
     private func toggleRecording() {
         if viewModel.isRecording {
-            feedback.confirm()
+            feedback.tap()
         } else {
-            feedback.longPress()
+            feedback.holdStart()
         }
         viewModel.toggle(transcript: transcript) { newTranscript in
             transcript = newTranscript

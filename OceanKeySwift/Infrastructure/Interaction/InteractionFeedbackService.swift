@@ -1,4 +1,5 @@
 import AVFoundation
+import OSLog
 import SwiftUI
 import UIKit
 
@@ -108,6 +109,8 @@ final class InteractionFeedbackService {
 }
 
 private final class InteractionSoundPlayer {
+    private static let logger = Logger(subsystem: "com.alex.oceankey.swift", category: "InteractionSound")
+
     private var selectPlayer: AVAudioPlayer?
     private var deselectPlayer: AVAudioPlayer?
 
@@ -133,7 +136,7 @@ private final class InteractionSoundPlayer {
                 options: [.mixWithOthers]
             )
         } catch {
-            assertionFailure("Failed to configure OceanKey interaction audio: \(error)")
+            Self.logger.error("Failed to configure interaction audio: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -147,7 +150,7 @@ private final class InteractionSoundPlayer {
             player.prepareToPlay()
             return player
         } catch {
-            assertionFailure("Failed to load OceanKey interaction sound \(resource): \(error)")
+            Self.logger.error("Failed to load interaction sound \(resource, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }
