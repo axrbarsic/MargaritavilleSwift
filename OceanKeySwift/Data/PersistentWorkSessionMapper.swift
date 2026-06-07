@@ -9,6 +9,7 @@ enum PersistentWorkSessionMapper {
             carts: (session.carts ?? [])
                 .sorted { $0.displayOrder < $1.displayOrder }
                 .map(cart(from:)),
+            history: history(from: session.historyEntries ?? []),
             updatedAt: session.updatedAt
         )
     }
@@ -24,6 +25,7 @@ enum PersistentWorkSessionMapper {
         syncCartBindings(snapshot.selection.cartBindings, session: session, context: context)
         syncRoomSelections(snapshot.selection.cartRoomSelections, session: session, context: context)
         syncCarts(snapshot.carts, session: session, context: context)
+        try syncHistory(snapshot.history, session: session, context: context)
     }
 
     private static func selection(from session: PersistentWorkSession) -> WorkSessionSelectionState {

@@ -76,7 +76,8 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
             PersistentRoomSelection.self,
             PersistentCart.self,
             PersistentRoom.self,
-            PersistentMediaAttachment.self
+            PersistentMediaAttachment.self,
+            PersistentHistoryEntry.self
         ])
         let configuration = ModelConfiguration(
             schema: schema,

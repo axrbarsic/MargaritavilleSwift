@@ -143,3 +143,25 @@ func lockedWorkdayIgnoresSelectionEdits() {
     #expect(selection.toggleRoom(cartNumber: 7, room: "304") == .ignored)
     #expect(!selection.rooms(forCart: 7).contains("304"))
 }
+
+@Test
+func roomMutationsRecordVisualHistorySnapshots() {
+    let store = WorkSessionStore.preview()
+
+    store.toggleOpen(roomId: "401")
+
+    let entry = store.history.first
+    #expect(entry?.kind == .roomOpened)
+    #expect(entry?.roomID == "401")
+    #expect(entry?.snapshot.carts.flatMap(\.rooms).first { $0.id == "401" }?.opened == true)
+}
+
+@Test
+func ignoredRoomMutationDoesNotRecordHistory() {
+    let store = WorkSessionStore.preview()
+    let beforeCount = store.history.count
+
+    store.toggleTask(.stripped, roomId: "401")
+
+    #expect(store.history.count == beforeCount)
+}

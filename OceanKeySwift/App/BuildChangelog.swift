@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (33)",
+            date: "2026-06-07",
+            changes: [
+                "Added the native work-session event history foundation: room, cart, selection, schedule, note, media, VIP, and automatic scheduled-open changes now create timestamped history entries.",
+                "Each history entry stores a lightweight visual snapshot of the main screen state so the future history UI can preview what the room grid looked like at that moment.",
+                "Persisted history through SwiftData as separate records instead of returning to full JSON snapshot rewrites."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (32)",
             date: "2026-06-07",
             changes: [

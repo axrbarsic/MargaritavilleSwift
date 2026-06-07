@@ -129,3 +129,7 @@ Simulator unless explicitly allowed.
 - The SwiftData persistence schema is shaped for future CloudKit compatibility,
   while the installed app remains local-only until iCloud sync is intentionally
   enabled.
+- Native global history foundation is in place: meaningful room, cart,
+  selection, schedule, VIP, note, media, and automatic scheduled-open changes
+  create timestamped history entries with lightweight visual snapshots of the
+  main screen. The browsing/preview UI is still a later parity step.

@@ -12,6 +12,7 @@ final class PersistentWorkSession {
     @Relationship(deleteRule: .cascade) var cartBindings: [PersistentCartBinding]?
     @Relationship(deleteRule: .cascade) var roomSelections: [PersistentRoomSelection]?
     @Relationship(deleteRule: .cascade) var carts: [PersistentCart]?
+    @Relationship(deleteRule: .cascade) var historyEntries: [PersistentHistoryEntry]?
 
     init(
         id: String = PersistentWorkSession.currentID,
@@ -20,7 +21,8 @@ final class PersistentWorkSession {
         workdayLocked: Bool = false,
         cartBindings: [PersistentCartBinding] = [],
         roomSelections: [PersistentRoomSelection] = [],
-        carts: [PersistentCart] = []
+        carts: [PersistentCart] = [],
+        historyEntries: [PersistentHistoryEntry] = []
     ) {
         self.id = id
         self.schemaVersion = schemaVersion
@@ -29,6 +31,7 @@ final class PersistentWorkSession {
         self.cartBindings = cartBindings
         self.roomSelections = roomSelections
         self.carts = carts
+        self.historyEntries = historyEntries
     }
 }
 
@@ -144,6 +147,38 @@ final class PersistentMediaAttachment {
         self.relativePath = relativePath
         self.createdAt = createdAt
         self.completedAt = completedAt
+        self.displayOrder = displayOrder
+    }
+}
+
+@Model
+final class PersistentHistoryEntry {
+    var eventID: UUID
+    var happenedAt: Date
+    var kindRawValue: String
+    var title: String
+    var roomID: String?
+    var cartID: Int?
+    var snapshotData: Data
+    var displayOrder: Int
+
+    init(
+        eventID: UUID,
+        happenedAt: Date,
+        kindRawValue: String,
+        title: String,
+        roomID: String?,
+        cartID: Int?,
+        snapshotData: Data,
+        displayOrder: Int
+    ) {
+        self.eventID = eventID
+        self.happenedAt = happenedAt
+        self.kindRawValue = kindRawValue
+        self.title = title
+        self.roomID = roomID
+        self.cartID = cartID
+        self.snapshotData = snapshotData
         self.displayOrder = displayOrder
     }
 }

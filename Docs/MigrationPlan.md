@@ -28,6 +28,9 @@ verification.
   path.
 - Local persistence: SwiftData is the default local-first work-session store;
   legacy JSON exists only as an import/fallback path for older installs.
+- Event history: room/cart/selection/status/note/media/schedule changes append
+  timestamped domain history entries. Each entry carries a lightweight visual
+  snapshot of the main screen state for future history preview UI.
 - iCloud readiness: the SwiftData persistence schema avoids local-only
   assumptions that would block CloudKit later; the active store remains
   explicitly local-only until sync is enabled as a separate infrastructure
@@ -68,6 +71,8 @@ available.
    - Keep SwiftData as the native local repository and source of truth.
    - Store room state, milestone timestamps, notes, cart notes, and local media
      metadata.
+   - Store work-session history as append-style SwiftData records with visual
+     main-screen snapshots, not as a replacement full JSON rewrite loop.
    - Keep legacy JSON reads only for upgrade/fallback compatibility.
    - Keep media files local by default.
 

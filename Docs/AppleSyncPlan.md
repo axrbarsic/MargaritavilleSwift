@@ -49,7 +49,8 @@ be added behind that boundary after the domain model and input flow are stable.
      ordering and conflict rules need explicit control.
 
 4. Sync only lightweight domain data.
-   - Room/cart state, timestamps, notes, settings, snapshots.
+   - Room/cart state, timestamps, notes, settings, history entries, visual
+     snapshots.
    - Local-only media files unless a later product decision changes this.
 
 ## Readiness Gate
