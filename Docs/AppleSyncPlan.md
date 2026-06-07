@@ -47,6 +47,8 @@ be added behind that boundary after the domain model and input flow are stable.
      entitlements/container setup and conflict policy are enabled deliberately.
    - `SwiftDataWorkSessionRepository.SyncMode` is now the explicit boundary for
      that future switch; default app construction still uses `.localOnly`.
+   - Merge/conflict rules are tracked in `Docs/AppleSyncConflictPolicy.md` and
+     must be treated as the contract before enabling real iCloud sync.
    - Fallback candidate: direct CloudKit `CKRecord`/custom zones if event log
      ordering and conflict rules need explicit control.
 
@@ -69,4 +71,4 @@ Before implementing CloudKit:
 - The repository can now accept a future private CloudKit container identifier
   through a sync-mode parameter, while tests keep this path isolated from real
   iCloud by forcing in-memory storage to local-only.
-- A documented conflict policy exists for two iPhones editing the same workday.
+- `Docs/AppleSyncConflictPolicy.md` documents the two-iPhone conflict policy.
