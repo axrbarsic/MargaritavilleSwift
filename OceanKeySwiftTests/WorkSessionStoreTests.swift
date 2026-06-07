@@ -218,3 +218,15 @@ func cartConsumableQuantityAndCompletionRecordHistory() {
     #expect(item?.completedAt != nil)
     #expect(store.history.first?.kind == .cartConsumablesChanged)
 }
+
+@Test
+func cartCustomConsumableIsStoredWithHistory() {
+    let store = WorkSessionStore.preview()
+
+    store.addCartConsumable(title: "Extra towels", quantity: 2, cartId: 7)
+
+    let item = store.cart(id: 7)?.consumables?.first { $0.title == "Extra towels" }
+    #expect(item?.quantity == 2)
+    #expect(item?.id.hasPrefix("custom_") == true)
+    #expect(store.history.first?.kind == .cartConsumablesChanged)
+}

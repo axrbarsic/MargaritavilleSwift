@@ -195,3 +195,9 @@ Simulator unless explicitly allowed.
 - Native Matrix rendering keeps that visual contract but uses SpriteKit-native
   cached glyph textures and bottom-left scene coordinate mapping, not a literal
   Flutter painter port.
+- Video wallpaper is now native iOS: Settings can import one local video,
+  persist it in Application Support, and render it as a muted loop through
+  `AVQueuePlayer`/`AVPlayerLooper` with a matte blur control.
+- Cart consumables now support custom per-cart rows on top of the default
+  towel/linen catalog, with quantity, completion state, timestamps, history,
+  and SwiftData persistence.

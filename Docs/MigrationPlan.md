@@ -40,6 +40,9 @@ verification.
 - Matrix implementation is native SpriteKit: cached glyph textures, async
   `SKView`, no live text-node layout loop, and explicit Canvas-to-SpriteKit
   coordinate mapping so the rain falls top-to-bottom.
+- Video wallpaper uses native AVFoundation rather than a SwiftUI video player:
+  imported local video files are rendered by `AVQueuePlayer` and
+  `AVPlayerLooper`, with a system blur/material layer for matte intensity.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings
@@ -49,6 +52,9 @@ verification.
   path.
 - Local persistence: SwiftData is the default local-first work-session store;
   legacy JSON exists only as an import/fallback path for older installs.
+- Cart consumables include the default towel/linen catalog plus custom cart
+  rows; quantities, completion timestamps, and custom rows persist with the
+  cart graph.
 - Event history: room/cart/selection/status/note/media/schedule changes append
   timestamped domain history entries. Each entry carries a lightweight visual
   snapshot of the main screen state, and Settings can already open a compact

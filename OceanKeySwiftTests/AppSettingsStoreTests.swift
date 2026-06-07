@@ -32,6 +32,24 @@ func appSettingsPersistsBackgroundMode() {
 }
 
 @Test
+func appSettingsPersistsBackgroundVideoSettings() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.appBackgroundMode = .video
+    settings.backgroundVideoRelativePath = "Background/video-wallpaper.mov"
+    settings.backgroundVideoBlur = 0.64
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.appBackgroundMode == .video)
+    #expect(loaded.backgroundVideoRelativePath == "Background/video-wallpaper.mov")
+    #expect(loaded.backgroundVideoBlur == 0.64)
+}
+
+@Test
 func appSettingsClampsMatrixSpeed() {
     let settings = AppSettingsStore(matrixSpeed: 9)
     let low = AppSettingsStore(matrixSpeed: 0)
@@ -90,6 +108,8 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.summaryActionMenuAllowsMultiple = true
     settings.statusPaletteSaturation = 1.52
     settings.matrixSpeed = 2.2
+    settings.backgroundVideoRelativePath = "Background/video-wallpaper.mov"
+    settings.backgroundVideoBlur = 0.7
 
     settings.resetToDefaults()
     let loaded = AppSettingsStore.load(userDefaults: defaults)
@@ -100,4 +120,6 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(!loaded.summaryActionMenuAllowsMultiple)
     #expect(loaded.statusPaletteSaturation == 1)
     #expect(loaded.matrixSpeed == MatrixRainConfiguration.default.speed)
+    #expect(loaded.backgroundVideoRelativePath == nil)
+    #expect(loaded.backgroundVideoBlur == 0.28)
 }

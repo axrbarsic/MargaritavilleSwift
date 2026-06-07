@@ -24,6 +24,8 @@ enum CartConsumableCatalog {
 
     static func merged(with storedItems: [CartConsumableItem]?) -> [CartConsumableItem] {
         let storedByID = Dictionary(uniqueKeysWithValues: (storedItems ?? []).map { ($0.id, $0) })
-        return defaults.map { storedByID[$0.id] ?? $0 }
+        let defaultIDs = Set(defaults.map(\.id))
+        let customItems = (storedItems ?? []).filter { !defaultIDs.contains($0.id) }
+        return defaults.map { storedByID[$0.id] ?? $0 } + customItems
     }
 }

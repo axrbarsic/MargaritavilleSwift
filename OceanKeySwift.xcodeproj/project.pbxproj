@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		016D66D8398F0E9CF45B3217 /* RuntimeDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D221253E9DCEF3666178BF1F /* RuntimeDiagnostics.swift */; };
+		043A1D13C4D3931888D1815E /* AppBackgroundVideoEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */; };
 		094272BBB8350642EA68BD69 /* SummaryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */; };
 		09D30B3BED384CE9D99707EA /* AppBuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */; };
 		0DB493EF3021829B88BE5682 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */; };
@@ -31,6 +32,7 @@
 		3886B379568EF546F95B3A4B /* WorkSessionStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE907719B6B3BAB75721FA29 /* WorkSessionStore+Persistence.swift */; };
 		392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */; };
 		39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC54D512493ADEF1EB26177 /* GameplayKit.framework */; };
+		39D81BCD68AFEF090FCC1D4E /* LoopingVideoBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067B3DBCAB2B48683F38F685 /* LoopingVideoBackgroundView.swift */; };
 		4090C45733427419BF97E219 /* CartConsumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF2871D52FD44F8399FAEB1 /* CartConsumables.swift */; };
 		42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */; };
 		4618198B48949C4576C5DBF7 /* InteractionFeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5680F4D3B4245E31F8AB215 /* InteractionFeedbackService.swift */; };
@@ -56,6 +58,7 @@
 		856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */; };
 		8623867BDD224CD95F47BBF2 /* SettingsControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88F4E1B0F391C1E8C9C2F6C /* SettingsControls.swift */; };
 		87852D01D8D77739E19E6738 /* AppSettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CFB1546F72B1749BEB27E7 /* AppSettingsStoreTests.swift */; };
+		8F5523652C530ACE93B68B17 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */; };
 		90E670E6CFD78A670C422204 /* MatrixRainConfigurationEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AA7911C61D036B30E2BEF6 /* MatrixRainConfigurationEnvironment.swift */; };
 		93D0CE8735DD6EAA67CEB78D /* BuildChangelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608321B44757C987209F2A54 /* BuildChangelog.swift */; };
 		9723FE9E9B7A04E31BE1260B /* RoomScheduleSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55CBE9F99AD8814E390BE3C /* RoomScheduleSheet.swift */; };
@@ -81,6 +84,7 @@
 		DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1576751457D918F28F73179E /* VoiceNoteViewModel.swift */; };
 		E239F137FD94F82D7BB15630 /* VoiceTranscriptionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */; };
 		E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */; };
+		E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
 		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
 		F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */; };
@@ -107,6 +111,7 @@
 		00A45905838B30EDFC18C397 /* PerformanceTelemetryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTelemetryStoreTests.swift; sourceTree = "<group>"; };
 		01619659028AB1BB43A6C515 /* WorkSessionStore+Consumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Consumables.swift"; sourceTree = "<group>"; };
 		0655DECA8F86F1748E5A8A9B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
+		067B3DBCAB2B48683F38F685 /* LoopingVideoBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoBackgroundView.swift; sourceTree = "<group>"; };
 		0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModels.swift; sourceTree = "<group>"; };
 		0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
 		0D340AE2F35A8796533E0460 /* SummaryActionMenuExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansion.swift; sourceTree = "<group>"; };
@@ -124,6 +129,7 @@
 		35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsScreen.swift; sourceTree = "<group>"; };
 		35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepository.swift; sourceTree = "<group>"; };
 		3A66CA79C454C0F64B64E853 /* OceanKeySwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OceanKeySwift.entitlements; sourceTree = "<group>"; };
+		3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundVideoEnvironment.swift; sourceTree = "<group>"; };
 		3CC54D512493ADEF1EB26177 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		435A89956E097B59C6894F7B /* WorkSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStore.swift; sourceTree = "<group>"; };
 		449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
@@ -151,6 +157,7 @@
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
 		868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeySwiftApp.swift; sourceTree = "<group>"; };
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
+		8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellGeometry.swift; sourceTree = "<group>"; };
 		A07FDDB084B7AAC0AC13CF80 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		A0AA7911C61D036B30E2BEF6 /* MatrixRainConfigurationEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfigurationEnvironment.swift; sourceTree = "<group>"; };
@@ -171,6 +178,7 @@
 		BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		BCAF8BEA469DB858BD47A0D4 /* OceanKeySwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OceanKeySwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
+		C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
 		C831B23410D63DEBCFBC85BF /* MatrixRainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfiguration.swift; sourceTree = "<group>"; };
 		C904268098CE3875C7C61698 /* SummaryActionMenuExpansionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansionTests.swift; sourceTree = "<group>"; };
 		CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleRoute.swift; sourceTree = "<group>"; };
@@ -202,6 +210,7 @@
 				A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */,
 				39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */,
 				ADE238EEBC86AEC1A5A483B2 /* AVKit.framework in Frameworks */,
+				8F5523652C530ACE93B68B17 /* PhotosUI.framework in Frameworks */,
 				D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */,
 				A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */,
 			);
@@ -286,6 +295,7 @@
 			children = (
 				85ED0B20C8238C7912F393F9 /* AVKit.framework */,
 				3CC54D512493ADEF1EB26177 /* GameplayKit.framework */,
+				8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */,
 				A07FDDB084B7AAC0AC13CF80 /* Speech.framework */,
 				EA1A7943D626E20E20C9F481 /* SpriteKit.framework */,
 				BB8F64AABB38A2036C634BCB /* SwiftData.framework */,
@@ -331,6 +341,7 @@
 		57A4FE67865DAEA283BC1F72 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */,
 				A8D625970C1997ABD4B4AEB6 /* LocalMediaFileStore.swift */,
 				F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */,
 				1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */,
@@ -480,11 +491,13 @@
 			isa = PBXGroup;
 			children = (
 				4EBB035F8E992FD2AF55A8FC /* AppBackgroundModeEnvironment.swift */,
+				3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */,
 				ED5A6E1FABD4ECD894D9A452 /* AppBackgroundView.swift */,
 				FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */,
 				B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */,
 				A229714857D6D952BA687014 /* AppSettingsStore.swift */,
 				608321B44757C987209F2A54 /* BuildChangelog.swift */,
+				067B3DBCAB2B48683F38F685 /* LoopingVideoBackgroundView.swift */,
 				868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */,
 			);
 			path = App;
@@ -638,10 +651,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA1ECF280752FFF426599CBC /* AppBackgroundModeEnvironment.swift in Sources */,
+				043A1D13C4D3931888D1815E /* AppBackgroundVideoEnvironment.swift in Sources */,
 				FB2DCA9C3911969BAF7D82C3 /* AppBackgroundView.swift in Sources */,
 				09D30B3BED384CE9D99707EA /* AppBuildInfo.swift in Sources */,
 				856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */,
 				366D12C14372662249291AE9 /* AppSettingsStore.swift in Sources */,
+				E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */,
 				93D0CE8735DD6EAA67CEB78D /* BuildChangelog.swift in Sources */,
 				A81C9CEAA6F5C0B8AB7C4BF0 /* BuildChangelogScreen.swift in Sources */,
 				0DB493EF3021829B88BE5682 /* CameraCaptureView.swift in Sources */,
@@ -654,6 +669,7 @@
 				4618198B48949C4576C5DBF7 /* InteractionFeedbackService.swift in Sources */,
 				2D389E5577FAC32B77E85819 /* LocalMediaFileStore.swift in Sources */,
 				21201E301476E7CD55CDD211 /* LocalWorkSessionRepository.swift in Sources */,
+				39D81BCD68AFEF090FCC1D4E /* LoopingVideoBackgroundView.swift in Sources */,
 				A703675234FF769CF867B2BD /* MatrixRainConfiguration.swift in Sources */,
 				90E670E6CFD78A670C422204 /* MatrixRainConfigurationEnvironment.swift in Sources */,
 				42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */,
@@ -791,7 +807,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 54;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -850,7 +866,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 54;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

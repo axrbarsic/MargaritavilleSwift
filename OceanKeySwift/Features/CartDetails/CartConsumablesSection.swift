@@ -3,6 +3,8 @@ import SwiftUI
 struct CartConsumablesSection: View {
     let cartID: CartSection.ID
     @Bindable var workSession: WorkSessionStore
+    @Environment(\.interactionFeedback) private var feedback
+    @State private var newConsumableTitle = ""
 
     private var items: [CartConsumableItem] {
         CartConsumableCatalog.merged(with: workSession.cart(id: cartID)?.consumables)
@@ -10,6 +12,8 @@ struct CartConsumablesSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            addConsumableRow
+
             ForEach(items) { item in
                 CartConsumableRow(
                     item: item,
@@ -36,6 +40,51 @@ struct CartConsumablesSection: View {
                 )
             }
         }
+    }
+
+    private var addConsumableRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "plus.circle.fill")
+                .font(.system(size: 24, weight: .black))
+                .foregroundStyle(OceanKeyTheme.accent)
+
+            TextField("Добавить расходник", text: $newConsumableTitle)
+                .textInputAutocapitalization(.sentences)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+                .submitLabel(.done)
+                .onSubmit(addConsumable)
+
+            Button(action: addConsumable) {
+                Text("OK")
+                    .font(.system(size: 15, weight: .black, design: .rounded))
+                    .frame(width: 48, height: 36)
+                    .foregroundStyle(OceanKeyTheme.roomForeground)
+                    .background(OceanKeyTheme.accent.opacity(canAddConsumable ? 1 : 0.28))
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            }
+            .buttonStyle(.plain)
+            .disabled(!canAddConsumable)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 9)
+        .background(.black.opacity(0.18))
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(OceanKeyTheme.accent.opacity(0.14), lineWidth: 1)
+        }
+    }
+
+    private var canAddConsumable: Bool {
+        !newConsumableTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func addConsumable() {
+        guard canAddConsumable else { return }
+        workSession.addCartConsumable(title: newConsumableTitle, cartId: cartID)
+        newConsumableTitle = ""
+        feedback.confirm()
     }
 }
 

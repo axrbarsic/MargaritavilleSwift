@@ -4,6 +4,7 @@ import Observation
 enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
     case off
     case matrixRain
+    case video
 
     var id: String { rawValue }
 
@@ -13,6 +14,8 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
             "Выкл"
         case .matrixRain:
             "Matrix"
+        case .video:
+            "Видео"
         }
     }
 
@@ -22,6 +25,8 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
             "Чёрный фон"
         case .matrixRain:
             "Matrix Rain"
+        case .video:
+            "Видео фон"
         }
     }
 }
@@ -35,11 +40,14 @@ final class AppSettingsStore {
         static let summaryActionMenuAllowsMultiple = "summaryActionMenuAllowsMultiple"
         static let statusPaletteSaturation = "statusPaletteSaturation"
         static let matrixSpeed = "matrixSpeed"
+        static let backgroundVideoRelativePath = "backgroundVideoRelativePath"
+        static let backgroundVideoBlur = "backgroundVideoBlur"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
     private var storedStatusPaletteSaturation: Double
     private var storedMatrixSpeed: Double
+    private var storedBackgroundVideoBlur: Double
 
     var appBackgroundMode: AppBackgroundMode {
         didSet {
@@ -81,8 +89,27 @@ final class AppSettingsStore {
         }
     }
 
+    var backgroundVideoRelativePath: String? {
+        didSet {
+            userDefaults.set(backgroundVideoRelativePath, forKey: Keys.backgroundVideoRelativePath)
+        }
+    }
+
+    var backgroundVideoBlur: Double {
+        get { storedBackgroundVideoBlur }
+        set {
+            storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(newValue)
+            userDefaults.set(storedBackgroundVideoBlur, forKey: Keys.backgroundVideoBlur)
+        }
+    }
+
     var matrixConfiguration: MatrixRainConfiguration {
         MatrixRainConfiguration(speed: matrixSpeed)
+    }
+
+    var backgroundVideoURL: URL? {
+        guard let backgroundVideoRelativePath else { return nil }
+        return BackgroundVideoFileStore().url(for: backgroundVideoRelativePath)
     }
 
     func resetToDefaults() {
@@ -92,6 +119,8 @@ final class AppSettingsStore {
         summaryActionMenuAllowsMultiple = false
         statusPaletteSaturation = 1
         matrixSpeed = MatrixRainConfiguration.default.speed
+        backgroundVideoRelativePath = nil
+        backgroundVideoBlur = 0.28
     }
 
     init(
@@ -101,14 +130,18 @@ final class AppSettingsStore {
         summaryActionMenuAllowsMultiple: Bool = false,
         statusPaletteSaturation: Double = 1,
         matrixSpeed: Double = MatrixRainConfiguration.default.speed,
+        backgroundVideoRelativePath: String? = nil,
+        backgroundVideoBlur: Double = 0.28,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
         self.roomCellGeometry = roomCellGeometry
         self.roomTaskLongPress = roomTaskLongPress
         self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
+        self.backgroundVideoRelativePath = backgroundVideoRelativePath
         self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
         self.storedMatrixSpeed = Self.normalizedMatrixSpeed(matrixSpeed)
+        self.storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(backgroundVideoBlur)
         self.userDefaults = userDefaults
     }
 
@@ -122,6 +155,8 @@ final class AppSettingsStore {
         let statusPaletteSaturation = userDefaults.object(forKey: Keys.statusPaletteSaturation) as? Double ?? 1
         let matrixSpeed = userDefaults.object(forKey: Keys.matrixSpeed) as? Double
             ?? MatrixRainConfiguration.default.speed
+        let backgroundVideoRelativePath = userDefaults.string(forKey: Keys.backgroundVideoRelativePath)
+        let backgroundVideoBlur = userDefaults.object(forKey: Keys.backgroundVideoBlur) as? Double ?? 0.28
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -129,6 +164,8 @@ final class AppSettingsStore {
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,
             statusPaletteSaturation: statusPaletteSaturation,
             matrixSpeed: matrixSpeed,
+            backgroundVideoRelativePath: backgroundVideoRelativePath,
+            backgroundVideoBlur: backgroundVideoBlur,
             userDefaults: userDefaults
         )
     }
@@ -139,5 +176,9 @@ final class AppSettingsStore {
 
     static func normalizedMatrixSpeed(_ value: Double) -> Double {
         min(max(value, 0.08), 3.0)
+    }
+
+    static func normalizedBackgroundVideoBlur(_ value: Double) -> Double {
+        min(max(value, 0), 1)
     }
 }

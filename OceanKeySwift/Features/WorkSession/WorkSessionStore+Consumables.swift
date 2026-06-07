@@ -1,6 +1,31 @@
 import Foundation
 
 extension WorkSessionStore {
+    func addCartConsumable(
+        title: String,
+        quantity: Int = 0,
+        cartId: CartSection.ID
+    ) {
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        mutateCart(cartId, history: { _, after, _ in
+            (.cartConsumablesChanged, "Тележка \(after.id): добавлен расходник \(trimmed)")
+        }) { cart in
+            var items = CartConsumableCatalog.merged(with: cart.consumables)
+            items.append(
+                CartConsumableItem(
+                    id: "custom_\(UUID().uuidString)",
+                    title: trimmed,
+                    quantity: max(0, quantity),
+                    updatedAt: Date(),
+                    completedAt: nil
+                )
+            )
+            cart.consumables = items
+        }
+    }
+
     func updateCartConsumableQuantity(
         itemID: CartConsumableItem.ID,
         quantity: Int,

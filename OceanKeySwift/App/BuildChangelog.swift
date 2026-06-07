@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (54)",
+            date: "2026-06-07",
+            changes: [
+                "Added native video wallpaper support: pick a video in Settings, copy it into local app storage, and render it as a muted looping AVQueuePlayer background.",
+                "Added a video matte slider that applies a native blur/material layer over the looped video background.",
+                "Expanded cart consumables so each cart can add custom supply rows in addition to the default towel and linen catalog."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (53)",
             date: "2026-06-07",
             changes: [

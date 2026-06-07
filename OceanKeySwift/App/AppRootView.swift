@@ -22,6 +22,8 @@ struct AppRootView: View {
             }
         }
         .environment(\.appBackgroundMode, appSettings.appBackgroundMode)
+        .environment(\.appBackgroundVideoURL, appSettings.backgroundVideoURL)
+        .environment(\.appBackgroundVideoBlur, appSettings.backgroundVideoBlur)
         .environment(\.matrixRainConfiguration, appSettings.matrixConfiguration)
         .preferredColorScheme(.dark)
     }

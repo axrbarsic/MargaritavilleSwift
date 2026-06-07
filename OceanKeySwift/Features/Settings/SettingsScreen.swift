@@ -1,4 +1,7 @@
+import CoreTransferable
+import PhotosUI
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SettingsScreen: View {
     @Bindable var workSession: WorkSessionStore
@@ -11,6 +14,7 @@ struct SettingsScreen: View {
     @State private var isChangelogPresented = false
     @State private var isHistoryPresented = false
     @State private var isResetConfirmationPresented = false
+    @State private var selectedBackgroundVideoItem: PhotosPickerItem?
 
     var body: some View {
         ZStack {
@@ -161,16 +165,51 @@ struct SettingsScreen: View {
             }
 
             SettingsInfoRow(title: "Заставка", value: appSettings.appBackgroundMode.description, systemName: "grid")
+            if appSettings.appBackgroundMode == .matrixRain {
+                SettingsSliderRow(
+                    title: "Скорость",
+                    valueLabel: "\(String(format: "%.2f", appSettings.matrixSpeed))x",
+                    systemName: "speedometer",
+                    range: 0.08...3.0,
+                    defaultValue: MatrixRainConfiguration.default.speed,
+                    value: $appSettings.matrixSpeed
+                )
+            }
+            if appSettings.appBackgroundMode == .video {
+                videoBackgroundControls
+            }
+        }
+    }
+
+    private var videoBackgroundControls: some View {
+        let videoStatus = appSettings.backgroundVideoRelativePath == nil ? "Выбрать" : "Выбрано"
+
+        return VStack(alignment: .leading, spacing: 12) {
+            PhotosPicker(
+                selection: $selectedBackgroundVideoItem,
+                matching: .videos,
+                photoLibrary: .shared()
+            ) {
+                SettingsInfoRow(
+                    title: "Видео",
+                    value: videoStatus,
+                    systemName: "film.fill"
+                )
+            }
+            .buttonStyle(.plain)
+            .onChange(of: selectedBackgroundVideoItem) { _, item in
+                guard let item else { return }
+                Task { await importBackgroundVideo(item) }
+            }
+
             SettingsSliderRow(
-                title: "Скорость",
-                valueLabel: "\(String(format: "%.2f", appSettings.matrixSpeed))x",
-                systemName: "speedometer",
-                range: 0.08...3.0,
-                defaultValue: MatrixRainConfiguration.default.speed,
-                value: $appSettings.matrixSpeed
+                title: "Матовость",
+                valueLabel: "\(Int((appSettings.backgroundVideoBlur * 100).rounded()))%",
+                systemName: "aqi.medium",
+                range: 0...1,
+                defaultValue: 0.28,
+                value: $appSettings.backgroundVideoBlur
             )
-            .disabled(appSettings.appBackgroundMode != .matrixRain)
-            .opacity(appSettings.appBackgroundMode == .matrixRain ? 1 : 0.46)
         }
     }
 
@@ -276,6 +315,38 @@ struct SettingsScreen: View {
     private func resetSettings() {
         feedback.confirm()
         appSettings.resetToDefaults()
+    }
+
+    @MainActor
+    private func importBackgroundVideo(_ item: PhotosPickerItem) async {
+        do {
+            guard let pickedVideo = try await item.loadTransferable(type: PickedBackgroundVideo.self) else { return }
+            let relativePath = try BackgroundVideoFileStore().saveVideo(from: pickedVideo.url)
+            appSettings.backgroundVideoRelativePath = relativePath
+            appSettings.appBackgroundMode = .video
+            feedback.confirm()
+        } catch {
+            feedback.holdWarning()
+        }
+    }
+}
+
+private struct PickedBackgroundVideo: Transferable {
+    let url: URL
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(contentType: .movie) { video in
+            SentTransferredFile(video.url)
+        } importing: { received in
+            let copyURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString)
+                .appendingPathExtension(received.file.pathExtension.isEmpty ? "mov" : received.file.pathExtension)
+            if FileManager.default.fileExists(atPath: copyURL.path) {
+                try FileManager.default.removeItem(at: copyURL)
+            }
+            try FileManager.default.copyItem(at: received.file, to: copyURL)
+            return PickedBackgroundVideo(url: copyURL)
+        }
     }
 }
 
