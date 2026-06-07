@@ -132,4 +132,6 @@ Simulator unless explicitly allowed.
 - Native global history foundation is in place: meaningful room, cart,
   selection, schedule, VIP, note, media, and automatic scheduled-open changes
   create timestamped history entries with lightweight visual snapshots of the
-  main screen. The browsing/preview UI is still a later parity step.
+  main screen.
+- Settings exposes the first native history viewer with timestamped cards and a
+  compact visual snapshot preview that highlights the changed room when present.

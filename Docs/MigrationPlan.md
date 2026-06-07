@@ -30,7 +30,8 @@ verification.
   legacy JSON exists only as an import/fallback path for older installs.
 - Event history: room/cart/selection/status/note/media/schedule changes append
   timestamped domain history entries. Each entry carries a lightweight visual
-  snapshot of the main screen state for future history preview UI.
+  snapshot of the main screen state, and Settings can already open a compact
+  native history viewer.
 - iCloud readiness: the SwiftData persistence schema avoids local-only
   assumptions that would block CloudKit later; the active store remains
   explicitly local-only until sync is enabled as a separate infrastructure

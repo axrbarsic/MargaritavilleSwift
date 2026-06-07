@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (34)",
+            date: "2026-06-07",
+            changes: [
+                "Added the first native history viewer in Settings.",
+                "History cards show the event title, timestamp, and a compact visual preview of the main room screen snapshot.",
+                "Changed rooms are highlighted inside the snapshot preview so the history is readable on the move."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (33)",
             date: "2026-06-07",
             changes: [

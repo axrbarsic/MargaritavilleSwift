@@ -64,6 +64,7 @@
 		E2F267B30D4B9E3FCB81BFAA /* MatrixRainBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E24D2B3912DAF9638A767BD /* MatrixRainBackground.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
 		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
+		F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */; };
 		F516FD9FD2B66D2AC637D72F /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */; };
 		FA5C69080CC5FCF5A7FEE8B5 /* RoomScheduleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */; };
 		FB32AB4983152627A3E46501 /* CartDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */; };
@@ -146,6 +147,7 @@
 		F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
 		F944082CEA5BC13C9ECF514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBuildInfo.swift; sourceTree = "<group>"; };
+		FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistoryScreen.swift; sourceTree = "<group>"; };
 		FE907719B6B3BAB75721FA29 /* WorkSessionStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Persistence.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -164,6 +166,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072178F9C325F8CA8F9079FB /* History */ = {
+			isa = PBXGroup;
+			children = (
+				FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		0F9E43ED7321D8CB24F874D8 /* Interaction */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				C9E10F31E30C63963769BE0C /* CartDetails */,
+				072178F9C325F8CA8F9079FB /* History */,
 				B7ED1D4A215E50BAD307F0BE /* Media */,
 				E1495D03D11DE340AD8F73C1 /* Notes */,
 				50353B0126AC75763D1495BF /* RoomDetails */,
@@ -583,6 +594,7 @@
 				E239F137FD94F82D7BB15630 /* VoiceTranscriptionPanel.swift in Sources */,
 				620D522DC5593DD3F3BDEB91 /* VoiceTranscriptionService.swift in Sources */,
 				7F92A978E76F5F55A09D7981 /* WorkSessionHistory.swift in Sources */,
+				F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */,
 				FE883ABF504432B7E12BA6BE /* WorkSessionRepository.swift in Sources */,
 				5BEF0B9F1E9F30B6E70FA14F /* WorkSessionSelection.swift in Sources */,
 				20634D173CAF4424922CA0DB /* WorkSessionSnapshot.swift in Sources */,
@@ -677,7 +689,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -736,7 +748,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

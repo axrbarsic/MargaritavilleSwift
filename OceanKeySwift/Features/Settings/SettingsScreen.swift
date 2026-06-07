@@ -7,6 +7,7 @@ struct SettingsScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
     @State private var isChangelogPresented = false
+    @State private var isHistoryPresented = false
 
     var body: some View {
         ZStack {
@@ -29,6 +30,10 @@ struct SettingsScreen: View {
         }
         .sheet(isPresented: $isChangelogPresented) {
             BuildChangelogScreen()
+                .preferredColorScheme(.dark)
+        }
+        .sheet(isPresented: $isHistoryPresented) {
+            WorkSessionHistoryScreen(entries: workSession.history)
                 .preferredColorScheme(.dark)
         }
     }
@@ -100,6 +105,10 @@ struct SettingsScreen: View {
         SettingsPanel(title: "Локальные данные") {
             SettingsInfoRow(title: "Ячеек", value: "\(workSession.counts.total)", systemName: "rectangle.grid.1x2")
             SettingsInfoRow(title: "Готово", value: "\(workSession.counts.completed)", systemName: "checkmark.circle.fill")
+            Button(action: openHistory) {
+                SettingsInfoRow(title: "Хронология", value: "\(workSession.history.count)", systemName: "clock.arrow.circlepath")
+            }
+            .buttonStyle(.plain)
             SettingsInfoRow(title: "Хранилище", value: persistenceStatus, systemName: "externaldrive.fill")
             if workSession.selection.workdayLocked {
                 Button(action: unlockWorkdayForEditing) {
@@ -135,6 +144,11 @@ struct SettingsScreen: View {
     private func openChangelog() {
         feedback.tap()
         isChangelogPresented = true
+    }
+
+    private func openHistory() {
+        feedback.tap()
+        isHistoryPresented = true
     }
 }
 
