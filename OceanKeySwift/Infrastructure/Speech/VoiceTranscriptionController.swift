@@ -2,6 +2,39 @@ import AVFoundation
 import Observation
 import Speech
 
+private enum VoiceTranscriptionError: LocalizedError {
+    case invalidInputFormat
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidInputFormat:
+            "Микрофон не отдал аудио-формат"
+        }
+    }
+}
+
+private func requestSpeechRecognitionPermission() async -> Bool {
+    await withCheckedContinuation { continuation in
+        SFSpeechRecognizer.requestAuthorization { status in
+            continuation.resume(returning: status == .authorized)
+        }
+    }
+}
+
+private func requestMicrophonePermission() async -> Bool {
+    await withCheckedContinuation { continuation in
+        if #available(iOS 17.0, *) {
+            AVAudioApplication.requestRecordPermission { allowed in
+                continuation.resume(returning: allowed)
+            }
+        } else {
+            AVAudioSession.sharedInstance().requestRecordPermission { allowed in
+                continuation.resume(returning: allowed)
+            }
+        }
+    }
+}
+
 @MainActor
 @Observable
 final class VoiceTranscriptionController {
@@ -11,6 +44,7 @@ final class VoiceTranscriptionController {
     private var recognitionTask: SFSpeechRecognitionTask?
     private var baseText = ""
     private var onTranscript: ((String) -> Void)?
+    private var hasInstalledTap = false
 
     private(set) var isRecording = false
     private(set) var statusText = "Готово к записи"
@@ -26,19 +60,16 @@ final class VoiceTranscriptionController {
     }
 
     func stop() {
-        guard isRecording else { return }
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
-        recognitionRequest?.endAudio()
-        recognitionTask?.finish()
-        isRecording = false
-        statusText = "Расшифровка сохранена"
-        restoreInteractionAudioSession()
+        finishRecording(status: "Расшифровка сохранена", cancelTask: false)
     }
 
     private func start(transcript: String, onTranscript: @escaping (String) -> Void) async {
         guard await requestPermissions() else { return }
-        guard let recognizer, recognizer.isAvailable else {
+        guard let recognizer else {
+            statusText = "Русское распознавание речи недоступно"
+            return
+        }
+        guard recognizer.isAvailable else {
             statusText = "Распознавание речи недоступно"
             return
         }
@@ -53,46 +84,31 @@ final class VoiceTranscriptionController {
 
         do {
             try configureRecordingSession()
-            installAudioTap(request: request)
+            try installAudioTap(request: request)
+            audioEngine.prepare()
+            try audioEngine.start()
             recognitionTask = recognizer.recognitionTask(with: request) { [weak self] result, error in
                 Task { @MainActor in
                     self?.handleRecognition(result: result, error: error)
                 }
             }
-            audioEngine.prepare()
-            try audioEngine.start()
             isRecording = true
             statusText = "Слушаю..."
         } catch {
             statusText = "Ошибка микрофона: \(error.localizedDescription)"
-            stopExistingTask()
-            restoreInteractionAudioSession()
+            finishRecording(status: statusText, cancelTask: true)
         }
     }
 
     private func requestPermissions() async -> Bool {
         statusText = "Проверяю доступ..."
-        let speechAllowed = await withCheckedContinuation { continuation in
-            SFSpeechRecognizer.requestAuthorization { status in
-                continuation.resume(returning: status == .authorized)
-            }
-        }
+        let speechAllowed = await requestSpeechRecognitionPermission()
         guard speechAllowed else {
             statusText = "Нет доступа к распознаванию речи"
             return false
         }
 
-        let micAllowed = await withCheckedContinuation { continuation in
-            if #available(iOS 17.0, *) {
-                AVAudioApplication.requestRecordPermission { allowed in
-                    continuation.resume(returning: allowed)
-                }
-            } else {
-                AVAudioSession.sharedInstance().requestRecordPermission { allowed in
-                    continuation.resume(returning: allowed)
-                }
-            }
-        }
+        let micAllowed = await requestMicrophonePermission()
         guard micAllowed else {
             statusText = "Нет доступа к микрофону"
             return false
@@ -120,13 +136,20 @@ final class VoiceTranscriptionController {
         }
     }
 
-    private func installAudioTap(request: SFSpeechAudioBufferRecognitionRequest) {
+    private func installAudioTap(request: SFSpeechAudioBufferRecognitionRequest) throws {
         let inputNode = audioEngine.inputNode
-        inputNode.removeTap(onBus: 0)
+        if hasInstalledTap {
+            inputNode.removeTap(onBus: 0)
+            hasInstalledTap = false
+        }
         let format = inputNode.outputFormat(forBus: 0)
+        guard format.sampleRate > 0, format.channelCount > 0 else {
+            throw VoiceTranscriptionError.invalidInputFormat
+        }
         inputNode.installTap(onBus: 0, bufferSize: 1_024, format: format) { buffer, _ in
             request.append(buffer)
         }
+        hasInstalledTap = true
     }
 
     private func handleRecognition(result: SFSpeechRecognitionResult?, error: Error?) {
@@ -139,8 +162,7 @@ final class VoiceTranscriptionController {
             statusText = result.isFinal ? "Готово" : "Слушаю..."
         }
         if error != nil, isRecording {
-            statusText = "Распознавание остановлено"
-            stop()
+            finishRecording(status: "Распознавание остановлено", cancelTask: true)
         }
     }
 
@@ -148,10 +170,32 @@ final class VoiceTranscriptionController {
         recognitionTask?.cancel()
         recognitionTask = nil
         recognitionRequest = nil
+        stopAudioEngine()
+        isRecording = false
+    }
+
+    private func finishRecording(status: String, cancelTask: Bool) {
+        let request = recognitionRequest
+        let task = recognitionTask
+        isRecording = false
+        statusText = status
+        stopAudioEngine()
+        request?.endAudio()
+        if cancelTask {
+            task?.cancel()
+        }
+        recognitionTask = nil
+        recognitionRequest = nil
+        restoreInteractionAudioSession()
+    }
+
+    private func stopAudioEngine() {
         if audioEngine.isRunning {
             audioEngine.stop()
         }
-        audioEngine.inputNode.removeTap(onBus: 0)
-        isRecording = false
+        if hasInstalledTap {
+            audioEngine.inputNode.removeTap(onBus: 0)
+            hasInstalledTap = false
+        }
     }
 }

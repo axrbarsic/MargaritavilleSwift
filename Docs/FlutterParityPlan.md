@@ -103,5 +103,8 @@ Simulator unless explicitly allowed.
 - Room voice notes and cart notes now share native Russian speech-to-text
   transcription through `Speech` and `AVAudioEngine`; Gemini is not part of the
   Swift voice path.
+- Voice recording startup is hardened on real devices: Speech and microphone
+  permission callbacks stay outside MainActor isolation, and audio-engine tap
+  cleanup avoids duplicate removal/finish paths.
 - Sync direction is Apple-first for the native rewrite. Firebase should not be
   used as the architecture reference for Swift sync.

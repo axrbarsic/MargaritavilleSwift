@@ -10,6 +10,24 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (24)",
+            date: "2026-06-06",
+            changes: [
+                "Fixed the real-device crash when starting voice recording from room or cart notes.",
+                "Moved Speech and microphone permission callbacks outside MainActor isolation so iOS background permission queues cannot trip Swift concurrency checks.",
+                "Kept the hardened audio-engine startup and tap cleanup from build 23."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (23)",
+            date: "2026-06-06",
+            changes: [
+                "Hardened the native voice recorder against real-device Speech and microphone startup crashes.",
+                "Voice recording no longer calls risky task finish or duplicate audio-tap removal paths.",
+                "The recorder now validates the microphone input format before starting live transcription."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (22)",
             date: "2026-06-06",
             changes: [
