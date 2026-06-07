@@ -42,7 +42,7 @@ struct SummaryScreen: View {
             .padding(.top, 18)
         }
         .sheet(item: $roomDetailsRoute) { route in
-            RoomDetailsScreen(route: route)
+            RoomDetailsScreen(route: route, workSession: workSession)
                 .preferredColorScheme(.dark)
         }
         .sheet(isPresented: $isSettingsPresented) {

@@ -58,3 +58,5 @@ Simulator unless explicitly allowed.
   rewrite.
 - Header settings opens a native Settings screen with developer/build info and
   local storage status.
+- Room details text notes and voice-transcript drafts are now domain data and
+  persist through the local work-session repository.

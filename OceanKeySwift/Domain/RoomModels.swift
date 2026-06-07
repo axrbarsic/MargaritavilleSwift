@@ -23,6 +23,10 @@ struct RoomCell: Codable, Identifiable, Equatable {
     var isVIP: Bool
     var scheduledTime: Date? = nil
     var timeline = RoomTimeline()
+    var textNote: String?
+    var textNoteUpdatedAt: Date?
+    var voiceTranscript: String?
+    var voiceTranscriptUpdatedAt: Date?
 
     var isReady: Bool {
         completedTasks.count == RoomTask.allCases.count

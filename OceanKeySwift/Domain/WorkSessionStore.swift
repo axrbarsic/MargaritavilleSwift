@@ -86,6 +86,26 @@ final class WorkSessionStore {
         }
     }
 
+    func room(id roomId: RoomCell.ID) -> RoomCell? {
+        carts.lazy.flatMap(\.rooms).first { $0.id == roomId }
+    }
+
+    func updateTextNote(_ text: String, roomId: RoomCell.ID) {
+        mutateRoom(roomId) { room in
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            room.textNote = trimmed.isEmpty ? nil : text
+            room.textNoteUpdatedAt = trimmed.isEmpty ? nil : Date()
+        }
+    }
+
+    func updateVoiceTranscript(_ text: String, roomId: RoomCell.ID) {
+        mutateRoom(roomId) { room in
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            room.voiceTranscript = trimmed.isEmpty ? nil : text
+            room.voiceTranscriptUpdatedAt = trimmed.isEmpty ? nil : Date()
+        }
+    }
+
     private func mutateRoom(_ roomId: RoomCell.ID, update: (inout RoomCell) -> Void) {
         guard let cartIndex = carts.firstIndex(where: { cart in
             cart.rooms.contains(where: { $0.id == roomId })

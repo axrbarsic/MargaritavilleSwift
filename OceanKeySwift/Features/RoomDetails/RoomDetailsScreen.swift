@@ -2,9 +2,11 @@ import SwiftUI
 
 struct RoomDetailsScreen: View {
     let route: RoomDetailsRoute
+    @Bindable var workSession: WorkSessionStore
 
     @Environment(\.dismiss) private var dismiss
-    @State private var noteText = ""
+    @State private var draftText = ""
+    @State private var draftVoiceTranscript = ""
 
     var body: some View {
         ZStack {
@@ -19,10 +21,14 @@ struct RoomDetailsScreen: View {
                         .font(.system(size: 34, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
 
+                    if let updatedLabel {
+                        RoomDetailsTimestamp(label: "Обновлено: \(updatedLabel)")
+                    }
+
                     if route.mode == .voice {
                         voicePlaceholder
                     } else {
-                        textEditor
+                        textEditor(text: $draftText, placeholder: "Текстовая заметка")
                     }
                 }
                 .padding(18)
@@ -38,6 +44,15 @@ struct RoomDetailsScreen: View {
             }
             .padding(.horizontal, 18)
             .padding(.top, 18)
+        }
+        .onAppear(perform: loadDraft)
+        .onChange(of: draftText) { _, newValue in
+            guard route.mode == .text else { return }
+            workSession.updateTextNote(newValue, roomId: route.roomID)
+        }
+        .onChange(of: draftVoiceTranscript) { _, newValue in
+            guard route.mode == .voice else { return }
+            workSession.updateVoiceTranscript(newValue, roomId: route.roomID)
         }
     }
 
@@ -63,38 +78,79 @@ struct RoomDetailsScreen: View {
     }
 
     private var voicePlaceholder: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "mic.circle.fill")
-                .font(.system(size: 72, weight: .black))
-                .foregroundStyle(OceanKeyTheme.accent)
+        VStack(spacing: 14) {
+            VStack(spacing: 8) {
+                Image(systemName: "mic.circle.fill")
+                    .font(.system(size: 68, weight: .black))
+                    .foregroundStyle(OceanKeyTheme.accent)
 
-            Text("Здесь будет нативная запись голоса с транскрипцией.")
-                .font(.system(size: 17, weight: .bold, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-                .multilineTextAlignment(.center)
+                Text("Нативная запись голоса будет подключена отдельным AVFoundation-слоем. Черновик расшифровки уже сохраняется локально.")
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.secondaryText)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 170)
+
+            textEditor(text: $draftVoiceTranscript, placeholder: "Черновик расшифровки")
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 220)
     }
 
-    private var textEditor: some View {
-        TextEditor(text: $noteText)
-            .font(.system(size: 18, weight: .semibold, design: .rounded))
-            .scrollContentBackground(.hidden)
-            .foregroundStyle(.white)
-            .padding(10)
-            .frame(minHeight: 240)
-            .background(.black.opacity(0.24))
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(OceanKeyTheme.accent.opacity(0.18), lineWidth: 1)
+    private func textEditor(text: Binding<String>, placeholder: String) -> some View {
+        ZStack(alignment: .topLeading) {
+            TextEditor(text: text)
+                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .scrollContentBackground(.hidden)
+                .foregroundStyle(.white)
+                .padding(10)
+                .frame(minHeight: 220)
+                .background(.black.opacity(0.24))
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(OceanKeyTheme.accent.opacity(0.18), lineWidth: 1)
+                }
+
+            if text.wrappedValue.isEmpty {
+                Text(placeholder)
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.55))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 18)
+                    .allowsHitTesting(false)
             }
+        }
+    }
+
+    private func loadDraft() {
+        let room = workSession.room(id: route.roomID)
+        draftText = room?.textNote ?? ""
+        draftVoiceTranscript = room?.voiceTranscript ?? ""
+    }
+
+    private var updatedLabel: String? {
+        let room = workSession.room(id: route.roomID)
+        let date = route.mode == .voice ? room?.voiceTranscriptUpdatedAt : room?.textNoteUpdatedAt
+        guard let date else { return nil }
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "MMM d, h:mm a"
+        return formatter.string(from: date)
+    }
+}
+
+private struct RoomDetailsTimestamp: View {
+    let label: String
+
+    var body: some View {
+        Text(label)
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
+            .foregroundStyle(OceanKeyTheme.secondaryText)
     }
 }
 
 #Preview {
-    RoomDetailsScreen(route: RoomDetailsRoute(roomID: "303", mode: .voice))
+    RoomDetailsScreen(route: RoomDetailsRoute(roomID: "303", mode: .voice), workSession: .preview())
         .preferredColorScheme(.dark)
 }
-
