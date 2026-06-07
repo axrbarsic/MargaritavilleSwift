@@ -7,6 +7,7 @@ struct CartDetailsScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var draftNote = ""
     @State private var captureKind: MediaKind?
+    @State private var selectedMedia: MediaAttachment?
     @State private var mediaError: String?
 
     var body: some View {
@@ -113,7 +114,10 @@ struct CartDetailsScreen: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(mediaAttachments) { attachment in
-                            MediaThumbnailView(attachment: attachment)
+                            Button(action: { selectedMedia = attachment }) {
+                                MediaThumbnailView(attachment: attachment)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -126,6 +130,9 @@ struct CartDetailsScreen: View {
                 onCancel: { captureKind = nil }
             )
             .ignoresSafeArea()
+        }
+        .fullScreenCover(item: $selectedMedia) { attachment in
+            MediaViewerScreen(attachments: mediaAttachments, initialAttachment: attachment)
         }
     }
 
@@ -171,10 +178,14 @@ struct CartDetailsScreen: View {
 
     private var updatedLabel: String? {
         guard let date = workSession.cart(id: route.cartID)?.noteUpdatedAt else { return nil }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "MMM d, h:mm a"
-        return formatter.string(from: date)
+        return date.formatted(
+            .dateTime
+                .month(.abbreviated)
+                .day()
+                .hour(.defaultDigits(amPM: .abbreviated))
+                .minute(.twoDigits)
+                .locale(Locale(identifier: "en_US_POSIX"))
+        )
     }
 }
 

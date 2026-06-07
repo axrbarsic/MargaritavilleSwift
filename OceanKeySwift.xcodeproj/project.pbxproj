@@ -15,6 +15,7 @@
 		0EE521A4B14A49A7AB277822 /* pressed.wav in Resources */ = {isa = PBXBuildFile; fileRef = 210C76CC89C65FF13A27A6C3 /* pressed.wav */; };
 		0F33257171B1CD7428303898 /* CartDetailsRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2997A598AB1E6A8F5F843FE2 /* CartDetailsRoute.swift */; };
 		141C0E990AE81553E8E12E35 /* VoiceTranscriptionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */; };
+		149EF7313B6A406216DEDDD3 /* MediaViewerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8848A3AD3F9D0BCE2F025E5 /* MediaViewerScreen.swift */; };
 		14A467CC5BC8CBF9F1AAF2E5 /* CartSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */; };
 		20634D173CAF4424922CA0DB /* WorkSessionSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE700A892F09B415394914D /* WorkSessionSnapshot.swift */; };
 		21201E301476E7CD55CDD211 /* LocalWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */; };
@@ -56,6 +57,7 @@
 		A81C9CEAA6F5C0B8AB7C4BF0 /* BuildChangelogScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */; };
 		AB643CF5E38CEC4927C7E316 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA8304DBB6369130113E5E /* WorkSessionStore+Selection.swift */; };
 		ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */; };
+		ADE238EEBC86AEC1A5A483B2 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85ED0B20C8238C7912F393F9 /* AVKit.framework */; };
 		C27172BDC7C51C3E3EE3CFF9 /* ScheduleNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7318EEDF92B83E3F4615D5F9 /* ScheduleNotificationService.swift */; };
 		C73F9B0839DCB8945BC76C5E /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0655DECA8F86F1748E5A8A9B /* click.wav */; };
 		CD93640CE2E2659E71DC69FE /* CartConsumablesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7762788268738A77A93D4598 /* CartConsumablesSection.swift */; };
@@ -123,6 +125,7 @@
 		77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
 		7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupComponents.swift; sourceTree = "<group>"; };
 		8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaThumbnailView.swift; sourceTree = "<group>"; };
+		85ED0B20C8238C7912F393F9 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
 		868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeySwiftApp.swift; sourceTree = "<group>"; };
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
@@ -153,6 +156,7 @@
 		EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryHeader.swift; sourceTree = "<group>"; };
 		F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRoomActionMenu.swift; sourceTree = "<group>"; };
 		F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
+		F8848A3AD3F9D0BCE2F025E5 /* MediaViewerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewerScreen.swift; sourceTree = "<group>"; };
 		F944082CEA5BC13C9ECF514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBuildInfo.swift; sourceTree = "<group>"; };
 		FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistoryScreen.swift; sourceTree = "<group>"; };
@@ -166,6 +170,7 @@
 			files = (
 				A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */,
 				39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */,
+				ADE238EEBC86AEC1A5A483B2 /* AVKit.framework in Frameworks */,
 				D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */,
 				A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */,
 			);
@@ -245,6 +250,7 @@
 		37B70174422F47734BC66A08 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				85ED0B20C8238C7912F393F9 /* AVKit.framework */,
 				3CC54D512493ADEF1EB26177 /* GameplayKit.framework */,
 				A07FDDB084B7AAC0AC13CF80 /* Speech.framework */,
 				EA1A7943D626E20E20C9F481 /* SpriteKit.framework */,
@@ -374,6 +380,7 @@
 			children = (
 				DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */,
 				8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */,
+				F8848A3AD3F9D0BCE2F025E5 /* MediaViewerScreen.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -580,6 +587,7 @@
 				E2F267B30D4B9E3FCB81BFAA /* MatrixRainBackground.swift in Sources */,
 				42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */,
 				53CE312477D9329530227EB4 /* MediaThumbnailView.swift in Sources */,
+				149EF7313B6A406216DEDDD3 /* MediaViewerScreen.swift in Sources */,
 				307C5468BDEA436295C95CE4 /* OceanKeySwiftApp.swift in Sources */,
 				7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */,
 				9A12B43A26BB9BB84920CC5C /* PersistentWorkSessionMapper+Consumables.swift in Sources */,
@@ -705,7 +713,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -764,7 +772,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

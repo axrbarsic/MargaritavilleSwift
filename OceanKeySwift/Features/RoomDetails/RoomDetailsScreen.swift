@@ -8,6 +8,7 @@ struct RoomDetailsScreen: View {
     @State private var draftText = ""
     @State private var draftVoiceTranscript = ""
     @State private var captureKind: MediaKind?
+    @State private var selectedMedia: MediaAttachment?
     @State private var mediaError: String?
 
     var body: some View {
@@ -66,6 +67,9 @@ struct RoomDetailsScreen: View {
             )
             .ignoresSafeArea()
         }
+        .fullScreenCover(item: $selectedMedia) { attachment in
+            MediaViewerScreen(attachments: mediaAttachments, initialAttachment: attachment)
+        }
     }
 
     private var header: some View {
@@ -117,7 +121,10 @@ struct RoomDetailsScreen: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(mediaAttachments) { attachment in
-                            MediaThumbnailView(attachment: attachment)
+                            Button(action: { selectedMedia = attachment }) {
+                                MediaThumbnailView(attachment: attachment)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -204,10 +211,14 @@ struct RoomDetailsScreen: View {
             room?.mediaAttachments?.first?.createdAt
         }
         guard let date else { return nil }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "MMM d, h:mm a"
-        return formatter.string(from: date)
+        return date.formatted(
+            .dateTime
+                .month(.abbreviated)
+                .day()
+                .hour(.defaultDigits(amPM: .abbreviated))
+                .minute(.twoDigits)
+                .locale(Locale(identifier: "en_US_POSIX"))
+        )
     }
 }
 

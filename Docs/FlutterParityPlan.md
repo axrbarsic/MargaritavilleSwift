@@ -74,10 +74,10 @@ Simulator unless explicitly allowed.
 - Cart consumables are real domain data now: towel/sheet rows support quantity,
   completion mark, timestamp, event history, and SwiftData persistence.
 - Cart details media can capture local-only photos/videos through the native
-  camera bridge, stores files in Application Support, and shows vertical
-  thumbnail previews.
+  camera bridge, stores files in Application Support, shows vertical thumbnail
+  previews, and opens a shared full-screen viewer.
 - Room swipe menu now opens the same native local media capture flow for room
-  photo/video attachments.
+  photo/video attachments, including the same full-screen viewer.
 - Settings now includes an in-app build changelog so installed builds can be
   identified without reading Git history.
 - Deliberate visual exception: native Swift room cells use the taller first-test
