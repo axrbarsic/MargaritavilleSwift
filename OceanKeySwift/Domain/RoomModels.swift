@@ -75,7 +75,7 @@ struct RoomTimeline: Equatable {
 }
 
 struct SummaryCounts: Equatable {
-    var pending: Int
-    var ready: Int
-    var open: Int
+    var total: Int
+    var completed: Int
+    var remaining: Int
 }

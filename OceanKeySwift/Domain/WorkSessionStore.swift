@@ -10,15 +10,18 @@ final class WorkSessionStore {
     }
 
     var counts: SummaryCounts {
-        carts.flatMap(\.rooms).reduce(into: SummaryCounts(pending: 0, ready: 0, open: 0)) { counts, room in
-            switch room.status {
-            case .pending, .scheduled:
-                counts.pending += 1
-            case .open, .inProgress:
-                counts.open += 1
-            case .ready:
-                counts.ready += 1
-            }
+        let rooms = carts.flatMap(\.rooms)
+        let completed = rooms.filter(\.isReady).count
+        return SummaryCounts(
+            total: rooms.count,
+            completed: completed,
+            remaining: rooms.count - completed
+        )
+    }
+
+    var visibleRoomIDs: [RoomCell.ID] {
+        carts.flatMap { cart in
+            cart.rooms.map(\.id)
         }
     }
 
