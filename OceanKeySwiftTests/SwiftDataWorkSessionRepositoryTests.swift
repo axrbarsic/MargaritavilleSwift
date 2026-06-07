@@ -98,6 +98,15 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
                     createdAt: mediaAt,
                     completedAt: mediaAt
                 )
+            ],
+            consumables: [
+                CartConsumableItem(
+                    id: "bath_towel",
+                    title: "Полотенца банные",
+                    quantity: 4,
+                    updatedAt: noteAt,
+                    completedAt: mediaAt
+                )
             ]
         )
     ]

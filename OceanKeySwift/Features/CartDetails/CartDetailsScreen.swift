@@ -88,10 +88,7 @@ struct CartDetailsScreen: View {
 
     private var consumablesSection: some View {
         CartDetailsPanel(title: "Расходники") {
-            Text("Здесь будет отдельная таблица полотенец и расходников по тележке. Сейчас раздел закреплён как самостоятельная зона, не смешанная с ячейками номеров.")
-                .font(.system(size: 15, weight: .semibold, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-                .fixedSize(horizontal: false, vertical: true)
+            CartConsumablesSection(cartID: route.cartID, workSession: workSession)
         }
     }
 

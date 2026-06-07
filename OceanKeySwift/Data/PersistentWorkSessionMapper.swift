@@ -52,7 +52,8 @@ enum PersistentWorkSessionMapper {
             rooms: (record.rooms ?? []).sorted { $0.displayOrder < $1.displayOrder }.map(room(from:)),
             note: record.note,
             noteUpdatedAt: record.noteUpdatedAt,
-            mediaAttachments: media(from: record.mediaAttachments ?? [])
+            mediaAttachments: media(from: record.mediaAttachments ?? []),
+            consumables: consumables(from: record.consumables ?? [])
         )
     }
 
@@ -168,6 +169,11 @@ enum PersistentWorkSessionMapper {
             record.mediaAttachments = syncMedia(
                 cart.mediaAttachments ?? [],
                 existingRecords: record.mediaAttachments,
+                context: context
+            )
+            record.consumables = syncConsumables(
+                cart.consumables ?? [],
+                existingRecords: record.consumables,
                 context: context
             )
         }

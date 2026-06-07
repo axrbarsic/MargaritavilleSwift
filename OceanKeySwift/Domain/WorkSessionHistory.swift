@@ -11,6 +11,7 @@ enum WorkSessionHistoryKind: String, Codable, CaseIterable, Sendable {
     case roomMediaAdded
     case cartNoteChanged
     case cartMediaAdded
+    case cartConsumablesChanged
     case selectionChanged
     case workdayLocked
     case workdayUnlocked

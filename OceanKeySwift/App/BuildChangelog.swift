@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (35)",
+            date: "2026-06-07",
+            changes: [
+                "Replaced the cart consumables placeholder with real native cart consumable rows for towels, mats, sheets, and pillowcases.",
+                "Consumables now support quantity changes, completion marks, timestamps, event history, and SwiftData persistence.",
+                "Kept consumables as cart-specific domain data, separate from room-cell tasks."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (34)",
             date: "2026-06-07",
             changes: [

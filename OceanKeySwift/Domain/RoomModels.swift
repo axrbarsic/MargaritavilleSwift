@@ -61,6 +61,7 @@ struct CartSection: Codable, Identifiable, Equatable, Sendable {
     var note: String?
     var noteUpdatedAt: Date?
     var mediaAttachments: [MediaAttachment]?
+    var consumables: [CartConsumableItem]?
 }
 
 enum MediaKind: String, Codable, CaseIterable, Identifiable, Sendable {

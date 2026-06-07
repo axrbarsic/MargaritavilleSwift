@@ -165,3 +165,16 @@ func ignoredRoomMutationDoesNotRecordHistory() {
 
     #expect(store.history.count == beforeCount)
 }
+
+@Test
+func cartConsumableQuantityAndCompletionRecordHistory() {
+    let store = WorkSessionStore.preview()
+
+    store.updateCartConsumableQuantity(itemID: "bath_towel", quantity: 4, cartId: 7)
+    store.toggleCartConsumableCompletion(itemID: "bath_towel", cartId: 7)
+
+    let item = store.cart(id: 7)?.consumables?.first { $0.id == "bath_towel" }
+    #expect(item?.quantity == 4)
+    #expect(item?.completedAt != nil)
+    #expect(store.history.first?.kind == .cartConsumablesChanged)
+}

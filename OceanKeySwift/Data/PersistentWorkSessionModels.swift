@@ -66,6 +66,7 @@ final class PersistentCart {
     var noteUpdatedAt: Date?
     @Relationship(deleteRule: .cascade) var rooms: [PersistentRoom]?
     @Relationship(deleteRule: .cascade) var mediaAttachments: [PersistentMediaAttachment]?
+    @Relationship(deleteRule: .cascade) var consumables: [PersistentCartConsumable]?
 
     init(
         cartNumber: Int,
@@ -74,7 +75,8 @@ final class PersistentCart {
         note: String? = nil,
         noteUpdatedAt: Date? = nil,
         rooms: [PersistentRoom] = [],
-        mediaAttachments: [PersistentMediaAttachment] = []
+        mediaAttachments: [PersistentMediaAttachment] = [],
+        consumables: [PersistentCartConsumable] = []
     ) {
         self.cartNumber = cartNumber
         self.displayOrder = displayOrder
@@ -83,6 +85,7 @@ final class PersistentCart {
         self.noteUpdatedAt = noteUpdatedAt
         self.rooms = rooms
         self.mediaAttachments = mediaAttachments
+        self.consumables = consumables
     }
 }
 
@@ -146,6 +149,32 @@ final class PersistentMediaAttachment {
         self.kindRawValue = kindRawValue
         self.relativePath = relativePath
         self.createdAt = createdAt
+        self.completedAt = completedAt
+        self.displayOrder = displayOrder
+    }
+}
+
+@Model
+final class PersistentCartConsumable {
+    var itemID: String
+    var title: String
+    var quantity: Int
+    var updatedAt: Date?
+    var completedAt: Date?
+    var displayOrder: Int
+
+    init(
+        itemID: String,
+        title: String,
+        quantity: Int,
+        updatedAt: Date?,
+        completedAt: Date?,
+        displayOrder: Int
+    ) {
+        self.itemID = itemID
+        self.title = title
+        self.quantity = quantity
+        self.updatedAt = updatedAt
         self.completedAt = completedAt
         self.displayOrder = displayOrder
     }

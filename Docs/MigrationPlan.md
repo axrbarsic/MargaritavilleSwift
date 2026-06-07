@@ -87,6 +87,8 @@ available.
    - Port voice notes with transcription.
    - Port photo and video capture with native AVFoundation/PhotosUI paths.
    - Build thumbnail and full-screen preview flows for vertical media first.
+   - Keep cart consumables as cart-specific domain data with quantities,
+     completion timestamps, and history events.
    - Keep recorder and capture lifecycles in native services; SwiftUI panels
      should render state and call small ViewModel actions, not own low-level
      audio/video engines.

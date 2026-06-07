@@ -227,7 +227,7 @@ final class WorkSessionStore {
         }
     }
 
-    private func mutateCart(
+    func mutateCart(
         _ cartId: CartSection.ID,
         history makeHistory: ((CartSection, CartSection, Date) -> (WorkSessionHistoryKind, String)?)? = nil,
         update: (inout CartSection) -> Void

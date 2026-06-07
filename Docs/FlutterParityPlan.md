@@ -34,7 +34,7 @@ Simulator unless explicitly allowed.
 
 4. Cart details
    - Long press on cart header opens cart-specific details.
-   - Cart notes, consumables placeholder, photo/video capture.
+   - Cart notes, consumables, photo/video capture.
    - Completion markers and timestamps.
 
 5. Settings and diagnostics
@@ -70,7 +70,9 @@ Simulator unless explicitly allowed.
 - Room details text notes and voice-transcript drafts are now domain data and
   persist through the local work-session repository.
 - Long press on a cart header opens a native cart details screen with persistent
-  cart note, consumables placeholder, and media action slots.
+  cart note, consumables, and media action slots.
+- Cart consumables are real domain data now: towel/sheet rows support quantity,
+  completion mark, timestamp, event history, and SwiftData persistence.
 - Cart details media can capture local-only photos/videos through the native
   camera bridge, stores files in Application Support, and shows vertical
   thumbnail previews.

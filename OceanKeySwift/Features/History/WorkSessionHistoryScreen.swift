@@ -102,6 +102,7 @@ private struct WorkSessionHistoryCard: View {
         case .roomTextNoteChanged, .cartNoteChanged: "note.text"
         case .roomVoiceTranscriptChanged: "mic.fill"
         case .roomMediaAdded, .cartMediaAdded: "camera.fill"
+        case .cartConsumablesChanged: "shippingbox.fill"
         case .selectionChanged: "rectangle.grid.2x2.fill"
         case .workdayLocked: "lock.fill"
         case .workdayUnlocked: "lock.open.fill"
