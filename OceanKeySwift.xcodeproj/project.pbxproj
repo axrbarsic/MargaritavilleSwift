@@ -111,6 +111,7 @@
 		34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupScreen.swift; sourceTree = "<group>"; };
 		35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsScreen.swift; sourceTree = "<group>"; };
 		35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepository.swift; sourceTree = "<group>"; };
+		3A66CA79C454C0F64B64E853 /* OceanKeySwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OceanKeySwift.entitlements; sourceTree = "<group>"; };
 		3CC54D512493ADEF1EB26177 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		435A89956E097B59C6894F7B /* WorkSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStore.swift; sourceTree = "<group>"; };
 		449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
@@ -244,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				F944082CEA5BC13C9ECF514C /* Info.plist */,
+				3A66CA79C454C0F64B64E853 /* OceanKeySwift.entitlements */,
 				EB46BA9A2511009474D5840B /* App */,
 				57A4FE67865DAEA283BC1F72 /* Data */,
 				4463822596AA3844DBFE4AB1 /* Design */,
@@ -737,7 +739,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 44;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -796,7 +798,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 44;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

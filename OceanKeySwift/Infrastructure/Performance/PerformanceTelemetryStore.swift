@@ -104,8 +104,9 @@ private final class DisplayLinkDriver: NSObject {
     func start() {
         guard displayLink == nil else { return }
         let link = CADisplayLink(target: self, selector: #selector(frameDidTick(_:)))
+        let minimumFPS = targetFPS >= 120 ? 80 : targetFPS
         link.preferredFrameRateRange = CAFrameRateRange(
-            minimum: 30,
+            minimum: Float(minimumFPS),
             maximum: Float(targetFPS),
             preferred: Float(targetFPS)
         )

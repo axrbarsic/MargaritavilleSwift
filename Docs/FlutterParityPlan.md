@@ -110,6 +110,9 @@ Simulator unless explicitly allowed.
 - Room long-press haptics are delayed so normal vertical scrolling across cells
   does not buzz or steal intent; right-swipe menu arming now requires a stronger
   horizontal gesture.
+- Current Swift gesture rule: inactive tap/long-press recognizers must not stay
+  attached to room controls, and vertical scroll must beat row-level
+  swipe/tap/long-press interactions when the finger starts on a cell.
 - The summary header puzzle handle is functional again: dragging the puzzle
   returns from the main screen to first-screen cart/room editing.
 - Room scheduling now uses a native hour/minute/AM-PM sheet with 15-minute
@@ -153,3 +156,9 @@ Simulator unless explicitly allowed.
   and history entries are unioned by ID.
 - Real-device SwiftData migration now keeps older setup selection rows
   compatible with the new selected/deselected metadata flags.
+- Native iOS has a CloudKit entitlement draft for the Apple-first sync
+  direction, but it is not active in signing until the Apple provisioning
+  profile includes iCloud/Push capabilities.
+- Native iOS now also declares the ProMotion Info.plist opt-in so supported
+  iPhones can request frame rates above the system default; Matrix/SpriteKit
+  and telemetry target the device maximum rather than assuming 60 Hz.

@@ -42,6 +42,9 @@ verification.
 - Performance telemetry: a lightweight app-wide CADisplayLink sampler tracks
   current FPS, slow frames, and worst recent frame without invalidating SwiftUI
   on every display tick.
+- ProMotion readiness: the app opts out of the iPhone minimum-frame-duration
+  cap and requests the physical display's maximum cadence for SpriteKit and
+  telemetry, with 120 Hz as the supported-device target.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.
@@ -54,6 +57,10 @@ verification.
   preserve earliest facts, and history remains append-only.
 - Installed-device SwiftData migration is guarded for older setup selection
   records: missing selected/deselected flags are treated as active legacy rows.
+- A native iCloud/CloudKit entitlement draft exists for container
+  `iCloud.com.alex.oceankey.swift`, but activation is currently blocked by the
+  installed Apple Development provisioning profile, which does not yet include
+  iCloud/Push capabilities.
 - Physical iPhone install is active through the local Apple Development profile
   for `com.alex.oceankey.swift`
 - Project generation: XcodeGen through `project.yml`
@@ -111,6 +118,8 @@ available.
 6. Diagnostics and performance
    - Keep frame/performance telemetry from the start.
    - Treat 120 Hz smoothness as the target on supported iPhones.
+   - Keep vertical scrolling higher priority than row-level gestures; room
+     swipe menus must require a clearly horizontal gesture.
    - Test on real devices before considering visual effects done.
 
 7. Cutover

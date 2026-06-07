@@ -35,6 +35,12 @@ The native domain now includes `WorkSessionMergePolicy`, which exercises these
 rules before the CloudKit adapter exists.
 SwiftData migration keeps legacy setup selection rows active when their new
 selected/deselected flag is absent, preventing upgrade-time data loss.
+The repo now contains a CloudKit entitlement draft for
+`iCloud.com.alex.oceankey.swift`, but the active signed target remains
+local-only until the Apple Development provisioning profile includes iCloud and
+Push capabilities. Local-first remains the behavioral rule, and the future
+CloudKit adapter must use the domain merge policy instead of blind snapshot
+replacement.
 
 Default rule:
 

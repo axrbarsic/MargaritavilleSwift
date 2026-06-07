@@ -16,26 +16,26 @@ struct HoldActionTarget<Content: View>: View {
             .contentShape(Rectangle())
             .accessibilityAddTraits(.isButton)
             .accessibilityLabel(semanticLabel)
-            .gesture(tapGesture)
-            .onLongPressGesture(
-                minimumDuration: useLongPress ? 0.46 : 999,
-                maximumDistance: 18,
-                pressing: handlePressing,
-                perform: activateLongPress
+            .modifier(
+                HoldActionGestureModifier(
+                    enabled: enabled,
+                    useLongPress: useLongPress,
+                    onTap: activateTap,
+                    onLongPressPressing: handlePressing,
+                    onLongPress: activateLongPress
+                )
             )
     }
 
-    private var tapGesture: some Gesture {
-        TapGesture().onEnded {
-            guard enabled, !useLongPress else {
-                if !enabled {
-                    feedback.invalid()
-                }
-                return
+    private func activateTap() {
+        guard enabled, !useLongPress else {
+            if !enabled {
+                feedback.invalid()
             }
-            feedback.tap()
-            onActivate()
+            return
         }
+        feedback.tap()
+        onActivate()
     }
 
     private func handlePressing(_ pressing: Bool) {
@@ -71,5 +71,28 @@ struct HoldActionTarget<Content: View>: View {
         warningTask = nil
         feedback.holdCommit()
         onActivate()
+    }
+}
+
+private struct HoldActionGestureModifier: ViewModifier {
+    let enabled: Bool
+    let useLongPress: Bool
+    let onTap: () -> Void
+    let onLongPressPressing: (Bool) -> Void
+    let onLongPress: () -> Void
+
+    func body(content: Content) -> some View {
+        if useLongPress {
+            content
+                .onLongPressGesture(
+                    minimumDuration: 0.46,
+                    maximumDistance: 8,
+                    pressing: onLongPressPressing,
+                    perform: onLongPress
+                )
+        } else {
+            content
+                .onTapGesture(perform: onTap)
+        }
     }
 }

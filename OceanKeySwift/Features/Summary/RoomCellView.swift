@@ -24,6 +24,7 @@ struct RoomCellView: View {
     var body: some View {
         VStack(spacing: 0) {
             tileBody
+                .gesture(actionMenuDragGesture, including: .gesture)
 
             if isActionMenuExpanded {
                 SummaryRoomActionMenu(
@@ -38,7 +39,6 @@ struct RoomCellView: View {
             }
         }
         .animation(.smooth(duration: 0.26), value: isActionMenuExpanded)
-        .simultaneousGesture(actionMenuDragGesture)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Room \(room.id)")
     }
@@ -108,7 +108,7 @@ struct RoomCellView: View {
     }
 
     private var actionMenuDragGesture: some Gesture {
-        DragGesture(minimumDistance: 12, coordinateSpace: .local)
+        DragGesture(minimumDistance: 34, coordinateSpace: .local)
             .onChanged { value in
                 updateActionMenuDrag(value)
             }
@@ -123,13 +123,13 @@ struct RoomCellView: View {
 
         let absX = abs(swipeDX)
         let absY = abs(swipeDY)
-        if absY > 18, absY > absX * 1.15 {
+        if absY > 10, absY > absX {
             resetActionMenuDrag()
             return
         }
 
         if swipeDirection == 0 {
-            guard absX >= 32, absX >= absY * 2.0 else { return }
+            guard absX >= 44, absX >= absY * 2.4 else { return }
             guard swipeDX > 0 else {
                 resetActionMenuDrag()
                 return
@@ -141,7 +141,7 @@ struct RoomCellView: View {
             }
         }
 
-        let threshold: CGFloat = 82
+        let threshold: CGFloat = 92
         let armed = absX >= threshold
         if armed, !swipeArmed {
             feedback.holdCommit()

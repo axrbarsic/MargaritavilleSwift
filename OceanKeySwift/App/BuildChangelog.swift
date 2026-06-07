@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (44)",
+            date: "2026-06-07",
+            changes: [
+                "Prepared the native iCloud/CloudKit entitlement draft for the Apple-first sync path; activation is blocked until the Apple provisioning profile includes iCloud/Push capabilities.",
+                "Reduced main-screen scroll gesture conflicts by removing inactive recognizers from room controls and making the room swipe menu require a deliberate horizontal gesture.",
+                "Enabled the iPhone ProMotion Info.plist opt-in and tightened the frame telemetry display link toward the device's 120 Hz target."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (43)",
             date: "2026-06-07",
             changes: [
