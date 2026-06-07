@@ -41,7 +41,7 @@ enum PersistentWorkSessionMapper {
             if let updatedAt = binding.updatedAt {
                 bindingUpdatedAt[binding.cartNumber] = updatedAt
             }
-            if binding.isSelected, !binding.territoryID.isEmpty {
+            if binding.isSelected != false, !binding.territoryID.isEmpty {
                 bindings[binding.cartNumber] = WorkSessionCartBinding(
                     cartNumber: binding.cartNumber,
                     territoryID: binding.territoryID
@@ -51,7 +51,7 @@ enum PersistentWorkSessionMapper {
         var groupedRooms: [Int: Set<RoomID>] = [:]
         var roomUpdatedAt: [Int: [RoomID: Date]] = [:]
         for selection in session.roomSelections ?? [] {
-            if selection.isSelected {
+            if selection.isSelected != false {
                 groupedRooms[selection.cartNumber, default: []].insert(selection.roomID)
             }
             if let updatedAt = selection.updatedAt {

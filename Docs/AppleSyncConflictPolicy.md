@@ -33,6 +33,8 @@ Setup selection coverage now includes cart binding timestamps, room selection
 timestamps, deselection tombstones, and workday lock timestamps.
 The native domain now includes `WorkSessionMergePolicy`, which exercises these
 rules before the CloudKit adapter exists.
+SwiftData migration keeps legacy setup selection rows active when their new
+selected/deselected flag is absent, preventing upgrade-time data loss.
 
 Default rule:
 

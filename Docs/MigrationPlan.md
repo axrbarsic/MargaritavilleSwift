@@ -52,6 +52,8 @@ verification.
 - A pure domain merge policy now covers the future Apple sync boundary before a
   CloudKit adapter is wired: current fields use newest timestamp, milestones
   preserve earliest facts, and history remains append-only.
+- Installed-device SwiftData migration is guarded for older setup selection
+  records: missing selected/deselected flags are treated as active legacy rows.
 - Physical iPhone install is active through the local Apple Development profile
   for `com.alex.oceankey.swift`
 - Project generation: XcodeGen through `project.yml`

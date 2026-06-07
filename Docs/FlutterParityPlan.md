@@ -151,3 +151,5 @@ Simulator unless explicitly allowed.
 - A pure domain merge policy now exists for future Apple sync: field-level
   timestamps decide current state, milestone facts keep earliest timestamps,
   and history entries are unioned by ID.
+- Real-device SwiftData migration now keeps older setup selection rows
+  compatible with the new selected/deselected metadata flags.

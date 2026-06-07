@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (43)",
+            date: "2026-06-07",
+            changes: [
+                "Fixed real-device SwiftData migration for existing setup selection records.",
+                "New selected/deselected persistence flags are now backward-compatible with older installed builds; missing values are treated as active legacy selections.",
+                "This prevents the installed app from falling back to in-memory storage after upgrading from earlier Swift builds."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (42)",
             date: "2026-06-07",
             changes: [

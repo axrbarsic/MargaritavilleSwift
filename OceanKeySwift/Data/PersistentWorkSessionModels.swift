@@ -42,13 +42,13 @@ final class PersistentWorkSession {
 final class PersistentCartBinding {
     var cartNumber: Int
     var territoryID: String
-    var isSelected: Bool
+    var isSelected: Bool?
     var updatedAt: Date?
 
     init(
         cartNumber: Int,
         territoryID: String,
-        isSelected: Bool = true,
+        isSelected: Bool? = true,
         updatedAt: Date? = nil
     ) {
         self.cartNumber = cartNumber
@@ -62,13 +62,13 @@ final class PersistentCartBinding {
 final class PersistentRoomSelection {
     var cartNumber: Int
     var roomID: String
-    var isSelected: Bool
+    var isSelected: Bool?
     var updatedAt: Date?
 
     init(
         cartNumber: Int,
         roomID: String,
-        isSelected: Bool = true,
+        isSelected: Bool? = true,
         updatedAt: Date? = nil
     ) {
         self.cartNumber = cartNumber

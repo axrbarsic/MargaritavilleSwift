@@ -48,6 +48,51 @@ func inMemoryCloudKitModeFallsBackToLocalStorage() throws {
     #expect(loaded == snapshot)
 }
 
+@Test
+func legacySelectionRowsWithoutSelectedFlagLoadAsActive() {
+    let session = PersistentWorkSession(
+        workdayLocked: true,
+        cartBindings: [
+            PersistentCartBinding(
+                cartNumber: 7,
+                territoryID: "A3",
+                isSelected: nil,
+                updatedAt: nil
+            )
+        ],
+        roomSelections: [
+            PersistentRoomSelection(
+                cartNumber: 7,
+                roomID: "303",
+                isSelected: nil,
+                updatedAt: nil
+            )
+        ],
+        carts: [
+            PersistentCart(
+                cartNumber: 7,
+                displayOrder: 0,
+                building: "A3",
+                rooms: [
+                    PersistentRoom(
+                        roomID: "303",
+                        displayOrder: 0,
+                        opened: false,
+                        completedTaskValues: "",
+                        isVIP: false
+                    )
+                ]
+            )
+        ]
+    )
+
+    let snapshot = PersistentWorkSessionMapper.snapshot(from: session)
+
+    #expect(snapshot.selection.cartBindings[7]?.territoryID == "A3")
+    #expect(snapshot.selection.rooms(forCart: 7).contains("303"))
+    #expect(snapshot.carts.first?.rooms.first?.id == "303")
+}
+
 private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
     let selectedAt = Date(timeIntervalSince1970: 1_801_000_000)
     let openedAt = Date(timeIntervalSince1970: 1_801_003_600)
