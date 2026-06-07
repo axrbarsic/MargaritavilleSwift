@@ -6,11 +6,12 @@ enum OceanKeyTheme {
     static let accent = Color(red: 0.118, green: 1.000, blue: 0.353)
     static let mutedText = Color(red: 0.294, green: 0.702, blue: 0.396)
     static let secondaryText = Color(red: 0.608, green: 1.000, blue: 0.722)
-    static let ready = Color(red: 0.035, green: 0.940, blue: 0.020)
-    static let pending = Color(red: 1.000, green: 0.820, blue: 0.145)
-    static let open = Color(red: 1.000, green: 0.180, blue: 0.180)
-    static let inProgress = Color(red: 0.110, green: 0.420, blue: 1.000)
-    static let scheduled = Color(red: 1.000, green: 0.230, blue: 0.700)
+    static let ready = Color(hex: 0x25D366)
+    static let pending = Color(hex: 0xFFD83D)
+    static let open = Color(hex: 0xFF3B30)
+    static let inProgress = Color(hex: 0x2F80FF)
+    static let scheduled = Color(hex: 0xFF4DB8)
+    static let roomForeground = Color(hex: 0x050505)
 
     static func fill(for status: RoomStatus) -> Color {
         switch status {
@@ -20,5 +21,15 @@ enum OceanKeyTheme {
         case .ready: ready
         case .scheduled: scheduled
         }
+    }
+}
+
+extension Color {
+    init(hex: UInt32) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255.0,
+            green: Double((hex >> 8) & 0xFF) / 255.0,
+            blue: Double(hex & 0xFF) / 255.0
+        )
     }
 }

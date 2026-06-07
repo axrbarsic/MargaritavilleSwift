@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SummaryScreen: View {
     @Bindable var workSession: WorkSessionStore
+    @State private var expandedActionMenuRoomID: RoomCell.ID?
 
     var body: some View {
         ZStack {
@@ -16,8 +17,11 @@ struct SummaryScreen: View {
                         ForEach($workSession.carts) { $cart in
                             CartSummarySection(
                                 cart: $cart,
+                                expandedActionMenuRoomID: $expandedActionMenuRoomID,
+                                onOpenToggle: workSession.toggleOpen,
                                 onTaskToggle: workSession.toggleTask,
-                                onVIPToggle: workSession.toggleVIP
+                                onVIPToggle: workSession.toggleVIP,
+                                onScheduleToggle: workSession.toggleSchedule
                             )
                         }
                     }

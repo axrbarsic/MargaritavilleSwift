@@ -16,6 +16,7 @@
 		630D9BF8C070EDF39CF079C6 /* WorkSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */; };
 		714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */; };
 		7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */; };
+		7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */; };
 		856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */; };
 		A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A7943D626E20E20C9F481 /* SpriteKit.framework */; };
 		BA7C18EBFE93F08708C52938 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929170B7329DE71DCDD384FD /* WorkSessionStore.swift */; };
@@ -54,6 +55,7 @@
 		CE487E5E6D0AB9E9818EEF84 /* OceanKeySwift.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OceanKeySwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1A7943D626E20E20C9F481 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryHeader.swift; sourceTree = "<group>"; };
+		F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRoomActionMenu.swift; sourceTree = "<group>"; };
 		F944082CEA5BC13C9ECF514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,6 +152,7 @@
 				2E24D2B3912DAF9638A767BD /* MatrixRainBackground.swift */,
 				868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */,
 				EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */,
+				F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */,
 				77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */,
 				1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */,
 			);
@@ -282,6 +285,7 @@
 				392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */,
 				CDEB880791759C750A6CBF53 /* SpriteKitEffectView.swift in Sources */,
 				094272BBB8350642EA68BD69 /* SummaryHeader.swift in Sources */,
+				7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */,
 				E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */,
 				E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */,
 				BA7C18EBFE93F08708C52938 /* WorkSessionStore.swift in Sources */,
