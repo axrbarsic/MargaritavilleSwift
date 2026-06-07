@@ -6,6 +6,7 @@ struct RoomCellView: View {
     @Binding var room: RoomCell
     let geometry: RoomCellGeometry
     let taskControlsUseLongPress: Bool
+    let statusPaletteSaturation: Double
     let isActionMenuExpanded: Bool
     let onActionMenuToggle: () -> Void
     let onOpenNotes: () -> Void
@@ -186,7 +187,7 @@ struct RoomCellView: View {
 
     private var cellBackground: some View {
         tileShape
-            .fill(OceanKeyTheme.fill(for: room.status))
+            .fill(OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation))
             .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
     }
 
@@ -222,6 +223,7 @@ private extension RoomCell {
         room: $room,
         geometry: .roomy,
         taskControlsUseLongPress: true,
+        statusPaletteSaturation: 1,
         isActionMenuExpanded: true,
         onActionMenuToggle: {},
         onOpenNotes: {},

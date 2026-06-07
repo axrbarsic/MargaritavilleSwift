@@ -97,6 +97,15 @@ struct SettingsScreen: View {
                     systemName: "rectangle.roundedtop.fill"
                 )
 
+                SettingsSliderRow(
+                    title: "Палитра",
+                    valueLabel: "\(Int((appSettings.statusPaletteSaturation * 100).rounded()))%",
+                    systemName: "eyedropper.halffull",
+                    range: 0.70...1.65,
+                    defaultValue: 1,
+                    value: $appSettings.statusPaletteSaturation
+                )
+
                 Toggle(isOn: $appSettings.roomTaskLongPress) {
                     SettingsInfoRow(
                         title: "Долгий тап",

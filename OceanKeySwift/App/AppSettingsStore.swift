@@ -7,10 +7,12 @@ final class AppSettingsStore {
         static let roomCellGeometry = "roomCellGeometry"
         static let roomTaskLongPress = "roomTaskLongPress"
         static let summaryActionMenuAllowsMultiple = "summaryActionMenuAllowsMultiple"
+        static let statusPaletteSaturation = "statusPaletteSaturation"
         static let matrixColorRichness = "matrixColorRichness"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
+    private var storedStatusPaletteSaturation: Double
     private var storedMatrixColorRichness: Double
 
     var roomCellGeometry: RoomCellGeometry {
@@ -31,6 +33,14 @@ final class AppSettingsStore {
         }
     }
 
+    var statusPaletteSaturation: Double {
+        get { storedStatusPaletteSaturation }
+        set {
+            storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(newValue)
+            userDefaults.set(storedStatusPaletteSaturation, forKey: Keys.statusPaletteSaturation)
+        }
+    }
+
     var matrixColorRichness: Double {
         get { storedMatrixColorRichness }
         set {
@@ -47,12 +57,14 @@ final class AppSettingsStore {
         roomCellGeometry: RoomCellGeometry = .roomy,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
+        statusPaletteSaturation: Double = 1,
         matrixColorRichness: Double = MatrixRainConfiguration.default.colorRichness,
         userDefaults: UserDefaults = .standard
     ) {
         self.roomCellGeometry = roomCellGeometry
         self.roomTaskLongPress = roomTaskLongPress
         self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
+        self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
         self.storedMatrixColorRichness = Self.normalizedMatrixColorRichness(matrixColorRichness)
         self.userDefaults = userDefaults
     }
@@ -62,15 +74,21 @@ final class AppSettingsStore {
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
         let summaryActionMenuAllowsMultiple = userDefaults.object(forKey: Keys.summaryActionMenuAllowsMultiple) as? Bool ?? false
+        let statusPaletteSaturation = userDefaults.object(forKey: Keys.statusPaletteSaturation) as? Double ?? 1
         let matrixColorRichness = userDefaults.object(forKey: Keys.matrixColorRichness) as? Double
             ?? MatrixRainConfiguration.default.colorRichness
         return AppSettingsStore(
             roomCellGeometry: geometry,
             roomTaskLongPress: roomTaskLongPress,
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,
+            statusPaletteSaturation: statusPaletteSaturation,
             matrixColorRichness: matrixColorRichness,
             userDefaults: userDefaults
         )
+    }
+
+    static func normalizedStatusPaletteSaturation(_ value: Double) -> Double {
+        min(max(value, 0.70), 1.65)
     }
 
     static func normalizedMatrixColorRichness(_ value: Double) -> Double {

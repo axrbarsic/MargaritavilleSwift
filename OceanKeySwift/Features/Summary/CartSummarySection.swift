@@ -6,6 +6,7 @@ struct CartSummarySection: View {
     @Binding var cart: CartSection
     let geometry: RoomCellGeometry
     let taskControlsUseLongPress: Bool
+    let statusPaletteSaturation: Double
     let actionMenuAllowsMultiple: Bool
     @Binding var expandedActionMenuRoomIDs: Set<RoomCell.ID>
     let onOpenCartDetails: (CartSection.ID) -> Void
@@ -38,6 +39,7 @@ struct CartSummarySection: View {
                     room: $room,
                     geometry: geometry,
                     taskControlsUseLongPress: taskControlsUseLongPress,
+                    statusPaletteSaturation: statusPaletteSaturation,
                     isActionMenuExpanded: expandedActionMenuRoomIDs.contains(room.id),
                     onActionMenuToggle: {
                         expandedActionMenuRoomIDs = SummaryActionMenuExpansion.toggled(
@@ -67,6 +69,7 @@ struct CartSummarySection: View {
         cart: $cart,
         geometry: .roomy,
         taskControlsUseLongPress: true,
+        statusPaletteSaturation: 1,
         actionMenuAllowsMultiple: false,
         expandedActionMenuRoomIDs: $expanded,
         onOpenCartDetails: { _ in },

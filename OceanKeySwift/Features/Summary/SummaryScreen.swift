@@ -33,6 +33,7 @@ struct SummaryScreen: View {
                                 cart: $cart,
                                 geometry: appSettings.roomCellGeometry,
                                 taskControlsUseLongPress: appSettings.roomTaskLongPress,
+                                statusPaletteSaturation: appSettings.statusPaletteSaturation,
                                 actionMenuAllowsMultiple: appSettings.summaryActionMenuAllowsMultiple,
                                 expandedActionMenuRoomIDs: $expandedActionMenuRoomIDs,
                                 onOpenCartDetails: { cartID in

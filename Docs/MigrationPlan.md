@@ -24,6 +24,8 @@ verification.
   environment into the existing `SKView`.
 - Summary action-menu behavior: one expanded menu is the default, while optional
   multi-menu mode is handled through Settings and a tested presentation policy.
+- Room status palette: status fills go through a shared native theme API with a
+  persisted saturation factor, instead of hardcoding final colors in each cell.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings
@@ -130,6 +132,8 @@ available.
      swipe menus must require a clearly horizontal gesture.
    - Keep summary menu expansion rules outside heavy SwiftUI views so Settings
      can alter behavior without creating new gesture conflicts.
+   - Keep visual palette controls routed through the shared design layer, not
+     directly inside row views.
    - Keep background effects behind shared SpriteKit/runtime configuration;
      settings sliders must update the existing effect rather than remounting it.
    - Test on real devices before considering visual effects done.

@@ -37,3 +37,26 @@ func appSettingsPersistsSummaryActionMenuMode() {
 
     #expect(loaded.summaryActionMenuAllowsMultiple)
 }
+
+@Test
+func appSettingsPersistsStatusPaletteSaturation() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.statusPaletteSaturation = 1.42
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.statusPaletteSaturation == 1.42)
+}
+
+@Test
+func appSettingsClampsStatusPaletteSaturation() {
+    let high = AppSettingsStore(statusPaletteSaturation: 99)
+    let low = AppSettingsStore(statusPaletteSaturation: -1)
+
+    #expect(high.statusPaletteSaturation == 1.65)
+    #expect(low.statusPaletteSaturation == 0.70)
+}

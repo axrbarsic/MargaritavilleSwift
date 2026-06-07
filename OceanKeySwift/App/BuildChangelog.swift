@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (48)",
+            date: "2026-06-07",
+            changes: [
+                "Added a native Settings slider for main-screen room status palette saturation.",
+                "Room cells now read their status colors through the shared theme API, so one setting adjusts pending, open, in-progress, ready, and scheduled colors together.",
+                "Added persistence and clamp regression tests for the palette saturation setting."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (47)",
             date: "2026-06-07",
             changes: [

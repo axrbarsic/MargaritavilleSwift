@@ -58,6 +58,8 @@ Simulator unless explicitly allowed.
   Canvas/Timeline fallback was removed so live-background work goes through one
   native runtime.
 - Room cells now use the Flutter status palette.
+- Room status colors now also pass through a native saturation setting so the
+  whole main-screen palette can be made calmer or richer from Settings.
 - Room cells support open state, S/L/B task toggles, VIP toggle, schedule toggle,
   timeline fields, schedule badge, and a right-swipe action menu.
 - Only one action menu is open at a time by default; Settings now exposes the
@@ -175,3 +177,6 @@ Simulator unless explicitly allowed.
 - Settings now also has a native work-behavior toggle for the summary
   swipe-menu mode. The expansion rule is tested separately from SwiftUI views so
   default single-menu behavior and optional multi-menu behavior cannot drift.
+- Settings exposes a native palette saturation slider for all room status colors
+  at once, replacing the old piecemeal color controls with one immediate global
+  adjustment.
