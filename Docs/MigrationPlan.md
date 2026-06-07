@@ -22,6 +22,8 @@ verification.
 - Matrix wallpaper: a single SpriteKit scene is the active native background
   path, with persisted color-richness configuration flowing through SwiftUI
   environment into the existing `SKView`.
+- Summary action-menu behavior: one expanded menu is the default, while optional
+  multi-menu mode is handled through Settings and a tested presentation policy.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings
@@ -126,6 +128,8 @@ available.
    - Treat 120 Hz smoothness as the target on supported iPhones.
    - Keep vertical scrolling higher priority than row-level gestures; room
      swipe menus must require a clearly horizontal gesture.
+   - Keep summary menu expansion rules outside heavy SwiftUI views so Settings
+     can alter behavior without creating new gesture conflicts.
    - Keep background effects behind shared SpriteKit/runtime configuration;
      settings sliders must update the existing effect rather than remounting it.
    - Test on real devices before considering visual effects done.

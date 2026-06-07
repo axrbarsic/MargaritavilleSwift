@@ -8,7 +8,7 @@ struct SummaryScreen: View {
     @Bindable var performanceTelemetry: PerformanceTelemetryStore
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.scheduleNotifications) private var scheduleNotifications
-    @State private var expandedActionMenuRoomID: RoomCell.ID?
+    @State private var expandedActionMenuRoomIDs: Set<RoomCell.ID> = []
     @State private var roomDetailsRoute: RoomDetailsRoute?
     @State private var cartDetailsRoute: CartDetailsRoute?
     @State private var scheduleRoute: RoomScheduleRoute?
@@ -33,13 +33,14 @@ struct SummaryScreen: View {
                                 cart: $cart,
                                 geometry: appSettings.roomCellGeometry,
                                 taskControlsUseLongPress: appSettings.roomTaskLongPress,
-                                expandedActionMenuRoomID: $expandedActionMenuRoomID,
+                                actionMenuAllowsMultiple: appSettings.summaryActionMenuAllowsMultiple,
+                                expandedActionMenuRoomIDs: $expandedActionMenuRoomIDs,
                                 onOpenCartDetails: { cartID in
-                                    expandedActionMenuRoomID = nil
+                                    expandedActionMenuRoomIDs.removeAll()
                                     cartDetailsRoute = CartDetailsRoute(cartID: cartID)
                                 },
                                 onOpenDetails: { roomID, mode in
-                                    expandedActionMenuRoomID = nil
+                                    expandedActionMenuRoomIDs.removeAll()
                                     roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
                                 },
                                 onOpenToggle: toggleOpen,
@@ -78,6 +79,12 @@ struct SummaryScreen: View {
         }
         .onAppear {
             advanceScheduledRooms()
+        }
+        .onChange(of: appSettings.summaryActionMenuAllowsMultiple) { _, allowsMultiple in
+            expandedActionMenuRoomIDs = SummaryActionMenuExpansion.normalized(
+                expandedActionMenuRoomIDs,
+                allowsMultiple: allowsMultiple
+            )
         }
         .onReceive(scheduleTimer) { date in
             advanceScheduledRooms(now: date)

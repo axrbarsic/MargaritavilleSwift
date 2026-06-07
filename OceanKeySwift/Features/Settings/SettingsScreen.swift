@@ -19,6 +19,7 @@ struct SettingsScreen: View {
                 VStack(alignment: .leading, spacing: 18) {
                     header
                     appearanceSection
+                    workSection
                     backgroundSection
                     developerSection
                     storageSection
@@ -122,6 +123,22 @@ struct SettingsScreen: View {
                 defaultValue: MatrixRainConfiguration.default.colorRichness,
                 value: $appSettings.matrixColorRichness
             )
+        }
+    }
+
+    private var workSection: some View {
+        SettingsPanel(title: "Работа") {
+            Toggle(isOn: $appSettings.summaryActionMenuAllowsMultiple) {
+                SettingsInfoRow(
+                    title: "Мульти-меню",
+                    value: appSettings.summaryActionMenuAllowsMultiple ? "Несколько" : "Одно",
+                    systemName: "rectangle.stack.fill"
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.summaryActionMenuAllowsMultiple) { _, _ in
+                feedback.confirm()
+            }
         }
     }
 

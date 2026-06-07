@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (47)",
+            date: "2026-06-07",
+            changes: [
+                "Added a native Settings toggle for summary action-menu mode.",
+                "Room swipe menus now default to one open menu, while the optional multi-menu mode allows several expanded room menus at once.",
+                "Moved the menu expansion rule into a tested presentation policy so gesture behavior stays predictable as Settings grows."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (46)",
             date: "2026-06-07",
             changes: [

@@ -60,7 +60,9 @@ Simulator unless explicitly allowed.
 - Room cells now use the Flutter status palette.
 - Room cells support open state, S/L/B task toggles, VIP toggle, schedule toggle,
   timeline fields, schedule badge, and a right-swipe action menu.
-- Only one action menu is open at a time.
+- Only one action menu is open at a time by default; Settings now exposes the
+  optional multi-menu behavior for cases where several expanded room menus are
+  useful during work.
 - Native state now uses SwiftData as the default local-first source of truth for
   the work session. Legacy Application Support JSON is only an import/fallback
   path for older local installs.
@@ -170,3 +172,6 @@ Simulator unless explicitly allowed.
 - Settings now has a dedicated app-background section with a persisted Matrix
   color richness slider. The slider updates the shared SpriteKit scene
   configuration instead of recreating the wallpaper engine.
+- Settings now also has a native work-behavior toggle for the summary
+  swipe-menu mode. The expansion rule is tested separately from SwiftUI views so
+  default single-menu behavior and optional multi-menu behavior cannot drift.

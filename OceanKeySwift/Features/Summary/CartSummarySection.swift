@@ -6,7 +6,8 @@ struct CartSummarySection: View {
     @Binding var cart: CartSection
     let geometry: RoomCellGeometry
     let taskControlsUseLongPress: Bool
-    @Binding var expandedActionMenuRoomID: RoomCell.ID?
+    let actionMenuAllowsMultiple: Bool
+    @Binding var expandedActionMenuRoomIDs: Set<RoomCell.ID>
     let onOpenCartDetails: (CartSection.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onOpenToggle: (RoomCell.ID) -> Void
@@ -37,9 +38,13 @@ struct CartSummarySection: View {
                     room: $room,
                     geometry: geometry,
                     taskControlsUseLongPress: taskControlsUseLongPress,
-                    isActionMenuExpanded: expandedActionMenuRoomID == room.id,
+                    isActionMenuExpanded: expandedActionMenuRoomIDs.contains(room.id),
                     onActionMenuToggle: {
-                        expandedActionMenuRoomID = expandedActionMenuRoomID == room.id ? nil : room.id
+                        expandedActionMenuRoomIDs = SummaryActionMenuExpansion.toggled(
+                            roomID: room.id,
+                            in: expandedActionMenuRoomIDs,
+                            allowsMultiple: actionMenuAllowsMultiple
+                        )
                     },
                     onOpenNotes: { onOpenDetails(room.id, .text) },
                     onOpenVoice: { onOpenDetails(room.id, .voice) },
@@ -57,12 +62,13 @@ struct CartSummarySection: View {
 
 #Preview {
     @Previewable @State var cart = WorkSessionStore.preview().carts[0]
-    @Previewable @State var expanded: RoomCell.ID?
+    @Previewable @State var expanded: Set<RoomCell.ID> = []
     return CartSummarySection(
         cart: $cart,
         geometry: .roomy,
         taskControlsUseLongPress: true,
-        expandedActionMenuRoomID: $expanded,
+        actionMenuAllowsMultiple: false,
+        expandedActionMenuRoomIDs: $expanded,
         onOpenCartDetails: { _ in },
         onOpenDetails: { _, _ in },
         onOpenToggle: { _ in },

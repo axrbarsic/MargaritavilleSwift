@@ -6,6 +6,7 @@ final class AppSettingsStore {
     private enum Keys {
         static let roomCellGeometry = "roomCellGeometry"
         static let roomTaskLongPress = "roomTaskLongPress"
+        static let summaryActionMenuAllowsMultiple = "summaryActionMenuAllowsMultiple"
         static let matrixColorRichness = "matrixColorRichness"
     }
 
@@ -24,6 +25,12 @@ final class AppSettingsStore {
         }
     }
 
+    var summaryActionMenuAllowsMultiple: Bool {
+        didSet {
+            userDefaults.set(summaryActionMenuAllowsMultiple, forKey: Keys.summaryActionMenuAllowsMultiple)
+        }
+    }
+
     var matrixColorRichness: Double {
         get { storedMatrixColorRichness }
         set {
@@ -39,11 +46,13 @@ final class AppSettingsStore {
     init(
         roomCellGeometry: RoomCellGeometry = .roomy,
         roomTaskLongPress: Bool = true,
+        summaryActionMenuAllowsMultiple: Bool = false,
         matrixColorRichness: Double = MatrixRainConfiguration.default.colorRichness,
         userDefaults: UserDefaults = .standard
     ) {
         self.roomCellGeometry = roomCellGeometry
         self.roomTaskLongPress = roomTaskLongPress
+        self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
         self.storedMatrixColorRichness = Self.normalizedMatrixColorRichness(matrixColorRichness)
         self.userDefaults = userDefaults
     }
@@ -52,11 +61,13 @@ final class AppSettingsStore {
         let rawValue = userDefaults.string(forKey: Keys.roomCellGeometry)
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
+        let summaryActionMenuAllowsMultiple = userDefaults.object(forKey: Keys.summaryActionMenuAllowsMultiple) as? Bool ?? false
         let matrixColorRichness = userDefaults.object(forKey: Keys.matrixColorRichness) as? Double
             ?? MatrixRainConfiguration.default.colorRichness
         return AppSettingsStore(
             roomCellGeometry: geometry,
             roomTaskLongPress: roomTaskLongPress,
+            summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,
             matrixColorRichness: matrixColorRichness,
             userDefaults: userDefaults
         )
