@@ -40,6 +40,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     private var audioEngine: AVAudioEngine?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+    private var audioPipe: SpeechAudioBufferPipe?
     private var cleanupTask: Task<Void, Never>?
     private var baseText = ""
     private var activeSessionID: UUID?
@@ -108,13 +109,15 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         request.shouldReportPartialResults = true
         request.taskHint = .dictation
         request.addsPunctuation = true
+        let audioPipe = SpeechAudioBufferPipe(request: request)
 
         audioEngine = engine
         recognitionRequest = request
+        self.audioPipe = audioPipe
 
         do {
             try configureRecordingSession()
-            try installAudioTap(on: engine, request: request)
+            try installAudioTap(on: engine, audioPipe: audioPipe)
             recognitionTask = recognizer.recognitionTask(with: request) { [weak self] result, error in
                 Task { @MainActor in
                     self?.handleRecognition(result: result, error: error)
@@ -134,8 +137,8 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         guard phase == .recording || phase == .starting else { return }
         phase = .finishing
         onStatus?("Завершаю расшифровку...")
+        audioPipe?.finishAudio()
         stopAudioEngine()
-        recognitionRequest?.endAudio()
         scheduleFinishingTimeout()
     }
 
@@ -206,13 +209,15 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     private func cleanupExistingSession(cancelTask: Bool) {
         cleanupTask?.cancel()
         cleanupTask = nil
+        audioPipe?.finishAudio()
         stopAudioEngine()
-        recognitionRequest?.endAudio()
         if cancelTask {
             recognitionTask?.cancel()
         }
         recognitionTask = nil
         recognitionRequest = nil
+        audioPipe?.discard()
+        audioPipe = nil
         activeSessionID = nil
         hasDeliveredTranscript = false
     }
@@ -228,7 +233,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
             mode: .measurement,
             options: [.allowBluetoothHFP, .defaultToSpeaker, .mixWithOthers]
         )
-        try session.setActive(true, options: .notifyOthersOnDeactivation)
+        try session.setActive(true)
     }
 
     private func restoreInteractionAudioSession() {
@@ -241,14 +246,14 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         }
     }
 
-    private func installAudioTap(on engine: AVAudioEngine, request: SFSpeechAudioBufferRecognitionRequest) throws {
+    private func installAudioTap(on engine: AVAudioEngine, audioPipe: SpeechAudioBufferPipe) throws {
         let inputNode = engine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
         guard format.sampleRate > 0, format.channelCount > 0 else {
             throw VoiceTranscriptionError.invalidInputFormat
         }
         inputNode.installTap(onBus: 0, bufferSize: 1_024, format: format) { buffer, _ in
-            request.append(buffer)
+            audioPipe.append(buffer)
         }
         hasInstalledTap = true
     }

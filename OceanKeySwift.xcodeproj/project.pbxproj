@@ -51,6 +51,7 @@
 		D044CA9E18FAD578A0FB0238 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9BE68B3296B3000BD7A068 /* WorkSessionStore+Selection.swift */; };
 		D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A07FDDB084B7AAC0AC13CF80 /* Speech.framework */; };
 		DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1576751457D918F28F73179E /* VoiceNoteViewModel.swift */; };
+		DD72FCE1C3E9930E8FCEE3AC /* SpeechAudioBufferPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0269E3129E4EF9439065ED9A /* SpeechAudioBufferPipe.swift */; };
 		E239F137FD94F82D7BB15630 /* VoiceTranscriptionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */; };
 		E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */; };
 		E2F267B30D4B9E3FCB81BFAA /* MatrixRainBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E24D2B3912DAF9638A767BD /* MatrixRainBackground.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0269E3129E4EF9439065ED9A /* SpeechAudioBufferPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechAudioBufferPipe.swift; sourceTree = "<group>"; };
 		0655DECA8F86F1748E5A8A9B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModels.swift; sourceTree = "<group>"; };
 		0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 		68B13C1B908C6EF928E61B75 /* Speech */ = {
 			isa = PBXGroup;
 			children = (
+				0269E3129E4EF9439065ED9A /* SpeechAudioBufferPipe.swift */,
 				8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */,
 				46AFB0966095D79AA80CAF5F /* VoiceTranscriptionService.swift */,
 			);
@@ -527,6 +530,7 @@
 				9723FE9E9B7A04E31BE1260B /* RoomScheduleSheet.swift in Sources */,
 				C27172BDC7C51C3E3EE3CFF9 /* ScheduleNotificationService.swift in Sources */,
 				0E1066669AD7D73D2C6F05E8 /* SettingsScreen.swift in Sources */,
+				DD72FCE1C3E9930E8FCEE3AC /* SpeechAudioBufferPipe.swift in Sources */,
 				CDEB880791759C750A6CBF53 /* SpriteKitEffectView.swift in Sources */,
 				094272BBB8350642EA68BD69 /* SummaryHeader.swift in Sources */,
 				7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */,
@@ -629,7 +633,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -688,7 +692,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

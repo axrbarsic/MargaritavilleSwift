@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (27)",
+            date: "2026-06-06",
+            changes: [
+                "Hardened real-device voice recording shutdown with a locked Speech audio pipe.",
+                "Speech audio now finishes exactly once even if the panel disappears, stop is tapped, or cleanup runs later.",
+                "Microphone buffers are ignored after stop so the audio tap cannot append into a closed Speech request."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (26)",
             date: "2026-06-06",
             changes: [
