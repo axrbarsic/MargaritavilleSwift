@@ -3,7 +3,8 @@ import Foundation
 enum SettingsCategory: String, CaseIterable, Identifiable {
     case appearance
     case workflow
-    case data
+    case sync
+    case tools
     case developer
 
     var id: String { rawValue }
@@ -14,8 +15,10 @@ enum SettingsCategory: String, CaseIterable, Identifiable {
             "Внешний вид"
         case .workflow:
             "Работа"
-        case .data:
-            "Данные"
+        case .sync:
+            "Синхронизация"
+        case .tools:
+            "Инструменты"
         case .developer:
             "Разработчик"
         }
@@ -27,10 +30,12 @@ enum SettingsCategory: String, CaseIterable, Identifiable {
             "paintpalette.fill"
         case .workflow:
             "hand.tap.fill"
-        case .data:
-            "externaldrive.fill"
+        case .sync:
+            "icloud.fill"
+        case .tools:
+            "wrench.adjustable.fill"
         case .developer:
-            "wrench.and.screwdriver.fill"
+            "hammer.fill"
         }
     }
 }

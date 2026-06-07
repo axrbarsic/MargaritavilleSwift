@@ -160,6 +160,11 @@ available.
      additions should not inflate the main settings view.
    - Keep background effects behind shared SpriteKit/runtime configuration;
      settings sliders must update the existing effect rather than remounting it.
+   - Keep video wallpaper matte/blur inside one native player composition
+     rather than layering per-frame SwiftUI filters over AV playback.
+   - Gate iOS 26 visual experiments with availability checks and developer
+     toggles so production behavior stays stable while new Apple APIs are
+     evaluated.
    - Test on real devices before considering visual effects done.
 
 7. Cutover

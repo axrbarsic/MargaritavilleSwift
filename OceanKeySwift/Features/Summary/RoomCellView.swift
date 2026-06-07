@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RoomCellView: View {
     @Environment(\.interactionFeedback) private var feedback
+    @Environment(\.experimentalGlassVIPEnabled) private var experimentalGlassVIPEnabled
 
     @Binding var room: RoomCell
     let geometry: RoomCellGeometry
@@ -67,6 +68,7 @@ struct RoomCellView: View {
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .background(cellBackground)
         .clipShape(tileShape)
+        .experimentalVIPGlass(enabled: experimentalGlassVIPEnabled && room.isVIP, shape: tileShape)
         .overlay(alignment: .topTrailing) {
             if room.isVIP {
                 VIPPulseOverlay()
@@ -204,6 +206,25 @@ struct RoomCellView: View {
     private func taskColor(_ task: RoomTask) -> Color {
         guard room.opened else { return OceanKeyTheme.roomForeground.opacity(0.25) }
         return room.completedTasks.contains(task) ? OceanKeyTheme.roomForeground : OceanKeyTheme.roomForeground.opacity(0.32)
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func experimentalVIPGlass(enabled: Bool, shape: UnevenRoundedRectangle) -> some View {
+        if enabled {
+            if #available(iOS 26.0, *) {
+                self.glassEffect(.regular.tint(.white.opacity(0.12)).interactive(), in: shape)
+            } else {
+                self.overlay {
+                    shape
+                        .stroke(.white.opacity(0.32), lineWidth: 1.5)
+                        .blendMode(.screen)
+                }
+            }
+        } else {
+            self
+        }
     }
 }
 

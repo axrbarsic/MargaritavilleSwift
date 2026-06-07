@@ -84,19 +84,76 @@ struct SettingsScreen: View {
             settingsSection
         case .workflow:
             workSection
-        case .data:
+        case .sync:
+            syncSection
             storageSection
-            migrationSection
+        case .tools:
+            toolsSection
         case .developer:
+            experimentalSection
             developerSection
+            migrationSection
+        }
+    }
+
+    private var experimentalSection: some View {
+        SettingsPanel(
+            title: "Экспериментальное",
+            subtitle: "Новые iOS 26-возможности включаются вручную и всегда имеют безопасный fallback."
+        ) {
+            Toggle(isOn: $appSettings.developerLiquidGlassEnabled) {
+                SettingsInfoRow(
+                    title: "Liquid Glass",
+                    value: appSettings.developerLiquidGlassEnabled ? "Вкл" : "Выкл",
+                    systemName: "circle.hexagongrid.fill",
+                    subtitle: "Нативное стекло Apple для карточек настроек на iOS 26+."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerLiquidGlassEnabled) { _, _ in
+                feedback.confirm()
+            }
+
+            Toggle(isOn: $appSettings.developerGlassVIPEnabled) {
+                SettingsInfoRow(
+                    title: "Glass VIP",
+                    value: appSettings.developerGlassVIPEnabled ? "Вкл" : "Выкл",
+                    systemName: "sparkle.magnifyingglass",
+                    subtitle: "Стеклянный слой для VIP-ячеек без отдельного тяжёлого эффекта на каждую ячейку."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerGlassVIPEnabled) { _, _ in
+                feedback.confirm()
+            }
+
+            SettingsInfoRow(
+                title: "Metal shader",
+                value: "Следующий",
+                systemName: "cpu.fill",
+                subtitle: "Фоновые shader-эффекты вынесем в отдельный runtime, чтобы не ломать 120 Гц."
+            )
         }
     }
 
     private var developerSection: some View {
-        SettingsPanel(title: "Разработчик") {
-            SettingsInfoRow(title: "Версия", value: AppBuildInfo.versionLabel, systemName: "number")
+        SettingsPanel(
+            title: "Разработчик",
+            subtitle: "Диагностика, версия приложения и технические признаки текущей сборки."
+        ) {
+            SettingsInfoRow(
+                title: "Версия",
+                value: AppBuildInfo.versionLabel,
+                systemName: "number",
+                subtitle: "Нажми ниже, чтобы открыть краткий список изменений."
+            )
             Button(action: openChangelog) {
-                SettingsInfoRow(title: "Что изменилось", value: "Открыть", systemName: "list.bullet.clipboard.fill")
+                SettingsInfoRow(
+                    title: "Что изменилось",
+                    value: "Открыть",
+                    systemName: "list.bullet.clipboard.fill",
+                    subtitle: "Короткая выжимка по последним билдам."
+                )
             }
             .buttonStyle(.plain)
             SettingsInfoRow(title: "Движок", value: "SpriteKit + SwiftUI", systemName: "sparkles")
@@ -106,14 +163,22 @@ struct SettingsScreen: View {
             SettingsInfoRow(title: "Просадки", value: performanceSlowFrameLabel, systemName: "waveform.path.ecg")
             SettingsInfoRow(title: "Худший кадр", value: performanceWorstFrameLabel, systemName: "timer")
             Button(action: resetPerformanceCounters) {
-                SettingsInfoRow(title: "Метрики", value: "Сбросить", systemName: "arrow.counterclockwise")
+                SettingsInfoRow(
+                    title: "Метрики",
+                    value: "Сбросить",
+                    systemName: "arrow.counterclockwise",
+                    subtitle: "Обнулить счётчики FPS и медленных кадров."
+                )
             }
             .buttonStyle(.plain)
         }
     }
 
     private var appearanceSection: some View {
-        SettingsPanel(title: "Внешний вид") {
+        SettingsPanel(
+            title: "Внешний вид",
+            subtitle: "Размер ячеек, палитра статусов и жесты задач на основном экране."
+        ) {
             VStack(alignment: .leading, spacing: 10) {
                 Picker("Размер ячеек", selection: $appSettings.roomCellGeometry) {
                     ForEach(RoomCellGeometry.allCases) { geometry in
@@ -125,7 +190,8 @@ struct SettingsScreen: View {
                 SettingsInfoRow(
                     title: "Ячейки",
                     value: appSettings.roomCellGeometry.description,
-                    systemName: "rectangle.roundedtop.fill"
+                    systemName: "rectangle.roundedtop.fill",
+                    subtitle: "Можно оставить просторный размер или вернуться ближе к компактному виду."
                 )
 
                 SettingsSliderRow(
@@ -141,7 +207,8 @@ struct SettingsScreen: View {
                     SettingsInfoRow(
                         title: "Долгий тап",
                         value: appSettings.roomTaskLongPress ? "Включен" : "Быстрый",
-                        systemName: "hand.tap.fill"
+                        systemName: "hand.tap.fill",
+                        subtitle: "Защищает S, L, B от случайных касаний во время скролла."
                     )
                 }
                 .tint(OceanKeyTheme.accent)
@@ -153,7 +220,10 @@ struct SettingsScreen: View {
     }
 
     private var backgroundSection: some View {
-        SettingsPanel(title: "Фон приложения") {
+        SettingsPanel(
+            title: "Фон приложения",
+            subtitle: "Matrix Rain или локальное видео как живая заставка основного экрана."
+        ) {
             Picker("Заставка", selection: $appSettings.appBackgroundMode) {
                 ForEach(AppBackgroundMode.allCases) { mode in
                     Text(mode.title).tag(mode)
@@ -164,7 +234,12 @@ struct SettingsScreen: View {
                 feedback.confirm()
             }
 
-            SettingsInfoRow(title: "Заставка", value: appSettings.appBackgroundMode.description, systemName: "grid")
+            SettingsInfoRow(
+                title: "Заставка",
+                value: appSettings.appBackgroundMode.description,
+                systemName: "grid",
+                subtitle: "Видео хранится только локально на устройстве."
+            )
             if appSettings.appBackgroundMode == .matrixRain {
                 SettingsSliderRow(
                     title: "Скорость",
@@ -190,11 +265,7 @@ struct SettingsScreen: View {
                 matching: .videos,
                 photoLibrary: .shared()
             ) {
-                SettingsInfoRow(
-                    title: "Видео",
-                    value: videoStatus,
-                    systemName: "film.fill"
-                )
+                BackgroundVideoPickerLabel(videoStatus: videoStatus)
             }
             .buttonStyle(.plain)
             .onChange(of: selectedBackgroundVideoItem) { _, item in
@@ -214,12 +285,16 @@ struct SettingsScreen: View {
     }
 
     private var workSection: some View {
-        SettingsPanel(title: "Работа") {
+        SettingsPanel(
+            title: "Работа",
+            subtitle: "Поведение раздвижного меню ячейки и рабочие жесты на основном экране."
+        ) {
             Toggle(isOn: $appSettings.summaryActionMenuAllowsMultiple) {
                 SettingsInfoRow(
                     title: "Мульти-меню",
                     value: appSettings.summaryActionMenuAllowsMultiple ? "Несколько" : "Одно",
-                    systemName: "rectangle.stack.fill"
+                    systemName: "rectangle.stack.fill",
+                    subtitle: "По умолчанию открыто только одно меню ячейки; этот режим разрешает несколько."
                 )
             }
             .tint(OceanKeyTheme.accent)
@@ -229,40 +304,111 @@ struct SettingsScreen: View {
         }
     }
 
-    private var storageSection: some View {
-        SettingsPanel(title: "Локальные данные") {
-            SettingsInfoRow(title: "Ячеек", value: "\(workSession.counts.total)", systemName: "rectangle.grid.1x2")
-            SettingsInfoRow(title: "Готово", value: "\(workSession.counts.completed)", systemName: "checkmark.circle.fill")
+    private var syncSection: some View {
+        SettingsPanel(
+            title: "Синхронизация",
+            subtitle: "Swift-версия готовится под Apple-first хранение и будущую iCloud-синхронизацию."
+        ) {
+            SettingsInfoRow(
+                title: "iCloud",
+                value: RuntimeDiagnostics.appleSyncStatusLabel,
+                systemName: "icloud.slash.fill",
+                subtitle: "Firebase больше не является ориентиром для нативной iOS-ветки."
+            )
+            SettingsInfoRow(
+                title: "Локальный режим",
+                value: persistenceStatus,
+                systemName: "externaldrive.fill",
+                subtitle: "Данные сначала сохраняются на устройстве, без блокировки интерфейса."
+            )
             Button(action: openHistory) {
-                SettingsInfoRow(title: "Хронология", value: "\(workSession.history.count)", systemName: "clock.arrow.circlepath")
+                SettingsInfoRow(
+                    title: "Хронология",
+                    value: "\(workSession.history.count)",
+                    systemName: "clock.arrow.circlepath",
+                    subtitle: "События работы с ячейками и тележками."
+                )
             }
             .buttonStyle(.plain)
-            SettingsInfoRow(title: "Хранилище", value: persistenceStatus, systemName: "externaldrive.fill")
-            SettingsInfoRow(title: "iCloud", value: RuntimeDiagnostics.appleSyncStatusLabel, systemName: "icloud.slash.fill")
+        }
+    }
+
+    private var storageSection: some View {
+        SettingsPanel(
+            title: "Текущая смена",
+            subtitle: "Быстрый технический срез активного рабочего списка."
+        ) {
+            SettingsInfoRow(title: "Ячеек", value: "\(workSession.counts.total)", systemName: "rectangle.grid.1x2")
+            SettingsInfoRow(title: "Готово", value: "\(workSession.counts.completed)", systemName: "checkmark.circle.fill")
             if workSession.selection.workdayLocked {
                 Button(action: unlockWorkdayForEditing) {
-                    SettingsInfoRow(title: "Рабочий список", value: "Редактировать", systemName: "square.and.pencil")
+                    SettingsInfoRow(
+                        title: "Рабочий список",
+                        value: "Редактировать",
+                        systemName: "square.and.pencil",
+                        subtitle: "Разблокировать первый экран для правки тележек и номеров."
+                    )
                 }
                 .buttonStyle(.plain)
             }
         }
     }
 
+    private var toolsSection: some View {
+        SettingsPanel(
+            title: "Инструменты",
+            subtitle: "Встроенные помощники Swift-версии. AI-перевод и Gemini пока не показываем."
+        ) {
+            SettingsInfoRow(
+                title: "Диктофон",
+                value: "Apple Speech",
+                systemName: "mic.fill",
+                subtitle: "Нативная запись и расшифровка заметок без Gemini как основного пути."
+            )
+            SettingsInfoRow(
+                title: "Медиа",
+                value: "Локально",
+                systemName: "camera.fill",
+                subtitle: "Фото и видео остаются на устройстве, без облачной синхронизации."
+            )
+            SettingsInfoRow(
+                title: "Видео-фон",
+                value: appSettings.backgroundVideoRelativePath == nil ? "Не выбран" : "Готов",
+                systemName: "film.stack.fill",
+                subtitle: "Тот же локальный файл используется как фон приложения."
+            )
+        }
+    }
+
     private var settingsSection: some View {
-        SettingsPanel(title: "Настройки") {
+        SettingsPanel(
+            title: "Сброс",
+            subtitle: "Вернуть визуальные и рабочие параметры к значениям по умолчанию."
+        ) {
             Button(action: confirmResetSettings) {
-                SettingsInfoRow(title: "Сброс", value: "По умолчанию", systemName: "arrow.counterclockwise.circle.fill")
+                SettingsInfoRow(
+                    title: "Сброс настроек",
+                    value: "По умолчанию",
+                    systemName: "arrow.counterclockwise.circle.fill",
+                    subtitle: "Не удаляет рабочую смену, но сбрасывает внешний вид и режимы."
+                )
             }
             .buttonStyle(.plain)
         }
     }
 
     private var migrationSection: some View {
-        SettingsPanel(title: "Перенос") {
+        SettingsPanel(
+            title: "Перенос",
+            subtitle: "Служебная заметка по текущей нативной iOS-ветке."
+        ) {
             Text("Эта Swift-версия пока идёт отдельной веткой. Flutter-приложение остаётся эталоном поведения до полной готовности нативной версии.")
                 .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundStyle(OceanKeyTheme.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
+                .padding(16)
+                .background(OceanKeyTheme.surface.opacity(0.84))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
     }
 
@@ -328,6 +474,18 @@ struct SettingsScreen: View {
         } catch {
             feedback.holdWarning()
         }
+    }
+}
+
+private struct BackgroundVideoPickerLabel: View {
+    let videoStatus: String
+
+    var body: some View {
+        SettingsInfoRow(
+            title: "Видео",
+            value: videoStatus,
+            systemName: "film.fill"
+        )
     }
 }
 

@@ -50,6 +50,22 @@ func appSettingsPersistsBackgroundVideoSettings() {
 }
 
 @Test
+func appSettingsPersistsDeveloperExperimentalFlags() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.developerLiquidGlassEnabled = true
+    settings.developerGlassVIPEnabled = true
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.developerLiquidGlassEnabled)
+    #expect(loaded.developerGlassVIPEnabled)
+}
+
+@Test
 func appSettingsClampsMatrixSpeed() {
     let settings = AppSettingsStore(matrixSpeed: 9)
     let low = AppSettingsStore(matrixSpeed: 0)
@@ -110,6 +126,8 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.matrixSpeed = 2.2
     settings.backgroundVideoRelativePath = "Background/video-wallpaper.mov"
     settings.backgroundVideoBlur = 0.7
+    settings.developerLiquidGlassEnabled = true
+    settings.developerGlassVIPEnabled = true
 
     settings.resetToDefaults()
     let loaded = AppSettingsStore.load(userDefaults: defaults)
@@ -122,4 +140,6 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.matrixSpeed == MatrixRainConfiguration.default.speed)
     #expect(loaded.backgroundVideoRelativePath == nil)
     #expect(loaded.backgroundVideoBlur == 0.28)
+    #expect(!loaded.developerLiquidGlassEnabled)
+    #expect(!loaded.developerGlassVIPEnabled)
 }

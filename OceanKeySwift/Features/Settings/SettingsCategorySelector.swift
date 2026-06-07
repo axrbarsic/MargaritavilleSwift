@@ -5,7 +5,7 @@ struct SettingsCategorySelector: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 10) {
+            LazyHGrid(rows: [GridItem(.fixed(46)), GridItem(.fixed(46))], spacing: 8) {
                 ForEach(SettingsCategory.allCases) { category in
                     SettingsCategoryButton(
                         category: category,
@@ -33,7 +33,7 @@ private struct SettingsCategoryButton: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
                 .padding(.horizontal, 15)
-                .frame(height: 46)
+                .frame(minWidth: 138, maxWidth: 178, minHeight: 46)
                 .background(background)
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .overlay {

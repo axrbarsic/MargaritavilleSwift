@@ -12,10 +12,10 @@ struct AppBackgroundView: View {
                 SpriteKitEffectView(.matrixRain)
             }
             if appBackgroundMode == .video, let appBackgroundVideoURL {
-                LoopingVideoBackgroundView(url: appBackgroundVideoURL)
-                    .overlay {
-                        BackgroundMaterialView(alpha: CGFloat(appBackgroundVideoBlur))
-                    }
+                LoopingVideoBackgroundView(
+                    url: appBackgroundVideoURL,
+                    matteStrength: appBackgroundVideoBlur
+                )
             }
         }
         .ignoresSafeArea()

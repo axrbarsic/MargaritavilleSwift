@@ -42,6 +42,8 @@ final class AppSettingsStore {
         static let matrixSpeed = "matrixSpeed"
         static let backgroundVideoRelativePath = "backgroundVideoRelativePath"
         static let backgroundVideoBlur = "backgroundVideoBlur"
+        static let developerLiquidGlassEnabled = "developerLiquidGlassEnabled"
+        static let developerGlassVIPEnabled = "developerGlassVIPEnabled"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -103,6 +105,18 @@ final class AppSettingsStore {
         }
     }
 
+    var developerLiquidGlassEnabled: Bool {
+        didSet {
+            userDefaults.set(developerLiquidGlassEnabled, forKey: Keys.developerLiquidGlassEnabled)
+        }
+    }
+
+    var developerGlassVIPEnabled: Bool {
+        didSet {
+            userDefaults.set(developerGlassVIPEnabled, forKey: Keys.developerGlassVIPEnabled)
+        }
+    }
+
     var matrixConfiguration: MatrixRainConfiguration {
         MatrixRainConfiguration(speed: matrixSpeed)
     }
@@ -121,6 +135,8 @@ final class AppSettingsStore {
         matrixSpeed = MatrixRainConfiguration.default.speed
         backgroundVideoRelativePath = nil
         backgroundVideoBlur = 0.28
+        developerLiquidGlassEnabled = false
+        developerGlassVIPEnabled = false
     }
 
     init(
@@ -132,6 +148,8 @@ final class AppSettingsStore {
         matrixSpeed: Double = MatrixRainConfiguration.default.speed,
         backgroundVideoRelativePath: String? = nil,
         backgroundVideoBlur: Double = 0.28,
+        developerLiquidGlassEnabled: Bool = false,
+        developerGlassVIPEnabled: Bool = false,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -142,6 +160,8 @@ final class AppSettingsStore {
         self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
         self.storedMatrixSpeed = Self.normalizedMatrixSpeed(matrixSpeed)
         self.storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(backgroundVideoBlur)
+        self.developerLiquidGlassEnabled = developerLiquidGlassEnabled
+        self.developerGlassVIPEnabled = developerGlassVIPEnabled
         self.userDefaults = userDefaults
     }
 
@@ -157,6 +177,8 @@ final class AppSettingsStore {
             ?? MatrixRainConfiguration.default.speed
         let backgroundVideoRelativePath = userDefaults.string(forKey: Keys.backgroundVideoRelativePath)
         let backgroundVideoBlur = userDefaults.object(forKey: Keys.backgroundVideoBlur) as? Double ?? 0.28
+        let developerLiquidGlassEnabled = userDefaults.object(forKey: Keys.developerLiquidGlassEnabled) as? Bool ?? false
+        let developerGlassVIPEnabled = userDefaults.object(forKey: Keys.developerGlassVIPEnabled) as? Bool ?? false
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -166,6 +188,8 @@ final class AppSettingsStore {
             matrixSpeed: matrixSpeed,
             backgroundVideoRelativePath: backgroundVideoRelativePath,
             backgroundVideoBlur: backgroundVideoBlur,
+            developerLiquidGlassEnabled: developerLiquidGlassEnabled,
+            developerGlassVIPEnabled: developerGlassVIPEnabled,
             userDefaults: userDefaults
         )
     }

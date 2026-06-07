@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (55)",
+            date: "2026-06-07",
+            changes: [
+                "Rebuilt video wallpaper matte blur as a single native AVFoundation/UIKit composition with material blur and tint inside the player view.",
+                "Reworked Settings into the Flutter-style category structure: Appearance, Work, Sync, Tools, and Developer, while keeping the implementation native SwiftUI.",
+                "Added Developer experimental toggles for iOS 26 Liquid Glass settings surfaces and Glass VIP cells, with safe fallbacks on older iOS versions."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (54)",
             date: "2026-06-07",
             changes: [

@@ -25,6 +25,8 @@ struct AppRootView: View {
         .environment(\.appBackgroundVideoURL, appSettings.backgroundVideoURL)
         .environment(\.appBackgroundVideoBlur, appSettings.backgroundVideoBlur)
         .environment(\.matrixRainConfiguration, appSettings.matrixConfiguration)
+        .environment(\.experimentalLiquidGlassEnabled, appSettings.developerLiquidGlassEnabled)
+        .environment(\.experimentalGlassVIPEnabled, appSettings.developerGlassVIPEnabled)
         .preferredColorScheme(.dark)
     }
 }

@@ -198,6 +198,12 @@ Simulator unless explicitly allowed.
 - Video wallpaper is now native iOS: Settings can import one local video,
   persist it in Application Support, and render it as a muted loop through
   `AVQueuePlayer`/`AVPlayerLooper` with a matte blur control.
+- Video wallpaper matte blur now lives inside the native player container:
+  `AVPlayerLayer` stays the video source while one UIKit material/tint layer
+  provides the matte finish without remounting the background.
 - Cart consumables now support custom per-cart rows on top of the default
   towel/linen catalog, with quantity, completion state, timestamps, history,
   and SwiftData persistence.
+- Settings now follows the Flutter category idea as native SwiftUI:
+  Appearance, Work, Sync, Tools, and Developer. Developer also contains gated
+  iOS 26 visual experiments for Liquid Glass and Glass VIP cells.
