@@ -1,6 +1,6 @@
 import Foundation
 
-enum RoomTask: String, CaseIterable, Identifiable {
+enum RoomTask: String, CaseIterable, Codable, Identifiable {
     case stripped = "S"
     case linen = "L"
     case balcony = "B"
@@ -8,7 +8,7 @@ enum RoomTask: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-enum RoomStatus: String, CaseIterable {
+enum RoomStatus: String, CaseIterable, Codable {
     case pending
     case open
     case inProgress
@@ -16,7 +16,7 @@ enum RoomStatus: String, CaseIterable {
     case scheduled
 }
 
-struct RoomCell: Identifiable, Equatable {
+struct RoomCell: Codable, Identifiable, Equatable {
     let id: String
     var opened: Bool
     var completedTasks: Set<RoomTask>
@@ -45,13 +45,13 @@ struct RoomCell: Identifiable, Equatable {
     }
 }
 
-struct CartSection: Identifiable, Equatable {
+struct CartSection: Codable, Identifiable, Equatable {
     let id: Int
     var building: String
     var rooms: [RoomCell]
 }
 
-struct RoomTimeline: Equatable {
+struct RoomTimeline: Codable, Equatable {
     var selectedAt: Date?
     var openedAt: Date?
     var strippedAt: Date?
@@ -74,7 +74,7 @@ struct RoomTimeline: Equatable {
     }
 }
 
-struct SummaryCounts: Equatable {
+struct SummaryCounts: Codable, Equatable {
     var total: Int
     var completed: Int
     var remaining: Int

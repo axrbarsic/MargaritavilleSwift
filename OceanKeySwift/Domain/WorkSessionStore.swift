@@ -3,10 +3,14 @@ import Observation
 
 @Observable
 final class WorkSessionStore {
+    @ObservationIgnored private let repository: WorkSessionRepository?
+    @ObservationIgnored private(set) var lastPersistenceError: Error?
+
     var carts: [CartSection]
 
-    init(carts: [CartSection]) {
+    init(carts: [CartSection], repository: WorkSessionRepository? = nil) {
         self.carts = carts
+        self.repository = repository
     }
 
     var counts: SummaryCounts {
@@ -90,12 +94,40 @@ final class WorkSessionStore {
             return
         }
         update(&carts[cartIndex].rooms[roomIndex])
+        persist()
+    }
+
+    private func persist() {
+        guard let repository else { return }
+        do {
+            try repository.save(carts: carts)
+            lastPersistenceError = nil
+        } catch {
+            lastPersistenceError = error
+        }
     }
 }
 
 extension WorkSessionStore {
+    static func load(repository: WorkSessionRepository = LocalWorkSessionRepository()) -> WorkSessionStore {
+        do {
+            if let storedCarts = try repository.loadCarts() {
+                return WorkSessionStore(carts: storedCarts, repository: repository)
+            }
+        } catch {
+            let store = WorkSessionStore(carts: seedCarts(), repository: repository)
+            store.lastPersistenceError = error
+            return store
+        }
+        return WorkSessionStore(carts: seedCarts(), repository: repository)
+    }
+
     static func preview() -> WorkSessionStore {
-        WorkSessionStore(carts: [
+        WorkSessionStore(carts: seedCarts())
+    }
+
+    private static func seedCarts() -> [CartSection] {
+        [
             CartSection(id: 7, building: "A3", rooms: [
                 RoomCell(id: "303", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: true),
                 RoomCell(id: "304", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: false),
@@ -108,6 +140,6 @@ extension WorkSessionStore {
                 RoomCell(id: "401", opened: false, completedTasks: [], isVIP: false),
                 RoomCell(id: "402", opened: false, completedTasks: [], isVIP: false)
             ])
-        ])
+        ]
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		094272BBB8350642EA68BD69 /* SummaryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */; };
 		14A467CC5BC8CBF9F1AAF2E5 /* CartSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */; };
+		21201E301476E7CD55CDD211 /* LocalWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */; };
 		307C5468BDEA436295C95CE4 /* OceanKeySwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */; };
 		392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */; };
 		39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC54D512493ADEF1EB26177 /* GameplayKit.framework */; };
@@ -26,6 +27,7 @@
 		E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */; };
 		E2F267B30D4B9E3FCB81BFAA /* MatrixRainBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E24D2B3912DAF9638A767BD /* MatrixRainBackground.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
+		FE883ABF504432B7E12BA6BE /* WorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,7 @@
 		449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
 		4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStoreTests.swift; sourceTree = "<group>"; };
 		53CC2C533226B89F0CF70B87 /* SpriteKitEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitEffectView.swift; sourceTree = "<group>"; };
+		6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionRepository.swift; sourceTree = "<group>"; };
 		6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSummarySection.swift; sourceTree = "<group>"; };
 		77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
@@ -60,6 +63,7 @@
 		EA1A7943D626E20E20C9F481 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryHeader.swift; sourceTree = "<group>"; };
 		F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRoomActionMenu.swift; sourceTree = "<group>"; };
+		F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
 		F944082CEA5BC13C9ECF514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,6 +93,7 @@
 			children = (
 				F944082CEA5BC13C9ECF514C /* Info.plist */,
 				EB46BA9A2511009474D5840B /* App */,
+				57A4FE67865DAEA283BC1F72 /* Data */,
 				4463822596AA3844DBFE4AB1 /* Design */,
 				EC1216ECE72E0D2A8492BCE8 /* Domain */,
 				12EBECD5526152C864BD4CD9 /* Effects */,
@@ -121,6 +126,15 @@
 				A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */,
 			);
 			path = RoomDetails;
+			sourceTree = "<group>";
+		};
+		57A4FE67865DAEA283BC1F72 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */,
+				6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		68F7A701FAA1A43CD7D4E624 /* OceanKeySwiftTests */ = {
@@ -291,6 +305,7 @@
 			files = (
 				856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */,
 				14A467CC5BC8CBF9F1AAF2E5 /* CartSummarySection.swift in Sources */,
+				21201E301476E7CD55CDD211 /* LocalWorkSessionRepository.swift in Sources */,
 				E2F267B30D4B9E3FCB81BFAA /* MatrixRainBackground.swift in Sources */,
 				42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */,
 				307C5468BDEA436295C95CE4 /* OceanKeySwiftApp.swift in Sources */,
@@ -304,6 +319,7 @@
 				7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */,
 				E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */,
 				E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */,
+				FE883ABF504432B7E12BA6BE /* WorkSessionRepository.swift in Sources */,
 				BA7C18EBFE93F08708C52938 /* WorkSessionStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

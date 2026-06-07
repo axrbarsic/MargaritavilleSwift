@@ -53,4 +53,6 @@ Simulator unless explicitly allowed.
 - Room cells support open state, S/L/B task toggles, VIP toggle, schedule toggle,
   timeline fields, schedule badge, and a right-swipe action menu.
 - Only one action menu is open at a time.
-
+- Native state now loads from and saves to a local JSON repository in Application
+  Support. This is the first local-first source-of-truth layer for the Swift
+  rewrite.
