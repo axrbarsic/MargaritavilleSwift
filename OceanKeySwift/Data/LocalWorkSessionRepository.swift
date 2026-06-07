@@ -1,6 +1,6 @@
 import Foundation
 
-struct LocalWorkSessionRepository: WorkSessionRepository {
+struct LocalWorkSessionRepository: WorkSessionRepository, @unchecked Sendable {
     private let fileURL: URL
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
@@ -31,7 +31,11 @@ struct LocalWorkSessionRepository: WorkSessionRepository {
         )
     }
 
-    func save(snapshot: WorkSessionSnapshot) throws {
+    func save(snapshot: WorkSessionSnapshot) {
+        try? saveLegacySnapshot(snapshot)
+    }
+
+    func saveLegacySnapshot(_ snapshot: WorkSessionSnapshot) throws {
         let directoryURL = fileURL.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
 

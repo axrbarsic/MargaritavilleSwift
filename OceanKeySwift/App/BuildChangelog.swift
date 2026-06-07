@@ -10,6 +10,18 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (31)",
+            date: "2026-06-07",
+            changes: [
+                "Work-session persistence now uses SwiftData as the native local-first store instead of rewriting the full JSON snapshot on every change.",
+                "Legacy JSON work-session data is still imported on first SwiftData load so existing local installs keep their rooms, notes, schedules, VIP flags, and media metadata.",
+                "The app now starts with a lightweight seed store and loads the saved work session off the main thread before applying it on the main actor.",
+                "Moved WorkSessionStore out of Domain into the work-session feature layer, with persistence/bootstrap split into a dedicated extension.",
+                "Moved room-cell geometry into the Design layer so Domain stays free of presentation sizing.",
+                "Added SwiftData repository regression tests for complete round-trip persistence and stale child cleanup."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (30)",
             date: "2026-06-06",
             changes: [

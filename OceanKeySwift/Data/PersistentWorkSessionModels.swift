@@ -1,0 +1,149 @@
+import Foundation
+import SwiftData
+
+@Model
+final class PersistentWorkSession {
+    static let currentID = "current"
+
+    @Attribute(.unique) var id: String
+    var schemaVersion: Int
+    var updatedAt: Date
+    var workdayLocked: Bool
+    @Relationship(deleteRule: .cascade) var cartBindings: [PersistentCartBinding]
+    @Relationship(deleteRule: .cascade) var roomSelections: [PersistentRoomSelection]
+    @Relationship(deleteRule: .cascade) var carts: [PersistentCart]
+
+    init(
+        id: String = PersistentWorkSession.currentID,
+        schemaVersion: Int = 1,
+        updatedAt: Date = Date(),
+        workdayLocked: Bool = false,
+        cartBindings: [PersistentCartBinding] = [],
+        roomSelections: [PersistentRoomSelection] = [],
+        carts: [PersistentCart] = []
+    ) {
+        self.id = id
+        self.schemaVersion = schemaVersion
+        self.updatedAt = updatedAt
+        self.workdayLocked = workdayLocked
+        self.cartBindings = cartBindings
+        self.roomSelections = roomSelections
+        self.carts = carts
+    }
+}
+
+@Model
+final class PersistentCartBinding {
+    var cartNumber: Int
+    var territoryID: String
+
+    init(cartNumber: Int, territoryID: String) {
+        self.cartNumber = cartNumber
+        self.territoryID = territoryID
+    }
+}
+
+@Model
+final class PersistentRoomSelection {
+    var cartNumber: Int
+    var roomID: String
+
+    init(cartNumber: Int, roomID: String) {
+        self.cartNumber = cartNumber
+        self.roomID = roomID
+    }
+}
+
+@Model
+final class PersistentCart {
+    var cartNumber: Int
+    var displayOrder: Int
+    var building: String
+    var note: String?
+    var noteUpdatedAt: Date?
+    @Relationship(deleteRule: .cascade) var rooms: [PersistentRoom]
+    @Relationship(deleteRule: .cascade) var mediaAttachments: [PersistentMediaAttachment]
+
+    init(
+        cartNumber: Int,
+        displayOrder: Int,
+        building: String,
+        note: String? = nil,
+        noteUpdatedAt: Date? = nil,
+        rooms: [PersistentRoom] = [],
+        mediaAttachments: [PersistentMediaAttachment] = []
+    ) {
+        self.cartNumber = cartNumber
+        self.displayOrder = displayOrder
+        self.building = building
+        self.note = note
+        self.noteUpdatedAt = noteUpdatedAt
+        self.rooms = rooms
+        self.mediaAttachments = mediaAttachments
+    }
+}
+
+@Model
+final class PersistentRoom {
+    var roomID: String
+    var displayOrder: Int
+    var opened: Bool
+    var completedTaskValues: String
+    var isVIP: Bool
+    var scheduledTime: Date?
+    var selectedAt: Date?
+    var openedAt: Date?
+    var strippedAt: Date?
+    var linenDeliveredAt: Date?
+    var balconyCleanedAt: Date?
+    var completedAt: Date?
+    var textNote: String?
+    var textNoteUpdatedAt: Date?
+    var voiceTranscript: String?
+    var voiceTranscriptUpdatedAt: Date?
+    @Relationship(deleteRule: .cascade) var mediaAttachments: [PersistentMediaAttachment]
+
+    init(
+        roomID: String,
+        displayOrder: Int,
+        opened: Bool,
+        completedTaskValues: String,
+        isVIP: Bool,
+        scheduledTime: Date? = nil,
+        mediaAttachments: [PersistentMediaAttachment] = []
+    ) {
+        self.roomID = roomID
+        self.displayOrder = displayOrder
+        self.opened = opened
+        self.completedTaskValues = completedTaskValues
+        self.isVIP = isVIP
+        self.scheduledTime = scheduledTime
+        self.mediaAttachments = mediaAttachments
+    }
+}
+
+@Model
+final class PersistentMediaAttachment {
+    var attachmentID: UUID
+    var kindRawValue: String
+    var relativePath: String
+    var createdAt: Date
+    var completedAt: Date?
+    var displayOrder: Int
+
+    init(
+        attachmentID: UUID,
+        kindRawValue: String,
+        relativePath: String,
+        createdAt: Date,
+        completedAt: Date?,
+        displayOrder: Int
+    ) {
+        self.attachmentID = attachmentID
+        self.kindRawValue = kindRawValue
+        self.relativePath = relativePath
+        self.createdAt = createdAt
+        self.completedAt = completedAt
+        self.displayOrder = displayOrder
+    }
+}

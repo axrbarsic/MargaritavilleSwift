@@ -59,9 +59,12 @@ Simulator unless explicitly allowed.
 - Room cells support open state, S/L/B task toggles, VIP toggle, schedule toggle,
   timeline fields, schedule badge, and a right-swipe action menu.
 - Only one action menu is open at a time.
-- Native state now loads from and saves to a local JSON repository in Application
-  Support. This is the first local-first source-of-truth layer for the Swift
-  rewrite.
+- Native state now uses SwiftData as the default local-first source of truth for
+  the work session. Legacy Application Support JSON is only an import/fallback
+  path for older local installs.
+- Startup no longer performs work-session IO on the main thread: SwiftData or
+  legacy JSON loading happens on a background queue, then the ready snapshot is
+  applied to the Observation store on the main actor.
 - Header settings opens a native Settings screen with developer/build info and
   local storage status.
 - Room details text notes and voice-transcript drafts are now domain data and
@@ -89,8 +92,14 @@ Simulator unless explicitly allowed.
   floor, and rooms before locking into the summary screen.
 - Settings can unlock the workday and return to setup editing after the summary
   screen is already active.
-- Local persistence now writes a work-session snapshot containing selection and
-  carts together, while still reading older cart-list JSON files.
+- `WorkSessionStore` now lives in the work-session feature layer rather than
+  Domain; Domain keeps room/catalog/selection/snapshot value rules only.
+- Room-cell geometry now lives in the Design layer, not in domain or app
+  bootstrap code.
+- Local persistence now stores the work-session graph in SwiftData containing
+  selection, carts, rooms, timestamps, notes, schedules, VIP, and media metadata,
+  while still reading older cart-list/work-session JSON files for upgrade
+  compatibility.
 - Core room task invariants now require an open room before S/L/B changes, and
   ready status requires open plus all tasks.
 - Native interaction feedback now mirrors the Flutter foundation: UIKit haptics,
@@ -105,14 +114,13 @@ Simulator unless explicitly allowed.
   increments, pink schedule status priority, automatic due-time opening, and
   local iOS notifications.
 - Room voice notes and cart notes now share native Russian speech-to-text
-  transcription through `Speech` and `AVAudioEngine`; Gemini is not part of the
-  Swift voice path.
+  transcription through file-based `AVAudioRecorder` capture followed by
+  `SFSpeechURLRecognitionRequest`; Gemini is not part of the Swift voice path.
 - Voice recording startup is hardened on real devices: Speech and microphone
-  permission callbacks stay outside MainActor isolation, and audio-engine tap
-  cleanup avoids duplicate removal/finish paths.
-- Repeated voice recordings now run through an explicit capture state machine
-  with a fresh `AVAudioEngine` per session, preventing overlapping input taps
-  during rapid start/stop cycles.
+  permission callbacks stay outside MainActor isolation, and recording cleanup
+  no longer depends on live audio-tap lifecycle.
+- Repeated voice recordings run through an explicit file-capture state machine,
+  preventing overlapping live microphone taps during rapid start/stop cycles.
 - Voice transcription is now split into an iOS-native `VoiceTranscriptionService`
   and `VoiceNoteViewModel`; the SwiftUI panel no longer owns AVFoundation or
   Speech lifecycle directly.

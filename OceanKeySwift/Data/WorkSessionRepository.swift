@@ -1,6 +1,6 @@
 import Foundation
 
-protocol WorkSessionRepository {
+protocol WorkSessionRepository: Sendable {
     func loadSnapshot() throws -> WorkSessionSnapshot?
-    func save(snapshot: WorkSessionSnapshot) throws
+    func save(snapshot: WorkSessionSnapshot)
 }

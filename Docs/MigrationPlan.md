@@ -22,8 +22,15 @@ verification.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings
-- Speech: native `Speech` + `AVAudioEngine` Russian voice-to-text controller
-  for local room/cart notes
+- Speech: native `AVAudioRecorder` file capture followed by
+  `SFSpeechURLRecognitionRequest` Russian voice-to-text for local room/cart
+  notes. Live `AVAudioEngine` taps are intentionally not part of the Swift voice
+  path.
+- Local persistence: SwiftData is the default local-first work-session store;
+  legacy JSON exists only as an import/fallback path for older installs.
+- Startup loading: saved work-session state is fetched off the main thread and
+  applied on the main actor, so first render is not blocked by SwiftData or
+  legacy JSON IO.
 - Physical iPhone install is active through the local Apple Development profile
   for `com.alex.oceankey.swift`
 - Project generation: XcodeGen through `project.yml`
@@ -50,11 +57,14 @@ available.
    - Keep domain logic testable without SwiftUI.
    - Keep tactile/audio interaction behavior behind a shared native feedback
      service, not scattered across SwiftUI views.
+   - Keep presentation stores such as `WorkSessionStore` outside `Domain`;
+     domain files should stay value-model/rule oriented.
 
 3. Local-first persistence
-   - Add a local repository as the source of truth.
+   - Keep SwiftData as the native local repository and source of truth.
    - Store room state, milestone timestamps, notes, cart notes, and local media
      metadata.
+   - Keep legacy JSON reads only for upgrade/fallback compatibility.
    - Keep media files local by default.
 
 4. Apple-first sync

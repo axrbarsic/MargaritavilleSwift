@@ -1,6 +1,6 @@
 import Foundation
 
-enum RoomTask: String, CaseIterable, Codable, Identifiable {
+enum RoomTask: String, CaseIterable, Codable, Identifiable, Sendable {
     case stripped = "S"
     case linen = "L"
     case balcony = "B"
@@ -8,7 +8,7 @@ enum RoomTask: String, CaseIterable, Codable, Identifiable {
     var id: String { rawValue }
 }
 
-enum RoomStatus: String, CaseIterable, Codable {
+enum RoomStatus: String, CaseIterable, Codable, Sendable {
     case pending
     case open
     case inProgress
@@ -16,7 +16,7 @@ enum RoomStatus: String, CaseIterable, Codable {
     case scheduled
 }
 
-struct RoomCell: Codable, Identifiable, Equatable {
+struct RoomCell: Codable, Identifiable, Equatable, Sendable {
     let id: String
     var opened: Bool
     var completedTasks: Set<RoomTask>
@@ -54,7 +54,7 @@ struct RoomCell: Codable, Identifiable, Equatable {
     }
 }
 
-struct CartSection: Codable, Identifiable, Equatable {
+struct CartSection: Codable, Identifiable, Equatable, Sendable {
     let id: Int
     var building: String
     var rooms: [RoomCell]
@@ -63,14 +63,14 @@ struct CartSection: Codable, Identifiable, Equatable {
     var mediaAttachments: [MediaAttachment]?
 }
 
-enum MediaKind: String, Codable, CaseIterable, Identifiable {
+enum MediaKind: String, Codable, CaseIterable, Identifiable, Sendable {
     case photo
     case video
 
     var id: String { rawValue }
 }
 
-struct MediaAttachment: Codable, Identifiable, Equatable {
+struct MediaAttachment: Codable, Identifiable, Equatable, Sendable {
     let id: UUID
     let kind: MediaKind
     let relativePath: String
@@ -82,7 +82,7 @@ struct MediaAttachment: Codable, Identifiable, Equatable {
     }
 }
 
-struct RoomTimeline: Codable, Equatable {
+struct RoomTimeline: Codable, Equatable, Sendable {
     var selectedAt: Date?
     var openedAt: Date?
     var strippedAt: Date?
@@ -141,7 +141,7 @@ struct RoomTimeline: Codable, Equatable {
     }
 }
 
-struct SummaryCounts: Codable, Equatable {
+struct SummaryCounts: Codable, Equatable, Sendable {
     var total: Int
     var completed: Int
     var remaining: Int

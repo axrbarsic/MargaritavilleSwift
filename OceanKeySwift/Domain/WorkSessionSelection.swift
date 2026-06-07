@@ -1,6 +1,6 @@
 import Foundation
 
-struct WorkSessionCartBinding: Codable, Equatable, Hashable {
+struct WorkSessionCartBinding: Codable, Equatable, Hashable, Sendable {
     let cartNumber: Int
     let territoryID: String
 
@@ -9,7 +9,7 @@ struct WorkSessionCartBinding: Codable, Equatable, Hashable {
     }
 }
 
-struct WorkSessionSelectionState: Codable, Equatable {
+struct WorkSessionSelectionState: Codable, Equatable, Sendable {
     var cartBindings: [Int: WorkSessionCartBinding] = [:]
     var cartRoomSelections: [Int: Set<RoomID>] = [:]
     var workdayLocked = false
@@ -96,7 +96,7 @@ enum WorkSessionSelectionRules {
     }
 }
 
-enum WorkSessionSelectionCommandResult: Equatable {
+enum WorkSessionSelectionCommandResult: Equatable, Sendable {
     case changed
     case blocked
     case ignored

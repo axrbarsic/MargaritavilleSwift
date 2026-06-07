@@ -2,7 +2,7 @@ import Foundation
 
 typealias RoomID = String
 
-enum Building: String, CaseIterable, Codable, Hashable {
+enum Building: String, CaseIterable, Codable, Hashable, Sendable {
     case a
     case b
 
@@ -11,7 +11,7 @@ enum Building: String, CaseIterable, Codable, Hashable {
     }
 }
 
-struct Territory: Codable, Hashable, Identifiable {
+struct Territory: Codable, Hashable, Identifiable, Sendable {
     let floor: Int
     let building: Building
     let rooms: [RoomID]

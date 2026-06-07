@@ -3,8 +3,8 @@ import Observation
 
 @Observable
 final class WorkSessionStore {
-    @ObservationIgnored private let repository: WorkSessionRepository?
-    @ObservationIgnored private(set) var lastPersistenceError: Error?
+    @ObservationIgnored let repository: WorkSessionRepository?
+    @ObservationIgnored var lastPersistenceError: Error?
 
     var carts: [CartSection]
     var selection: WorkSessionSelectionState
@@ -193,55 +193,4 @@ final class WorkSessionStore {
         persist()
     }
 
-    func persist() {
-        guard let repository else { return }
-        do {
-            try repository.save(
-                snapshot: WorkSessionSnapshot(selection: selection, carts: carts)
-            )
-            lastPersistenceError = nil
-        } catch {
-            lastPersistenceError = error
-        }
-    }
-}
-
-extension WorkSessionStore {
-    static func load(repository: WorkSessionRepository = LocalWorkSessionRepository()) -> WorkSessionStore {
-        do {
-            if let snapshot = try repository.loadSnapshot() {
-                return WorkSessionStore(
-                    carts: snapshot.carts,
-                    selection: snapshot.selection,
-                    repository: repository
-                )
-            }
-        } catch {
-            let store = WorkSessionStore(carts: seedCarts(), repository: repository)
-            store.lastPersistenceError = error
-            return store
-        }
-        return WorkSessionStore(carts: seedCarts(), repository: repository)
-    }
-
-    static func preview() -> WorkSessionStore {
-        WorkSessionStore(carts: seedCarts())
-    }
-
-    private static func seedCarts() -> [CartSection] {
-        [
-            CartSection(id: 7, building: "A3", rooms: [
-                RoomCell(id: "303", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: true),
-                RoomCell(id: "304", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: false),
-                RoomCell(id: "305", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: false),
-                RoomCell(id: "306", opened: false, completedTasks: [], isVIP: false, scheduledTime: Calendar.current.date(bySettingHour: 10, minute: 15, second: 0, of: Date())),
-                RoomCell(id: "307", opened: true, completedTasks: [], isVIP: false),
-                RoomCell(id: "308", opened: true, completedTasks: [.stripped], isVIP: true)
-            ]),
-            CartSection(id: 8, building: "A4", rooms: [
-                RoomCell(id: "401", opened: false, completedTasks: [], isVIP: false),
-                RoomCell(id: "402", opened: false, completedTasks: [], isVIP: false)
-            ])
-        ]
-    }
 }

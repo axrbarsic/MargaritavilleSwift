@@ -21,18 +21,22 @@
 		2D389E5577FAC32B77E85819 /* LocalMediaFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D625970C1997ABD4B4AEB6 /* LocalMediaFileStore.swift */; };
 		307C5468BDEA436295C95CE4 /* OceanKeySwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */; };
 		366D12C14372662249291AE9 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A229714857D6D952BA687014 /* AppSettingsStore.swift */; };
+		3886B379568EF546F95B3A4B /* WorkSessionStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE907719B6B3BAB75721FA29 /* WorkSessionStore+Persistence.swift */; };
 		392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */; };
 		39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC54D512493ADEF1EB26177 /* GameplayKit.framework */; };
 		42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */; };
 		4618198B48949C4576C5DBF7 /* InteractionFeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5680F4D3B4245E31F8AB215 /* InteractionFeedbackService.swift */; };
+		469914E1D57ABFC62A127B96 /* PersistentWorkSessionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0A2610829CE5A6476F226 /* PersistentWorkSessionModels.swift */; };
 		527B878A69C30E46C76091E1 /* WorkSetupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */; };
 		53CE312477D9329530227EB4 /* MediaThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */; };
 		5BEF0B9F1E9F30B6E70FA14F /* WorkSessionSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F7B231FDD457CE44ED5D8 /* WorkSessionSelection.swift */; };
+		60B1D6E7AB062722B5B80FC1 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435A89956E097B59C6894F7B /* WorkSessionStore.swift */; };
 		6131A697881AE94294650A03 /* RoomScheduleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */; };
 		620D522DC5593DD3F3BDEB91 /* VoiceTranscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AFB0966095D79AA80CAF5F /* VoiceTranscriptionService.swift */; };
 		630D9BF8C070EDF39CF079C6 /* WorkSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */; };
 		714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */; };
 		7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */; };
+		737F1A575F371EAC9B6103EF /* PersistentWorkSessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */; };
 		799665048AEA94BD4F3094DB /* WorkSetupComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */; };
 		7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */; };
 		7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */; };
@@ -42,19 +46,22 @@
 		93D0CE8735DD6EAA67CEB78D /* BuildChangelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608321B44757C987209F2A54 /* BuildChangelog.swift */; };
 		9723FE9E9B7A04E31BE1260B /* RoomScheduleSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55CBE9F99AD8814E390BE3C /* RoomScheduleSheet.swift */; };
 		A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A7943D626E20E20C9F481 /* SpriteKit.framework */; };
+		A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8F64AABB38A2036C634BCB /* SwiftData.framework */; };
+		A630CB74A998E3B1A321DF76 /* SwiftDataWorkSessionRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */; };
 		A81C9CEAA6F5C0B8AB7C4BF0 /* BuildChangelogScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */; };
+		AB643CF5E38CEC4927C7E316 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA8304DBB6369130113E5E /* WorkSessionStore+Selection.swift */; };
 		ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */; };
-		BA7C18EBFE93F08708C52938 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929170B7329DE71DCDD384FD /* WorkSessionStore.swift */; };
 		C27172BDC7C51C3E3EE3CFF9 /* ScheduleNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7318EEDF92B83E3F4615D5F9 /* ScheduleNotificationService.swift */; };
 		C73F9B0839DCB8945BC76C5E /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0655DECA8F86F1748E5A8A9B /* click.wav */; };
+		CDCECFDE80C1B36038EDE677 /* RoomCellGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */; };
 		CDEB880791759C750A6CBF53 /* SpriteKitEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CC2C533226B89F0CF70B87 /* SpriteKitEffectView.swift */; };
-		D044CA9E18FAD578A0FB0238 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9BE68B3296B3000BD7A068 /* WorkSessionStore+Selection.swift */; };
 		D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A07FDDB084B7AAC0AC13CF80 /* Speech.framework */; };
 		DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1576751457D918F28F73179E /* VoiceNoteViewModel.swift */; };
 		E239F137FD94F82D7BB15630 /* VoiceTranscriptionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */; };
 		E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */; };
 		E2F267B30D4B9E3FCB81BFAA /* MatrixRainBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E24D2B3912DAF9638A767BD /* MatrixRainBackground.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
+		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
 		FA5C69080CC5FCF5A7FEE8B5 /* RoomScheduleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */; };
 		FB32AB4983152627A3E46501 /* CartDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */; };
 		FE883ABF504432B7E12BA6BE /* WorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */; };
@@ -78,6 +85,7 @@
 		1576751457D918F28F73179E /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
 		1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyTheme.swift; sourceTree = "<group>"; };
 		1B5C81FF97AC52C9DE7C54C2 /* VIPPulseOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPPulseOverlay.swift; sourceTree = "<group>"; };
+		1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentWorkSessionMapper.swift; sourceTree = "<group>"; };
 		210C76CC89C65FF13A27A6C3 /* pressed.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pressed.wav; sourceTree = "<group>"; };
 		287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionPanel.swift; sourceTree = "<group>"; };
 		2997A598AB1E6A8F5F843FE2 /* CartDetailsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsRoute.swift; sourceTree = "<group>"; };
@@ -85,7 +93,9 @@
 		31317A47FB0AB2FCC1E94C8A /* HoldActionTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldActionTarget.swift; sourceTree = "<group>"; };
 		34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupScreen.swift; sourceTree = "<group>"; };
 		35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsScreen.swift; sourceTree = "<group>"; };
+		35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepository.swift; sourceTree = "<group>"; };
 		3CC54D512493ADEF1EB26177 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
+		435A89956E097B59C6894F7B /* WorkSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStore.swift; sourceTree = "<group>"; };
 		449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
 		46AFB0966095D79AA80CAF5F /* VoiceTranscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionService.swift; sourceTree = "<group>"; };
 		4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStoreTests.swift; sourceTree = "<group>"; };
@@ -103,22 +113,25 @@
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
 		868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeySwiftApp.swift; sourceTree = "<group>"; };
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
-		929170B7329DE71DCDD384FD /* WorkSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStore.swift; sourceTree = "<group>"; };
+		9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellGeometry.swift; sourceTree = "<group>"; };
 		A07FDDB084B7AAC0AC13CF80 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsScreen.swift; sourceTree = "<group>"; };
 		A229714857D6D952BA687014 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
+		A3FA8304DBB6369130113E5E /* WorkSessionStore+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Selection.swift"; sourceTree = "<group>"; };
 		A5E3CFB6CDA7132DA0EFA9B9 /* RoomCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalog.swift; sourceTree = "<group>"; };
 		A8D625970C1997ABD4B4AEB6 /* LocalMediaFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMediaFileStore.swift; sourceTree = "<group>"; };
 		B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		B3B0A2610829CE5A6476F226 /* PersistentWorkSessionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentWorkSessionModels.swift; sourceTree = "<group>"; };
 		B55CBE9F99AD8814E390BE3C /* RoomScheduleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSheet.swift; sourceTree = "<group>"; };
 		B5680F4D3B4245E31F8AB215 /* InteractionFeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionFeedbackService.swift; sourceTree = "<group>"; };
+		BB8F64AABB38A2036C634BCB /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
 		BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		BCAF8BEA469DB858BD47A0D4 /* OceanKeySwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OceanKeySwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
 		CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleRoute.swift; sourceTree = "<group>"; };
 		CE487E5E6D0AB9E9818EEF84 /* OceanKeySwift.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OceanKeySwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
-		DB9BE68B3296B3000BD7A068 /* WorkSessionStore+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Selection.swift"; sourceTree = "<group>"; };
+		DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepositoryTests.swift; sourceTree = "<group>"; };
 		E7AAB559BEB598BFAB429AB4 /* SummarySelectionPuzzleHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySelectionPuzzleHandle.swift; sourceTree = "<group>"; };
 		EA1A7943D626E20E20C9F481 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		EAE700A892F09B415394914D /* WorkSessionSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionSnapshot.swift; sourceTree = "<group>"; };
@@ -127,6 +140,7 @@
 		F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
 		F944082CEA5BC13C9ECF514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBuildInfo.swift; sourceTree = "<group>"; };
+		FE907719B6B3BAB75721FA29 /* WorkSessionStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Persistence.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +151,7 @@
 				A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */,
 				39D62E4704F0D75DE27FB4E7 /* GameplayKit.framework in Frameworks */,
 				D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */,
+				A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +224,7 @@
 				3CC54D512493ADEF1EB26177 /* GameplayKit.framework */,
 				A07FDDB084B7AAC0AC13CF80 /* Speech.framework */,
 				EA1A7943D626E20E20C9F481 /* SpriteKit.framework */,
+				BB8F64AABB38A2036C634BCB /* SwiftData.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -226,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */,
+				9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -252,6 +269,9 @@
 			children = (
 				A8D625970C1997ABD4B4AEB6 /* LocalMediaFileStore.swift */,
 				F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */,
+				1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */,
+				B3B0A2610829CE5A6476F226 /* PersistentWorkSessionModels.swift */,
+				35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */,
 				6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */,
 			);
 			path = Data;
@@ -269,6 +289,7 @@
 		68F7A701FAA1A43CD7D4E624 /* OceanKeySwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */,
 				C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */,
 				4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */,
 			);
@@ -284,6 +305,7 @@
 				50353B0126AC75763D1495BF /* RoomDetails */,
 				F2F23DD9DD0CDA6C3A957425 /* Settings */,
 				DB4465BBE8548B26B6954744 /* Summary */,
+				A19ACA6E1954556561C30EA3 /* WorkSession */,
 				413336AA0FE19306CB5650C1 /* WorkSetup */,
 			);
 			path = Features;
@@ -297,6 +319,16 @@
 				37B70174422F47734BC66A08 /* Frameworks */,
 				ADD15C0367B5ED3749CE048A /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A19ACA6E1954556561C30EA3 /* WorkSession */ = {
+			isa = PBXGroup;
+			children = (
+				435A89956E097B59C6894F7B /* WorkSessionStore.swift */,
+				FE907719B6B3BAB75721FA29 /* WorkSessionStore+Persistence.swift */,
+				A3FA8304DBB6369130113E5E /* WorkSessionStore+Selection.swift */,
+			);
+			path = WorkSession;
 			sourceTree = "<group>";
 		};
 		ADD15C0367B5ED3749CE048A /* Products */ = {
@@ -372,8 +404,6 @@
 				6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */,
 				723F7B231FDD457CE44ED5D8 /* WorkSessionSelection.swift */,
 				EAE700A892F09B415394914D /* WorkSessionSnapshot.swift */,
-				929170B7329DE71DCDD384FD /* WorkSessionStore.swift */,
-				DB9BE68B3296B3000BD7A068 /* WorkSessionStore+Selection.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -490,6 +520,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A630CB74A998E3B1A321DF76 /* SwiftDataWorkSessionRepositoryTests.swift in Sources */,
 				FEF4E3DB4C837AA11700CCD7 /* VoiceNoteViewModelTests.swift in Sources */,
 				630D9BF8C070EDF39CF079C6 /* WorkSessionStoreTests.swift in Sources */,
 			);
@@ -517,7 +548,10 @@
 				53CE312477D9329530227EB4 /* MediaThumbnailView.swift in Sources */,
 				307C5468BDEA436295C95CE4 /* OceanKeySwiftApp.swift in Sources */,
 				7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */,
+				737F1A575F371EAC9B6103EF /* PersistentWorkSessionMapper.swift in Sources */,
+				469914E1D57ABFC62A127B96 /* PersistentWorkSessionModels.swift in Sources */,
 				8547E85F7C729B1350CF7C3B /* RoomCatalog.swift in Sources */,
+				CDCECFDE80C1B36038EDE677 /* RoomCellGeometry.swift in Sources */,
 				714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */,
 				7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */,
 				ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */,
@@ -532,6 +566,7 @@
 				7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */,
 				E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */,
 				839F12922CCEDD9CD0149288 /* SummarySelectionPuzzleHandle.swift in Sources */,
+				EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */,
 				E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */,
 				DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */,
 				141C0E990AE81553E8E12E35 /* VoiceTranscriptionContracts.swift in Sources */,
@@ -540,8 +575,9 @@
 				FE883ABF504432B7E12BA6BE /* WorkSessionRepository.swift in Sources */,
 				5BEF0B9F1E9F30B6E70FA14F /* WorkSessionSelection.swift in Sources */,
 				20634D173CAF4424922CA0DB /* WorkSessionSnapshot.swift in Sources */,
-				D044CA9E18FAD578A0FB0238 /* WorkSessionStore+Selection.swift in Sources */,
-				BA7C18EBFE93F08708C52938 /* WorkSessionStore.swift in Sources */,
+				3886B379568EF546F95B3A4B /* WorkSessionStore+Persistence.swift in Sources */,
+				AB643CF5E38CEC4927C7E316 /* WorkSessionStore+Selection.swift in Sources */,
+				60B1D6E7AB062722B5B80FC1 /* WorkSessionStore.swift in Sources */,
 				799665048AEA94BD4F3094DB /* WorkSetupComponents.swift in Sources */,
 				527B878A69C30E46C76091E1 /* WorkSetupScreen.swift in Sources */,
 			);
@@ -629,7 +665,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -688,7 +724,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

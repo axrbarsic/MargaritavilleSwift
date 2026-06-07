@@ -1,6 +1,6 @@
 import Foundation
 
-enum RoomSchedulePeriod: String, CaseIterable, Codable, Identifiable {
+enum RoomSchedulePeriod: String, CaseIterable, Codable, Identifiable, Sendable {
     case am
     case pm
 
@@ -11,7 +11,7 @@ enum RoomSchedulePeriod: String, CaseIterable, Codable, Identifiable {
     }
 }
 
-struct RoomScheduleSelection: Codable, Equatable {
+struct RoomScheduleSelection: Codable, Equatable, Sendable {
     static let hours = [8, 9, 10, 11, 12, 1, 2, 3, 4]
     static let minutes = [0, 15, 30, 45]
 

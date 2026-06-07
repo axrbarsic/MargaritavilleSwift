@@ -1,6 +1,6 @@
 import Foundation
 
-struct WorkSessionSnapshot: Codable, Equatable {
+struct WorkSessionSnapshot: Codable, Equatable, Sendable {
     var schemaVersion: Int
     var selection: WorkSessionSelectionState
     var carts: [CartSection]

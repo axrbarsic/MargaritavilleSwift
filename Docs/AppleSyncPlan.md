@@ -53,5 +53,6 @@ Before implementing CloudKit:
 - Domain commands are covered by tests.
 - The first input screen creates the same work-session state as the summary
   screen consumes.
-- Local JSON can be upgraded or replaced without losing current installs.
+- Legacy JSON has been upgraded behind the repository boundary; SwiftData can
+  import existing local JSON without losing current installs.
 - A documented conflict policy exists for two iPhones editing the same workday.
