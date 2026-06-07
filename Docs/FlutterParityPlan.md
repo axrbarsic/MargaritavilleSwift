@@ -192,3 +192,6 @@ Simulator unless explicitly allowed.
 - Native Matrix Rain now follows the Flutter Matrix visual contract: 80 random
   drops, the same glyph set, dark green background, head glow, vignette, and
   Flutter-style speed range.
+- Native Matrix rendering keeps that visual contract but uses SpriteKit-native
+  cached glyph textures and bottom-left scene coordinate mapping, not a literal
+  Flutter painter port.

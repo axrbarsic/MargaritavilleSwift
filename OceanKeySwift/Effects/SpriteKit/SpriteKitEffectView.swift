@@ -28,6 +28,8 @@ struct SpriteKitEffectView: UIViewRepresentable {
         let view = EffectSKView()
         view.backgroundColor = .clear
         view.allowsTransparency = true
+        view.isAsynchronous = true
+        view.isUserInteractionEnabled = false
         view.ignoresSiblingOrder = true
         view.shouldCullNonVisibleNodes = true
         view.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond

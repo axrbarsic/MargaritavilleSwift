@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (53)",
+            date: "2026-06-07",
+            changes: [
+                "Fixed Matrix direction after mapping Flutter's top-left canvas coordinates into SpriteKit's bottom-left scene coordinates.",
+                "Reworked native Matrix rendering to use cached SpriteKit glyph textures instead of thousands of live text nodes.",
+                "Reduced Matrix per-frame work to movement, visibility, and rare glyph swaps, keeping the visual contract while using a native SpriteKit runtime."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (52)",
             date: "2026-06-07",
             changes: [

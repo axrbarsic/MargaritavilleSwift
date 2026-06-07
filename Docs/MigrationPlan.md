@@ -37,6 +37,9 @@ verification.
 - Matrix parity: the active native Matrix scene follows the Flutter visual
   model with 80 random drops, the same glyph set, head glow, dark green
   background, vignette, and `0.08...3.0` speed control.
+- Matrix implementation is native SpriteKit: cached glyph textures, async
+  `SKView`, no live text-node layout loop, and explicit Canvas-to-SpriteKit
+  coordinate mapping so the rain falls top-to-bottom.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings

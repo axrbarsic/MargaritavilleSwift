@@ -2,6 +2,7 @@ import GameplayKit
 import SpriteKit
 import UIKit
 
+@MainActor
 final class MatrixRainSpriteScene: SKScene, ResizableSpriteScene {
     private var drops: [MatrixRainDrop] = []
     private var random = GKLinearCongruentialRandomSource(seed: UInt64(Date().timeIntervalSinceReferenceDate))
@@ -61,9 +62,6 @@ final class MatrixRainSpriteScene: SKScene, ResizableSpriteScene {
     func apply(configuration: MatrixRainConfiguration) {
         guard self.configuration != configuration else { return }
         self.configuration = configuration
-        for drop in drops {
-            drop.updateColors()
-        }
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -159,14 +157,15 @@ final class MatrixRainSpriteScene: SKScene, ResizableSpriteScene {
     }
 }
 
+@MainActor
 private final class MatrixRainDrop: SKNode {
     var y: CGFloat
     let x: CGFloat
     let velocity: CGFloat
     let opacity: CGFloat
     private var glyphs: [String]
-    private var glyphNodes: [SKLabelNode] = []
-    private var glowNodesByHead: [SKLabelNode] = []
+    private var glyphNodes: [SKSpriteNode] = []
+    private var glowNodesByHead: [SKSpriteNode] = []
 
     init(
         x: CGFloat,
@@ -195,33 +194,39 @@ private final class MatrixRainDrop: SKNode {
             let charY = py - CGFloat(index) * MatrixRainMetrics.charHeight
             glyphNodes[index].isHidden = charY < -MatrixRainMetrics.charHeight ||
                 charY > size.height + MatrixRainMetrics.charHeight
-            glyphNodes[index].position = CGPoint(x: px, y: charY + MatrixRainMetrics.cellSize / 2)
+            glyphNodes[index].position = CGPoint(
+                x: px,
+                y: size.height - (charY + MatrixRainMetrics.cellSize / 2)
+            )
         }
-        let headY = py + MatrixRainMetrics.cellSize / 2
+        let headCenterY = py + MatrixRainMetrics.cellSize / 2
         let glowOffsets = [CGPoint(x: 1, y: 0), CGPoint(x: -1, y: 0), CGPoint(x: 0, y: 1), CGPoint(x: 0, y: -1)]
         for (index, node) in glowNodesByHead.enumerated() {
-            node.text = glyphs.first
             node.isHidden = glyphNodes.first?.isHidden ?? true
-            node.position = CGPoint(x: px + glowOffsets[index].x, y: headY + glowOffsets[index].y)
+            node.position = CGPoint(
+                x: px + glowOffsets[index].x,
+                y: size.height - (headCenterY + glowOffsets[index].y)
+            )
         }
-        updateColors()
     }
 
-    func updateColors() {
+    private func updateColors() {
         for (index, node) in glyphNodes.enumerated() {
             let alpha: CGFloat = index == 0
                 ? opacity
                 : opacity * (1.0 - CGFloat(index) / CGFloat(max(glyphNodes.count, 1))) * 0.7
             let brightness: CGFloat = index < 3 ? 0.9 : 0.4
-            node.fontColor = UIColor(
+            node.color = UIColor(
                 red: (130 / 255) * brightness,
                 green: brightness,
                 blue: (100 / 255) * brightness,
-                alpha: alpha.clamped(to: 0...1)
+                alpha: 1
             )
+            node.alpha = alpha.clamped(to: 0...1)
         }
         for node in glowNodesByHead {
-            node.fontColor = UIColor(red: 128 / 255, green: 1, blue: 128 / 255, alpha: opacity * 0.6)
+            node.color = UIColor(red: 128 / 255, green: 1, blue: 128 / 255, alpha: 1)
+            node.alpha = opacity * 0.6
         }
     }
 
@@ -229,23 +234,23 @@ private final class MatrixRainDrop: SKNode {
         guard !glyphs.isEmpty else { return }
         let index = Int.random(in: 0..<glyphs.count)
         glyphs[index] = glyph
-        glyphNodes[index].text = glyph
+        glyphNodes[index].texture = MatrixRainGlyphTextureCache.texture(for: glyph)
         if index == 0 {
             for node in glowNodesByHead {
-                node.text = glyph
+                node.texture = MatrixRainGlyphTextureCache.texture(for: glyph)
             }
         }
     }
 
     private func buildNodes() {
         for glyph in glyphs {
-            let node = makeGlyphNode(text: glyph)
+            let node = makeGlyphNode(glyph)
             node.zPosition = 0
             glyphNodes.append(node)
             addChild(node)
         }
         for _ in 0..<4 {
-            let node = makeGlyphNode(text: glyphs.first ?? "")
+            let node = makeGlyphNode(glyphs.first ?? "")
             node.zPosition = -1
             glowNodesByHead.append(node)
             addChild(node)
@@ -253,15 +258,56 @@ private final class MatrixRainDrop: SKNode {
         updateColors()
     }
 
-    private func makeGlyphNode(text: String) -> SKLabelNode {
-        let node = SKLabelNode(fontNamed: MatrixRainMetrics.fontName)
-        node.text = text
-        node.fontSize = MatrixRainMetrics.fontSize
-        node.fontColor = .white
-        node.verticalAlignmentMode = .center
-        node.horizontalAlignmentMode = .center
+    private func makeGlyphNode(_ text: String) -> SKSpriteNode {
+        let node = SKSpriteNode(texture: MatrixRainGlyphTextureCache.texture(for: text))
+        node.size = CGSize(width: MatrixRainMetrics.cellSize, height: MatrixRainMetrics.cellSize)
+        node.colorBlendFactor = 1
         node.blendMode = .add
         return node
+    }
+}
+
+@MainActor
+private enum MatrixRainGlyphTextureCache {
+    private static var textures: [String: SKTexture] = [:]
+
+    static func texture(for glyph: String) -> SKTexture {
+        if let texture = textures[glyph] {
+            return texture
+        }
+        let texture = makeTexture(for: glyph)
+        textures[glyph] = texture
+        return texture
+    }
+
+    private static func makeTexture(for glyph: String) -> SKTexture {
+        let size = CGSize(width: MatrixRainMetrics.cellSize, height: MatrixRainMetrics.cellSize)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        format.opaque = false
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        let image = renderer.image { _ in
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.alignment = .center
+            let font = UIFont(name: MatrixRainMetrics.fontName, size: MatrixRainMetrics.fontSize)
+                ?? .monospacedSystemFont(ofSize: MatrixRainMetrics.fontSize, weight: .bold)
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: font,
+                .foregroundColor: UIColor.white,
+                .paragraphStyle: paragraph
+            ]
+            let textSize = glyph.size(withAttributes: attributes)
+            let rect = CGRect(
+                x: (size.width - textSize.width) / 2,
+                y: (size.height - textSize.height) / 2,
+                width: textSize.width,
+                height: textSize.height
+            )
+            glyph.draw(in: rect, withAttributes: attributes)
+        }
+        let texture = SKTexture(image: image)
+        texture.filteringMode = .nearest
+        return texture
     }
 }
 
