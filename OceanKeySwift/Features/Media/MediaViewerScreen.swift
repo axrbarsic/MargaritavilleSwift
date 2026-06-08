@@ -1,4 +1,4 @@
-import AVKit
+import AVFoundation
 import SwiftUI
 import UIKit
 
@@ -156,34 +156,87 @@ private struct ZoomablePhotoView: UIViewRepresentable {
 
 private struct FullScreenVideoPlayer: View {
     let url: URL
-    @State private var player: AVPlayer?
 
     var body: some View {
-        ZStack {
-            Color.black
+        FullScreenVideoPlayerView(url: url)
+            .ignoresSafeArea()
+    }
+}
 
-            if let player {
-                VideoPlayer(player: player)
-                    .ignoresSafeArea()
-                    .onReceive(NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)) { notification in
-                        guard notification.object as? AVPlayerItem == player.currentItem else { return }
-                        player.seek(to: .zero)
-                        player.play()
-                    }
-            } else {
-                ProgressView()
-                    .tint(OceanKeyTheme.accent)
+private struct FullScreenVideoPlayerView: UIViewRepresentable {
+    let url: URL
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    func makeUIView(context: Context) -> FullScreenPlayerView {
+        let view = FullScreenPlayerView()
+        context.coordinator.configure(url: url, in: view)
+        return view
+    }
+
+    func updateUIView(_ view: FullScreenPlayerView, context: Context) {
+        context.coordinator.configure(url: url, in: view)
+    }
+
+    static func dismantleUIView(_ view: FullScreenPlayerView, coordinator: Coordinator) {
+        coordinator.stop()
+        view.playerLayer.player = nil
+    }
+
+    final class Coordinator {
+        private var currentURL: URL?
+        private var player: AVQueuePlayer?
+        private var looper: AVPlayerLooper?
+
+        @MainActor
+        func configure(url: URL, in view: FullScreenPlayerView) {
+            guard currentURL != url else {
+                player?.play()
+                return
             }
+            currentURL = url
+            let item = AVPlayerItem(url: url)
+            let queuePlayer = AVQueuePlayer()
+            queuePlayer.actionAtItemEnd = .none
+            queuePlayer.allowsExternalPlayback = false
+            queuePlayer.preventsDisplaySleepDuringVideoPlayback = false
+            player = queuePlayer
+            looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
+            view.playerLayer.player = queuePlayer
+            queuePlayer.play()
         }
-        .onAppear {
-            let nextPlayer = AVPlayer(url: url)
-            player = nextPlayer
-            nextPlayer.play()
-        }
-        .onDisappear {
+
+        func stop() {
             player?.pause()
+            player?.removeAllItems()
             player = nil
+            looper = nil
+            currentURL = nil
         }
+    }
+}
+
+private final class FullScreenPlayerView: UIView {
+    override static var layerClass: AnyClass {
+        AVPlayerLayer.self
+    }
+
+    var playerLayer: AVPlayerLayer {
+        layer as! AVPlayerLayer
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .black
+        playerLayer.videoGravity = .resizeAspect
+        playerLayer.masksToBounds = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

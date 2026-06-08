@@ -99,46 +99,80 @@ struct SettingsScreen: View {
     private var experimentalSection: some View {
         SettingsPanel(
             title: "Экспериментальное",
-            subtitle: "Новые iOS 26-возможности включаются вручную и всегда имеют безопасный fallback."
+            subtitle: "Только активные режимы, которые можно реально оценить на основном экране."
         ) {
-            Toggle(isOn: $appSettings.developerGlassLabEnabled) {
+            Toggle(isOn: $appSettings.developerCellPhysicsEnabled) {
                 SettingsInfoRow(
-                    title: "Glass Lab",
-                    value: appSettings.developerGlassLabEnabled ? "Вкл" : "Выкл",
-                    systemName: "circle.hexagongrid.fill",
-                    subtitle: "Liquid Glass в настройках + стеклянный VIP-слой одним режимом."
+                    title: "Живые ячейки",
+                    value: appSettings.developerCellPhysicsEnabled ? "Вкл" : "Выкл",
+                    systemName: "waveform.path",
+                    subtitle: "Пружинящий отклик ячеек на изменения статуса, задач и VIP."
                 )
             }
             .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerGlassLabEnabled) { _, _ in
+            .onChange(of: appSettings.developerCellPhysicsEnabled) { _, _ in
                 feedback.confirm()
             }
 
-            Toggle(isOn: $appSettings.developerGameFeelPackEnabled) {
+            if appSettings.developerCellPhysicsEnabled {
+                SettingsSliderRow(
+                    title: "Сила пружины",
+                    valueLabel: "\(Int((appSettings.developerCellSpringIntensity * 100).rounded()))%",
+                    systemName: "arrow.up.and.down.and.arrow.left.and.right",
+                    range: 0...1,
+                    defaultValue: 0.72,
+                    value: $appSettings.developerCellSpringIntensity
+                )
+                SettingsSliderRow(
+                    title: "Скорость пружины",
+                    valueLabel: "\(String(format: "%.2f", appSettings.developerCellSpringSpeed))x",
+                    systemName: "speedometer",
+                    range: 0.2...1.6,
+                    defaultValue: 0.82,
+                    value: $appSettings.developerCellSpringSpeed
+                )
+            }
+
+            Toggle(isOn: $appSettings.developerCellVolumeEnabled) {
                 SettingsInfoRow(
-                    title: "Game Feel Pack",
-                    value: appSettings.developerGameFeelPackEnabled ? "Вкл" : "Выкл",
-                    systemName: "gamecontroller.fill",
-                    subtitle: "Звук V2, Haptics V2, VIP-частицы и spring-отклик ячеек одной кнопкой."
+                    title: "Объёмные ячейки",
+                    value: appSettings.developerCellVolumeEnabled ? "Вкл" : "Выкл",
+                    systemName: "view.in.ar",
+                    subtitle: "Глянцевый выпуклый вид ячеек в стиле драже из Flutter-версии."
                 )
             }
             .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerGameFeelPackEnabled) { _, _ in
+            .onChange(of: appSettings.developerCellVolumeEnabled) { _, _ in
                 feedback.confirm()
             }
 
-            Toggle(isOn: $appSettings.developerAssistantObjectEnabled) {
-                SettingsInfoRow(
-                    title: "Assistant Object",
-                    value: appSettings.developerAssistantObjectEnabled ? "Вкл" : "Выкл",
-                    systemName: "smallcircle.filled.circle",
-                    subtitle: "Отдельный стресс-тест SpriteKit physics. Не входит в Game Feel Pack."
+            if appSettings.developerCellVolumeEnabled {
+                SettingsSliderRow(
+                    title: "Сила объёма",
+                    valueLabel: "\(Int((appSettings.developerCellVolumeIntensity * 100).rounded()))%",
+                    systemName: "circle.grid.cross",
+                    range: 0...1,
+                    defaultValue: 0.78,
+                    value: $appSettings.developerCellVolumeIntensity
                 )
             }
-            .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerAssistantObjectEnabled) { _, _ in
-                feedback.confirm()
-            }
+
+            SettingsSliderRow(
+                title: "VIP-зебра",
+                valueLabel: "\(Int((appSettings.developerVIPZebraIntensity * 100).rounded()))%",
+                systemName: "line.3.horizontal.decrease.circle.fill",
+                range: 0...1,
+                defaultValue: 0.86,
+                value: $appSettings.developerVIPZebraIntensity
+            )
+            SettingsSliderRow(
+                title: "Скорость VIP",
+                valueLabel: "\(String(format: "%.2f", appSettings.developerVIPZebraSpeed))x",
+                systemName: "speedometer",
+                range: 0.2...1.8,
+                defaultValue: 0.78,
+                value: $appSettings.developerVIPZebraSpeed
+            )
         }
     }
 
@@ -290,6 +324,22 @@ struct SettingsScreen: View {
                 range: 0...1,
                 defaultValue: 0.28,
                 value: $appSettings.backgroundVideoBlur
+            )
+            SettingsSliderRow(
+                title: "Яркость",
+                valueLabel: "\(Int((appSettings.backgroundVideoBrightness * 100).rounded()))%",
+                systemName: "sun.max.fill",
+                range: -0.45...0.45,
+                defaultValue: 0,
+                value: $appSettings.backgroundVideoBrightness
+            )
+            SettingsSliderRow(
+                title: "Зелёный оттенок",
+                valueLabel: "\(Int((appSettings.backgroundVideoGreenTint * 100).rounded()))%",
+                systemName: "leaf.fill",
+                range: 0...1,
+                defaultValue: 0.34,
+                value: $appSettings.backgroundVideoGreenTint
             )
         }
     }

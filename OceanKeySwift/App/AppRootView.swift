@@ -25,6 +25,8 @@ struct AppRootView: View {
         .environment(\.appBackgroundMode, appSettings.appBackgroundMode)
         .environment(\.appBackgroundVideoURL, appSettings.backgroundVideoURL)
         .environment(\.appBackgroundVideoBlur, appSettings.backgroundVideoBlur)
+        .environment(\.appBackgroundVideoBrightness, appSettings.backgroundVideoBrightness)
+        .environment(\.appBackgroundVideoGreenTint, appSettings.backgroundVideoGreenTint)
         .environment(\.matrixRainConfiguration, appSettings.matrixConfiguration)
         .environment(\.experimentalLiquidGlassEnabled, appSettings.developerLiquidGlassEnabled)
         .environment(\.experimentalGlassVIPEnabled, appSettings.developerGlassVIPEnabled)
@@ -34,6 +36,12 @@ struct AppRootView: View {
         .environment(\.experimentalVIPParticlesEnabled, appSettings.developerVIPParticlesEnabled)
         .environment(\.experimentalCellPhysicsEnabled, appSettings.developerCellPhysicsEnabled)
         .environment(\.experimentalAssistantObjectEnabled, appSettings.developerAssistantObjectEnabled)
+        .environment(\.experimentalCellVolumeEnabled, appSettings.developerCellVolumeEnabled)
+        .environment(\.experimentalCellVolumeIntensity, appSettings.developerCellVolumeIntensity)
+        .environment(\.experimentalCellSpringIntensity, appSettings.developerCellSpringIntensity)
+        .environment(\.experimentalCellSpringSpeed, appSettings.developerCellSpringSpeed)
+        .environment(\.experimentalVIPZebraIntensity, appSettings.developerVIPZebraIntensity)
+        .environment(\.experimentalVIPZebraSpeed, appSettings.developerVIPZebraSpeed)
         .environment(
             \.interactionFeedback,
             .live(

@@ -201,6 +201,9 @@ Simulator unless explicitly allowed.
 - Video wallpaper matte blur now lives inside the native player container:
   `AVPlayerLayer` stays the video source while one UIKit material/tint layer
   provides the matte finish without remounting the background.
+- Video wallpaper controls now include blur, brightness, and green tint. The
+  native player container has a lightweight watchdog that resumes or rebuilds
+  the loop if AV playback stalls after app/background transitions.
 - Cart consumables now support custom per-cart rows on top of the default
   towel/linen catalog, with quantity, completion state, timestamps, history,
   and SwiftData persistence.
@@ -210,3 +213,9 @@ Simulator unless explicitly allowed.
 - Developer experiments now include the first native Metal-backed background:
   Metal Aurora uses `MTKView` plus a fullscreen fragment shader and is isolated
   from the default Matrix/video wallpaper paths.
+- Developer experiments were simplified again after real-device testing:
+  deprecated invisible/heavy overlays are no longer activated from stored
+  settings, while the active test controls are live spring cells, glossy volume
+  cells, and adjustable moving VIP zebra stripes.
+- Room and cart voice notes now share playable local audio bubbles, while room
+  cells show compact indicators when text, voice, photo, or video data exists.

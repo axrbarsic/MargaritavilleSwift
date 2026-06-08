@@ -6,6 +6,7 @@ struct CartDetailsScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var draftNote = ""
+    @State private var draftVoiceTranscript = ""
     @State private var captureKind: MediaKind?
     @State private var selectedMedia: MediaAttachment?
     @State private var mediaError: String?
@@ -30,6 +31,20 @@ struct CartDetailsScreen: View {
         .onAppear(perform: loadDraft)
         .onChange(of: draftNote) { _, newValue in
             workSession.updateCartNote(newValue, cartId: route.cartID)
+        }
+        .onChange(of: draftVoiceTranscript) { _, newValue in
+            workSession.updateCartNote(newValue, cartId: route.cartID)
+        }
+        .fullScreenCover(item: $captureKind) { kind in
+            CameraCaptureView(
+                kind: kind,
+                onCapture: saveCapturedMedia,
+                onCancel: { captureKind = nil }
+            )
+            .ignoresSafeArea()
+        }
+        .fullScreenCover(item: $selectedMedia) { attachment in
+            MediaViewerScreen(attachments: visualMediaAttachments, initialAttachment: attachment)
         }
     }
 
@@ -63,24 +78,21 @@ struct CartDetailsScreen: View {
 
     private var noteSection: some View {
         CartDetailsPanel(title: "Заметка") {
-            VoiceTranscriptionPanel(title: "Надиктовать заметку", transcript: $draftNote)
-            ZStack(alignment: .topLeading) {
-                TextEditor(text: $draftNote)
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .scrollContentBackground(.hidden)
-                    .foregroundStyle(.white)
-                    .padding(10)
-                    .frame(minHeight: 180)
-                    .background(.black.opacity(0.24))
-                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            VoiceTranscriptionPanel(
+                title: "Голосовая заметка",
+                transcript: $draftVoiceTranscript,
+                onCompletion: saveVoiceResult
+            )
 
-                if draftNote.isEmpty {
-                    Text("Что принести на тележку, что уже проверено, что нужно уточнить...")
-                        .font(.system(size: 17, weight: .semibold, design: .rounded))
-                        .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.52))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 18)
-                        .allowsHitTesting(false)
+            if voiceAttachments.isEmpty {
+                Text("Голосовые заметки по тележке появятся здесь пузырями после записи.")
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.70))
+            } else {
+                VStack(spacing: 10) {
+                    ForEach(voiceAttachments) { attachment in
+                        VoiceNoteBubble(attachment: attachment)
+                    }
                 }
             }
         }
@@ -105,14 +117,14 @@ struct CartDetailsScreen: View {
                     .foregroundStyle(OceanKeyTheme.pending)
             }
 
-            if mediaAttachments.isEmpty {
+            if visualMediaAttachments.isEmpty {
                 Text("Фото и видео сохраняются только локально на устройстве.")
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .foregroundStyle(OceanKeyTheme.secondaryText)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(mediaAttachments) { attachment in
+                        ForEach(visualMediaAttachments) { attachment in
                             Button(action: { selectedMedia = attachment }) {
                                 MediaThumbnailView(attachment: attachment)
                             }
@@ -121,17 +133,6 @@ struct CartDetailsScreen: View {
                     }
                 }
             }
-        }
-        .fullScreenCover(item: $captureKind) { kind in
-            CameraCaptureView(
-                kind: kind,
-                onCapture: saveCapturedMedia,
-                onCancel: { captureKind = nil }
-            )
-            .ignoresSafeArea()
-        }
-        .fullScreenCover(item: $selectedMedia) { attachment in
-            MediaViewerScreen(attachments: mediaAttachments, initialAttachment: attachment)
         }
     }
 
@@ -160,8 +161,17 @@ struct CartDetailsScreen: View {
         workSession.cart(id: route.cartID)?.mediaAttachments ?? []
     }
 
+    private var visualMediaAttachments: [MediaAttachment] {
+        mediaAttachments.filter { $0.kind == .photo || $0.kind == .video }
+    }
+
+    private var voiceAttachments: [MediaAttachment] {
+        mediaAttachments.filter { $0.kind == .audio }
+    }
+
     private func loadDraft() {
         draftNote = workSession.cart(id: route.cartID)?.note ?? ""
+        draftVoiceTranscript = draftNote
     }
 
     private func saveCapturedMedia(_ capturedMedia: CapturedMedia) {
@@ -173,6 +183,24 @@ struct CartDetailsScreen: View {
             mediaError = error.localizedDescription
         }
         captureKind = nil
+    }
+
+    private func saveVoiceResult(_ result: VoiceTranscriptionResult) {
+        do {
+            let attachment = try LocalMediaFileStore().saveVoiceAudio(
+                from: result.audioURL,
+                transcript: result.transcript
+            )
+            workSession.addCartMedia(attachment, cartId: route.cartID)
+            if let transcript = result.transcript, !transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                draftNote = transcript
+                draftVoiceTranscript = transcript
+            }
+            mediaError = nil
+        } catch {
+            mediaError = error.localizedDescription
+        }
+        try? FileManager.default.removeItem(at: result.audioURL)
     }
 
     private var updatedLabel: String? {

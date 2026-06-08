@@ -43,6 +43,7 @@
 		527B878A69C30E46C76091E1 /* WorkSetupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */; };
 		53CE312477D9329530227EB4 /* MediaThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */; };
 		5BEF0B9F1E9F30B6E70FA14F /* WorkSessionSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F7B231FDD457CE44ED5D8 /* WorkSessionSelection.swift */; };
+		5E6AB58A4A3683A5394DE41A /* VoiceNoteBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AE7DB8A2119718A8E5A240 /* VoiceNoteBubble.swift */; };
 		60B1D6E7AB062722B5B80FC1 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435A89956E097B59C6894F7B /* WorkSessionStore.swift */; };
 		6131A697881AE94294650A03 /* RoomScheduleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */; };
 		620D522DC5593DD3F3BDEB91 /* VoiceTranscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AFB0966095D79AA80CAF5F /* VoiceTranscriptionService.swift */; };
@@ -124,6 +125,7 @@
 		0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModels.swift; sourceTree = "<group>"; };
 		0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
 		0D340AE2F35A8796533E0460 /* SummaryActionMenuExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansion.swift; sourceTree = "<group>"; };
+		11AE7DB8A2119718A8E5A240 /* VoiceNoteBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteBubble.swift; sourceTree = "<group>"; };
 		1576751457D918F28F73179E /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
 		1909D54CE539693E2E057B69 /* WorkSessionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistory.swift; sourceTree = "<group>"; };
 		1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyTheme.swift; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 		E1495D03D11DE340AD8F73C1 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				11AE7DB8A2119718A8E5A240 /* VoiceNoteBubble.swift */,
 				1576751457D918F28F73179E /* VoiceNoteViewModel.swift */,
 				287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */,
 			);
@@ -745,6 +748,7 @@
 				1CC7B5BA41A310AB6B2F2D7A /* VIPParticleOverlay.swift in Sources */,
 				3C57EC982FEBCBEEDD4B6B1F /* VIPParticleTargets.swift in Sources */,
 				E27BBB154B1792023F94F34B /* VIPPulseOverlay.swift in Sources */,
+				5E6AB58A4A3683A5394DE41A /* VoiceNoteBubble.swift in Sources */,
 				DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */,
 				141C0E990AE81553E8E12E35 /* VoiceTranscriptionContracts.swift in Sources */,
 				E239F137FD94F82D7BB15630 /* VoiceTranscriptionPanel.swift in Sources */,
@@ -847,7 +851,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 61;
+				CURRENT_PROJECT_VERSION = 62;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -906,7 +910,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 61;
+				CURRENT_PROJECT_VERSION = 62;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

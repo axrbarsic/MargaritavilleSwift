@@ -43,6 +43,9 @@ verification.
 - Video wallpaper uses native AVFoundation rather than a SwiftUI video player:
   imported local video files are rendered by `AVQueuePlayer` and
   `AVPlayerLooper`, with a system blur/material layer for matte intensity.
+- Video wallpaper tuning now includes blur, brightness, and green tint, and the
+  AVFoundation player owns a lightweight stall watchdog so a frozen loop can be
+  resumed without force-quitting the app.
 - Interaction feedback: UIKit feedback generators plus bundled local WAV sounds
   through an ambient mixed audio session
 - Notifications: local UserNotifications for due scheduled room openings
@@ -55,6 +58,9 @@ verification.
 - Cart consumables include the default towel/linen catalog plus custom cart
   rows; quantities, completion timestamps, and custom rows persist with the
   cart graph.
+- Room/cart multimodal notes share the native media foundation: voice
+  recordings save as local playable audio bubbles with transcript text, and
+  photo/video attachments use local-only metadata and vertical previews.
 - Event history: room/cart/selection/status/note/media/schedule changes append
   timestamped domain history entries. Each entry carries a lightweight visual
   snapshot of the main screen state, and Settings can already open a compact

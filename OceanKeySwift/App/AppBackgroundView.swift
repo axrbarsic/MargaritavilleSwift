@@ -4,6 +4,8 @@ struct AppBackgroundView: View {
     @Environment(\.appBackgroundMode) private var appBackgroundMode
     @Environment(\.appBackgroundVideoURL) private var appBackgroundVideoURL
     @Environment(\.appBackgroundVideoBlur) private var appBackgroundVideoBlur
+    @Environment(\.appBackgroundVideoBrightness) private var appBackgroundVideoBrightness
+    @Environment(\.appBackgroundVideoGreenTint) private var appBackgroundVideoGreenTint
 
     var body: some View {
         ZStack {
@@ -13,7 +15,11 @@ struct AppBackgroundView: View {
             } else if appBackgroundMode == .video, let appBackgroundVideoURL {
                 LoopingVideoBackgroundView(
                     url: appBackgroundVideoURL,
-                    matteStrength: appBackgroundVideoBlur
+                    tuning: VideoBackgroundTuning(
+                        blur: appBackgroundVideoBlur,
+                        brightness: appBackgroundVideoBrightness,
+                        greenTint: appBackgroundVideoGreenTint
+                    )
                 )
             }
         }

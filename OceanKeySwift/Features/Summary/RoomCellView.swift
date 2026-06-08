@@ -6,6 +6,12 @@ struct RoomCellView: View {
     @Environment(\.experimentalGlassVIPEnabled) private var experimentalGlassVIPEnabled
     @Environment(\.experimentalVIPParticlesEnabled) private var experimentalVIPParticlesEnabled
     @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
+    @Environment(\.experimentalCellVolumeEnabled) private var experimentalCellVolumeEnabled
+    @Environment(\.experimentalCellVolumeIntensity) private var experimentalCellVolumeIntensity
+    @Environment(\.experimentalCellSpringIntensity) private var experimentalCellSpringIntensity
+    @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
+    @Environment(\.experimentalVIPZebraIntensity) private var experimentalVIPZebraIntensity
+    @Environment(\.experimentalVIPZebraSpeed) private var experimentalVIPZebraSpeed
 
     @Binding var room: RoomCell
     let geometry: RoomCellGeometry
@@ -77,13 +83,13 @@ struct RoomCellView: View {
         .background(cellBackground)
         .clipShape(tileShape)
         .scaleEffect(
-            x: experimentalCellPhysicsEnabled && physicsPulse ? 1.065 : 1,
-            y: experimentalCellPhysicsEnabled && physicsPulse ? 0.925 : 1
+            x: experimentalCellPhysicsEnabled && physicsPulse ? 1 + 0.09 * experimentalCellSpringIntensity : 1,
+            y: experimentalCellPhysicsEnabled && physicsPulse ? 1 - 0.12 * experimentalCellSpringIntensity : 1
         )
-        .offset(y: experimentalCellPhysicsEnabled && physicsPulse ? -5 : 0)
+        .offset(y: experimentalCellPhysicsEnabled && physicsPulse ? -7 * experimentalCellSpringIntensity : 0)
         .offset(x: swipeProgress * 10)
         .rotation3DEffect(
-            .degrees(experimentalCellPhysicsEnabled && physicsPulse ? 5.5 : 0),
+            .degrees(experimentalCellPhysicsEnabled && physicsPulse ? 7.5 * experimentalCellSpringIntensity : 0),
             axis: (x: 0.0, y: 1.0, z: 0.0),
             perspective: 0.72
         )
@@ -117,8 +123,24 @@ struct RoomCellView: View {
             }
         }
         .animation(
-            experimentalCellPhysicsEnabled ? .interpolatingSpring(stiffness: 260, damping: 9) : .default,
+            experimentalCellPhysicsEnabled
+                ? .interpolatingSpring(
+                    stiffness: 180 + 220 * experimentalCellSpringSpeed,
+                    damping: max(5, 15 - 7 * experimentalCellSpringIntensity)
+                )
+                : .default,
             value: physicsPulse
+        )
+        .experimentalCellVolume(
+            enabled: experimentalCellVolumeEnabled,
+            shape: tileShape,
+            intensity: experimentalCellVolumeIntensity
+        )
+        .vipZebraEffect(
+            enabled: room.isVIP,
+            shape: tileShape,
+            intensity: experimentalVIPZebraIntensity,
+            speed: experimentalVIPZebraSpeed
         )
         .experimentalVIPGlass(enabled: experimentalGlassVIPEnabled && room.isVIP, shape: tileShape)
         .anchorPreference(key: VIPParticleAnchorPreferenceKey.self, value: .bounds) { anchor in
@@ -148,6 +170,29 @@ struct RoomCellView: View {
                             style: .continuous
                         )
                     )
+            }
+        }
+        .overlay(alignment: .bottomLeading) {
+            if !room.noteIndicatorIcons.isEmpty {
+                HStack(spacing: 5) {
+                    ForEach(room.noteIndicatorIcons, id: \.self) { iconName in
+                        Image(systemName: iconName)
+                            .font(.system(size: 11, weight: .black))
+                    }
+                    if room.noteIndicatorCount > room.noteIndicatorIcons.count {
+                        Text("+\(room.noteIndicatorCount - room.noteIndicatorIcons.count)")
+                            .font(.system(size: 10, weight: .black, design: .rounded))
+                            .monospacedDigit()
+                    }
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(.black.opacity(0.72))
+                .clipShape(Capsule())
+                .padding(.leading, 10)
+                .padding(.bottom, isActionMenuExpanded ? 7 : 8)
+                .allowsHitTesting(false)
             }
         }
     }
@@ -231,14 +276,15 @@ struct RoomCellView: View {
 
     private var actionMenuSwipeThreshold: CGFloat {
         let visibleWidth = tileWidth > 0 ? tileWidth : UIScreen.main.bounds.width - 32
-        return max(240, visibleWidth * 0.74)
+        return max(300, visibleWidth * 0.92)
     }
 
     private func triggerPhysicsPulse() {
         guard experimentalCellPhysicsEnabled else { return }
         physicsPulse = true
         Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(240))
+            let duration = max(110, Int(280 / experimentalCellSpringSpeed))
+            try? await Task.sleep(for: .milliseconds(duration))
             physicsPulse = false
         }
     }
@@ -302,6 +348,158 @@ private extension View {
             self
         }
     }
+
+    @ViewBuilder
+    func experimentalCellVolume(
+        enabled: Bool,
+        shape: UnevenRoundedRectangle,
+        intensity: Double
+    ) -> some View {
+        if enabled {
+            let normalized = min(max(intensity, 0), 1)
+            self
+                .overlay {
+                    shape
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    .white.opacity(0.30 * normalized),
+                                    .white.opacity(0.08 * normalized),
+                                    .clear,
+                                    .black.opacity(0.20 * normalized)
+                                ],
+                                startPoint: UnitPoint(x: 0.05, y: 0.0),
+                                endPoint: UnitPoint(x: 0.92, y: 1.0)
+                            )
+                        )
+                        .blendMode(.overlay)
+                        .allowsHitTesting(false)
+                }
+                .overlay(alignment: .topLeading) {
+                    GeometryReader { proxy in
+                        Ellipse()
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        .white.opacity(0.42 * normalized),
+                                        .white.opacity(0.11 * normalized),
+                                        .clear
+                                    ],
+                                    center: UnitPoint(x: 0.22, y: 0.24),
+                                    startRadius: 2,
+                                    endRadius: max(proxy.size.width, proxy.size.height) * 0.58
+                                )
+                            )
+                            .frame(
+                                width: proxy.size.width * 0.58,
+                                height: proxy.size.height * 0.48
+                            )
+                            .offset(x: proxy.size.width * 0.04, y: proxy.size.height * 0.04)
+                            .blendMode(.screen)
+                            .allowsHitTesting(false)
+                    }
+                    .clipShape(shape)
+                }
+                .overlay {
+                    shape
+                        .strokeBorder(
+                            LinearGradient(
+                                colors: [
+                                    .white.opacity(0.42 * normalized),
+                                    .white.opacity(0.06 * normalized),
+                                    .black.opacity(0.20 * normalized)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: 1.2 + 1.6 * normalized
+                        )
+                        .blendMode(.screen)
+                        .allowsHitTesting(false)
+                }
+                .shadow(
+                    color: .black.opacity(0.18 + 0.18 * normalized),
+                    radius: 7 + 9 * normalized,
+                    x: 0,
+                    y: 4 + 4 * normalized
+                )
+        } else {
+            self
+        }
+    }
+
+    @ViewBuilder
+    func vipZebraEffect(
+        enabled: Bool,
+        shape: UnevenRoundedRectangle,
+        intensity: Double,
+        speed: Double
+    ) -> some View {
+        if enabled {
+            self.overlay {
+                VIPZebraOverlay(
+                    shape: shape,
+                    intensity: intensity,
+                    speed: speed
+                )
+                .allowsHitTesting(false)
+            }
+        } else {
+            self
+        }
+    }
+}
+
+private struct VIPZebraOverlay: View {
+    let shape: UnevenRoundedRectangle
+    let intensity: Double
+    let speed: Double
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
+            let phase = timeline.date.timeIntervalSinceReferenceDate * min(max(speed, 0.2), 1.8)
+            let offset = CGFloat(phase.truncatingRemainder(dividingBy: 1))
+            shape
+                .fill(
+                    LinearGradient(
+                        stops: zebraStops,
+                        startPoint: UnitPoint(x: -0.55 + offset * 1.25, y: -0.08),
+                        endPoint: UnitPoint(x: 0.50 + offset * 1.25, y: 1.08)
+                    )
+                )
+                .blendMode(.screen)
+                .clipShape(shape)
+                .overlay {
+                    shape
+                        .stroke(.white.opacity(0.10 * normalizedIntensity), lineWidth: 1)
+                        .blendMode(.screen)
+                }
+        }
+    }
+
+    private var normalizedIntensity: Double {
+        min(max(intensity, 0), 1)
+    }
+
+    private var zebraStops: [Gradient.Stop] {
+        let bright = 0.30 * normalizedIntensity
+        let soft = 0.10 * normalizedIntensity
+        let dark = 0.16 * normalizedIntensity
+        return [
+            .init(color: .clear, location: 0.00),
+            .init(color: .white.opacity(soft), location: 0.08),
+            .init(color: .white.opacity(bright), location: 0.14),
+            .init(color: .clear, location: 0.22),
+            .init(color: .black.opacity(dark), location: 0.30),
+            .init(color: .clear, location: 0.38),
+            .init(color: .white.opacity(bright * 0.86), location: 0.48),
+            .init(color: .clear, location: 0.58),
+            .init(color: .black.opacity(dark * 0.78), location: 0.68),
+            .init(color: .clear, location: 0.78),
+            .init(color: .white.opacity(bright), location: 0.88),
+            .init(color: .clear, location: 1.00)
+        ]
+    }
 }
 
 private extension RoomCell {
@@ -311,6 +509,31 @@ private extension RoomCell {
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "h:mm a"
         return formatter.string(from: scheduledTime)
+    }
+
+    var noteIndicatorIcons: [String] {
+        var icons: [String] = []
+        if textNote?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
+            icons.append("text.bubble.fill")
+        }
+        if voiceTranscript?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+            || mediaAttachments?.contains(where: { $0.kind == .audio }) == true {
+            icons.append("mic.fill")
+        }
+        if mediaAttachments?.contains(where: { $0.kind == .photo }) == true {
+            icons.append("photo.fill")
+        }
+        if mediaAttachments?.contains(where: { $0.kind == .video }) == true {
+            icons.append("video.fill")
+        }
+        return Array(icons.prefix(3))
+    }
+
+    var noteIndicatorCount: Int {
+        let textCount = textNote?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? 1 : 0
+        let transcriptCount = voiceTranscript?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? 1 : 0
+        let mediaCount = mediaAttachments?.count ?? 0
+        return textCount + transcriptCount + mediaCount
     }
 }
 

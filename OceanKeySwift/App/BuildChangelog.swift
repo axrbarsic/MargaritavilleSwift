@@ -10,6 +10,19 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (62)",
+            date: "2026-06-08",
+            changes: [
+                "Fixed voice-note playback by activating a playback audio session before playing saved local m4a bubbles.",
+                "Brought cart details closer to room details: voice notes now save as playable audio bubbles, while photo/video media stays local.",
+                "Added room-cell media indicators for text, voice, photo, and video attachments.",
+                "Rebuilt photo/video viewing around AVPlayerLayer/UIKit containers and added looping silent video thumbnails.",
+                "Extended video wallpaper controls with brightness and green tint, plus a playback watchdog that revives stalled loops.",
+                "Cleaned Developer experiments down to live cells, volume cells, and VIP zebra controls; deprecated invisible SpriteKit overlays are no longer activated.",
+                "Added visible moving diagonal VIP zebra stripes and tightened room/unlock swipe thresholds."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (61)",
             date: "2026-06-07",
             changes: [

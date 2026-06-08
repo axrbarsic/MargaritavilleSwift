@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import AVFoundation
 import UniformTypeIdentifiers
 
 enum CapturedMedia {
@@ -13,24 +14,11 @@ struct CameraCaptureView: UIViewControllerRepresentable {
     let onCancel: () -> Void
 
     func makeUIViewController(context: Context) -> UIViewController {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            return UnavailableCaptureViewController(message: "Камера недоступна", onCancel: onCancel)
-        }
-
-        let requestedType = kind == .photo ? UTType.image.identifier : UTType.movie.identifier
-        let availableTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
-        guard availableTypes.contains(requestedType) else {
-            return UnavailableCaptureViewController(message: "Этот режим камеры недоступен", onCancel: onCancel)
-        }
-
-        let picker = UIImagePickerController()
-        picker.sourceType = .camera
-        picker.delegate = context.coordinator
-        picker.mediaTypes = [requestedType]
-        picker.videoQuality = .typeHigh
-        picker.allowsEditing = false
-        picker.cameraCaptureMode = kind == .photo ? .photo : .video
-        return picker
+        CameraCaptureHostViewController(
+            kind: kind,
+            coordinator: context.coordinator,
+            onCancel: onCancel
+        )
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
@@ -100,6 +88,120 @@ extension CameraCaptureView {
                     onCancel()
                 }
             }
+        }
+    }
+}
+
+private final class CameraCaptureHostViewController: UIViewController {
+    private enum State {
+        case idle
+        case requestingPermission
+        case presentingPicker
+        case finished
+    }
+
+    private let kind: MediaKind
+    private let coordinator: CameraCaptureView.Coordinator
+    private let onCancel: () -> Void
+    private var state = State.idle
+
+    init(
+        kind: MediaKind,
+        coordinator: CameraCaptureView.Coordinator,
+        onCancel: @escaping () -> Void
+    ) {
+        self.kind = kind
+        self.coordinator = coordinator
+        self.onCancel = onCancel
+        super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .fullScreen
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .black
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startIfNeeded()
+    }
+
+    private func startIfNeeded() {
+        guard state == .idle else { return }
+        guard kind == .photo || kind == .video else {
+            showUnavailable("Этот режим камеры недоступен")
+            return
+        }
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            showUnavailable("Камера недоступна")
+            return
+        }
+
+        state = .requestingPermission
+        Task { @MainActor in
+            let hasCameraAccess = await requestAccess(for: .video)
+            let hasAudioAccess = kind == .video ? await requestAccess(for: .audio) : true
+            guard state == .requestingPermission else { return }
+            guard hasCameraAccess else {
+                showUnavailable("Нет доступа к камере")
+                return
+            }
+            guard hasAudioAccess else {
+                showUnavailable("Нет доступа к микрофону для видео")
+                return
+            }
+            presentPicker()
+        }
+    }
+
+    private func presentPicker() {
+        let requestedType = kind == .photo ? UTType.image.identifier : UTType.movie.identifier
+        let availableTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+        guard availableTypes.contains(requestedType) else {
+            showUnavailable("Этот режим камеры недоступен")
+            return
+        }
+
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = coordinator
+        picker.mediaTypes = [requestedType]
+        picker.videoQuality = .typeHigh
+        picker.videoMaximumDuration = 60 * 10
+        picker.allowsEditing = false
+        picker.cameraCaptureMode = kind == .photo ? .photo : .video
+        picker.modalPresentationStyle = .fullScreen
+        state = .presentingPicker
+        present(picker, animated: false)
+    }
+
+    private func showUnavailable(_ message: String) {
+        state = .finished
+        let unavailable = UnavailableCaptureViewController(message: message, onCancel: onCancel)
+        unavailable.modalPresentationStyle = .fullScreen
+        present(unavailable, animated: false)
+    }
+
+    private func requestAccess(for mediaType: AVMediaType) async -> Bool {
+        switch AVCaptureDevice.authorizationStatus(for: mediaType) {
+        case .authorized:
+            return true
+        case .notDetermined:
+            return await withCheckedContinuation { continuation in
+                AVCaptureDevice.requestAccess(for: mediaType) { allowed in
+                    continuation.resume(returning: allowed)
+                }
+            }
+        case .denied, .restricted:
+            return false
+        @unknown default:
+            return false
         }
     }
 }

@@ -1,4 +1,3 @@
-import AVFoundation
 import SwiftUI
 
 struct RoomDetailsScreen: View {
@@ -280,84 +279,6 @@ private struct RoomDetailsTimestamp: View {
     }
 }
 
-private struct VoiceNoteBubble: View {
-    let attachment: MediaAttachment
-    private let fileStore = LocalMediaFileStore()
-
-    @State private var player: AVAudioPlayer?
-    @State private var isPlaying = false
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Button(action: togglePlayback) {
-                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                    .font(.system(size: 18, weight: .black))
-                    .frame(width: 42, height: 42)
-                    .foregroundStyle(OceanKeyTheme.roomForeground)
-                    .background(OceanKeyTheme.accent)
-                    .clipShape(Circle())
-            }
-            .buttonStyle(.plain)
-
-            VStack(alignment: .leading, spacing: 7) {
-                HStack {
-                    Text(timeLabel)
-                        .font(.system(size: 12, weight: .black, design: .rounded))
-                        .foregroundStyle(OceanKeyTheme.secondaryText)
-                    Spacer()
-                    Image(systemName: "waveform")
-                        .font(.system(size: 13, weight: .black))
-                        .foregroundStyle(OceanKeyTheme.accent.opacity(0.78))
-                }
-
-                Text(attachment.transcript?.isEmpty == false ? attachment.transcript! : "Голос сохранён без расшифровки")
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(12)
-            .background(.black.opacity(0.30))
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(OceanKeyTheme.accent.opacity(0.16), lineWidth: 1)
-            }
-        }
-        .onDisappear {
-            player?.stop()
-            player = nil
-            isPlaying = false
-        }
-    }
-
-    private var timeLabel: String {
-        attachment.createdAt.formatted(
-            .dateTime
-                .hour(.defaultDigits(amPM: .abbreviated))
-                .minute(.twoDigits)
-                .locale(Locale(identifier: "en_US_POSIX"))
-        )
-    }
-
-    private func togglePlayback() {
-        if isPlaying {
-            player?.pause()
-            isPlaying = false
-            return
-        }
-
-        do {
-            if player == nil {
-                player = try AVAudioPlayer(contentsOf: fileStore.url(for: attachment))
-                player?.prepareToPlay()
-            }
-            player?.play()
-            isPlaying = true
-        } catch {
-            isPlaying = false
-        }
-    }
-}
 
 #Preview {
     RoomDetailsScreen(route: RoomDetailsRoute(roomID: "303", mode: .voice), workSession: .preview())

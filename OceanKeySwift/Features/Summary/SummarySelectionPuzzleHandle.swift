@@ -44,7 +44,7 @@ struct SummarySelectionPuzzleHandle: View {
                 fillOpacity: 0.08 + 0.18 * eased,
                 shadowOpacity: 0.22 * eased
             )
-            .offset(x: -min(threshold * 0.68, 250) * eased)
+            .offset(x: -threshold * 0.96 * eased)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 6)
         }

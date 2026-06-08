@@ -11,7 +11,9 @@ struct MediaThumbnailView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             Group {
-                if let image {
+                if attachment.kind == .video {
+                    LoopingVideoThumbnailView(url: fileStore.url(for: attachment))
+                } else if let image {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
@@ -45,6 +47,7 @@ struct MediaThumbnailView: View {
                 .stroke(OceanKeyTheme.accent.opacity(0.18), lineWidth: 1)
         }
         .task(id: attachment.id) {
+            guard attachment.kind != .video else { return }
             image = await loadThumbnail()
         }
     }
@@ -88,5 +91,70 @@ struct MediaThumbnailView: View {
         case .audio:
             "waveform"
         }
+    }
+}
+
+private struct LoopingVideoThumbnailView: UIViewRepresentable {
+    let url: URL
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    func makeUIView(context: Context) -> ThumbnailPlayerView {
+        let view = ThumbnailPlayerView()
+        context.coordinator.configure(url: url, in: view)
+        return view
+    }
+
+    func updateUIView(_ view: ThumbnailPlayerView, context: Context) {
+        context.coordinator.configure(url: url, in: view)
+    }
+
+    final class Coordinator {
+        private var currentURL: URL?
+        private var player: AVQueuePlayer?
+        private var looper: AVPlayerLooper?
+
+        @MainActor
+        func configure(url: URL, in view: ThumbnailPlayerView) {
+            guard currentURL != url else {
+                player?.play()
+                return
+            }
+            currentURL = url
+            let item = AVPlayerItem(url: url)
+            let queuePlayer = AVQueuePlayer()
+            queuePlayer.isMuted = true
+            queuePlayer.actionAtItemEnd = .none
+            queuePlayer.allowsExternalPlayback = false
+            queuePlayer.preventsDisplaySleepDuringVideoPlayback = false
+            player = queuePlayer
+            looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
+            view.playerLayer.player = queuePlayer
+            queuePlayer.play()
+        }
+    }
+}
+
+private final class ThumbnailPlayerView: UIView {
+    override static var layerClass: AnyClass {
+        AVPlayerLayer.self
+    }
+
+    var playerLayer: AVPlayerLayer {
+        layer as! AVPlayerLayer
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .black
+        playerLayer.videoGravity = .resizeAspectFill
+        playerLayer.masksToBounds = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
