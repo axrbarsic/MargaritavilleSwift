@@ -78,9 +78,9 @@ verification.
 - ProMotion readiness: the app opts out of the iPhone minimum-frame-duration
   cap and requests the physical display's maximum cadence for SpriteKit and
   telemetry, with 120 Hz as the supported-device target.
-- Settings surfaces runtime diagnostics for ProMotion opt-in and Apple sync
-  readiness, so device builds expose whether these platform capabilities are
-  active or blocked.
+- Runtime diagnostics for ProMotion and Apple sync remain available in code,
+  but Settings is intentionally limited to working controls and the build
+  changelog so the menu does not collect passive status rows.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.
@@ -172,11 +172,9 @@ available.
      player view, not a per-frame image filter.
    - Rejected developer experiments should be hard-disabled at settings load so
      stale device defaults cannot resurrect them.
-   - Gate iOS 26 visual experiments with availability checks and developer
-     toggles so production behavior stays stable while new Apple APIs are
-     evaluated.
-   - Keep Metal experiments in isolated `MTKView` components with a single
-     pipeline/draw path, not mixed into regular SwiftUI view bodies.
+   - Keep Developer settings limited to active, visible experiments. Rejected
+     or invisible experiments should be removed from Settings/state instead of
+     hidden behind stale saved flags.
    - Test on real devices before considering visual effects done.
 
 7. Cutover

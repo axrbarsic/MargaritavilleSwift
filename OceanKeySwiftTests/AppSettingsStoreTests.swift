@@ -62,16 +62,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     defer { defaults.removePersistentDomain(forName: suiteName) }
 
     let settings = AppSettingsStore(userDefaults: defaults)
-    settings.developerLiquidGlassEnabled = true
-    settings.developerGlassVIPEnabled = true
-    settings.developerMetalAuroraEnabled = true
-    settings.developerSoundPackV2Enabled = true
-    settings.developerHapticsV2Enabled = true
-    settings.developerVIPParticlesEnabled = true
     settings.developerCellPhysicsEnabled = true
-    settings.developerAssistantObjectEnabled = true
-    settings.developerCellVolumeEnabled = true
-    settings.developerCellVolumeIntensity = 0.52
     settings.developerCellSpringIntensity = 0.64
     settings.developerCellSpringSpeed = 1.14
     settings.developerVIPZebraIntensity = 0.77
@@ -80,46 +71,12 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
-    #expect(!loaded.developerLiquidGlassEnabled)
-    #expect(!loaded.developerGlassVIPEnabled)
-    #expect(!loaded.developerMetalAuroraEnabled)
-    #expect(!loaded.developerSoundPackV2Enabled)
-    #expect(!loaded.developerHapticsV2Enabled)
-    #expect(!loaded.developerVIPParticlesEnabled)
     #expect(loaded.developerCellPhysicsEnabled)
-    #expect(!loaded.developerAssistantObjectEnabled)
-    #expect(!loaded.developerCellVolumeEnabled)
-    #expect(loaded.developerCellVolumeIntensity == 0)
     #expect(loaded.developerCellSpringIntensity == 0.64)
     #expect(loaded.developerCellSpringSpeed == 1.14)
     #expect(loaded.developerVIPZebraIntensity == 0.77)
     #expect(loaded.developerVIPZebraSpeed == 1.22)
     #expect(loaded.developerVIPZebraSharpness == 0.44)
-}
-
-@Test
-func appSettingsGroupedDeveloperTogglesControlUnderlyingFlags() {
-    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
-    let defaults = UserDefaults(suiteName: suiteName)!
-    defer { defaults.removePersistentDomain(forName: suiteName) }
-
-    let settings = AppSettingsStore(userDefaults: defaults)
-    settings.developerGameFeelPackEnabled = true
-
-    #expect(settings.developerSoundPackV2Enabled)
-    #expect(settings.developerHapticsV2Enabled)
-    #expect(settings.developerVIPParticlesEnabled)
-    #expect(settings.developerCellPhysicsEnabled)
-
-    settings.developerGameFeelPackEnabled = false
-
-    let loaded = AppSettingsStore.load(userDefaults: defaults)
-    #expect(!loaded.developerLiquidGlassEnabled)
-    #expect(!loaded.developerGlassVIPEnabled)
-    #expect(!loaded.developerSoundPackV2Enabled)
-    #expect(!loaded.developerHapticsV2Enabled)
-    #expect(!loaded.developerVIPParticlesEnabled)
-    #expect(!loaded.developerCellPhysicsEnabled)
 }
 
 @Test
@@ -206,16 +163,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.backgroundVideoBrightness = 0.33
     settings.backgroundVideoGreenTint = 0.81
     settings.backgroundVideoGridIntensity = 0.42
-    settings.developerLiquidGlassEnabled = true
-    settings.developerGlassVIPEnabled = true
-    settings.developerMetalAuroraEnabled = true
-    settings.developerSoundPackV2Enabled = true
-    settings.developerHapticsV2Enabled = true
-    settings.developerVIPParticlesEnabled = true
     settings.developerCellPhysicsEnabled = true
-    settings.developerAssistantObjectEnabled = true
-    settings.developerCellVolumeEnabled = true
-    settings.developerCellVolumeIntensity = 0.25
     settings.developerCellSpringIntensity = 0.35
     settings.developerCellSpringSpeed = 1.25
     settings.developerVIPZebraIntensity = 0.45
@@ -236,16 +184,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.backgroundVideoBrightness == 0.08)
     #expect(loaded.backgroundVideoGreenTint == 0.34)
     #expect(loaded.backgroundVideoGridIntensity == 0)
-    #expect(!loaded.developerLiquidGlassEnabled)
-    #expect(!loaded.developerGlassVIPEnabled)
-    #expect(!loaded.developerMetalAuroraEnabled)
-    #expect(!loaded.developerSoundPackV2Enabled)
-    #expect(!loaded.developerHapticsV2Enabled)
-    #expect(!loaded.developerVIPParticlesEnabled)
     #expect(!loaded.developerCellPhysicsEnabled)
-    #expect(!loaded.developerAssistantObjectEnabled)
-    #expect(!loaded.developerCellVolumeEnabled)
-    #expect(loaded.developerCellVolumeIntensity == 0)
     #expect(loaded.developerCellSpringIntensity == 0.72)
     #expect(loaded.developerCellSpringSpeed == 0.82)
     #expect(loaded.developerVIPZebraIntensity == 0.86)

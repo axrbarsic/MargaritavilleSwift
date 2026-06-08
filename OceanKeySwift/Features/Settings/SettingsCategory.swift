@@ -2,9 +2,8 @@ import Foundation
 
 enum SettingsCategory: String, CaseIterable, Identifiable {
     case appearance
+    case background
     case workflow
-    case sync
-    case tools
     case developer
 
     var id: String { rawValue }
@@ -13,12 +12,10 @@ enum SettingsCategory: String, CaseIterable, Identifiable {
         switch self {
         case .appearance:
             "Внешний вид"
+        case .background:
+            "Фон"
         case .workflow:
             "Работа"
-        case .sync:
-            "Синхронизация"
-        case .tools:
-            "Инструменты"
         case .developer:
             "Разработчик"
         }
@@ -28,12 +25,10 @@ enum SettingsCategory: String, CaseIterable, Identifiable {
         switch self {
         case .appearance:
             "paintpalette.fill"
+        case .background:
+            "film.stack.fill"
         case .workflow:
             "hand.tap.fill"
-        case .sync:
-            "icloud.fill"
-        case .tools:
-            "wrench.adjustable.fill"
         case .developer:
             "hammer.fill"
         }

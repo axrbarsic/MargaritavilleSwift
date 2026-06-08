@@ -1,19 +1,13 @@
-import CoreTransferable
 import PhotosUI
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct SettingsScreen: View {
-    @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
-    @Bindable var performanceTelemetry: PerformanceTelemetryStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
-    @Environment(\.appleSyncStatus) private var appleSyncStatus
     @State private var selectedCategory: SettingsCategory = .appearance
     @State private var isChangelogPresented = false
-    @State private var isHistoryPresented = false
     @State private var isResetConfirmationPresented = false
     @State private var selectedBackgroundVideoItem: PhotosPickerItem?
 
@@ -38,10 +32,6 @@ struct SettingsScreen: View {
         }
         .sheet(isPresented: $isChangelogPresented) {
             BuildChangelogScreen()
-                .preferredColorScheme(.dark)
-        }
-        .sheet(isPresented: $isHistoryPresented) {
-            WorkSessionHistoryScreen(entries: workSession.history)
                 .preferredColorScheme(.dark)
         }
         .confirmationDialog(
@@ -81,19 +71,14 @@ struct SettingsScreen: View {
         switch selectedCategory {
         case .appearance:
             appearanceSection
-            backgroundSection
             settingsSection
+        case .background:
+            backgroundSection
         case .workflow:
             workSection
-        case .sync:
-            syncSection
-            storageSection
-        case .tools:
-            toolsSection
         case .developer:
             experimentalSection
             developerSection
-            migrationSection
         }
     }
 
@@ -164,35 +149,14 @@ struct SettingsScreen: View {
     private var developerSection: some View {
         SettingsPanel(
             title: "Разработчик",
-            subtitle: "Диагностика, версия приложения и технические признаки текущей сборки."
+            subtitle: "Только служебный build changelog. Остальная диагностика не смешивается с настройками."
         ) {
-            SettingsInfoRow(
-                title: "Версия",
-                value: AppBuildInfo.versionLabel,
-                systemName: "number",
-                subtitle: "Нажми ниже, чтобы открыть краткий список изменений."
-            )
             Button(action: openChangelog) {
                 SettingsInfoRow(
-                    title: "Что изменилось",
-                    value: "Открыть",
+                    title: "Версия \(AppBuildInfo.versionLabel)",
+                    value: "Изменения",
                     systemName: "list.bullet.clipboard.fill",
                     subtitle: "Короткая выжимка по последним билдам."
-                )
-            }
-            .buttonStyle(.plain)
-            SettingsInfoRow(title: "Движок", value: "SpriteKit + SwiftUI", systemName: "sparkles")
-            SettingsInfoRow(title: "Цель", value: "Физический iPhone", systemName: "iphone")
-            SettingsInfoRow(title: "ProMotion", value: RuntimeDiagnostics.currentProMotionStatusLabel(), systemName: "display")
-            SettingsInfoRow(title: "FPS", value: performanceFPSLabel, systemName: "speedometer")
-            SettingsInfoRow(title: "Просадки", value: performanceSlowFrameLabel, systemName: "waveform.path.ecg")
-            SettingsInfoRow(title: "Худший кадр", value: performanceWorstFrameLabel, systemName: "timer")
-            Button(action: resetPerformanceCounters) {
-                SettingsInfoRow(
-                    title: "Метрики",
-                    value: "Сбросить",
-                    systemName: "arrow.counterclockwise",
-                    subtitle: "Обнулить счётчики FPS и медленных кадров."
                 )
             }
             .buttonStyle(.plain)
@@ -357,82 +321,6 @@ struct SettingsScreen: View {
         }
     }
 
-    private var syncSection: some View {
-        SettingsPanel(
-            title: "Синхронизация",
-            subtitle: "Нативная Apple-first синхронизация через SwiftData и CloudKit."
-        ) {
-            SettingsInfoRow(
-                title: "iCloud",
-                value: appleSyncStatus.statusLabel,
-                systemName: appleSyncStatus.isCloudActive ? "icloud.fill" : "icloud.slash.fill",
-                subtitle: appleSyncStatus.detailsLabel
-            )
-            SettingsInfoRow(
-                title: "Локальный режим",
-                value: persistenceStatus,
-                systemName: "externaldrive.fill",
-                subtitle: "Данные сначала сохраняются на устройстве, без блокировки интерфейса."
-            )
-            Button(action: openHistory) {
-                SettingsInfoRow(
-                    title: "Хронология",
-                    value: "\(workSession.history.count)",
-                    systemName: "clock.arrow.circlepath",
-                    subtitle: "События работы с ячейками и тележками."
-                )
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
-    private var storageSection: some View {
-        SettingsPanel(
-            title: "Текущая смена",
-            subtitle: "Быстрый технический срез активного рабочего списка."
-        ) {
-            SettingsInfoRow(title: "Ячеек", value: "\(workSession.counts.total)", systemName: "rectangle.grid.1x2")
-            SettingsInfoRow(title: "Готово", value: "\(workSession.counts.completed)", systemName: "checkmark.circle.fill")
-            if workSession.selection.workdayLocked {
-                Button(action: unlockWorkdayForEditing) {
-                    SettingsInfoRow(
-                        title: "Рабочий список",
-                        value: "Редактировать",
-                        systemName: "square.and.pencil",
-                        subtitle: "Разблокировать первый экран для правки тележек и номеров."
-                    )
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-
-    private var toolsSection: some View {
-        SettingsPanel(
-            title: "Инструменты",
-            subtitle: "Встроенные помощники Swift-версии. AI-перевод и Gemini пока не показываем."
-        ) {
-            SettingsInfoRow(
-                title: "Диктофон",
-                value: "Apple Speech",
-                systemName: "mic.fill",
-                subtitle: "Нативная запись и расшифровка заметок без Gemini как основного пути."
-            )
-            SettingsInfoRow(
-                title: "Медиа",
-                value: "Локально",
-                systemName: "camera.fill",
-                subtitle: "Фото и видео остаются на устройстве, без облачной синхронизации."
-            )
-            SettingsInfoRow(
-                title: "Видео-фон",
-                value: appSettings.backgroundVideoRelativePath == nil ? "Не выбран" : "Готов",
-                systemName: "film.stack.fill",
-                subtitle: "Тот же локальный файл используется как фон приложения."
-            )
-        }
-    }
-
     private var settingsSection: some View {
         SettingsPanel(
             title: "Сброс",
@@ -450,60 +338,9 @@ struct SettingsScreen: View {
         }
     }
 
-    private var migrationSection: some View {
-        SettingsPanel(
-            title: "Перенос",
-            subtitle: "Служебная заметка по текущей нативной iOS-ветке."
-        ) {
-            Text("Эта Swift-версия пока идёт отдельной веткой. Flutter-приложение остаётся эталоном поведения до полной готовности нативной версии.")
-                .font(.system(size: 15, weight: .semibold, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(16)
-                .background(OceanKeyTheme.surface.opacity(0.84))
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        }
-    }
-
-    private var persistenceStatus: String {
-        if let error = workSession.lastPersistenceError {
-            return "Ошибка: \(error.localizedDescription)"
-        }
-        return "Активно"
-    }
-
-    private var performanceFPSLabel: String {
-        let currentFPS = performanceTelemetry.currentFPS == 0 ? "..." : "\(performanceTelemetry.currentFPS)"
-        return "\(currentFPS) / \(performanceTelemetry.targetFPS)"
-    }
-
-    private var performanceSlowFrameLabel: String {
-        "\(performanceTelemetry.recentSlowFrames) сейчас, \(performanceTelemetry.totalSlowFrames) всего"
-    }
-
-    private var performanceWorstFrameLabel: String {
-        String(format: "%.1f ms", performanceTelemetry.recentWorstFrameMS)
-    }
-
-    private func unlockWorkdayForEditing() {
-        feedback.confirm()
-        workSession.unlockWorkdayForEditing()
-        dismiss()
-    }
-
     private func openChangelog() {
         feedback.tap()
         isChangelogPresented = true
-    }
-
-    private func openHistory() {
-        feedback.tap()
-        isHistoryPresented = true
-    }
-
-    private func resetPerformanceCounters() {
-        feedback.confirm()
-        performanceTelemetry.resetCounters()
     }
 
     private func confirmResetSettings() {
@@ -530,42 +367,9 @@ struct SettingsScreen: View {
     }
 }
 
-private struct BackgroundVideoPickerLabel: View {
-    let videoStatus: String
-
-    var body: some View {
-        SettingsInfoRow(
-            title: "Видео",
-            value: videoStatus,
-            systemName: "film.fill"
-        )
-    }
-}
-
-private struct PickedBackgroundVideo: Transferable {
-    let url: URL
-
-    static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(contentType: .movie) { video in
-            SentTransferredFile(video.url)
-        } importing: { received in
-            let copyURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(UUID().uuidString)
-                .appendingPathExtension(received.file.pathExtension.isEmpty ? "mov" : received.file.pathExtension)
-            if FileManager.default.fileExists(atPath: copyURL.path) {
-                try FileManager.default.removeItem(at: copyURL)
-            }
-            try FileManager.default.copyItem(at: received.file, to: copyURL)
-            return PickedBackgroundVideo(url: copyURL)
-        }
-    }
-}
-
 #Preview {
     SettingsScreen(
-        workSession: .preview(),
-        appSettings: AppSettingsStore(),
-        performanceTelemetry: PerformanceTelemetryStore()
+        appSettings: AppSettingsStore()
     )
         .preferredColorScheme(.dark)
 }

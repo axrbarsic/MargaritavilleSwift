@@ -76,9 +76,7 @@ struct SummaryScreen: View {
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsScreen(
-                workSession: workSession,
-                appSettings: appSettings,
-                performanceTelemetry: performanceTelemetry
+                appSettings: appSettings
             )
                 .preferredColorScheme(.dark)
         }

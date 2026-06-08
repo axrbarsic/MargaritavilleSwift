@@ -145,12 +145,9 @@ Simulator unless explicitly allowed.
   main screen.
 - Settings exposes the first native history viewer with timestamped cards and a
   compact visual snapshot preview that highlights the changed room when present.
-- Settings now exposes lightweight live performance telemetry: FPS target,
-  current FPS, recent slow frames, total slow frames, and recent worst frame
-  time.
-- Settings now also exposes runtime diagnostics for ProMotion opt-in and the
-  current Apple sync state, so installed builds show whether 120 Hz and iCloud
-  are actually active rather than implied.
+- Lightweight live performance telemetry and Apple sync status remain runtime
+  services, but Settings no longer shows passive diagnostic rows unless a row is
+  an actual control.
 - Room VIP state and scheduled room time now carry field-level update
   timestamps and persist them through SwiftData, closing another prerequisite
   for local-first Apple sync merges.
@@ -205,16 +202,13 @@ Simulator unless explicitly allowed.
 - Cart consumables now support custom per-cart rows on top of the default
   towel/linen catalog, with quantity, completion state, timestamps, history,
   and SwiftData persistence.
-- Settings now follows the Flutter category idea as native SwiftUI:
-  Appearance, Work, Sync, Tools, and Developer. Developer also contains gated
-  iOS 26 visual experiments for Liquid Glass and Glass VIP cells.
-- Developer experiments now include the first native Metal-backed background:
-  Metal Aurora uses `MTKView` plus a fullscreen fragment shader and is isolated
-  from the default Matrix/video wallpaper paths.
+- Settings now follows the Flutter category idea as native SwiftUI but is
+  intentionally trimmed to active controls only: Appearance, Background, Work,
+  and Developer.
 - Developer experiments were simplified again after real-device testing:
   deprecated invisible/heavy overlays and the rejected glossy volume-cell effect
-  are no longer activated from stored settings, while the active test controls
-  are live spring cells and adjustable moving VIP zebra stripes with sharpness.
+  were removed from Settings/state, while the active test controls are live
+  spring cells and adjustable moving VIP zebra stripes with sharpness.
 - Room and cart voice notes now share playable local audio bubbles, while room
   cells show compact top-right indicators when text, voice, photo, or video
   data exists. Room/cart attachments can be deleted and their local files are

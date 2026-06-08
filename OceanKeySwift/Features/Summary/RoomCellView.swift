@@ -3,8 +3,6 @@ import UIKit
 
 struct RoomCellView: View {
     @Environment(\.interactionFeedback) private var feedback
-    @Environment(\.experimentalGlassVIPEnabled) private var experimentalGlassVIPEnabled
-    @Environment(\.experimentalVIPParticlesEnabled) private var experimentalVIPParticlesEnabled
     @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
     @Environment(\.experimentalCellSpringIntensity) private var experimentalCellSpringIntensity
     @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
@@ -138,17 +136,6 @@ struct RoomCellView: View {
             speed: experimentalVIPZebraSpeed,
             sharpness: experimentalVIPZebraSharpness
         )
-        .experimentalVIPGlass(enabled: experimentalGlassVIPEnabled && room.isVIP, shape: tileShape)
-        .anchorPreference(key: VIPParticleAnchorPreferenceKey.self, value: .bounds) { anchor in
-            guard room.isVIP, experimentalVIPParticlesEnabled else { return [] }
-            return [
-                VIPParticleAnchor(
-                    id: room.id,
-                    tintColor: UIColor(OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)),
-                    bounds: anchor
-                )
-            ]
-        }
         .overlay(alignment: .bottomTrailing) {
             if let scheduleLabel = room.scheduleLabel {
                 Text(scheduleLabel)
@@ -322,23 +309,6 @@ struct RoomCellView: View {
 }
 
 private extension View {
-    @ViewBuilder
-    func experimentalVIPGlass(enabled: Bool, shape: UnevenRoundedRectangle) -> some View {
-        if enabled {
-            if #available(iOS 26.0, *) {
-                self.glassEffect(.regular.tint(.white.opacity(0.12)).interactive(), in: shape)
-            } else {
-                self.overlay {
-                    shape
-                        .stroke(.white.opacity(0.32), lineWidth: 1.5)
-                        .blendMode(.screen)
-                }
-            }
-        } else {
-            self
-        }
-    }
-
     @ViewBuilder
     func vipZebraEffect(
         enabled: Bool,

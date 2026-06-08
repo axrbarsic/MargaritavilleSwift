@@ -35,8 +35,6 @@ struct SettingsPanel<Content: View>: View {
 }
 
 struct SettingsInfoRow: View {
-    @Environment(\.experimentalLiquidGlassEnabled) private var liquidGlassEnabled
-
     let title: String
     let value: String
     let systemName: String
@@ -91,13 +89,10 @@ struct SettingsInfoRow: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(OceanKeyTheme.accent.opacity(0.18), lineWidth: 1)
         }
-        .experimentalLiquidGlass(enabled: liquidGlassEnabled, cornerRadius: 18, interactive: false)
     }
 }
 
 struct SettingsSliderRow: View {
-    @Environment(\.experimentalLiquidGlassEnabled) private var liquidGlassEnabled
-
     let title: String
     let valueLabel: String
     let systemName: String
@@ -152,7 +147,6 @@ struct SettingsSliderRow: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(OceanKeyTheme.accent.opacity(0.18), lineWidth: 1)
         }
-        .experimentalLiquidGlass(enabled: liquidGlassEnabled, cornerRadius: 18, interactive: true)
     }
 
     private var canReset: Bool {
@@ -161,25 +155,5 @@ struct SettingsSliderRow: View {
 
     private func reset() {
         value = defaultValue
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func experimentalLiquidGlass(enabled: Bool, cornerRadius: CGFloat, interactive: Bool) -> some View {
-        if enabled {
-            if #available(iOS 26.0, *) {
-                let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                if interactive {
-                    self.glassEffect(.regular.tint(OceanKeyTheme.accent.opacity(0.10)).interactive(), in: shape)
-                } else {
-                    self.glassEffect(.regular.tint(OceanKeyTheme.accent.opacity(0.08)), in: shape)
-                }
-            } else {
-                self.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            }
-        } else {
-            self
-        }
     }
 }

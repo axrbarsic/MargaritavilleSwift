@@ -45,16 +45,7 @@ final class AppSettingsStore {
         static let backgroundVideoBrightness = "backgroundVideoBrightness"
         static let backgroundVideoGreenTint = "backgroundVideoGreenTint"
         static let backgroundVideoGridIntensity = "backgroundVideoGridIntensity"
-        static let developerLiquidGlassEnabled = "developerLiquidGlassEnabled"
-        static let developerGlassVIPEnabled = "developerGlassVIPEnabled"
-        static let developerMetalAuroraEnabled = "developerMetalAuroraEnabled"
-        static let developerSoundPackV2Enabled = "developerSoundPackV2Enabled"
-        static let developerHapticsV2Enabled = "developerHapticsV2Enabled"
-        static let developerVIPParticlesEnabled = "developerVIPParticlesEnabled"
         static let developerCellPhysicsEnabled = "developerCellPhysicsEnabled"
-        static let developerAssistantObjectEnabled = "developerAssistantObjectEnabled"
-        static let developerCellVolumeEnabled = "developerCellVolumeEnabled"
-        static let developerCellVolumeIntensity = "developerCellVolumeIntensity"
         static let developerCellSpringIntensity = "developerCellSpringIntensity"
         static let developerCellSpringSpeed = "developerCellSpringSpeed"
         static let developerVIPZebraIntensity = "developerVIPZebraIntensity"
@@ -160,64 +151,9 @@ final class AppSettingsStore {
         }
     }
 
-    var developerLiquidGlassEnabled: Bool {
-        didSet {
-            userDefaults.set(developerLiquidGlassEnabled, forKey: Keys.developerLiquidGlassEnabled)
-        }
-    }
-
-    var developerGlassVIPEnabled: Bool {
-        didSet {
-            userDefaults.set(developerGlassVIPEnabled, forKey: Keys.developerGlassVIPEnabled)
-        }
-    }
-
-    var developerMetalAuroraEnabled: Bool {
-        didSet {
-            userDefaults.set(developerMetalAuroraEnabled, forKey: Keys.developerMetalAuroraEnabled)
-        }
-    }
-
-    var developerSoundPackV2Enabled: Bool {
-        didSet {
-            userDefaults.set(developerSoundPackV2Enabled, forKey: Keys.developerSoundPackV2Enabled)
-        }
-    }
-
-    var developerHapticsV2Enabled: Bool {
-        didSet {
-            userDefaults.set(developerHapticsV2Enabled, forKey: Keys.developerHapticsV2Enabled)
-        }
-    }
-
-    var developerVIPParticlesEnabled: Bool {
-        didSet {
-            userDefaults.set(developerVIPParticlesEnabled, forKey: Keys.developerVIPParticlesEnabled)
-        }
-    }
-
     var developerCellPhysicsEnabled: Bool {
         didSet {
             userDefaults.set(developerCellPhysicsEnabled, forKey: Keys.developerCellPhysicsEnabled)
-        }
-    }
-
-    var developerAssistantObjectEnabled: Bool {
-        didSet {
-            userDefaults.set(developerAssistantObjectEnabled, forKey: Keys.developerAssistantObjectEnabled)
-        }
-    }
-
-    var developerCellVolumeEnabled: Bool {
-        didSet {
-            userDefaults.set(developerCellVolumeEnabled, forKey: Keys.developerCellVolumeEnabled)
-        }
-    }
-
-    var developerCellVolumeIntensity: Double {
-        get { 0 }
-        set {
-            userDefaults.set(Self.normalizedDeveloperCellVolumeIntensity(newValue), forKey: Keys.developerCellVolumeIntensity)
         }
     }
 
@@ -265,31 +201,6 @@ final class AppSettingsStore {
         MatrixRainConfiguration(speed: matrixSpeed)
     }
 
-    var developerGameFeelPackEnabled: Bool {
-        get {
-            developerSoundPackV2Enabled
-                && developerHapticsV2Enabled
-                && developerVIPParticlesEnabled
-                && developerCellPhysicsEnabled
-        }
-        set {
-            developerSoundPackV2Enabled = newValue
-            developerHapticsV2Enabled = newValue
-            developerVIPParticlesEnabled = newValue
-            developerCellPhysicsEnabled = newValue
-        }
-    }
-
-    var developerGlassLabEnabled: Bool {
-        get {
-            developerLiquidGlassEnabled && developerGlassVIPEnabled
-        }
-        set {
-            developerLiquidGlassEnabled = newValue
-            developerGlassVIPEnabled = newValue
-        }
-    }
-
     var backgroundVideoURL: URL? {
         guard let backgroundVideoRelativePath else { return nil }
         return BackgroundVideoFileStore().url(for: backgroundVideoRelativePath)
@@ -307,16 +218,7 @@ final class AppSettingsStore {
         backgroundVideoBrightness = 0.08
         backgroundVideoGreenTint = 0.34
         backgroundVideoGridIntensity = 0
-        developerLiquidGlassEnabled = false
-        developerGlassVIPEnabled = false
-        developerMetalAuroraEnabled = false
-        developerSoundPackV2Enabled = false
-        developerHapticsV2Enabled = false
-        developerVIPParticlesEnabled = false
         developerCellPhysicsEnabled = false
-        developerAssistantObjectEnabled = false
-        developerCellVolumeEnabled = false
-        developerCellVolumeIntensity = 0
         developerCellSpringIntensity = 0.72
         developerCellSpringSpeed = 0.82
         developerVIPZebraIntensity = 0.86
@@ -336,16 +238,7 @@ final class AppSettingsStore {
         backgroundVideoBrightness: Double = 0.08,
         backgroundVideoGreenTint: Double = 0.34,
         backgroundVideoGridIntensity: Double = 0,
-        developerLiquidGlassEnabled: Bool = false,
-        developerGlassVIPEnabled: Bool = false,
-        developerMetalAuroraEnabled: Bool = false,
-        developerSoundPackV2Enabled: Bool = false,
-        developerHapticsV2Enabled: Bool = false,
-        developerVIPParticlesEnabled: Bool = false,
         developerCellPhysicsEnabled: Bool = false,
-        developerAssistantObjectEnabled: Bool = false,
-        developerCellVolumeEnabled: Bool = false,
-        developerCellVolumeIntensity: Double = 0,
         developerCellSpringIntensity: Double = 0.72,
         developerCellSpringSpeed: Double = 0.82,
         developerVIPZebraIntensity: Double = 0.86,
@@ -369,15 +262,7 @@ final class AppSettingsStore {
         self.storedDeveloperVIPZebraIntensity = Self.normalizedDeveloperVIPZebraIntensity(developerVIPZebraIntensity)
         self.storedDeveloperVIPZebraSpeed = Self.normalizedDeveloperVIPZebraSpeed(developerVIPZebraSpeed)
         self.storedDeveloperVIPZebraSharpness = Self.normalizedDeveloperVIPZebraSharpness(developerVIPZebraSharpness)
-        self.developerLiquidGlassEnabled = developerLiquidGlassEnabled
-        self.developerGlassVIPEnabled = developerGlassVIPEnabled
-        self.developerMetalAuroraEnabled = developerMetalAuroraEnabled
-        self.developerSoundPackV2Enabled = developerSoundPackV2Enabled
-        self.developerHapticsV2Enabled = developerHapticsV2Enabled
-        self.developerVIPParticlesEnabled = developerVIPParticlesEnabled
         self.developerCellPhysicsEnabled = developerCellPhysicsEnabled
-        self.developerAssistantObjectEnabled = developerAssistantObjectEnabled
-        self.developerCellVolumeEnabled = developerCellVolumeEnabled
         self.userDefaults = userDefaults
     }
 
@@ -396,16 +281,7 @@ final class AppSettingsStore {
         let backgroundVideoBrightness = userDefaults.object(forKey: Keys.backgroundVideoBrightness) as? Double ?? 0.08
         let backgroundVideoGreenTint = userDefaults.object(forKey: Keys.backgroundVideoGreenTint) as? Double ?? 0.34
         let backgroundVideoGridIntensity = userDefaults.object(forKey: Keys.backgroundVideoGridIntensity) as? Double ?? 0
-        let developerLiquidGlassEnabled = false
-        let developerGlassVIPEnabled = false
-        let developerMetalAuroraEnabled = false
-        let developerSoundPackV2Enabled = false
-        let developerHapticsV2Enabled = false
-        let developerVIPParticlesEnabled = false
         let developerCellPhysicsEnabled = userDefaults.object(forKey: Keys.developerCellPhysicsEnabled) as? Bool ?? false
-        let developerAssistantObjectEnabled = false
-        let developerCellVolumeEnabled = false
-        let developerCellVolumeIntensity = 0.0
         let developerCellSpringIntensity = userDefaults.object(forKey: Keys.developerCellSpringIntensity) as? Double ?? 0.72
         let developerCellSpringSpeed = userDefaults.object(forKey: Keys.developerCellSpringSpeed) as? Double ?? 0.82
         let developerVIPZebraIntensity = userDefaults.object(forKey: Keys.developerVIPZebraIntensity) as? Double ?? 0.86
@@ -423,16 +299,7 @@ final class AppSettingsStore {
             backgroundVideoBrightness: backgroundVideoBrightness,
             backgroundVideoGreenTint: backgroundVideoGreenTint,
             backgroundVideoGridIntensity: backgroundVideoGridIntensity,
-            developerLiquidGlassEnabled: developerLiquidGlassEnabled,
-            developerGlassVIPEnabled: developerGlassVIPEnabled,
-            developerMetalAuroraEnabled: developerMetalAuroraEnabled,
-            developerSoundPackV2Enabled: developerSoundPackV2Enabled,
-            developerHapticsV2Enabled: developerHapticsV2Enabled,
-            developerVIPParticlesEnabled: developerVIPParticlesEnabled,
             developerCellPhysicsEnabled: developerCellPhysicsEnabled,
-            developerAssistantObjectEnabled: developerAssistantObjectEnabled,
-            developerCellVolumeEnabled: developerCellVolumeEnabled,
-            developerCellVolumeIntensity: developerCellVolumeIntensity,
             developerCellSpringIntensity: developerCellSpringIntensity,
             developerCellSpringSpeed: developerCellSpringSpeed,
             developerVIPZebraIntensity: developerVIPZebraIntensity,
@@ -463,10 +330,6 @@ final class AppSettingsStore {
     }
 
     static func normalizedBackgroundVideoGridIntensity(_ value: Double) -> Double {
-        min(max(value, 0), 1)
-    }
-
-    static func normalizedDeveloperCellVolumeIntensity(_ value: Double) -> Double {
         min(max(value, 0), 1)
     }
 

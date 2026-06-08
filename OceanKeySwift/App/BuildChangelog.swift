@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (66)",
+            date: "2026-06-08",
+            changes: [
+                "Cleaned Settings down to controls that actually change the app: appearance, background, work menu behavior, live cells, VIP zebra, reset, and build changelog.",
+                "Removed Sync, Tools, migration notes, passive diagnostics rows, and old developer experiments from the Settings UI.",
+                "Deleted rejected or inactive visual experiment code paths so stale saved flags cannot resurrect unused effects."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (65)",
             date: "2026-06-08",
             changes: [

@@ -66,11 +66,7 @@ struct WorkSetupScreen: View {
             .padding(.top, 18)
         }
         .sheet(isPresented: $isSettingsPresented) {
-            SettingsScreen(
-                workSession: workSession,
-                appSettings: appSettings,
-                performanceTelemetry: performanceTelemetry
-            )
+            SettingsScreen(appSettings: appSettings)
                 .preferredColorScheme(.dark)
         }
     }
