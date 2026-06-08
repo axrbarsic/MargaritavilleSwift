@@ -58,6 +58,7 @@ private final class FakeVoiceTranscriptionService: VoiceTranscriptionServicing {
     func start(
         baseText: String,
         onTranscript: @escaping TranscriptHandler,
+        onCompletion: CompletionHandler?,
         onStatus: @escaping StatusHandler,
         onPhase: @escaping PhaseHandler
     ) async {

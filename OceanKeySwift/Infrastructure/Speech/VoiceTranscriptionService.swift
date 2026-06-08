@@ -70,6 +70,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     private var activeSessionID: UUID?
     private var baseText = ""
     private var onTranscript: TranscriptHandler?
+    private var onCompletion: CompletionHandler?
     private var onStatus: StatusHandler?
     private var onPhase: PhaseHandler?
 
@@ -84,6 +85,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     func start(
         baseText: String,
         onTranscript: @escaping TranscriptHandler,
+        onCompletion: CompletionHandler?,
         onStatus: @escaping StatusHandler,
         onPhase: @escaping PhaseHandler
     ) async {
@@ -94,6 +96,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         activeSessionID = sessionID
         self.baseText = baseText.trimmingCharacters(in: .whitespacesAndNewlines)
         self.onTranscript = onTranscript
+        self.onCompletion = onCompletion
         self.onStatus = onStatus
         self.onPhase = onPhase
 
@@ -140,7 +143,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         deactivateSession()
 
         guard let url else {
-            finishIfCurrent(activeSessionID, status: "Нет записи", transcript: nil)
+            finishIfCurrent(activeSessionID, status: "Нет записи", transcript: nil, audioURL: nil)
             return
         }
         let sessionID = activeSessionID
@@ -181,9 +184,8 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     // MARK: - File-based transcription
 
     private func transcribe(url: URL, sessionID: UUID?) async {
-        defer { try? FileManager.default.removeItem(at: url) }
         guard let recognizer, recognizer.isAvailable else {
-            finishIfCurrent(sessionID, status: "Распознавание недоступно", transcript: nil)
+            finishIfCurrent(sessionID, status: "Распознавание недоступно", transcript: nil, audioURL: url)
             return
         }
         let request = SFSpeechURLRecognitionRequest(url: url)
@@ -197,7 +199,8 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         finishIfCurrent(
             sessionID,
             status: (transcript?.isEmpty == false) ? "Готово" : "Нет распознанного текста",
-            transcript: transcript
+            transcript: transcript,
+            audioURL: url
         )
     }
 
@@ -232,9 +235,12 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         onTranscript?(combined)
     }
 
-    private func finishIfCurrent(_ sessionID: UUID?, status: String, transcript: String?) {
+    private func finishIfCurrent(_ sessionID: UUID?, status: String, transcript: String?, audioURL: URL?) {
         guard isCurrent(sessionID) else { return }
         if let transcript { deliver(transcript) }
+        if let audioURL {
+            onCompletion?(VoiceTranscriptionResult(transcript: transcript, audioURL: audioURL))
+        }
         activeSessionID = nil
         phase = .idle
         onStatus?(status)

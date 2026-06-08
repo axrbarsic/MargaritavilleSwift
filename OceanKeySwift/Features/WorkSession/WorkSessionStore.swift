@@ -207,7 +207,7 @@ final class WorkSessionStore {
 
     func addRoomMedia(_ attachment: MediaAttachment, roomId: RoomCell.ID) {
         mutateRoom(roomId, history: { _, after, _ in
-            (.roomMediaAdded, "\(after.id): добавлено \(attachment.kind == .photo ? "фото" : "видео")")
+            (.roomMediaAdded, "\(after.id): добавлено \(attachment.historyLabel)")
         }) { room in
             var attachments = room.mediaAttachments ?? []
             attachments.insert(attachment, at: 0)
@@ -227,7 +227,7 @@ final class WorkSessionStore {
 
     func addCartMedia(_ attachment: MediaAttachment, cartId: CartSection.ID) {
         mutateCart(cartId, history: { _, after, _ in
-            (.cartMediaAdded, "Тележка \(after.id): добавлено \(attachment.kind == .photo ? "фото" : "видео")")
+            (.cartMediaAdded, "Тележка \(after.id): добавлено \(attachment.historyLabel)")
         }) { cart in
             var attachments = cart.mediaAttachments ?? []
             attachments.insert(attachment, at: 0)
@@ -281,6 +281,19 @@ final class WorkSessionStore {
     ) {
         mutateRoom(roomId, history: makeHistory) { room, _ in
             update(&room)
+        }
+    }
+}
+
+private extension MediaAttachment {
+    var historyLabel: String {
+        switch kind {
+        case .photo:
+            "фото"
+        case .video:
+            "видео"
+        case .audio:
+            "голос"
         }
     }
 }

@@ -10,6 +10,47 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (61)",
+            date: "2026-06-07",
+            changes: [
+                "Replaced the palette saturation slider with a fixed vivid palette switch matching the high-saturation screenshot style.",
+                "Simplified the room swipe menu to one multimodal voice/media entry, VIP, and schedule, and removed the duplicate schedule chip from the expanded menu.",
+                "Added a slow lamp-style expansion transition for the room swipe menu.",
+                "Changed room voice notes into local audio bubbles with transcript text, timestamp, and playback.",
+                "Hardened camera/video capture with availability checks and stable temporary video copying before saving."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (60)",
+            date: "2026-06-07",
+            changes: [
+                "Removed the static green Metal Aurora background from the active app path so Matrix stays visible.",
+                "Made Game Feel visually clearer: VIP cells get a shared SpriteKit glow/particle layer, and cell physics uses a stronger event spring.",
+                "Changed room-cell and selection-unlock swipes to long pull-to-commit gestures with higher thresholds and staged haptic feedback."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (59)",
+            date: "2026-06-07",
+            changes: [
+                "Reduced Developer clutter by keeping grouped experimental presets instead of separate micro-switches.",
+                "Stopped hidden main-screen SpriteKit/background layers while Settings is open, so Developer scrolling does not compete with invisible effects underneath.",
+                "Disabled the unfinished Metal Aurora renderer from the active UI so Matrix cannot be covered by the static green experimental background.",
+                "Moved VIP animation off per-cell TimelineView into one shared overlay, with a more visible shared SpriteKit glow and particle pass for VIP cells.",
+                "Reworked swipe commit thresholds: room menus now require a long left-to-right pull across most of the cell, and the selection unlock handle requires a long right-to-left pull instead of long press."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (58)",
+            date: "2026-06-07",
+            changes: [
+                "Grouped the experimental switches into clearer Developer presets: Glass Lab, Game Feel Pack, Metal Aurora, and Assistant Object.",
+                "VIP Particles now uses one shared SKEmitterNode overlay for all visible VIP cells, and the old per-cell animated VIP stripe was removed from the hot scrolling path.",
+                "Settings now pauses the underlying main-screen background/effect layers while the sheet is open, and Metal Aurora no longer renders on top of Matrix/video at the same time.",
+                "Sound and haptic experiments stay behind developer switches and keep the ambient mixed audio session so they do not interrupt other playback."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (57)",
             date: "2026-06-07",
             changes: [

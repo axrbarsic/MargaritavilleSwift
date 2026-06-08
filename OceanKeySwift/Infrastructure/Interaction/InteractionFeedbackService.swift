@@ -26,17 +26,21 @@ struct InteractionFeedbackClient: Sendable {
         invalid: {}
     )
 
-    static func live(_ service: InteractionFeedbackService) -> InteractionFeedbackClient {
+    static func live(
+        _ service: InteractionFeedbackService,
+        soundPackV2: Bool = false,
+        hapticsV2: Bool = false
+    ) -> InteractionFeedbackClient {
         InteractionFeedbackClient(
-            tap: { service.tap() },
-            confirm: { service.confirm() },
-            longPress: { service.longPress() },
-            holdStart: { service.holdStart() },
-            holdWarning: { service.holdWarning() },
-            holdCommit: { service.holdCommit() },
-            select: { service.select() },
-            deselect: { service.deselect() },
-            invalid: { service.invalid() }
+            tap: { service.tap(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            confirm: { service.confirm(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            longPress: { service.longPress(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            holdStart: { service.holdStart(hapticsV2: hapticsV2) },
+            holdWarning: { service.holdWarning(hapticsV2: hapticsV2) },
+            holdCommit: { service.holdCommit(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            select: { service.select(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            deselect: { service.deselect(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            invalid: { service.invalid(soundPackV2: soundPackV2, hapticsV2: hapticsV2) }
         )
     }
 }
@@ -49,54 +53,63 @@ final class InteractionFeedbackService {
     private let medium = UIImpactFeedbackGenerator(style: .medium)
     private let heavy = UIImpactFeedbackGenerator(style: .heavy)
 
-    func tap() {
-        light.impactOccurred(intensity: 0.55)
+    func tap(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        light.impactOccurred(intensity: hapticsV2 ? 0.42 : 0.55)
+        if soundPackV2 {
+            sounds.playTapAccent()
+        }
         prepare()
     }
 
-    func confirm() {
-        medium.impactOccurred(intensity: 0.82)
-        sounds.playSelect()
+    func confirm(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        medium.impactOccurred(intensity: hapticsV2 ? 0.96 : 0.82)
+        sounds.playSelect(variant: soundPackV2 ? .confirm : .plain)
         prepare()
     }
 
-    func longPress() {
-        heavy.impactOccurred(intensity: 0.9)
-        sounds.playSelect()
+    func longPress(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        heavy.impactOccurred(intensity: hapticsV2 ? 1.0 : 0.9)
+        if hapticsV2 {
+            medium.impactOccurred(intensity: 0.45)
+        }
+        sounds.playSelect(variant: soundPackV2 ? .deep : .plain)
         prepare()
     }
 
-    func holdStart() {
+    func holdStart(hapticsV2: Bool = false) {
         selection.selectionChanged()
+        if hapticsV2 {
+            light.impactOccurred(intensity: 0.25)
+        }
         prepare()
     }
 
-    func holdWarning() {
-        light.impactOccurred(intensity: 0.7)
+    func holdWarning(hapticsV2: Bool = false) {
+        light.impactOccurred(intensity: hapticsV2 ? 0.95 : 0.7)
         prepare()
     }
 
-    func holdCommit() {
-        heavy.impactOccurred(intensity: 0.92)
-        sounds.playSelect()
+    func holdCommit(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        heavy.impactOccurred(intensity: hapticsV2 ? 1.0 : 0.92)
+        sounds.playSelect(variant: soundPackV2 ? .commit : .plain)
         prepare()
     }
 
-    func select() {
-        medium.impactOccurred(intensity: 0.72)
-        sounds.playSelect()
+    func select(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        medium.impactOccurred(intensity: hapticsV2 ? 0.86 : 0.72)
+        sounds.playSelect(variant: soundPackV2 ? .select : .plain)
         prepare()
     }
 
-    func deselect() {
-        light.impactOccurred(intensity: 0.48)
-        sounds.playDeselect()
+    func deselect(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        light.impactOccurred(intensity: hapticsV2 ? 0.36 : 0.48)
+        sounds.playDeselect(variant: soundPackV2 ? .soft : .plain)
         prepare()
     }
 
-    func invalid() {
-        light.impactOccurred(intensity: 0.3)
-        sounds.playDeselect()
+    func invalid(soundPackV2: Bool = false, hapticsV2: Bool = false) {
+        light.impactOccurred(intensity: hapticsV2 ? 0.18 : 0.3)
+        sounds.playDeselect(variant: soundPackV2 ? .invalid : .plain)
         prepare()
     }
 
@@ -114,18 +127,54 @@ private final class InteractionSoundPlayer {
     private var selectPlayer: AVAudioPlayer?
     private var deselectPlayer: AVAudioPlayer?
 
+    enum SelectVariant {
+        case plain
+        case confirm
+        case deep
+        case commit
+        case select
+    }
+
+    enum DeselectVariant {
+        case plain
+        case soft
+        case invalid
+    }
+
     init() {
         configureAudioSession()
         selectPlayer = makePlayer(resource: "pressed")
         deselectPlayer = makePlayer(resource: "click")
     }
 
-    func playSelect() {
-        play(selectPlayer)
+    func playSelect(variant: SelectVariant = .plain) {
+        switch variant {
+        case .plain:
+            play(selectPlayer, volume: 0.20, rate: 1.0, pan: 0)
+        case .confirm:
+            play(selectPlayer, volume: 0.24, rate: 1.12, pan: 0.05)
+        case .deep:
+            play(selectPlayer, volume: 0.23, rate: 0.82, pan: -0.08)
+        case .commit:
+            play(selectPlayer, volume: 0.28, rate: 1.24, pan: 0.10)
+        case .select:
+            play(selectPlayer, volume: 0.22, rate: 1.06, pan: -0.04)
+        }
     }
 
-    func playDeselect() {
-        play(deselectPlayer)
+    func playDeselect(variant: DeselectVariant = .plain) {
+        switch variant {
+        case .plain:
+            play(deselectPlayer, volume: 0.20, rate: 1.0, pan: 0)
+        case .soft:
+            play(deselectPlayer, volume: 0.15, rate: 0.92, pan: -0.05)
+        case .invalid:
+            play(deselectPlayer, volume: 0.23, rate: 0.72, pan: 0.08)
+        }
+    }
+
+    func playTapAccent() {
+        play(deselectPlayer, volume: 0.11, rate: 1.36, pan: 0.03)
     }
 
     private func configureAudioSession() {
@@ -147,6 +196,7 @@ private final class InteractionSoundPlayer {
         do {
             let player = try AVAudioPlayer(contentsOf: url)
             player.volume = 0.2
+            player.enableRate = true
             player.prepareToPlay()
             return player
         } catch {
@@ -155,11 +205,19 @@ private final class InteractionSoundPlayer {
         }
     }
 
-    private func play(_ player: AVAudioPlayer?) {
+    private func play(
+        _ player: AVAudioPlayer?,
+        volume: Float,
+        rate: Float,
+        pan: Float
+    ) {
         guard let player else { return }
         if player.isPlaying {
             player.currentTime = 0
         }
+        player.volume = volume
+        player.rate = rate
+        player.pan = pan
         player.play()
     }
 }

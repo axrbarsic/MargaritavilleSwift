@@ -4,9 +4,7 @@ struct SummaryRoomActionMenu: View {
     @Environment(\.interactionFeedback) private var feedback
 
     let room: RoomCell
-    let onNotes: () -> Void
-    let onVoice: () -> Void
-    let onMedia: () -> Void
+    let onMultimodalNote: () -> Void
     let onVIPToggle: () -> Void
     let onScheduleToggle: () -> Void
 
@@ -17,8 +15,7 @@ struct SummaryRoomActionMenu: View {
     var body: some View {
         VStack(spacing: 8) {
             HStack(spacing: 6) {
-                actionButton(systemName: "book.pages.fill", title: "Заметки", action: onNotes)
-                actionButton(systemName: "mic.fill", title: "Голос", action: onVoice)
+                actionButton(systemName: "mic.and.signal.meter.fill", title: "Голос/медиа", action: onMultimodalNote)
                 actionButton(
                     systemName: room.isVIP ? "crown.fill" : "diamond.fill",
                     title: "VIP",
@@ -31,7 +28,6 @@ struct SummaryRoomActionMenu: View {
                     selected: room.scheduledTime != nil,
                     action: onScheduleToggle
                 )
-                actionButton(systemName: "camera.fill", title: "Медиа", action: onMedia)
             }
 
             RoomTimelineStrip(room: room)
@@ -131,11 +127,7 @@ private struct RoomTimelineStrip: View {
     }
 
     private var chipLabels: [String] {
-        var labels = room.timeline.visibleMilestones.map { "\($0.0) \(timeLabel($0.1))" }
-        if let scheduleLabel = room.scheduleLabel {
-            labels.append("P \(scheduleLabel)")
-        }
-        return labels
+        room.timeline.visibleMilestones.map { "\($0.0) \(timeLabel($0.1))" }
     }
 
     private func chip(_ label: String) -> some View {

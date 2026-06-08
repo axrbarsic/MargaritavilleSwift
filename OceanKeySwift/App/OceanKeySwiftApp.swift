@@ -23,9 +23,9 @@ struct OceanKeySwiftApp: App {
             AppRootView(
                 workSession: workSession,
                 appSettings: appSettings,
-                performanceTelemetry: performanceTelemetry
+                performanceTelemetry: performanceTelemetry,
+                interactionFeedbackService: interactionFeedback
             )
-                .environment(\.interactionFeedback, .live(interactionFeedback))
                 .environment(\.scheduleNotifications, .live(scheduleNotifications))
                 .onAppear {
                     performanceTelemetry.start()

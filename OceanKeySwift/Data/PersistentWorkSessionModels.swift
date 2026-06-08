@@ -173,6 +173,7 @@ final class PersistentMediaAttachment {
     var kindRawValue: String
     var relativePath: String
     var createdAt: Date
+    var transcript: String?
     var completedAt: Date?
     var displayOrder: Int
 
@@ -181,6 +182,7 @@ final class PersistentMediaAttachment {
         kindRawValue: String,
         relativePath: String,
         createdAt: Date,
+        transcript: String? = nil,
         completedAt: Date?,
         displayOrder: Int
     ) {
@@ -188,6 +190,7 @@ final class PersistentMediaAttachment {
         self.kindRawValue = kindRawValue
         self.relativePath = relativePath
         self.createdAt = createdAt
+        self.transcript = transcript
         self.completedAt = completedAt
         self.displayOrder = displayOrder
     }

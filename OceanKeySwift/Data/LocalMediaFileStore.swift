@@ -20,6 +20,10 @@ struct LocalMediaFileStore {
         }
     }
 
+    func saveVoiceAudio(from temporaryURL: URL, transcript: String?) throws -> MediaAttachment {
+        try saveFile(from: temporaryURL, kind: .audio, fileExtension: "m4a", transcript: transcript)
+    }
+
     func url(for attachment: MediaAttachment) -> URL {
         rootDirectory.appendingPathComponent(attachment.relativePath)
     }
@@ -39,8 +43,17 @@ struct LocalMediaFileStore {
     }
 
     private func saveVideo(from temporaryURL: URL) throws -> MediaAttachment {
+        try saveFile(from: temporaryURL, kind: .video, fileExtension: "mov", transcript: nil)
+    }
+
+    private func saveFile(
+        from temporaryURL: URL,
+        kind: MediaKind,
+        fileExtension: String,
+        transcript: String?
+    ) throws -> MediaAttachment {
         let id = UUID()
-        let relativePath = "Media/\(id.uuidString).mov"
+        let relativePath = "Media/\(id.uuidString).\(fileExtension)"
         let destinationURL = rootDirectory.appendingPathComponent(relativePath)
         try prepareDirectory(for: destinationURL)
 
@@ -49,7 +62,13 @@ struct LocalMediaFileStore {
         }
         try fileManager.copyItem(at: temporaryURL, to: destinationURL)
 
-        return MediaAttachment(id: id, kind: .video, relativePath: relativePath, createdAt: Date())
+        return MediaAttachment(
+            id: id,
+            kind: kind,
+            relativePath: relativePath,
+            createdAt: Date(),
+            transcript: transcript
+        )
     }
 
     private func prepareDirectory(for fileURL: URL) throws {
@@ -70,4 +89,3 @@ enum LocalMediaFileStoreError: LocalizedError {
         }
     }
 }
-

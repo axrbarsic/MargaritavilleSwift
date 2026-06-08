@@ -28,7 +28,7 @@ struct MediaThumbnailView: View {
             .clipped()
 
             HStack(spacing: 4) {
-                Image(systemName: attachment.kind == .photo ? "camera.fill" : "play.fill")
+                Image(systemName: iconName)
                 Text(timeLabel)
             }
             .font(.system(size: 10, weight: .black, design: .rounded))
@@ -74,7 +74,19 @@ struct MediaThumbnailView: View {
                 }
                 return UIImage(cgImage: image)
             }.value
+        case .audio:
+            return nil
+        }
+    }
+
+    private var iconName: String {
+        switch attachment.kind {
+        case .photo:
+            "camera.fill"
+        case .video:
+            "play.fill"
+        case .audio:
+            "waveform"
         }
     }
 }
-

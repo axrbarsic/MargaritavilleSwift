@@ -59,12 +59,51 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     settings.developerLiquidGlassEnabled = true
     settings.developerGlassVIPEnabled = true
     settings.developerMetalAuroraEnabled = true
+    settings.developerSoundPackV2Enabled = true
+    settings.developerHapticsV2Enabled = true
+    settings.developerVIPParticlesEnabled = true
+    settings.developerCellPhysicsEnabled = true
+    settings.developerAssistantObjectEnabled = true
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.developerLiquidGlassEnabled)
     #expect(loaded.developerGlassVIPEnabled)
     #expect(loaded.developerMetalAuroraEnabled)
+    #expect(loaded.developerSoundPackV2Enabled)
+    #expect(loaded.developerHapticsV2Enabled)
+    #expect(loaded.developerVIPParticlesEnabled)
+    #expect(loaded.developerCellPhysicsEnabled)
+    #expect(loaded.developerAssistantObjectEnabled)
+}
+
+@Test
+func appSettingsGroupedDeveloperTogglesControlUnderlyingFlags() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.developerGlassLabEnabled = true
+    settings.developerGameFeelPackEnabled = true
+
+    #expect(settings.developerLiquidGlassEnabled)
+    #expect(settings.developerGlassVIPEnabled)
+    #expect(settings.developerSoundPackV2Enabled)
+    #expect(settings.developerHapticsV2Enabled)
+    #expect(settings.developerVIPParticlesEnabled)
+    #expect(settings.developerCellPhysicsEnabled)
+
+    settings.developerGlassLabEnabled = false
+    settings.developerGameFeelPackEnabled = false
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+    #expect(!loaded.developerLiquidGlassEnabled)
+    #expect(!loaded.developerGlassVIPEnabled)
+    #expect(!loaded.developerSoundPackV2Enabled)
+    #expect(!loaded.developerHapticsV2Enabled)
+    #expect(!loaded.developerVIPParticlesEnabled)
+    #expect(!loaded.developerCellPhysicsEnabled)
 }
 
 @Test
@@ -105,6 +144,26 @@ func appSettingsPersistsStatusPaletteSaturation() {
 }
 
 @Test
+func appSettingsVividPaletteToggleControlsFixedPreset() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.vividStatusPaletteEnabled = true
+
+    let vivid = AppSettingsStore.load(userDefaults: defaults)
+    #expect(vivid.vividStatusPaletteEnabled)
+    #expect(vivid.statusPaletteSaturation == 1.65)
+
+    vivid.vividStatusPaletteEnabled = false
+
+    let normal = AppSettingsStore.load(userDefaults: defaults)
+    #expect(!normal.vividStatusPaletteEnabled)
+    #expect(normal.statusPaletteSaturation == 1)
+}
+
+@Test
 func appSettingsClampsStatusPaletteSaturation() {
     let high = AppSettingsStore(statusPaletteSaturation: 99)
     let low = AppSettingsStore(statusPaletteSaturation: -1)
@@ -131,6 +190,11 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.developerLiquidGlassEnabled = true
     settings.developerGlassVIPEnabled = true
     settings.developerMetalAuroraEnabled = true
+    settings.developerSoundPackV2Enabled = true
+    settings.developerHapticsV2Enabled = true
+    settings.developerVIPParticlesEnabled = true
+    settings.developerCellPhysicsEnabled = true
+    settings.developerAssistantObjectEnabled = true
 
     settings.resetToDefaults()
     let loaded = AppSettingsStore.load(userDefaults: defaults)
@@ -146,4 +210,9 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(!loaded.developerLiquidGlassEnabled)
     #expect(!loaded.developerGlassVIPEnabled)
     #expect(!loaded.developerMetalAuroraEnabled)
+    #expect(!loaded.developerSoundPackV2Enabled)
+    #expect(!loaded.developerHapticsV2Enabled)
+    #expect(!loaded.developerVIPParticlesEnabled)
+    #expect(!loaded.developerCellPhysicsEnabled)
+    #expect(!loaded.developerAssistantObjectEnabled)
 }

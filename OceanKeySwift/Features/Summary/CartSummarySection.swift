@@ -48,9 +48,7 @@ struct CartSummarySection: View {
                             allowsMultiple: actionMenuAllowsMultiple
                         )
                     },
-                    onOpenNotes: { onOpenDetails(room.id, .text) },
-                    onOpenVoice: { onOpenDetails(room.id, .voice) },
-                    onOpenMedia: { onOpenDetails(room.id, .media) },
+                    onOpenMultimodalNote: { onOpenDetails(room.id, .voice) },
                     onOpenToggle: { onOpenToggle(room.id) },
                     onTaskToggle: { task in onTaskToggle(task, room.id) },
                     onVIPToggle: { onVIPToggle(room.id) },

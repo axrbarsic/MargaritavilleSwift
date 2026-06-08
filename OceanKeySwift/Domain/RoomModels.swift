@@ -84,6 +84,7 @@ struct CartSection: Codable, Identifiable, Equatable, Sendable {
 enum MediaKind: String, Codable, CaseIterable, Identifiable, Sendable {
     case photo
     case video
+    case audio
 
     var id: String { rawValue }
 }
@@ -93,6 +94,7 @@ struct MediaAttachment: Codable, Identifiable, Equatable, Sendable {
     let kind: MediaKind
     let relativePath: String
     let createdAt: Date
+    var transcript: String? = nil
     var completedAt: Date?
 
     var isCompleted: Bool {

@@ -1,3 +1,4 @@
+import AVFoundation
 import SwiftUI
 
 struct RoomDetailsScreen: View {
@@ -28,7 +29,7 @@ struct RoomDetailsScreen: View {
                     }
 
                     if route.mode == .voice {
-                        voicePlaceholder
+                        multimodalNoteSection
                     } else if route.mode == .media {
                         mediaSection
                     } else {
@@ -67,7 +68,7 @@ struct RoomDetailsScreen: View {
             .ignoresSafeArea()
         }
         .fullScreenCover(item: $selectedMedia) { attachment in
-            MediaViewerScreen(attachments: mediaAttachments, initialAttachment: attachment)
+            MediaViewerScreen(attachments: visualMediaAttachments, initialAttachment: attachment)
         }
     }
 
@@ -94,8 +95,34 @@ struct RoomDetailsScreen: View {
 
     private var voicePlaceholder: some View {
         VStack(spacing: 14) {
-            VoiceTranscriptionPanel(title: "Голосовая заметка", transcript: $draftVoiceTranscript)
-            textEditor(text: $draftVoiceTranscript, placeholder: "Черновик расшифровки")
+            VoiceTranscriptionPanel(
+                title: "Новая голосовая заметка",
+                transcript: $draftVoiceTranscript,
+                onCompletion: saveVoiceResult
+            )
+
+            if voiceAttachments.isEmpty {
+                Text("Голосовые заметки появятся здесь пузырями после записи.")
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.70))
+            } else {
+                VStack(spacing: 10) {
+                    ForEach(voiceAttachments) { attachment in
+                        VoiceNoteBubble(attachment: attachment)
+                    }
+                }
+            }
+        }
+    }
+
+    private var multimodalNoteSection: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            voicePlaceholder
+
+            Divider()
+                .overlay(OceanKeyTheme.accent.opacity(0.18))
+
+            mediaSection
         }
     }
 
@@ -112,14 +139,14 @@ struct RoomDetailsScreen: View {
                     .foregroundStyle(OceanKeyTheme.pending)
             }
 
-            if mediaAttachments.isEmpty {
+            if visualMediaAttachments.isEmpty {
                 Text("Фото и видео сохраняются локально и не синхронизируются.")
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .foregroundStyle(OceanKeyTheme.secondaryText)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(mediaAttachments) { attachment in
+                        ForEach(visualMediaAttachments) { attachment in
                             Button(action: { selectedMedia = attachment }) {
                                 MediaThumbnailView(attachment: attachment)
                             }
@@ -184,8 +211,16 @@ struct RoomDetailsScreen: View {
         draftVoiceTranscript = room?.voiceTranscript ?? ""
     }
 
-    private var mediaAttachments: [MediaAttachment] {
+    private var allMediaAttachments: [MediaAttachment] {
         workSession.room(id: route.roomID)?.mediaAttachments ?? []
+    }
+
+    private var visualMediaAttachments: [MediaAttachment] {
+        allMediaAttachments.filter { $0.kind == .photo || $0.kind == .video }
+    }
+
+    private var voiceAttachments: [MediaAttachment] {
+        allMediaAttachments.filter { $0.kind == .audio }
     }
 
     private func saveCapturedMedia(_ capturedMedia: CapturedMedia) {
@@ -199,15 +234,29 @@ struct RoomDetailsScreen: View {
         captureKind = nil
     }
 
+    private func saveVoiceResult(_ result: VoiceTranscriptionResult) {
+        do {
+            let attachment = try LocalMediaFileStore().saveVoiceAudio(
+                from: result.audioURL,
+                transcript: result.transcript
+            )
+            workSession.addRoomMedia(attachment, roomId: route.roomID)
+            mediaError = nil
+        } catch {
+            mediaError = error.localizedDescription
+        }
+        try? FileManager.default.removeItem(at: result.audioURL)
+    }
+
     private var updatedLabel: String? {
         let room = workSession.room(id: route.roomID)
         let date: Date? = switch route.mode {
         case .text:
             room?.textNoteUpdatedAt
         case .voice:
-            room?.voiceTranscriptUpdatedAt
+            room?.mediaAttachments?.first(where: { $0.kind == .audio })?.createdAt ?? room?.voiceTranscriptUpdatedAt
         case .media:
-            room?.mediaAttachments?.first?.createdAt
+            room?.mediaAttachments?.first(where: { $0.kind == .photo || $0.kind == .video })?.createdAt
         }
         guard let date else { return nil }
         return date.formatted(
@@ -228,6 +277,85 @@ private struct RoomDetailsTimestamp: View {
         Text(label)
             .font(.system(size: 18, weight: .semibold, design: .rounded))
             .foregroundStyle(OceanKeyTheme.secondaryText)
+    }
+}
+
+private struct VoiceNoteBubble: View {
+    let attachment: MediaAttachment
+    private let fileStore = LocalMediaFileStore()
+
+    @State private var player: AVAudioPlayer?
+    @State private var isPlaying = false
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Button(action: togglePlayback) {
+                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                    .font(.system(size: 18, weight: .black))
+                    .frame(width: 42, height: 42)
+                    .foregroundStyle(OceanKeyTheme.roomForeground)
+                    .background(OceanKeyTheme.accent)
+                    .clipShape(Circle())
+            }
+            .buttonStyle(.plain)
+
+            VStack(alignment: .leading, spacing: 7) {
+                HStack {
+                    Text(timeLabel)
+                        .font(.system(size: 12, weight: .black, design: .rounded))
+                        .foregroundStyle(OceanKeyTheme.secondaryText)
+                    Spacer()
+                    Image(systemName: "waveform")
+                        .font(.system(size: 13, weight: .black))
+                        .foregroundStyle(OceanKeyTheme.accent.opacity(0.78))
+                }
+
+                Text(attachment.transcript?.isEmpty == false ? attachment.transcript! : "Голос сохранён без расшифровки")
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(12)
+            .background(.black.opacity(0.30))
+            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(OceanKeyTheme.accent.opacity(0.16), lineWidth: 1)
+            }
+        }
+        .onDisappear {
+            player?.stop()
+            player = nil
+            isPlaying = false
+        }
+    }
+
+    private var timeLabel: String {
+        attachment.createdAt.formatted(
+            .dateTime
+                .hour(.defaultDigits(amPM: .abbreviated))
+                .minute(.twoDigits)
+                .locale(Locale(identifier: "en_US_POSIX"))
+        )
+    }
+
+    private func togglePlayback() {
+        if isPlaying {
+            player?.pause()
+            isPlaying = false
+            return
+        }
+
+        do {
+            if player == nil {
+                player = try AVAudioPlayer(contentsOf: fileStore.url(for: attachment))
+                player?.prepareToPlay()
+            }
+            player?.play()
+            isPlaying = true
+        } catch {
+            isPlaying = false
+        }
     }
 }
 

@@ -1,17 +1,19 @@
 import SwiftUI
+import UIKit
 
 struct SummarySelectionPuzzleHandle: View {
     @Environment(\.interactionFeedback) private var feedback
 
     let onComplete: () -> Void
-    let onLongPress: (() -> Void)?
 
     @State private var drag: CGFloat = 0
     @State private var armed = false
     @State private var committed = false
     @State private var feedbackStarted = false
 
-    private let threshold: CGFloat = 54
+    private var threshold: CGFloat {
+        max(220, UIScreen.main.bounds.width - 166)
+    }
 
     var body: some View {
         let progress = min(max(drag / threshold, 0), 1)
@@ -42,7 +44,7 @@ struct SummarySelectionPuzzleHandle: View {
                 fillOpacity: 0.08 + 0.18 * eased,
                 shadowOpacity: 0.22 * eased
             )
-            .offset(x: -48 * eased)
+            .offset(x: -min(threshold * 0.68, 250) * eased)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 6)
         }
@@ -50,7 +52,6 @@ struct SummarySelectionPuzzleHandle: View {
         .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .accessibilityLabel("Открыть выбор комнат")
         .gesture(dragGesture)
-        .simultaneousGesture(longPressGesture)
     }
 
     private var dragGesture: some Gesture {
@@ -90,14 +91,6 @@ struct SummarySelectionPuzzleHandle: View {
             }
     }
 
-    private var longPressGesture: some Gesture {
-        LongPressGesture(minimumDuration: 0.65)
-            .onEnded { _ in
-                feedback.longPress()
-                onLongPress?()
-            }
-    }
-
     private func reset() {
         drag = 0
         armed = false
@@ -131,7 +124,7 @@ private struct PuzzleGlyph: View {
 }
 
 #Preview {
-    SummarySelectionPuzzleHandle(onComplete: {}, onLongPress: {})
+    SummarySelectionPuzzleHandle(onComplete: {})
         .padding()
         .background(OceanKeyTheme.background)
 }

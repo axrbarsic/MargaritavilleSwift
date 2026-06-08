@@ -121,6 +121,7 @@ enum PersistentWorkSessionMapper {
                     kind: kind,
                     relativePath: record.relativePath,
                     createdAt: record.createdAt,
+                    transcript: record.transcript,
                     completedAt: record.completedAt
                 )
             }
@@ -325,6 +326,7 @@ enum PersistentWorkSessionMapper {
                     kindRawValue: attachment.kind.rawValue,
                     relativePath: attachment.relativePath,
                     createdAt: attachment.createdAt,
+                    transcript: attachment.transcript,
                     completedAt: attachment.completedAt,
                     displayOrder: index
                 )
@@ -336,6 +338,7 @@ enum PersistentWorkSessionMapper {
             record.kindRawValue = attachment.kind.rawValue
             record.relativePath = attachment.relativePath
             record.createdAt = attachment.createdAt
+            record.transcript = attachment.transcript
             record.completedAt = attachment.completedAt
             record.displayOrder = index
             nextRecords.append(record)

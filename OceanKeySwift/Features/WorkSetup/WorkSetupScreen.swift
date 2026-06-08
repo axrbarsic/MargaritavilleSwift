@@ -11,7 +11,11 @@ struct WorkSetupScreen: View {
 
     var body: some View {
         ZStack {
-            AppBackgroundView()
+            if isSettingsPresented {
+                Color.black.ignoresSafeArea()
+            } else {
+                AppBackgroundView()
+            }
 
             VStack(spacing: 16) {
                 WorkSetupHeader(

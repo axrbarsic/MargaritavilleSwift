@@ -12,7 +12,7 @@ enum RoomDetailsMode: String, Identifiable {
         case .text:
             "Заметки"
         case .voice:
-            "Голосовая"
+            "Голос/медиа"
         case .media:
             "Медиа"
         }

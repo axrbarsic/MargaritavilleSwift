@@ -24,8 +24,7 @@ struct SummaryHeader: View {
             Spacer(minLength: 8)
 
             SummarySelectionPuzzleHandle(
-                onComplete: onOpenSelection,
-                onLongPress: onOpenSelection
+                onComplete: onOpenSelection
             )
         }
         .frame(height: 48)

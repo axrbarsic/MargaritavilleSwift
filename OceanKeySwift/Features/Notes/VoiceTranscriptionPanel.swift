@@ -5,6 +5,7 @@ struct VoiceTranscriptionPanel: View {
 
     let title: String
     @Binding var transcript: String
+    var onCompletion: VoiceTranscriptionServicing.CompletionHandler? = nil
     @State private var viewModel = VoiceNoteViewModel()
 
     var body: some View {
@@ -62,6 +63,8 @@ struct VoiceTranscriptionPanel: View {
         }
         viewModel.toggle(transcript: transcript) { newTranscript in
             transcript = newTranscript
+        } onCompletion: { result in
+            onCompletion?(result)
         }
     }
 }

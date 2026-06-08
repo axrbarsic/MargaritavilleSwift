@@ -101,42 +101,42 @@ struct SettingsScreen: View {
             title: "Экспериментальное",
             subtitle: "Новые iOS 26-возможности включаются вручную и всегда имеют безопасный fallback."
         ) {
-            Toggle(isOn: $appSettings.developerLiquidGlassEnabled) {
+            Toggle(isOn: $appSettings.developerGlassLabEnabled) {
                 SettingsInfoRow(
-                    title: "Liquid Glass",
-                    value: appSettings.developerLiquidGlassEnabled ? "Вкл" : "Выкл",
+                    title: "Glass Lab",
+                    value: appSettings.developerGlassLabEnabled ? "Вкл" : "Выкл",
                     systemName: "circle.hexagongrid.fill",
-                    subtitle: "Нативное стекло Apple для карточек настроек на iOS 26+."
+                    subtitle: "Liquid Glass в настройках + стеклянный VIP-слой одним режимом."
                 )
             }
             .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerLiquidGlassEnabled) { _, _ in
+            .onChange(of: appSettings.developerGlassLabEnabled) { _, _ in
                 feedback.confirm()
             }
 
-            Toggle(isOn: $appSettings.developerGlassVIPEnabled) {
+            Toggle(isOn: $appSettings.developerGameFeelPackEnabled) {
                 SettingsInfoRow(
-                    title: "Glass VIP",
-                    value: appSettings.developerGlassVIPEnabled ? "Вкл" : "Выкл",
-                    systemName: "sparkle.magnifyingglass",
-                    subtitle: "Стеклянный слой для VIP-ячеек без отдельного тяжёлого эффекта на каждую ячейку."
+                    title: "Game Feel Pack",
+                    value: appSettings.developerGameFeelPackEnabled ? "Вкл" : "Выкл",
+                    systemName: "gamecontroller.fill",
+                    subtitle: "Звук V2, Haptics V2, VIP-частицы и spring-отклик ячеек одной кнопкой."
                 )
             }
             .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerGlassVIPEnabled) { _, _ in
+            .onChange(of: appSettings.developerGameFeelPackEnabled) { _, _ in
                 feedback.confirm()
             }
 
-            Toggle(isOn: $appSettings.developerMetalAuroraEnabled) {
+            Toggle(isOn: $appSettings.developerAssistantObjectEnabled) {
                 SettingsInfoRow(
-                    title: "Metal Aurora",
-                    value: appSettings.developerMetalAuroraEnabled ? "Вкл" : "Выкл",
-                    systemName: "cpu.fill",
-                    subtitle: "Экспериментальный GPU-фон через MTKView и fullscreen fragment shader."
+                    title: "Assistant Object",
+                    value: appSettings.developerAssistantObjectEnabled ? "Вкл" : "Выкл",
+                    systemName: "smallcircle.filled.circle",
+                    subtitle: "Отдельный стресс-тест SpriteKit physics. Не входит в Game Feel Pack."
                 )
             }
             .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerMetalAuroraEnabled) { _, _ in
+            .onChange(of: appSettings.developerAssistantObjectEnabled) { _, _ in
                 feedback.confirm()
             }
         }
@@ -200,14 +200,18 @@ struct SettingsScreen: View {
                     subtitle: "Можно оставить просторный размер или вернуться ближе к компактному виду."
                 )
 
-                SettingsSliderRow(
-                    title: "Палитра",
-                    valueLabel: "\(Int((appSettings.statusPaletteSaturation * 100).rounded()))%",
-                    systemName: "eyedropper.halffull",
-                    range: 0.70...1.65,
-                    defaultValue: 1,
-                    value: $appSettings.statusPaletteSaturation
-                )
+                Toggle(isOn: $appSettings.vividStatusPaletteEnabled) {
+                    SettingsInfoRow(
+                        title: "Сочная палитра",
+                        value: appSettings.vividStatusPaletteEnabled ? "Скриншот" : "Обычная",
+                        systemName: "paintpalette.fill",
+                        subtitle: "Второй режим фиксирует яркие цвета ячеек как на твоём скриншоте."
+                    )
+                }
+                .tint(OceanKeyTheme.accent)
+                .onChange(of: appSettings.vividStatusPaletteEnabled) { _, _ in
+                    feedback.confirm()
+                }
 
                 Toggle(isOn: $appSettings.roomTaskLongPress) {
                     SettingsInfoRow(

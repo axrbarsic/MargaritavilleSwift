@@ -1,8 +1,11 @@
 import SwiftUI
+import UIKit
 
 struct RoomCellView: View {
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.experimentalGlassVIPEnabled) private var experimentalGlassVIPEnabled
+    @Environment(\.experimentalVIPParticlesEnabled) private var experimentalVIPParticlesEnabled
+    @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
 
     @Binding var room: RoomCell
     let geometry: RoomCellGeometry
@@ -10,9 +13,7 @@ struct RoomCellView: View {
     let statusPaletteSaturation: Double
     let isActionMenuExpanded: Bool
     let onActionMenuToggle: () -> Void
-    let onOpenNotes: () -> Void
-    let onOpenVoice: () -> Void
-    let onOpenMedia: () -> Void
+    let onOpenMultimodalNote: () -> Void
     let onOpenToggle: () -> Void
     let onTaskToggle: (RoomTask) -> Void
     let onVIPToggle: () -> Void
@@ -22,6 +23,9 @@ struct RoomCellView: View {
     @State private var swipeDY: CGFloat = 0
     @State private var swipeDirection = 0
     @State private var swipeArmed = false
+    @State private var swipeProgress: CGFloat = 0
+    @State private var tileWidth: CGFloat = 0
+    @State private var physicsPulse = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,16 +35,20 @@ struct RoomCellView: View {
             if isActionMenuExpanded {
                 SummaryRoomActionMenu(
                     room: room,
-                    onNotes: onOpenNotes,
-                    onVoice: onOpenVoice,
-                    onMedia: onOpenMedia,
+                    onMultimodalNote: onOpenMultimodalNote,
                     onVIPToggle: onVIPToggle,
                     onScheduleToggle: onScheduleToggle
                 )
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .transition(.roomActionMenuLamp)
             }
         }
-        .animation(.smooth(duration: 0.26), value: isActionMenuExpanded)
+        .animation(.smooth(duration: 1.15), value: isActionMenuExpanded)
+        .onChange(of: room.status) { _, _ in
+            triggerPhysicsPulse()
+        }
+        .onChange(of: room.completedTasks) { _, _ in
+            triggerPhysicsPulse()
+        }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Room \(room.id)")
     }
@@ -68,12 +76,60 @@ struct RoomCellView: View {
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .background(cellBackground)
         .clipShape(tileShape)
-        .experimentalVIPGlass(enabled: experimentalGlassVIPEnabled && room.isVIP, shape: tileShape)
-        .overlay(alignment: .topTrailing) {
-            if room.isVIP {
-                VIPPulseOverlay()
-                    .clipShape(tileShape)
+        .scaleEffect(
+            x: experimentalCellPhysicsEnabled && physicsPulse ? 1.065 : 1,
+            y: experimentalCellPhysicsEnabled && physicsPulse ? 0.925 : 1
+        )
+        .offset(y: experimentalCellPhysicsEnabled && physicsPulse ? -5 : 0)
+        .offset(x: swipeProgress * 10)
+        .rotation3DEffect(
+            .degrees(experimentalCellPhysicsEnabled && physicsPulse ? 5.5 : 0),
+            axis: (x: 0.0, y: 1.0, z: 0.0),
+            perspective: 0.72
+        )
+        .background {
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        tileWidth = proxy.size.width
+                    }
+                    .onChange(of: proxy.size.width) { _, width in
+                        tileWidth = width
+                    }
             }
+        }
+        .overlay {
+            if swipeProgress > 0 {
+                tileShape
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .white.opacity(0.03),
+                                OceanKeyTheme.accent.opacity(0.10 + swipeProgress * 0.22),
+                                .white.opacity(0.08 + swipeProgress * 0.20)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .blendMode(.screen)
+                    .allowsHitTesting(false)
+            }
+        }
+        .animation(
+            experimentalCellPhysicsEnabled ? .interpolatingSpring(stiffness: 260, damping: 9) : .default,
+            value: physicsPulse
+        )
+        .experimentalVIPGlass(enabled: experimentalGlassVIPEnabled && room.isVIP, shape: tileShape)
+        .anchorPreference(key: VIPParticleAnchorPreferenceKey.self, value: .bounds) { anchor in
+            guard room.isVIP, experimentalVIPParticlesEnabled else { return [] }
+            return [
+                VIPParticleAnchor(
+                    id: room.id,
+                    tintColor: UIColor(OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)),
+                    bounds: anchor
+                )
+            ]
         }
         .overlay(alignment: .bottomTrailing) {
             if let scheduleLabel = room.scheduleLabel {
@@ -111,7 +167,7 @@ struct RoomCellView: View {
     }
 
     private var actionMenuDragGesture: some Gesture {
-        DragGesture(minimumDistance: 34, coordinateSpace: .local)
+        DragGesture(minimumDistance: 26, coordinateSpace: .local)
             .onChanged { value in
                 updateActionMenuDrag(value)
             }
@@ -132,7 +188,7 @@ struct RoomCellView: View {
         }
 
         if swipeDirection == 0 {
-            guard absX >= 44, absX >= absY * 2.4 else { return }
+            guard absX >= 36, absX >= absY * 2.6 else { return }
             guard swipeDX > 0 else {
                 resetActionMenuDrag()
                 return
@@ -144,11 +200,12 @@ struct RoomCellView: View {
             }
         }
 
-        let threshold: CGFloat = 92
+        let threshold = actionMenuSwipeThreshold
+        swipeProgress = min(max(absX / threshold, 0), 1)
         let armed = absX >= threshold
         if armed, !swipeArmed {
             feedback.holdCommit()
-        } else if !armed, absX > threshold * 0.68, !swipeArmed {
+        } else if !armed, absX > threshold * 0.72, !swipeArmed {
             feedback.holdWarning()
         }
         swipeArmed = armed
@@ -167,12 +224,30 @@ struct RoomCellView: View {
         swipeDY = 0
         swipeDirection = 0
         swipeArmed = false
+        withAnimation(.smooth(duration: 0.18)) {
+            swipeProgress = 0
+        }
+    }
+
+    private var actionMenuSwipeThreshold: CGFloat {
+        let visibleWidth = tileWidth > 0 ? tileWidth : UIScreen.main.bounds.width - 32
+        return max(240, visibleWidth * 0.74)
+    }
+
+    private func triggerPhysicsPulse() {
+        guard experimentalCellPhysicsEnabled else { return }
+        physicsPulse = true
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(240))
+            physicsPulse = false
+        }
     }
 
     private func activateOpenToggle() {
         if !taskControlsUseLongPress {
             feedback.confirm()
         }
+        triggerPhysicsPulse()
         onOpenToggle()
     }
 
@@ -184,6 +259,7 @@ struct RoomCellView: View {
                 feedback.select()
             }
         }
+        triggerPhysicsPulse()
         onTaskToggle(task)
     }
 
@@ -247,9 +323,7 @@ private extension RoomCell {
         statusPaletteSaturation: 1,
         isActionMenuExpanded: true,
         onActionMenuToggle: {},
-        onOpenNotes: {},
-        onOpenVoice: {},
-        onOpenMedia: {},
+        onOpenMultimodalNote: {},
         onOpenToggle: {},
         onTaskToggle: { _ in },
         onVIPToggle: {},

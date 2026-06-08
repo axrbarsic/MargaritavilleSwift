@@ -45,6 +45,11 @@ final class AppSettingsStore {
         static let developerLiquidGlassEnabled = "developerLiquidGlassEnabled"
         static let developerGlassVIPEnabled = "developerGlassVIPEnabled"
         static let developerMetalAuroraEnabled = "developerMetalAuroraEnabled"
+        static let developerSoundPackV2Enabled = "developerSoundPackV2Enabled"
+        static let developerHapticsV2Enabled = "developerHapticsV2Enabled"
+        static let developerVIPParticlesEnabled = "developerVIPParticlesEnabled"
+        static let developerCellPhysicsEnabled = "developerCellPhysicsEnabled"
+        static let developerAssistantObjectEnabled = "developerAssistantObjectEnabled"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -81,6 +86,13 @@ final class AppSettingsStore {
         set {
             storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(newValue)
             userDefaults.set(storedStatusPaletteSaturation, forKey: Keys.statusPaletteSaturation)
+        }
+    }
+
+    var vividStatusPaletteEnabled: Bool {
+        get { storedStatusPaletteSaturation >= 1.5 }
+        set {
+            statusPaletteSaturation = newValue ? 1.65 : 1
         }
     }
 
@@ -124,8 +136,63 @@ final class AppSettingsStore {
         }
     }
 
+    var developerSoundPackV2Enabled: Bool {
+        didSet {
+            userDefaults.set(developerSoundPackV2Enabled, forKey: Keys.developerSoundPackV2Enabled)
+        }
+    }
+
+    var developerHapticsV2Enabled: Bool {
+        didSet {
+            userDefaults.set(developerHapticsV2Enabled, forKey: Keys.developerHapticsV2Enabled)
+        }
+    }
+
+    var developerVIPParticlesEnabled: Bool {
+        didSet {
+            userDefaults.set(developerVIPParticlesEnabled, forKey: Keys.developerVIPParticlesEnabled)
+        }
+    }
+
+    var developerCellPhysicsEnabled: Bool {
+        didSet {
+            userDefaults.set(developerCellPhysicsEnabled, forKey: Keys.developerCellPhysicsEnabled)
+        }
+    }
+
+    var developerAssistantObjectEnabled: Bool {
+        didSet {
+            userDefaults.set(developerAssistantObjectEnabled, forKey: Keys.developerAssistantObjectEnabled)
+        }
+    }
+
     var matrixConfiguration: MatrixRainConfiguration {
         MatrixRainConfiguration(speed: matrixSpeed)
+    }
+
+    var developerGameFeelPackEnabled: Bool {
+        get {
+            developerSoundPackV2Enabled
+                && developerHapticsV2Enabled
+                && developerVIPParticlesEnabled
+                && developerCellPhysicsEnabled
+        }
+        set {
+            developerSoundPackV2Enabled = newValue
+            developerHapticsV2Enabled = newValue
+            developerVIPParticlesEnabled = newValue
+            developerCellPhysicsEnabled = newValue
+        }
+    }
+
+    var developerGlassLabEnabled: Bool {
+        get {
+            developerLiquidGlassEnabled && developerGlassVIPEnabled
+        }
+        set {
+            developerLiquidGlassEnabled = newValue
+            developerGlassVIPEnabled = newValue
+        }
     }
 
     var backgroundVideoURL: URL? {
@@ -145,6 +212,11 @@ final class AppSettingsStore {
         developerLiquidGlassEnabled = false
         developerGlassVIPEnabled = false
         developerMetalAuroraEnabled = false
+        developerSoundPackV2Enabled = false
+        developerHapticsV2Enabled = false
+        developerVIPParticlesEnabled = false
+        developerCellPhysicsEnabled = false
+        developerAssistantObjectEnabled = false
     }
 
     init(
@@ -159,6 +231,11 @@ final class AppSettingsStore {
         developerLiquidGlassEnabled: Bool = false,
         developerGlassVIPEnabled: Bool = false,
         developerMetalAuroraEnabled: Bool = false,
+        developerSoundPackV2Enabled: Bool = false,
+        developerHapticsV2Enabled: Bool = false,
+        developerVIPParticlesEnabled: Bool = false,
+        developerCellPhysicsEnabled: Bool = false,
+        developerAssistantObjectEnabled: Bool = false,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -172,6 +249,11 @@ final class AppSettingsStore {
         self.developerLiquidGlassEnabled = developerLiquidGlassEnabled
         self.developerGlassVIPEnabled = developerGlassVIPEnabled
         self.developerMetalAuroraEnabled = developerMetalAuroraEnabled
+        self.developerSoundPackV2Enabled = developerSoundPackV2Enabled
+        self.developerHapticsV2Enabled = developerHapticsV2Enabled
+        self.developerVIPParticlesEnabled = developerVIPParticlesEnabled
+        self.developerCellPhysicsEnabled = developerCellPhysicsEnabled
+        self.developerAssistantObjectEnabled = developerAssistantObjectEnabled
         self.userDefaults = userDefaults
     }
 
@@ -190,6 +272,11 @@ final class AppSettingsStore {
         let developerLiquidGlassEnabled = userDefaults.object(forKey: Keys.developerLiquidGlassEnabled) as? Bool ?? false
         let developerGlassVIPEnabled = userDefaults.object(forKey: Keys.developerGlassVIPEnabled) as? Bool ?? false
         let developerMetalAuroraEnabled = userDefaults.object(forKey: Keys.developerMetalAuroraEnabled) as? Bool ?? false
+        let developerSoundPackV2Enabled = userDefaults.object(forKey: Keys.developerSoundPackV2Enabled) as? Bool ?? false
+        let developerHapticsV2Enabled = userDefaults.object(forKey: Keys.developerHapticsV2Enabled) as? Bool ?? false
+        let developerVIPParticlesEnabled = userDefaults.object(forKey: Keys.developerVIPParticlesEnabled) as? Bool ?? false
+        let developerCellPhysicsEnabled = userDefaults.object(forKey: Keys.developerCellPhysicsEnabled) as? Bool ?? false
+        let developerAssistantObjectEnabled = userDefaults.object(forKey: Keys.developerAssistantObjectEnabled) as? Bool ?? false
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -202,6 +289,11 @@ final class AppSettingsStore {
             developerLiquidGlassEnabled: developerLiquidGlassEnabled,
             developerGlassVIPEnabled: developerGlassVIPEnabled,
             developerMetalAuroraEnabled: developerMetalAuroraEnabled,
+            developerSoundPackV2Enabled: developerSoundPackV2Enabled,
+            developerHapticsV2Enabled: developerHapticsV2Enabled,
+            developerVIPParticlesEnabled: developerVIPParticlesEnabled,
+            developerCellPhysicsEnabled: developerCellPhysicsEnabled,
+            developerAssistantObjectEnabled: developerAssistantObjectEnabled,
             userDefaults: userDefaults
         )
     }

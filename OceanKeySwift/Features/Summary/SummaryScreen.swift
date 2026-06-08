@@ -8,6 +8,7 @@ struct SummaryScreen: View {
     @Bindable var performanceTelemetry: PerformanceTelemetryStore
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.scheduleNotifications) private var scheduleNotifications
+    @Environment(\.experimentalAssistantObjectEnabled) private var experimentalAssistantObjectEnabled
     @State private var expandedActionMenuRoomIDs: Set<RoomCell.ID> = []
     @State private var roomDetailsRoute: RoomDetailsRoute?
     @State private var cartDetailsRoute: CartDetailsRoute?
@@ -16,7 +17,11 @@ struct SummaryScreen: View {
 
     var body: some View {
         ZStack {
-            AppBackgroundView()
+            if isSettingsPresented {
+                Color.black.ignoresSafeArea()
+            } else {
+                AppBackgroundView()
+            }
 
             VStack(spacing: 18) {
                 SummaryHeader(
@@ -56,6 +61,18 @@ struct SummaryScreen: View {
                 .scrollIndicators(.hidden)
             }
             .padding(.top, 18)
+
+            if experimentalAssistantObjectEnabled && !isSettingsPresented {
+                AssistantObjectOverlay()
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
+            }
+        }
+        .overlayPreferenceValue(VIPParticleAnchorPreferenceKey.self) { anchors in
+            if !isSettingsPresented {
+                VIPParticleOverlayHost(anchors: anchors)
+                    .allowsHitTesting(false)
+            }
         }
         .sheet(item: $roomDetailsRoute) { route in
             RoomDetailsScreen(route: route, workSession: workSession)
@@ -134,6 +151,26 @@ struct SummaryScreen: View {
         let openedRoomIDs = workSession.advanceScheduledRooms(now: now)
         for roomID in openedRoomIDs {
             scheduleNotifications.cancelRoom(roomID)
+        }
+    }
+}
+
+private struct VIPParticleOverlayHost: View {
+    let anchors: [VIPParticleAnchor]
+
+    var body: some View {
+        GeometryReader { proxy in
+            let targets = anchors.map { anchor in
+                VIPParticleTarget(
+                    id: anchor.id,
+                    rect: proxy[anchor.bounds],
+                    tintColor: anchor.tintColor
+                )
+            }
+
+            if !targets.isEmpty {
+                VIPParticleOverlay(targets: targets)
+            }
         }
     }
 }

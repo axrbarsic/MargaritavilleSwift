@@ -13,7 +13,11 @@ final class VoiceNoteViewModel {
         self.service = service
     }
 
-    func toggle(transcript: String, onTranscript: @escaping @MainActor (String) -> Void) {
+    func toggle(
+        transcript: String,
+        onTranscript: @escaping @MainActor (String) -> Void,
+        onCompletion: VoiceTranscriptionServicing.CompletionHandler? = nil
+    ) {
         guard canToggle else { return }
         if isRecording {
             service.stop()
@@ -22,6 +26,7 @@ final class VoiceNoteViewModel {
                 await service.start(
                     baseText: transcript,
                     onTranscript: onTranscript,
+                    onCompletion: onCompletion,
                     onStatus: updateStatus,
                     onPhase: updatePhase
                 )

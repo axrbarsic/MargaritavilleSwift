@@ -96,6 +96,8 @@ private struct MediaViewerPage: View {
             ZoomablePhotoView(url: fileStore.url(for: attachment))
         case .video:
             FullScreenVideoPlayer(url: fileStore.url(for: attachment))
+        case .audio:
+            Color.black
         }
     }
 }
