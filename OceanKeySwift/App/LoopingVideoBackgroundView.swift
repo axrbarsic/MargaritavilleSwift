@@ -23,7 +23,7 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
     func updateUIView(_ view: VideoBackgroundPlayerView, context: Context) {
         context.coordinator.configure(url: url, in: view)
         context.coordinator.setTuning(tuning)
-        view.setTuning(tuning, animated: true)
+        view.setTuning(tuning, animated: false)
     }
 
     static func dismantleUIView(_ view: VideoBackgroundPlayerView, coordinator: Coordinator) {
@@ -219,10 +219,16 @@ final class VideoBackgroundPlayerView: UIView {
 }
 
 private final class VideoGridOverlayView: UIView {
+    private var cachedIntensityStep = -1
+
     var intensity: Double = 0 {
         didSet {
-            alpha = CGFloat(min(max(intensity, 0), 1))
-            isHidden = intensity <= 0.01
+            let normalized = min(max(intensity, 0), 1)
+            let step = Int((normalized * 12).rounded())
+            alpha = CGFloat(normalized)
+            isHidden = step == 0
+            guard step != cachedIntensityStep else { return }
+            cachedIntensityStep = step
             setNeedsDisplay()
         }
     }
@@ -242,10 +248,10 @@ private final class VideoGridOverlayView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
-        guard intensity > 0.01, let context = UIGraphicsGetCurrentContext() else { return }
+        guard cachedIntensityStep > 0, let context = UIGraphicsGetCurrentContext() else { return }
         context.clear(rect)
 
-        let normalized = min(max(intensity, 0), 1)
+        let normalized = Double(cachedIntensityStep) / 12.0
         let scale = window?.screen.scale ?? UIScreen.main.scale
         let spacing = max(2.0, 3.0 * scale)
         let majorSpacing = spacing * 4
@@ -303,7 +309,9 @@ private enum VideoMatteCompositionFactory {
         AVMutableVideoComposition(asset: asset) { request in
             let tuning = matteFilter.tuning
             let source = request.sourceImage
-            let radius = tuning.blur > 0.01 ? 2 + tuning.blur * 34 : 0
+            let green = tuning.greenTint
+            let blurBudget = max(0.34, 1.0 - green * 0.32 - tuning.gridIntensity * 0.18)
+            let radius = tuning.blur > 0.01 ? 1.2 + tuning.blur * 13.8 * blurBudget : 0
             let blurred = radius > 0.2 ? source
                 .clampedToExtent()
                 .applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: radius])
@@ -315,7 +323,6 @@ private enum VideoMatteCompositionFactory {
                     kCIInputSaturationKey: max(0.08, 1 - tuning.greenTint * 0.54)
                 ]
             )
-            let green = tuning.greenTint
             let greened = tuned.applyingFilter(
                 "CIColorMatrix",
                 parameters: [

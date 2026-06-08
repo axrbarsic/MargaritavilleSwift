@@ -17,34 +17,24 @@ struct SummarySelectionPuzzleHandle: View {
 
     var body: some View {
         let progress = min(max(drag / threshold, 0), 1)
-        let eased = cubicEaseOut(progress)
 
         ZStack(alignment: .center) {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(OceanKeyTheme.surface.opacity(0.78))
+                .fill(.black.opacity(0.10 + 0.06 * progress))
                 .overlay {
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .stroke(
-                            OceanKeyTheme.accent.opacity(0.22 + 0.34 * eased),
+                            OceanKeyTheme.accent.opacity(0.12 + 0.24 * progress),
                             lineWidth: 1
                         )
                 }
 
-            PuzzleGlyph(
-                systemName: "puzzlepiece.extension.fill",
-                accentOpacity: 0.26 + 0.30 * eased,
-                fillOpacity: 0.05 + 0.08 * eased
-            )
+            PuzzleSocket(progress: progress)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 8)
 
-            PuzzleGlyph(
-                systemName: "puzzlepiece.fill",
-                accentOpacity: 0.45 + 0.50 * eased,
-                fillOpacity: 0.08 + 0.18 * eased,
-                shadowOpacity: 0.22 * eased
-            )
-            .offset(x: -threshold * eased)
+            PuzzlePiece(progress: progress, systemName: "puzzlepiece.fill")
+            .offset(x: -threshold * progress)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 6)
         }
@@ -96,30 +86,45 @@ struct SummarySelectionPuzzleHandle: View {
         armed = false
         feedbackStarted = false
     }
+}
 
-    private func cubicEaseOut(_ value: CGFloat) -> CGFloat {
-        1 - pow(1 - value, 3)
+struct PuzzleSocket: View {
+    let progress: CGFloat
+
+    var body: some View {
+        Image(systemName: "puzzlepiece.extension.fill")
+            .font(.system(size: 20, weight: .black))
+            .frame(width: 34, height: 34)
+            .foregroundStyle(.black.opacity(0.32 + 0.22 * progress))
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(.black.opacity(0.18 + 0.28 * progress))
+                    .shadow(color: .white.opacity(0.10), radius: 1, x: -1, y: -1)
+                    .shadow(color: .black.opacity(0.42), radius: 5, x: 2, y: 3)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(OceanKeyTheme.accent.opacity(0.12 + 0.28 * progress), lineWidth: 1)
+            }
     }
 }
 
-private struct PuzzleGlyph: View {
+struct PuzzlePiece: View {
+    let progress: CGFloat
     let systemName: String
-    let accentOpacity: Double
-    let fillOpacity: Double
-    var shadowOpacity: Double = 0
 
     var body: some View {
         Image(systemName: systemName)
             .font(.system(size: 20, weight: .black))
             .frame(width: 33, height: 33)
-            .foregroundStyle(OceanKeyTheme.accent.opacity(accentOpacity))
-            .background(OceanKeyTheme.accent.opacity(fillOpacity))
+            .foregroundStyle(OceanKeyTheme.accent.opacity(0.48 + 0.48 * progress))
+            .background(OceanKeyTheme.accent.opacity(0.08 + 0.16 * progress))
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(OceanKeyTheme.accent.opacity(0.18 + shadowOpacity), lineWidth: 1)
+                    .stroke(OceanKeyTheme.accent.opacity(0.22 + 0.34 * progress), lineWidth: 1)
             }
-            .shadow(color: OceanKeyTheme.accent.opacity(shadowOpacity), radius: 8)
+            .shadow(color: OceanKeyTheme.accent.opacity(0.28 * progress), radius: 8)
     }
 }
 

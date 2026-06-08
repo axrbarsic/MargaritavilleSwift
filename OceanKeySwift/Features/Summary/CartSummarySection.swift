@@ -51,12 +51,19 @@ struct CartSummarySection: View {
                     onOpenMultimodalNote: { onOpenDetails(room.id, .voice) },
                     onOpenToggle: { onOpenToggle(room.id) },
                     onTaskToggle: { task in onTaskToggle(task, room.id) },
-                    onVIPToggle: { onVIPToggle(room.id) },
+                    onVIPToggle: {
+                        onVIPToggle(room.id)
+                        closeActionMenu(room.id)
+                    },
                     onScheduleToggle: { onScheduleToggle(room.id) }
                 )
             }
         }
         .padding(.horizontal, geometry.sectionHorizontalPadding)
+    }
+
+    private func closeActionMenu(_ roomID: RoomCell.ID) {
+        expandedActionMenuRoomIDs.remove(roomID)
     }
 }
 

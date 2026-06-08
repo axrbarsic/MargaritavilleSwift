@@ -10,6 +10,18 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (68)",
+            date: "2026-06-08",
+            changes: [
+                "Fixed room media badges so they depend only on actual local attachments and disappear after the last voice/photo/video item is deleted.",
+                "Redesigned the room media marker as a compact native icon badge instead of a dark text chip.",
+                "Cleaned the room swipe menu down to voice/media, VIP, and time; removed timeline chips from the expanded cell.",
+                "Made VIP and time actions close the expanded room menu automatically, while voice/media keeps it open until the detail sheet is dismissed.",
+                "Added puzzle-pull visuals to room and setup swipes, plus a Settings row showing whether Apple sync is active or the app is using local fallback.",
+                "Reduced video-wallpaper heat by applying slider changes directly, quantizing the grid overlay, and capping the per-frame matte blur budget when blur, green tint, and grid are all enabled."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (67)",
             date: "2026-06-08",
             changes: [

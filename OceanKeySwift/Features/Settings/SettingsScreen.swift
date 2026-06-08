@@ -6,6 +6,7 @@ struct SettingsScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
+    @Environment(\.appleSyncStatus) private var appleSyncStatus
     @State private var selectedCategory: SettingsCategory = .appearance
     @State private var isChangelogPresented = false
     @State private var isResetConfirmationPresented = false
@@ -306,6 +307,13 @@ struct SettingsScreen: View {
             title: "Работа",
             subtitle: "Поведение раздвижного меню ячейки и рабочие жесты на основном экране."
         ) {
+            SettingsInfoRow(
+                title: "Синхронизация Apple",
+                value: appleSyncStatus.statusLabel,
+                systemName: appleSyncStatus.isCloudActive ? "icloud.fill" : "externaldrive.fill",
+                subtitle: appleSyncStatus.detailsLabel
+            )
+
             Toggle(isOn: $appSettings.summaryActionMenuAllowsMultiple) {
                 SettingsInfoRow(
                     title: "Мульти-меню",

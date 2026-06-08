@@ -44,7 +44,6 @@ struct SummaryScreen: View {
                                     cartDetailsRoute = CartDetailsRoute(cartID: cartID)
                                 },
                                 onOpenDetails: { roomID, mode in
-                                    expandedActionMenuRoomIDs.removeAll()
                                     roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
                                 },
                                 onOpenToggle: toggleOpen,
@@ -62,7 +61,7 @@ struct SummaryScreen: View {
             .padding(.top, 18)
 
         }
-        .sheet(item: $roomDetailsRoute) { route in
+        .sheet(item: $roomDetailsRoute, onDismiss: closeActionMenus) { route in
             RoomDetailsScreen(route: route, workSession: workSession)
                 .preferredColorScheme(.dark)
         }
@@ -121,6 +120,7 @@ struct SummaryScreen: View {
 
     private func setSchedule(roomID: RoomCell.ID, dueAt: Date) {
         workSession.setSchedule(dueAt, roomId: roomID)
+        expandedActionMenuRoomIDs.remove(roomID)
         if dueAt <= Date() {
             advanceScheduledRooms()
         } else {
@@ -130,7 +130,12 @@ struct SummaryScreen: View {
 
     private func clearSchedule(roomID: RoomCell.ID) {
         workSession.setSchedule(nil, roomId: roomID)
+        expandedActionMenuRoomIDs.remove(roomID)
         scheduleNotifications.cancelRoom(roomID)
+    }
+
+    private func closeActionMenus() {
+        expandedActionMenuRoomIDs.removeAll()
     }
 
     private func advanceScheduledRooms(now: Date = Date()) {

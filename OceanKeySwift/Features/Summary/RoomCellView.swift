@@ -104,19 +104,8 @@ struct RoomCellView: View {
         }
         .overlay {
             if swipeProgress > 0 {
-                tileShape
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                .white.opacity(0.03),
-                                OceanKeyTheme.accent.opacity(0.10 + swipeProgress * 0.22),
-                                .white.opacity(0.08 + swipeProgress * 0.20)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .blendMode(.screen)
+                RoomActionPuzzlePullOverlay(progress: swipeProgress)
+                    .clipShape(tileShape)
                     .allowsHitTesting(false)
             }
         }
@@ -211,15 +200,14 @@ struct RoomCellView: View {
             }
         }
 
-        let threshold = actionMenuSwipeThreshold
         swipeProgress = SummarySwipeCommitPolicy.roomActionMenuProgress(
             translation: max(swipeDX, 0),
             cellWidth: actionMenuCellWidth
         )
-        let armed = absX >= threshold
+        let armed = swipeProgress >= 1
         if armed, !swipeArmed {
             feedback.holdCommit()
-        } else if !armed, absX > threshold * 0.86, !swipeArmed {
+        } else if !armed, swipeProgress > 0.86, !swipeArmed {
             feedback.holdWarning()
         }
         swipeArmed = armed
@@ -395,34 +383,65 @@ private struct RoomMediaIndicator: View {
     let room: RoomCell
 
     var body: some View {
-        if let primaryIcon = room.primaryNoteIndicatorIcon {
-            HStack(spacing: -4) {
+        if let primaryIcon = room.primaryAttachmentIndicatorIcon {
+            HStack(spacing: 4) {
                 Image(systemName: primaryIcon)
-                    .font(.system(size: 15, weight: .black))
-                    .symbolRenderingMode(.hierarchical)
-                    .frame(width: 28, height: 28)
-                    .background(.ultraThinMaterial.opacity(0.80), in: Circle())
-                    .overlay {
-                        Circle()
-                            .stroke(.white.opacity(0.30), lineWidth: 1)
-                    }
+                    .font(.system(size: 14, weight: .black))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, OceanKeyTheme.accent)
 
-                if room.noteIndicatorCount > 1 {
-                    Text("\(room.noteIndicatorCount)")
+                if room.attachmentIndicatorCount > 1 {
+                    Text("\(room.attachmentIndicatorCount)")
                         .font(.system(size: 10, weight: .black, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(.white)
-                        .frame(width: 17, height: 17)
-                        .background(OceanKeyTheme.accent, in: Circle())
-                        .overlay {
-                            Circle()
-                                .stroke(.white.opacity(0.55), lineWidth: 0.8)
-                        }
-                        .offset(x: -2, y: -8)
                 }
             }
+            .padding(.horizontal, room.attachmentIndicatorCount > 1 ? 7 : 6)
+            .frame(height: 26)
+            .background(.black.opacity(0.26), in: Capsule())
+            .background(.ultraThinMaterial.opacity(0.72), in: Capsule())
+            .overlay {
+                Capsule()
+                    .stroke(.white.opacity(0.36), lineWidth: 0.8)
+            }
             .foregroundStyle(.white.opacity(0.96))
-            .shadow(color: .black.opacity(0.30), radius: 3, x: 0, y: 1)
+            .shadow(color: .black.opacity(0.36), radius: 4, x: 0, y: 1)
+        }
+    }
+}
+
+private struct RoomActionPuzzlePullOverlay: View {
+    let progress: CGFloat
+
+    var body: some View {
+        GeometryReader { proxy in
+            let width = proxy.size.width
+            let sinkSize = min(max(proxy.size.height * 0.52, 34), 48)
+            let travel = max(width - sinkSize - 26, 0)
+            let normalized = min(max(progress, 0), 1)
+            let x = 14 + travel * normalized
+
+            ZStack(alignment: .leading) {
+                LinearGradient(
+                    colors: [
+                        .white.opacity(0.02),
+                        OceanKeyTheme.accent.opacity(0.08 + normalized * 0.15),
+                        .white.opacity(0.04 + normalized * 0.16)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .blendMode(.screen)
+
+                PuzzleSocket(progress: normalized)
+                    .frame(width: sinkSize, height: sinkSize)
+                    .position(x: width - sinkSize * 0.5 - 16, y: proxy.size.height * 0.5)
+
+                PuzzlePiece(progress: normalized, systemName: "puzzlepiece.fill")
+                    .frame(width: sinkSize, height: sinkSize)
+                    .position(x: x + sinkSize * 0.5, y: proxy.size.height * 0.5)
+            }
         }
     }
 }
@@ -436,28 +455,16 @@ private extension RoomCell {
         return formatter.string(from: scheduledTime)
     }
 
-    var primaryNoteIndicatorIcon: String? {
-        if voiceTranscript?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-            || mediaAttachments?.contains(where: { $0.kind == .audio }) == true {
-            return "waveform.circle.fill"
-        }
-        if mediaAttachments?.contains(where: { $0.kind == .video }) == true {
-            return "play.rectangle.fill"
-        }
-        if mediaAttachments?.contains(where: { $0.kind == .photo }) == true {
-            return "photo.circle.fill"
-        }
-        if textNote?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-            return "text.bubble.fill"
-        }
-        return nil
+    var primaryAttachmentIndicatorIcon: String? {
+        guard let attachments = mediaAttachments, !attachments.isEmpty else { return nil }
+        if attachments.contains(where: { $0.kind == .audio }) { return "waveform.circle.fill" }
+        if attachments.contains(where: { $0.kind == .video }) { return "play.rectangle.fill" }
+        if attachments.contains(where: { $0.kind == .photo }) { return "photo.circle.fill" }
+        return "paperclip.circle.fill"
     }
 
-    var noteIndicatorCount: Int {
-        let textCount = textNote?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? 1 : 0
-        let transcriptCount = voiceTranscript?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? 1 : 0
-        let mediaCount = mediaAttachments?.count ?? 0
-        return textCount + transcriptCount + mediaCount
+    var attachmentIndicatorCount: Int {
+        mediaAttachments?.count ?? 0
     }
 }
 

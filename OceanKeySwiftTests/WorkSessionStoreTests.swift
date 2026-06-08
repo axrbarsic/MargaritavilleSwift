@@ -228,8 +228,10 @@ func roomAndCartMediaRemovalClearsAttachmentsAndRecordsHistory() {
     store.removeRoomMedia(roomAttachment, roomId: "303")
     store.removeCartMedia(cartAttachment, cartId: 7)
 
-    #expect(store.room(id: "303")?.mediaAttachments?.contains(roomAttachment) != true)
-    #expect(store.cart(id: 7)?.mediaAttachments?.contains(cartAttachment) != true)
+    #expect(store.room(id: "303")?.mediaAttachments == nil)
+    #expect(store.room(id: "303")?.voiceTranscript == nil)
+    #expect(store.room(id: "303")?.voiceTranscriptUpdatedAt == nil)
+    #expect(store.cart(id: 7)?.mediaAttachments == nil)
     #expect(store.history.prefix(2).allSatisfy { $0.title.contains("удалено") })
 }
 

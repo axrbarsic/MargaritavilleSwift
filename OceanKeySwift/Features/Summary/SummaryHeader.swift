@@ -37,11 +37,11 @@ struct SummaryHeader: View {
                 .font(.system(size: 24, weight: .black))
                 .frame(width: 48, height: 48)
                 .foregroundStyle(OceanKeyTheme.secondaryText)
-                .background(OceanKeyTheme.surface.opacity(0.82))
+                .background(.black.opacity(0.08))
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(OceanKeyTheme.accent.opacity(0.22), lineWidth: 1)
+                        .stroke(OceanKeyTheme.accent.opacity(0.16), lineWidth: 1)
                 }
         }
         .buttonStyle(.plain)
