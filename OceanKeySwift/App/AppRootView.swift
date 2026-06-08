@@ -27,6 +27,7 @@ struct AppRootView: View {
         .environment(\.matrixRainConfiguration, appSettings.matrixConfiguration)
         .environment(\.experimentalLiquidGlassEnabled, appSettings.developerLiquidGlassEnabled)
         .environment(\.experimentalGlassVIPEnabled, appSettings.developerGlassVIPEnabled)
+        .environment(\.experimentalMetalAuroraEnabled, appSettings.developerMetalAuroraEnabled)
         .preferredColorScheme(.dark)
     }
 }

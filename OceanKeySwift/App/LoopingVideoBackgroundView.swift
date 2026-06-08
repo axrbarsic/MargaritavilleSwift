@@ -1,4 +1,5 @@
 import AVFoundation
+import CoreImage
 import SwiftUI
 import UIKit
 
@@ -14,12 +15,14 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
         let view = VideoBackgroundPlayerView()
         view.isUserInteractionEnabled = false
         context.coordinator.configure(url: url, in: view)
+        context.coordinator.setMatteStrength(matteStrength)
         view.setMatteStrength(matteStrength, animated: false)
         return view
     }
 
     func updateUIView(_ view: VideoBackgroundPlayerView, context: Context) {
         context.coordinator.configure(url: url, in: view)
+        context.coordinator.setMatteStrength(matteStrength)
         view.setMatteStrength(matteStrength, animated: true)
     }
 
@@ -27,7 +30,9 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
         private var currentURL: URL?
         private var player: AVQueuePlayer?
         private var looper: AVPlayerLooper?
+        private let matteFilter = VideoMatteFilter()
 
+        @MainActor
         func configure(url: URL, in view: VideoBackgroundPlayerView) {
             guard currentURL != url else {
                 player?.play()
@@ -35,7 +40,12 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
             }
             currentURL = url
 
-            let item = AVPlayerItem(url: url)
+            let asset = AVURLAsset(url: url)
+            let item = AVPlayerItem(asset: asset)
+            item.videoComposition = VideoMatteCompositionFactory.makeComposition(
+                asset: asset,
+                matteFilter: matteFilter
+            )
             let queuePlayer = AVQueuePlayer()
             queuePlayer.isMuted = true
             queuePlayer.actionAtItemEnd = .none
@@ -47,13 +57,15 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
             view.playerLayer.player = queuePlayer
             queuePlayer.play()
         }
+
+        func setMatteStrength(_ value: Double) {
+            matteFilter.setStrength(value)
+        }
     }
 }
 
 final class VideoBackgroundPlayerView: UIView {
-    private let matteView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialDark))
     private let tintView = UIView()
-    private var currentMatteStyle: UIBlurEffect.Style = .systemMaterialDark
 
     override static var layerClass: AnyClass {
         AVPlayerLayer.self
@@ -69,11 +81,9 @@ final class VideoBackgroundPlayerView: UIView {
         playerLayer.videoGravity = .resizeAspectFill
         playerLayer.masksToBounds = true
 
-        matteView.isUserInteractionEnabled = false
         tintView.isUserInteractionEnabled = false
         tintView.backgroundColor = UIColor(red: 0.0, green: 0.18, blue: 0.08, alpha: 1)
 
-        addSubview(matteView)
         addSubview(tintView)
     }
 
@@ -84,25 +94,17 @@ final class VideoBackgroundPlayerView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        matteView.frame = bounds
         tintView.frame = bounds
     }
 
     func setMatteStrength(_ value: Double, animated: Bool) {
         let normalized = min(max(value, 0), 1)
-        let style = blurStyle(for: normalized)
-        if style != currentMatteStyle {
-            currentMatteStyle = style
-            matteView.effect = UIBlurEffect(style: style)
-        }
 
         let apply = {
             if normalized <= 0.01 {
-                self.matteView.alpha = 0
                 self.tintView.alpha = 0
             } else {
-                self.matteView.alpha = CGFloat(0.34 + normalized * 0.58)
-                self.tintView.alpha = CGFloat(0.08 + normalized * 0.18)
+                self.tintView.alpha = CGFloat(0.12 + normalized * 0.26)
             }
         }
 
@@ -118,14 +120,45 @@ final class VideoBackgroundPlayerView: UIView {
             animations: apply
         )
     }
+}
 
-    private func blurStyle(for value: Double) -> UIBlurEffect.Style {
-        if value >= 0.68 {
-            return .systemThickMaterialDark
+private final class VideoMatteFilter: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storedStrength: Double = 0.28
+
+    func setStrength(_ value: Double) {
+        lock.lock()
+        storedStrength = min(max(value, 0), 1)
+        lock.unlock()
+    }
+
+    var radius: Double {
+        lock.lock()
+        let strength = storedStrength
+        lock.unlock()
+        guard strength > 0.01 else { return 0 }
+        return 2 + strength * 34
+    }
+}
+
+private enum VideoMatteCompositionFactory {
+    static func makeComposition(
+        asset: AVAsset,
+        matteFilter: VideoMatteFilter
+    ) -> AVVideoComposition {
+        AVMutableVideoComposition(asset: asset) { request in
+            let radius = matteFilter.radius
+            guard radius > 0.2 else {
+                request.finish(with: request.sourceImage, context: nil)
+                return
+            }
+
+            let source = request.sourceImage
+            let blurred = source
+                .clampedToExtent()
+                .applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: radius])
+                .cropped(to: source.extent)
+            request.finish(with: blurred, context: nil)
         }
-        if value >= 0.34 {
-            return .systemMaterialDark
-        }
-        return .systemThinMaterialDark
     }
 }

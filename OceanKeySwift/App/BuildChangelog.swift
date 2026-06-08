@@ -10,6 +10,24 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (57)",
+            date: "2026-06-07",
+            changes: [
+                "Rebuilt video wallpaper matte blur again: the slider now drives a Core Image Gaussian blur inside AVVideoComposition, so the video frames themselves are blurred instead of only covered by a translucent material.",
+                "Kept the video background muted and looped through AVQueuePlayer while moving the heavy visual work into the video composition path.",
+                "Raised the matte tint response so blur changes are visually obvious when testing the slider on iPhone."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (56)",
+            date: "2026-06-07",
+            changes: [
+                "Added the first native Metal-backed experimental background: Metal Aurora renders through MTKView and a fullscreen fragment shader.",
+                "Added a Developer switch for Metal Aurora so the shader path can be tested without changing the default Matrix or video wallpaper modes.",
+                "Extended the experimental settings model and tests so Liquid Glass, Glass VIP, and Metal Aurora persist and reset predictably."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (55)",
             date: "2026-06-07",
             changes: [

@@ -44,6 +44,7 @@ final class AppSettingsStore {
         static let backgroundVideoBlur = "backgroundVideoBlur"
         static let developerLiquidGlassEnabled = "developerLiquidGlassEnabled"
         static let developerGlassVIPEnabled = "developerGlassVIPEnabled"
+        static let developerMetalAuroraEnabled = "developerMetalAuroraEnabled"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -117,6 +118,12 @@ final class AppSettingsStore {
         }
     }
 
+    var developerMetalAuroraEnabled: Bool {
+        didSet {
+            userDefaults.set(developerMetalAuroraEnabled, forKey: Keys.developerMetalAuroraEnabled)
+        }
+    }
+
     var matrixConfiguration: MatrixRainConfiguration {
         MatrixRainConfiguration(speed: matrixSpeed)
     }
@@ -137,6 +144,7 @@ final class AppSettingsStore {
         backgroundVideoBlur = 0.28
         developerLiquidGlassEnabled = false
         developerGlassVIPEnabled = false
+        developerMetalAuroraEnabled = false
     }
 
     init(
@@ -150,6 +158,7 @@ final class AppSettingsStore {
         backgroundVideoBlur: Double = 0.28,
         developerLiquidGlassEnabled: Bool = false,
         developerGlassVIPEnabled: Bool = false,
+        developerMetalAuroraEnabled: Bool = false,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -162,6 +171,7 @@ final class AppSettingsStore {
         self.storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(backgroundVideoBlur)
         self.developerLiquidGlassEnabled = developerLiquidGlassEnabled
         self.developerGlassVIPEnabled = developerGlassVIPEnabled
+        self.developerMetalAuroraEnabled = developerMetalAuroraEnabled
         self.userDefaults = userDefaults
     }
 
@@ -179,6 +189,7 @@ final class AppSettingsStore {
         let backgroundVideoBlur = userDefaults.object(forKey: Keys.backgroundVideoBlur) as? Double ?? 0.28
         let developerLiquidGlassEnabled = userDefaults.object(forKey: Keys.developerLiquidGlassEnabled) as? Bool ?? false
         let developerGlassVIPEnabled = userDefaults.object(forKey: Keys.developerGlassVIPEnabled) as? Bool ?? false
+        let developerMetalAuroraEnabled = userDefaults.object(forKey: Keys.developerMetalAuroraEnabled) as? Bool ?? false
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -190,6 +201,7 @@ final class AppSettingsStore {
             backgroundVideoBlur: backgroundVideoBlur,
             developerLiquidGlassEnabled: developerLiquidGlassEnabled,
             developerGlassVIPEnabled: developerGlassVIPEnabled,
+            developerMetalAuroraEnabled: developerMetalAuroraEnabled,
             userDefaults: userDefaults
         )
     }

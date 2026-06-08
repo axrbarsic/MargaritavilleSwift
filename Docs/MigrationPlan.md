@@ -165,6 +165,8 @@ available.
    - Gate iOS 26 visual experiments with availability checks and developer
      toggles so production behavior stays stable while new Apple APIs are
      evaluated.
+   - Keep Metal experiments in isolated `MTKView` components with a single
+     pipeline/draw path, not mixed into regular SwiftUI view bodies.
    - Test on real devices before considering visual effects done.
 
 7. Cutover

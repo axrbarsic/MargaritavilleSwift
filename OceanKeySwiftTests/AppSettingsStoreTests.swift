@@ -58,11 +58,13 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     let settings = AppSettingsStore(userDefaults: defaults)
     settings.developerLiquidGlassEnabled = true
     settings.developerGlassVIPEnabled = true
+    settings.developerMetalAuroraEnabled = true
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.developerLiquidGlassEnabled)
     #expect(loaded.developerGlassVIPEnabled)
+    #expect(loaded.developerMetalAuroraEnabled)
 }
 
 @Test
@@ -128,6 +130,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.backgroundVideoBlur = 0.7
     settings.developerLiquidGlassEnabled = true
     settings.developerGlassVIPEnabled = true
+    settings.developerMetalAuroraEnabled = true
 
     settings.resetToDefaults()
     let loaded = AppSettingsStore.load(userDefaults: defaults)
@@ -142,4 +145,5 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.backgroundVideoBlur == 0.28)
     #expect(!loaded.developerLiquidGlassEnabled)
     #expect(!loaded.developerGlassVIPEnabled)
+    #expect(!loaded.developerMetalAuroraEnabled)
 }

@@ -207,3 +207,6 @@ Simulator unless explicitly allowed.
 - Settings now follows the Flutter category idea as native SwiftUI:
   Appearance, Work, Sync, Tools, and Developer. Developer also contains gated
   iOS 26 visual experiments for Liquid Glass and Glass VIP cells.
+- Developer experiments now include the first native Metal-backed background:
+  Metal Aurora uses `MTKView` plus a fullscreen fragment shader and is isolated
+  from the default Matrix/video wallpaper paths.

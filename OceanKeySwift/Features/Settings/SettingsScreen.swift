@@ -127,12 +127,18 @@ struct SettingsScreen: View {
                 feedback.confirm()
             }
 
-            SettingsInfoRow(
-                title: "Metal shader",
-                value: "Следующий",
-                systemName: "cpu.fill",
-                subtitle: "Фоновые shader-эффекты вынесем в отдельный runtime, чтобы не ломать 120 Гц."
-            )
+            Toggle(isOn: $appSettings.developerMetalAuroraEnabled) {
+                SettingsInfoRow(
+                    title: "Metal Aurora",
+                    value: appSettings.developerMetalAuroraEnabled ? "Вкл" : "Выкл",
+                    systemName: "cpu.fill",
+                    subtitle: "Экспериментальный GPU-фон через MTKView и fullscreen fragment shader."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerMetalAuroraEnabled) { _, _ in
+                feedback.confirm()
+            }
         }
     }
 
