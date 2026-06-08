@@ -28,6 +28,10 @@
 	<string>OceanKey records audio while capturing local videos.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>OceanKey transcribes local Russian voice notes into editable text.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>

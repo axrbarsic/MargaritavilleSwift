@@ -10,6 +10,16 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (65)",
+            date: "2026-06-08",
+            changes: [
+                "Enabled the native Apple-first sync path by bootstrapping SwiftData with the private CloudKit container iCloud.com.alex.oceankey.swift.",
+                "Connected the iCloud entitlements file and remote-notification background mode to the signed app target.",
+                "Made the SwiftData schema CloudKit-compatible with defaulted fields and inverse relationships.",
+                "Added a runtime iCloud account/status check in Settings and a safe persistent local fallback if CloudKit is unavailable."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (64)",
             date: "2026-06-08",
             changes: [

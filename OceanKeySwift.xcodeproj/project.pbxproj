@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		016D66D8398F0E9CF45B3217 /* RuntimeDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D221253E9DCEF3666178BF1F /* RuntimeDiagnostics.swift */; };
 		043A1D13C4D3931888D1815E /* AppBackgroundVideoEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */; };
+		06DACBC44C930BBFDE23F934 /* AppleSyncConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428699A3EF746F120DB73F4B /* AppleSyncConfiguration.swift */; };
 		094272BBB8350642EA68BD69 /* SummaryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4FA201F6199BBB1FBE6120 /* SummaryHeader.swift */; };
 		09D30B3BED384CE9D99707EA /* AppBuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */; };
+		0BA150B28C32A752D35450AD /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC643F2EF7A7E0F80CCBF53 /* CloudKit.framework */; };
 		0DB493EF3021829B88BE5682 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */; };
 		0E1066669AD7D73D2C6F05E8 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCD901EC6DF0D77D2187C6D /* SettingsScreen.swift */; };
 		0E858357DAB729B03EFE513A /* HoldActionTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31317A47FB0AB2FCC1E94C8A /* HoldActionTarget.swift */; };
@@ -75,6 +77,7 @@
 		A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8F64AABB38A2036C634BCB /* SwiftData.framework */; };
 		A630CB74A998E3B1A321DF76 /* SwiftDataWorkSessionRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */; };
 		A703675234FF769CF867B2BD /* MatrixRainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C831B23410D63DEBCFBC85BF /* MatrixRainConfiguration.swift */; };
+		A727B57A65048FA67FE9E425 /* AppleSyncStatusEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E24444682CDA12B877EB67 /* AppleSyncStatusEnvironment.swift */; };
 		A81C9CEAA6F5C0B8AB7C4BF0 /* BuildChangelogScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */; };
 		AB643CF5E38CEC4927C7E316 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA8304DBB6369130113E5E /* WorkSessionStore+Selection.swift */; };
 		ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */; };
@@ -82,6 +85,8 @@
 		ADE238EEBC86AEC1A5A483B2 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85ED0B20C8238C7912F393F9 /* AVKit.framework */; };
 		BA1ECF280752FFF426599CBC /* AppBackgroundModeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB035F8E992FD2AF55A8FC /* AppBackgroundModeEnvironment.swift */; };
 		BFB26C1A0A7C67F26219BFA4 /* RoomActionMenuLampTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */; };
+		BFB3353CA1DF402C0F1222D5 /* AppleCloudAccountProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D456FBA6F34948A76DD74F8 /* AppleCloudAccountProbe.swift */; };
+		C049A7C4CC4F9626A8CE7178 /* AppleSyncEntitlementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14392CAF529EF78B4841747 /* AppleSyncEntitlementTests.swift */; };
 		C27172BDC7C51C3E3EE3CFF9 /* ScheduleNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7318EEDF92B83E3F4615D5F9 /* ScheduleNotificationService.swift */; };
 		C73F9B0839DCB8945BC76C5E /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0655DECA8F86F1748E5A8A9B /* click.wav */; };
 		CD93640CE2E2659E71DC69FE /* CartConsumablesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7762788268738A77A93D4598 /* CartConsumablesSection.swift */; };
@@ -137,6 +142,7 @@
 		210C76CC89C65FF13A27A6C3 /* pressed.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pressed.wav; sourceTree = "<group>"; };
 		287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionPanel.swift; sourceTree = "<group>"; };
 		2997A598AB1E6A8F5F843FE2 /* CartDetailsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsRoute.swift; sourceTree = "<group>"; };
+		30E24444682CDA12B877EB67 /* AppleSyncStatusEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncStatusEnvironment.swift; sourceTree = "<group>"; };
 		31317A47FB0AB2FCC1E94C8A /* HoldActionTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldActionTarget.swift; sourceTree = "<group>"; };
 		34A802CFC375D54754B2C34F /* SettingsCategorySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCategorySelector.swift; sourceTree = "<group>"; };
 		34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupScreen.swift; sourceTree = "<group>"; };
@@ -145,6 +151,7 @@
 		3A66CA79C454C0F64B64E853 /* OceanKeySwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OceanKeySwift.entitlements; sourceTree = "<group>"; };
 		3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundVideoEnvironment.swift; sourceTree = "<group>"; };
 		3CC54D512493ADEF1EB26177 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
+		428699A3EF746F120DB73F4B /* AppleSyncConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncConfiguration.swift; sourceTree = "<group>"; };
 		435A89956E097B59C6894F7B /* WorkSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStore.swift; sourceTree = "<group>"; };
 		449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
 		46AFB0966095D79AA80CAF5F /* VoiceTranscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionService.swift; sourceTree = "<group>"; };
@@ -175,6 +182,7 @@
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
 		8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellGeometry.swift; sourceTree = "<group>"; };
+		9D456FBA6F34948A76DD74F8 /* AppleCloudAccountProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCloudAccountProbe.swift; sourceTree = "<group>"; };
 		A07FDDB084B7AAC0AC13CF80 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		A0AA7911C61D036B30E2BEF6 /* MatrixRainConfigurationEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfigurationEnvironment.swift; sourceTree = "<group>"; };
 		A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsScreen.swift; sourceTree = "<group>"; };
@@ -184,6 +192,7 @@
 		A683672C5983A73C2DAC800F /* WorkSessionMergePolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionMergePolicyTests.swift; sourceTree = "<group>"; };
 		A8D625970C1997ABD4B4AEB6 /* LocalMediaFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMediaFileStore.swift; sourceTree = "<group>"; };
 		ACDA1FF459FA36ED5D33AEC3 /* PersistentWorkSessionMapper+Consumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistentWorkSessionMapper+Consumables.swift"; sourceTree = "<group>"; };
+		AFC643F2EF7A7E0F80CCBF53 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		B07C7DD0BB58B4988BC671FF /* SettingsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCategory.swift; sourceTree = "<group>"; };
 		B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+History.swift"; sourceTree = "<group>"; };
@@ -204,6 +213,7 @@
 		C930282AAFB3CC145E46D544 /* SummarySwipeCommitPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySwipeCommitPolicy.swift; sourceTree = "<group>"; };
 		CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleRoute.swift; sourceTree = "<group>"; };
 		CE487E5E6D0AB9E9818EEF84 /* OceanKeySwift.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OceanKeySwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14392CAF529EF78B4841747 /* AppleSyncEntitlementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncEntitlementTests.swift; sourceTree = "<group>"; };
 		D221253E9DCEF3666178BF1F /* RuntimeDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeDiagnostics.swift; sourceTree = "<group>"; };
 		DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepositoryTests.swift; sourceTree = "<group>"; };
@@ -236,6 +246,7 @@
 				8F5523652C530ACE93B68B17 /* PhotosUI.framework in Frameworks */,
 				D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */,
 				A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */,
+				0BA150B28C32A752D35450AD /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +296,7 @@
 				1B595C7AA9003B87379D4A65 /* Notifications */,
 				CA6F7F1708263AC80470562B /* Performance */,
 				68B13C1B908C6EF928E61B75 /* Speech */,
+				22D7AC7B384BFF9573D20AF6 /* Sync */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -295,6 +307,16 @@
 				7318EEDF92B83E3F4615D5F9 /* ScheduleNotificationService.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		22D7AC7B384BFF9573D20AF6 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				9D456FBA6F34948A76DD74F8 /* AppleCloudAccountProbe.swift */,
+				428699A3EF746F120DB73F4B /* AppleSyncConfiguration.swift */,
+				30E24444682CDA12B877EB67 /* AppleSyncStatusEnvironment.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 		36CA4C3E5465B3F3DA219801 /* OceanKeySwift */ = {
@@ -318,6 +340,7 @@
 			isa = PBXGroup;
 			children = (
 				85ED0B20C8238C7912F393F9 /* AVKit.framework */,
+				AFC643F2EF7A7E0F80CCBF53 /* CloudKit.framework */,
 				3CC54D512493ADEF1EB26177 /* GameplayKit.framework */,
 				BA93ED39F7F4293563E76C30 /* MetalKit.framework */,
 				8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */,
@@ -400,6 +423,7 @@
 		68F7A701FAA1A43CD7D4E624 /* OceanKeySwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				D14392CAF529EF78B4841747 /* AppleSyncEntitlementTests.swift */,
 				71CFB1546F72B1749BEB27E7 /* AppSettingsStoreTests.swift */,
 				00A45905838B30EDFC18C397 /* PerformanceTelemetryStoreTests.swift */,
 				4E3A3C8B003CBAF03504F695 /* RuntimeDiagnosticsTests.swift */,
@@ -678,6 +702,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87852D01D8D77739E19E6738 /* AppSettingsStoreTests.swift in Sources */,
+				C049A7C4CC4F9626A8CE7178 /* AppleSyncEntitlementTests.swift in Sources */,
 				74F755CC983F8493F4FAF4A6 /* PerformanceTelemetryStoreTests.swift in Sources */,
 				10CBAE8DA13FE056254B65D4 /* RuntimeDiagnosticsTests.swift in Sources */,
 				333A65A0C26F32AD550D5161 /* SummaryActionMenuExpansionTests.swift in Sources */,
@@ -699,6 +724,9 @@
 				09D30B3BED384CE9D99707EA /* AppBuildInfo.swift in Sources */,
 				856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */,
 				366D12C14372662249291AE9 /* AppSettingsStore.swift in Sources */,
+				BFB3353CA1DF402C0F1222D5 /* AppleCloudAccountProbe.swift in Sources */,
+				06DACBC44C930BBFDE23F934 /* AppleSyncConfiguration.swift in Sources */,
+				A727B57A65048FA67FE9E425 /* AppleSyncStatusEnvironment.swift in Sources */,
 				400C6B2894C2AB70759E9822 /* AssistantObjectOverlay.swift in Sources */,
 				E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */,
 				93D0CE8735DD6EAA67CEB78D /* BuildChangelog.swift in Sources */,
@@ -809,6 +837,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = OceanKeySwift/OceanKeySwift.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OceanKeySwift/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "OceanKey Swift";
@@ -859,7 +888,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 64;
+				CURRENT_PROJECT_VERSION = 65;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -918,7 +947,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 64;
+				CURRENT_PROJECT_VERSION = 65;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -954,6 +983,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = OceanKeySwift/OceanKeySwift.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OceanKeySwift/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "OceanKey Swift";

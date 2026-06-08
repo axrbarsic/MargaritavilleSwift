@@ -150,19 +150,23 @@ enum PersistentWorkSessionMapper {
         let cartNumbers = Set(selection.cartBindings.keys).union(selection.cartBindingUpdatedAt.keys)
         session.cartBindings = cartNumbers.sorted().compactMap { cartNumber in
             if let binding = selection.cartBindings[cartNumber] {
-                return PersistentCartBinding(
+                let record = PersistentCartBinding(
                     cartNumber: cartNumber,
                     territoryID: binding.territoryID,
                     isSelected: true,
                     updatedAt: selection.cartBindingUpdatedAt[cartNumber]
                 )
+                record.session = session
+                return record
             }
-            return PersistentCartBinding(
+            let record = PersistentCartBinding(
                 cartNumber: cartNumber,
                 territoryID: "",
                 isSelected: false,
                 updatedAt: selection.cartBindingUpdatedAt[cartNumber]
             )
+            record.session = session
+            return record
         }
     }
 
@@ -178,12 +182,14 @@ enum PersistentWorkSessionMapper {
             let activeRooms = selections[cartNumber, default: []]
             let metadataRooms = Set(metadata[cartNumber, default: [:]].keys)
             return activeRooms.union(metadataRooms).sorted(by: RoomCatalog.compareRoomIDs).map { room in
-                PersistentRoomSelection(
+                let record = PersistentRoomSelection(
                     cartNumber: cartNumber,
                     roomID: room,
                     isSelected: activeRooms.contains(room),
                     updatedAt: metadata[cartNumber]?[room]
                 )
+                record.session = session
+                return record
             }
         }
     }
@@ -221,17 +227,25 @@ enum PersistentWorkSessionMapper {
             record.building = cart.building
             record.note = cart.note
             record.noteUpdatedAt = cart.noteUpdatedAt
+            record.session = session
             syncRooms(cart.rooms, cart: record, context: context)
-            record.mediaAttachments = syncMedia(
+            let media = syncMedia(
                 cart.mediaAttachments ?? [],
                 existingRecords: record.mediaAttachments,
                 context: context
             )
-            record.consumables = syncConsumables(
+            media.forEach {
+                $0.cart = record
+                $0.room = nil
+            }
+            record.mediaAttachments = media
+            let consumables = syncConsumables(
                 cart.consumables ?? [],
                 existingRecords: record.consumables,
                 context: context
             )
+            consumables.forEach { $0.cart = record }
+            record.consumables = consumables
         }
         session.carts = nextCarts
     }
@@ -294,11 +308,17 @@ enum PersistentWorkSessionMapper {
             record.textNoteUpdatedAt = room.textNoteUpdatedAt
             record.voiceTranscript = room.voiceTranscript
             record.voiceTranscriptUpdatedAt = room.voiceTranscriptUpdatedAt
-            record.mediaAttachments = syncMedia(
+            record.cart = cart
+            let media = syncMedia(
                 room.mediaAttachments ?? [],
                 existingRecords: record.mediaAttachments,
                 context: context
             )
+            media.forEach {
+                $0.room = record
+                $0.cart = nil
+            }
+            record.mediaAttachments = media
         }
         cart.rooms = nextRooms
     }

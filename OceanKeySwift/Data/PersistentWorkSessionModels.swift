@@ -5,15 +5,15 @@ import SwiftData
 final class PersistentWorkSession {
     static let currentID = "current"
 
-    var id: String
-    var schemaVersion: Int
-    var updatedAt: Date
-    var workdayLocked: Bool
+    var id: String = PersistentWorkSession.currentID
+    var schemaVersion: Int = 1
+    var updatedAt: Date = Date()
+    var workdayLocked: Bool = false
     var workdayLockUpdatedAt: Date?
-    @Relationship(deleteRule: .cascade) var cartBindings: [PersistentCartBinding]?
-    @Relationship(deleteRule: .cascade) var roomSelections: [PersistentRoomSelection]?
-    @Relationship(deleteRule: .cascade) var carts: [PersistentCart]?
-    @Relationship(deleteRule: .cascade) var historyEntries: [PersistentHistoryEntry]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentCartBinding.session) var cartBindings: [PersistentCartBinding]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentRoomSelection.session) var roomSelections: [PersistentRoomSelection]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentCart.session) var carts: [PersistentCart]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentHistoryEntry.session) var historyEntries: [PersistentHistoryEntry]?
 
     init(
         id: String = PersistentWorkSession.currentID,
@@ -40,10 +40,11 @@ final class PersistentWorkSession {
 
 @Model
 final class PersistentCartBinding {
-    var cartNumber: Int
-    var territoryID: String
+    var cartNumber: Int = 0
+    var territoryID: String = ""
     var isSelected: Bool?
     var updatedAt: Date?
+    var session: PersistentWorkSession?
 
     init(
         cartNumber: Int,
@@ -60,10 +61,11 @@ final class PersistentCartBinding {
 
 @Model
 final class PersistentRoomSelection {
-    var cartNumber: Int
-    var roomID: String
+    var cartNumber: Int = 0
+    var roomID: String = ""
     var isSelected: Bool?
     var updatedAt: Date?
+    var session: PersistentWorkSession?
 
     init(
         cartNumber: Int,
@@ -80,14 +82,15 @@ final class PersistentRoomSelection {
 
 @Model
 final class PersistentCart {
-    var cartNumber: Int
-    var displayOrder: Int
-    var building: String
+    var cartNumber: Int = 0
+    var displayOrder: Int = 0
+    var building: String = ""
     var note: String?
     var noteUpdatedAt: Date?
-    @Relationship(deleteRule: .cascade) var rooms: [PersistentRoom]?
-    @Relationship(deleteRule: .cascade) var mediaAttachments: [PersistentMediaAttachment]?
-    @Relationship(deleteRule: .cascade) var consumables: [PersistentCartConsumable]?
+    var session: PersistentWorkSession?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentRoom.cart) var rooms: [PersistentRoom]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentMediaAttachment.cart) var mediaAttachments: [PersistentMediaAttachment]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentCartConsumable.cart) var consumables: [PersistentCartConsumable]?
 
     init(
         cartNumber: Int,
@@ -112,15 +115,15 @@ final class PersistentCart {
 
 @Model
 final class PersistentRoom {
-    var roomID: String
-    var displayOrder: Int
-    var opened: Bool
+    var roomID: String = ""
+    var displayOrder: Int = 0
+    var opened: Bool = false
     var openedUpdatedAt: Date?
-    var completedTaskValues: String
+    var completedTaskValues: String = ""
     var strippedUpdatedAt: Date?
     var linenUpdatedAt: Date?
     var balconyUpdatedAt: Date?
-    var isVIP: Bool
+    var isVIP: Bool = false
     var vipUpdatedAt: Date?
     var scheduledTime: Date?
     var scheduledUpdatedAt: Date?
@@ -134,7 +137,8 @@ final class PersistentRoom {
     var textNoteUpdatedAt: Date?
     var voiceTranscript: String?
     var voiceTranscriptUpdatedAt: Date?
-    @Relationship(deleteRule: .cascade) var mediaAttachments: [PersistentMediaAttachment]?
+    var cart: PersistentCart?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentMediaAttachment.room) var mediaAttachments: [PersistentMediaAttachment]?
 
     init(
         roomID: String,
@@ -169,13 +173,15 @@ final class PersistentRoom {
 
 @Model
 final class PersistentMediaAttachment {
-    var attachmentID: UUID
-    var kindRawValue: String
-    var relativePath: String
-    var createdAt: Date
+    var attachmentID: UUID = UUID()
+    var kindRawValue: String = ""
+    var relativePath: String = ""
+    var createdAt: Date = Date()
     var transcript: String?
     var completedAt: Date?
-    var displayOrder: Int
+    var displayOrder: Int = 0
+    var cart: PersistentCart?
+    var room: PersistentRoom?
 
     init(
         attachmentID: UUID,
@@ -198,12 +204,13 @@ final class PersistentMediaAttachment {
 
 @Model
 final class PersistentCartConsumable {
-    var itemID: String
-    var title: String
-    var quantity: Int
+    var itemID: String = ""
+    var title: String = ""
+    var quantity: Int = 0
     var updatedAt: Date?
     var completedAt: Date?
-    var displayOrder: Int
+    var displayOrder: Int = 0
+    var cart: PersistentCart?
 
     init(
         itemID: String,
@@ -224,14 +231,15 @@ final class PersistentCartConsumable {
 
 @Model
 final class PersistentHistoryEntry {
-    var eventID: UUID
-    var happenedAt: Date
-    var kindRawValue: String
-    var title: String
+    var eventID: UUID = UUID()
+    var happenedAt: Date = Date()
+    var kindRawValue: String = ""
+    var title: String = ""
     var roomID: String?
     var cartID: Int?
-    var snapshotData: Data
-    var displayOrder: Int
+    var snapshotData: Data = Data()
+    var displayOrder: Int = 0
+    var session: PersistentWorkSession?
 
     init(
         eventID: UUID,

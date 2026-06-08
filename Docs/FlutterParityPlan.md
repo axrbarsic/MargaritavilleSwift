@@ -137,9 +137,8 @@ Simulator unless explicitly allowed.
   Speech lifecycle directly.
 - Sync direction is Apple-first for the native rewrite. Firebase should not be
   used as the architecture reference for Swift sync.
-- The SwiftData persistence schema is shaped for future CloudKit compatibility,
-  while the installed app remains local-only until iCloud sync is intentionally
-  enabled.
+- The SwiftData persistence schema now requests CloudKit private-database sync
+  by default, with a persistent local fallback if iCloud is unavailable.
 - Native global history foundation is in place: meaningful room, cart,
   selection, schedule, VIP, note, media, and automatic scheduled-open changes
   create timestamped history entries with lightweight visual snapshots of the
@@ -165,9 +164,8 @@ Simulator unless explicitly allowed.
   and history entries are unioned by ID.
 - Real-device SwiftData migration now keeps older setup selection rows
   compatible with the new selected/deselected metadata flags.
-- Native iOS has a CloudKit entitlement draft for the Apple-first sync
-  direction, but it is not active in signing until the Apple provisioning
-  profile includes iCloud/Push capabilities.
+- Native iOS connects the CloudKit entitlement draft to signing and declares
+  remote notification background mode for SwiftData/CloudKit import/export.
 - Native iOS now also declares the ProMotion Info.plist opt-in so supported
   iPhones can request frame rates above the system default; Matrix/SpriteKit
   and telemetry target the device maximum rather than assuming 60 Hz.

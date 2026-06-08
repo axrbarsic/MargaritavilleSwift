@@ -67,6 +67,7 @@ extension PersistentWorkSessionMapper {
             record.cartID = entry.cartID
             record.snapshotData = snapshotData
             record.displayOrder = index
+            record.session = session
         }
         session.historyEntries = nextRecords
     }

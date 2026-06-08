@@ -2,8 +2,6 @@ import Foundation
 import UIKit
 
 enum RuntimeDiagnostics {
-    static let appleSyncStatusLabel = "Локально, профиль не готов"
-
     static func proMotionOptIn(infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]) -> Bool {
         infoDictionary["CADisableMinimumFrameDurationOnPhone"] as? Bool == true
     }

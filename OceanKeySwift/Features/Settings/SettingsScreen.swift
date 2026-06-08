@@ -10,6 +10,7 @@ struct SettingsScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
+    @Environment(\.appleSyncStatus) private var appleSyncStatus
     @State private var selectedCategory: SettingsCategory = .appearance
     @State private var isChangelogPresented = false
     @State private var isHistoryPresented = false
@@ -359,13 +360,13 @@ struct SettingsScreen: View {
     private var syncSection: some View {
         SettingsPanel(
             title: "Синхронизация",
-            subtitle: "Swift-версия готовится под Apple-first хранение и будущую iCloud-синхронизацию."
+            subtitle: "Нативная Apple-first синхронизация через SwiftData и CloudKit."
         ) {
             SettingsInfoRow(
                 title: "iCloud",
-                value: RuntimeDiagnostics.appleSyncStatusLabel,
-                systemName: "icloud.slash.fill",
-                subtitle: "Firebase больше не является ориентиром для нативной iOS-ветки."
+                value: appleSyncStatus.statusLabel,
+                systemName: appleSyncStatus.isCloudActive ? "icloud.fill" : "icloud.slash.fill",
+                subtitle: appleSyncStatus.detailsLabel
             )
             SettingsInfoRow(
                 title: "Локальный режим",
