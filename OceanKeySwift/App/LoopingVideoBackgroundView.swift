@@ -1,5 +1,4 @@
 import AVFoundation
-import CoreImage
 import SwiftUI
 import UIKit
 
@@ -36,7 +35,6 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
         private var currentURL: URL?
         private var player: AVQueuePlayer?
         private var looper: AVPlayerLooper?
-        private let matteFilter = VideoMatteFilter()
         private weak var view: VideoBackgroundPlayerView?
         private var watchdog: Timer?
         private var notifications: [NSObjectProtocol] = []
@@ -58,10 +56,6 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
 
             let asset = AVURLAsset(url: url)
             let item = AVPlayerItem(asset: asset)
-            item.videoComposition = VideoMatteCompositionFactory.makeComposition(
-                asset: asset,
-                matteFilter: matteFilter
-            )
             let queuePlayer = AVQueuePlayer()
             queuePlayer.isMuted = true
             queuePlayer.actionAtItemEnd = .none
@@ -77,7 +71,6 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
         }
 
         func setTuning(_ tuning: VideoBackgroundTuning) {
-            matteFilter.setTuning(tuning)
         }
 
         @MainActor
@@ -146,9 +139,11 @@ struct VideoBackgroundTuning: Equatable {
 }
 
 final class VideoBackgroundPlayerView: UIView {
+    private let blurView = UIVisualEffectView(effect: nil)
     private let tintView = UIView()
     private let dimView = UIView()
     private let gridView = VideoGridOverlayView()
+    private var currentBlurStep = -1
 
     override static var layerClass: AnyClass {
         AVPlayerLayer.self
@@ -163,13 +158,18 @@ final class VideoBackgroundPlayerView: UIView {
         backgroundColor = .black
         playerLayer.videoGravity = .resizeAspectFill
         playerLayer.masksToBounds = true
+        playerLayer.backgroundColor = UIColor.black.cgColor
+        playerLayer.needsDisplayOnBoundsChange = true
 
+        blurView.isUserInteractionEnabled = false
+        blurView.backgroundColor = .clear
         tintView.isUserInteractionEnabled = false
         tintView.backgroundColor = UIColor(red: 0.0, green: 0.18, blue: 0.08, alpha: 1)
 
         dimView.isUserInteractionEnabled = false
         dimView.backgroundColor = .black
 
+        addSubview(blurView)
         addSubview(tintView)
         addSubview(gridView)
         addSubview(dimView)
@@ -182,6 +182,7 @@ final class VideoBackgroundPlayerView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        blurView.frame = bounds
         tintView.frame = bounds
         gridView.frame = bounds
         dimView.frame = bounds
@@ -194,11 +195,13 @@ final class VideoBackgroundPlayerView: UIView {
         let grid = min(max(tuning.gridIntensity, 0), 1)
 
         let apply = {
-            if green <= 0.01, blur <= 0.01 {
-                self.tintView.alpha = 0
-            } else {
-                self.tintView.alpha = CGFloat(0.03 + blur * 0.10 + green * 0.82)
+            let blurStep = Int((blur * 5).rounded())
+            if blurStep != self.currentBlurStep {
+                self.currentBlurStep = blurStep
+                self.blurView.effect = Self.blurEffect(for: blurStep)
             }
+            self.blurView.alpha = blurStep == 0 ? 0 : CGFloat(0.18 + blur * 0.70)
+            self.tintView.alpha = green <= 0.01 ? 0 : CGFloat(0.04 + green * 0.76)
             self.gridView.intensity = grid
             self.dimView.alpha = brightness < 0 ? CGFloat(abs(brightness) * 0.82) : 0
             self.playerLayer.opacity = Float(1 + max(0, brightness) * 0.35)
@@ -215,6 +218,23 @@ final class VideoBackgroundPlayerView: UIView {
             options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseOut],
             animations: apply
         )
+    }
+
+    private static func blurEffect(for step: Int) -> UIBlurEffect? {
+        switch step {
+        case 0:
+            nil
+        case 1:
+            UIBlurEffect(style: .systemUltraThinMaterialDark)
+        case 2:
+            UIBlurEffect(style: .systemThinMaterialDark)
+        case 3:
+            UIBlurEffect(style: .systemMaterialDark)
+        case 4:
+            UIBlurEffect(style: .systemThickMaterialDark)
+        default:
+            UIBlurEffect(style: .systemChromeMaterialDark)
+        }
     }
 }
 
@@ -275,69 +295,5 @@ private final class VideoGridOverlayView: UIView {
             context.addLine(to: CGPoint(x: x.rounded(.down), y: rect.maxY))
         }
         context.strokePath()
-    }
-}
-
-private final class VideoMatteFilter: @unchecked Sendable {
-    private let lock = NSLock()
-    private var storedTuning = VideoBackgroundTuning.default
-
-    func setTuning(_ tuning: VideoBackgroundTuning) {
-        lock.lock()
-        storedTuning = VideoBackgroundTuning(
-            blur: min(max(tuning.blur, 0), 1),
-            brightness: min(max(tuning.brightness, -0.85), 0.85),
-            greenTint: min(max(tuning.greenTint, 0), 1),
-            gridIntensity: min(max(tuning.gridIntensity, 0), 1)
-        )
-        lock.unlock()
-    }
-
-    var tuning: VideoBackgroundTuning {
-        lock.lock()
-        let tuning = storedTuning
-        lock.unlock()
-        return tuning
-    }
-}
-
-private enum VideoMatteCompositionFactory {
-    static func makeComposition(
-        asset: AVAsset,
-        matteFilter: VideoMatteFilter
-    ) -> AVVideoComposition {
-        AVMutableVideoComposition(asset: asset) { request in
-            let tuning = matteFilter.tuning
-            let source = request.sourceImage
-            let green = tuning.greenTint
-            let blurBudget = max(0.34, 1.0 - green * 0.32 - tuning.gridIntensity * 0.18)
-            let radius = tuning.blur > 0.01 ? 1.2 + tuning.blur * 13.8 * blurBudget : 0
-            let blurred = radius > 0.2 ? source
-                .clampedToExtent()
-                .applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: radius])
-                .cropped(to: source.extent) : source
-            let tuned = blurred.applyingFilter(
-                "CIColorControls",
-                parameters: [
-                    kCIInputBrightnessKey: tuning.brightness,
-                    kCIInputSaturationKey: max(0.08, 1 - tuning.greenTint * 0.54)
-                ]
-            )
-            let greened = tuned.applyingFilter(
-                "CIColorMatrix",
-                parameters: [
-                    "inputRVector": CIVector(x: max(0.02, 1 - green * 0.98), y: 0, z: 0, w: 0),
-                    "inputGVector": CIVector(
-                        x: 0.18 * green,
-                        y: 1 + 0.42 * green,
-                        z: 0.16 * green,
-                        w: 0
-                    ),
-                    "inputBVector": CIVector(x: 0, y: 0, z: max(0.02, 1 - green * 0.98), w: 0),
-                    "inputAVector": CIVector(x: 0, y: 0, z: 0, w: 1)
-                ]
-            )
-            request.finish(with: greened, context: nil)
-        }
     }
 }

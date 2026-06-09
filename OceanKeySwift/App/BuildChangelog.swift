@@ -10,6 +10,23 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (70)",
+            date: "2026-06-08",
+            changes: [
+                "Rebuilt the top setup-unlock puzzle swipe as one measured GeometryReader track so the dragged piece lands exactly in the settings-button socket.",
+                "Fixed the room-cell puzzle swipe math so the piece center and socket center match exactly at commit instead of landing a few points off."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (69)",
+            date: "2026-06-08",
+            changes: [
+                "Rebuilt video wallpaper playback around a stable AVPlayerLayer path so the main screen no longer starts black until Settings forces a redraw.",
+                "Moved blur, green tint, brightness, and grid to lightweight overlay layers instead of per-frame Core Image video composition.",
+                "Added tap-to-close behavior: when a room action menu is open, tapping the room cell closes it."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (68)",
             date: "2026-06-08",
             changes: [

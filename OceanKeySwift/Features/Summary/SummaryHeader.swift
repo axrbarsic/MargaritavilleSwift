@@ -4,31 +4,38 @@ struct SummaryHeader: View {
     let counts: SummaryCounts
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
+    @State private var selectionPuzzleProgress: CGFloat = 0
 
     var body: some View {
-        HStack(spacing: 8) {
-            softButton(systemName: "line.3.horizontal", action: onOpenSettings)
+        GeometryReader { proxy in
+            HStack(spacing: 8) {
+                softButton(systemName: "line.3.horizontal", action: onOpenSettings)
+                    .opacity(CGFloat(1) - min(selectionPuzzleProgress * CGFloat(1.65), CGFloat(1)))
 
-            Spacer(minLength: 8)
+                Spacer(minLength: 8)
 
-            HStack(spacing: 12) {
-                Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
-                Text("\(counts.completed)").foregroundStyle(OceanKeyTheme.ready)
-                Text("\(counts.remaining)").foregroundStyle(Color(hex: 0xFF4A4A))
+                HStack(spacing: 12) {
+                    Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
+                    Text("\(counts.completed)").foregroundStyle(OceanKeyTheme.ready)
+                    Text("\(counts.remaining)").foregroundStyle(Color(hex: 0xFF4A4A))
+                }
+                .font(.system(size: 22, weight: .black, design: .rounded))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+
+                Spacer(minLength: 8)
             }
-            .font(.system(size: 22, weight: .black, design: .rounded))
-            .monospacedDigit()
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-
-            Spacer(minLength: 8)
-
-            SummarySelectionPuzzleHandle(
-                onComplete: onOpenSelection
-            )
+            .padding(.horizontal, 18)
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .overlay {
+                SummarySelectionPuzzleHandle(
+                    progress: $selectionPuzzleProgress,
+                    onComplete: onOpenSelection
+                )
+            }
         }
         .frame(height: 48)
-        .padding(.horizontal, 18)
     }
 
     private func softButton(systemName: String, action: @escaping () -> Void) -> some View {

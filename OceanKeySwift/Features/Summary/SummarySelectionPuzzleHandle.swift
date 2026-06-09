@@ -4,6 +4,7 @@ import UIKit
 struct SummarySelectionPuzzleHandle: View {
     @Environment(\.interactionFeedback) private var feedback
 
+    @Binding var progress: CGFloat
     let onComplete: () -> Void
 
     @State private var drag: CGFloat = 0
@@ -11,56 +12,64 @@ struct SummarySelectionPuzzleHandle: View {
     @State private var committed = false
     @State private var feedbackStarted = false
 
-    private var threshold: CGFloat {
-        max(280, UIScreen.main.bounds.width - 94)
-    }
-
     var body: some View {
-        let progress = min(max(drag / threshold, 0), 1)
+        GeometryReader { proxy in
+            let metrics = PuzzleTrackMetrics(width: proxy.size.width, height: proxy.size.height)
+            let normalized = metrics.progress(for: drag)
 
-        ZStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.black.opacity(0.10 + 0.06 * progress))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(
-                            OceanKeyTheme.accent.opacity(0.12 + 0.24 * progress),
-                            lineWidth: 1
-                        )
+            ZStack {
+                if normalized > 0.001 {
+                    PuzzleSocket(progress: normalized)
+                        .frame(width: metrics.pieceSize, height: metrics.pieceSize)
+                        .position(x: metrics.targetCenterX, y: metrics.centerY)
+                        .transition(.opacity)
                 }
 
-            PuzzleSocket(progress: progress)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 8)
+                PuzzlePiece(progress: normalized, systemName: "puzzlepiece.fill")
+                    .frame(width: metrics.pieceSize, height: metrics.pieceSize)
+                    .position(x: metrics.pieceCenterX(progress: normalized), y: metrics.centerY)
 
-            PuzzlePiece(progress: progress, systemName: "puzzlepiece.fill")
-            .offset(x: -threshold * progress)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.trailing, 6)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(.black.opacity(0.08 + 0.07 * normalized))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(
+                                OceanKeyTheme.accent.opacity(0.12 + 0.26 * normalized),
+                                lineWidth: 1
+                            )
+                    }
+                    .frame(width: metrics.startZoneWidth, height: 42)
+                    .position(x: metrics.startZoneCenterX, y: metrics.centerY)
+                    .opacity(1 - min(normalized * 1.15, 0.82))
+
+                Color.clear
+                    .frame(width: metrics.startZoneWidth + 18, height: metrics.height)
+                    .contentShape(Rectangle())
+                    .position(x: metrics.startZoneCenterX, y: metrics.centerY)
+                    .gesture(dragGesture(metrics: metrics))
+            }
         }
-        .frame(width: 86, height: 42)
-        .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .accessibilityLabel("Открыть выбор комнат")
-        .gesture(dragGesture)
     }
 
-    private var dragGesture: some Gesture {
+    private func dragGesture(metrics: PuzzleTrackMetrics) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
                 guard !committed else { return }
-                let next = min(max(-value.translation.width, 0), threshold * 1.15)
+                let next = min(max(-value.translation.width, 0), metrics.travel * 1.08)
                 guard next > 0 || drag > 0 else { return }
                 if next > 2, !feedbackStarted {
                     feedbackStarted = true
                     feedback.holdStart()
                 }
-                let nextArmed = next >= threshold
+                let nextArmed = next >= metrics.travel
                 if nextArmed, !armed {
                     feedback.holdCommit()
-                } else if !nextArmed, next > threshold * 0.82, drag <= threshold * 0.82 {
+                } else if !nextArmed, next > metrics.travel * 0.82, drag <= metrics.travel * 0.82 {
                     feedback.holdWarning()
                 }
                 drag = next
+                progress = metrics.progress(for: next)
                 armed = nextArmed
             }
             .onEnded { _ in
@@ -70,7 +79,8 @@ struct SummarySelectionPuzzleHandle: View {
                     return
                 }
                 committed = true
-                drag = threshold
+                drag = metrics.travel
+                progress = 1
                 feedback.confirm()
                 onComplete()
                 Task { @MainActor in
@@ -83,8 +93,33 @@ struct SummarySelectionPuzzleHandle: View {
 
     private func reset() {
         drag = 0
+        progress = 0
         armed = false
         feedbackStarted = false
+    }
+}
+
+private struct PuzzleTrackMetrics {
+    let width: CGFloat
+    let height: CGFloat
+
+    let horizontalPadding: CGFloat = 18
+    let settingsButtonSize: CGFloat = 48
+    let startZoneWidth: CGFloat = 86
+    let pieceSize: CGFloat = 42
+
+    var centerY: CGFloat { height * 0.5 }
+    var targetCenterX: CGFloat { horizontalPadding + settingsButtonSize * 0.5 }
+    var startZoneCenterX: CGFloat { width - horizontalPadding - startZoneWidth * 0.5 }
+    var startCenterX: CGFloat { startZoneCenterX }
+    var travel: CGFloat { max(startCenterX - targetCenterX, 1) }
+
+    func progress(for drag: CGFloat) -> CGFloat {
+        min(max(drag / travel, 0), 1)
+    }
+
+    func pieceCenterX(progress: CGFloat) -> CGFloat {
+        startCenterX + (targetCenterX - startCenterX) * min(max(progress, 0), 1)
     }
 }
 
@@ -129,7 +164,7 @@ struct PuzzlePiece: View {
 }
 
 #Preview {
-    SummarySelectionPuzzleHandle(onComplete: {})
+    SummarySelectionPuzzleHandle(progress: .constant(0), onComplete: {})
         .padding()
         .background(OceanKeyTheme.background)
 }

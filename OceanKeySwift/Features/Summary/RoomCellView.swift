@@ -34,6 +34,7 @@ struct RoomCellView: View {
         VStack(spacing: 0) {
             tileBody
                 .contentShape(Rectangle())
+                .highPriorityGesture(closeExpandedMenuTapGesture, including: .gesture)
                 .simultaneousGesture(actionMenuDragGesture, including: .gesture)
 
             if isActionMenuExpanded {
@@ -173,6 +174,15 @@ struct RoomCellView: View {
             }
             .onEnded { value in
                 finishActionMenuDrag(value)
+            }
+    }
+
+    private var closeExpandedMenuTapGesture: some Gesture {
+        TapGesture()
+            .onEnded {
+                guard isActionMenuExpanded else { return }
+                feedback.deselect()
+                onActionMenuToggle()
             }
     }
 
@@ -418,9 +428,10 @@ private struct RoomActionPuzzlePullOverlay: View {
         GeometryReader { proxy in
             let width = proxy.size.width
             let sinkSize = min(max(proxy.size.height * 0.52, 34), 48)
-            let travel = max(width - sinkSize - 26, 0)
             let normalized = min(max(progress, 0), 1)
-            let x = 14 + travel * normalized
+            let startCenterX = sinkSize * 0.5 + 14
+            let targetCenterX = width - sinkSize * 0.5 - 16
+            let pieceCenterX = startCenterX + (targetCenterX - startCenterX) * normalized
 
             ZStack(alignment: .leading) {
                 LinearGradient(
@@ -436,11 +447,11 @@ private struct RoomActionPuzzlePullOverlay: View {
 
                 PuzzleSocket(progress: normalized)
                     .frame(width: sinkSize, height: sinkSize)
-                    .position(x: width - sinkSize * 0.5 - 16, y: proxy.size.height * 0.5)
+                    .position(x: targetCenterX, y: proxy.size.height * 0.5)
 
                 PuzzlePiece(progress: normalized, systemName: "puzzlepiece.fill")
                     .frame(width: sinkSize, height: sinkSize)
-                    .position(x: x + sinkSize * 0.5, y: proxy.size.height * 0.5)
+                    .position(x: pieceCenterX, y: proxy.size.height * 0.5)
             }
         }
     }
