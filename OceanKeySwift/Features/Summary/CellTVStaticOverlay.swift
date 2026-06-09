@@ -1,124 +1,175 @@
+import CoreImage
 import SwiftUI
+import UIKit
 
-struct CellTVStaticOverlay: View {
+struct CellTVStaticOverlay: UIViewRepresentable {
     let statusColor: Color
     let roomID: String
 
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
-            let frame = UInt64(timeline.date.timeIntervalSinceReferenceDate * 60)
-            let seed = CellTVStaticNoise.seed(roomID: roomID, frame: frame)
-            Canvas(opaque: false, rendersAsynchronously: true) { context, size in
-                CellTVStaticNoise.draw(
-                    in: &context,
-                    size: size,
-                    statusColor: statusColor,
-                    seed: seed
-                )
-            }
-            .opacity(0.94)
-            .overlay {
-                scanlines
-                    .opacity(0.46)
-            }
-        }
+    func makeUIView(context: Context) -> CellTVStaticRenderView {
+        let view = CellTVStaticRenderView()
+        view.configure(statusColor: UIColor(statusColor), seedOffset: Self.seed(roomID: roomID))
+        view.start()
+        return view
     }
 
-    private var scanlines: some View {
-        LinearGradient(
-            stops: [
-                .init(color: .black.opacity(0.52), location: 0.00),
-                .init(color: .clear, location: 0.22),
-                .init(color: .white.opacity(0.18), location: 0.50),
-                .init(color: .clear, location: 0.78),
-                .init(color: .black.opacity(0.46), location: 1.00)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+    func updateUIView(_ view: CellTVStaticRenderView, context: Context) {
+        view.configure(statusColor: UIColor(statusColor), seedOffset: Self.seed(roomID: roomID))
+        view.start()
     }
-}
 
-private enum CellTVStaticNoise {
-    static func seed(roomID: String, frame: UInt64) -> UInt64 {
+    static func dismantleUIView(_ view: CellTVStaticRenderView, coordinator: ()) {
+        view.stop()
+    }
+
+    private static func seed(roomID: String) -> Int {
         var hash: UInt64 = 1469598103934665603
         for byte in roomID.utf8 {
             hash ^= UInt64(byte)
             hash &*= 1099511628211
         }
-        return hash ^ (frame &* 0x9E3779B97F4A7C15)
-    }
-
-    static func draw(in context: inout GraphicsContext, size: CGSize, statusColor: Color, seed: UInt64) {
-        guard size.width > 0, size.height > 0 else { return }
-
-        var generator = SeededNoise(seed: seed)
-        let columns = max(16, min(34, Int(size.width / 11.0)))
-        let rows = max(8, min(14, Int(size.height / 8.0)))
-        let cellWidth = size.width / CGFloat(columns)
-        let cellHeight = size.height / CGFloat(rows)
-
-        for row in 0..<rows {
-            let rowY = CGFloat(row) * cellHeight
-            let rowFlicker = 0.70 + generator.nextUnit() * 0.55
-            for column in 0..<columns {
-                let noise = generator.nextUnit()
-                let color = color(for: noise, statusColor: statusColor, rowFlicker: rowFlicker)
-                let rect = CGRect(
-                    x: CGFloat(column) * cellWidth,
-                    y: rowY,
-                    width: cellWidth * (noise > 0.965 ? 1.8 : 1.04),
-                    height: cellHeight * (noise < 0.05 || noise > 0.95 ? 1.22 : 1.04)
-                )
-                context.fill(Path(rect), with: .color(color))
-            }
-        }
-
-        for _ in 0..<8 {
-            let y = generator.nextUnit() * size.height
-            let height = 1.0 + generator.nextUnit() * 3.0
-            let alpha = 0.13 + generator.nextUnit() * 0.22
-            let rect = CGRect(x: 0, y: y, width: size.width, height: height)
-            let lineColor = generator.nextUnit() > 0.45 ? Color.black.opacity(alpha) : Color.white.opacity(alpha)
-            context.fill(Path(rect), with: .color(lineColor))
-        }
-
-        for _ in 0..<2 where generator.nextUnit() > 0.45 {
-            let x = generator.nextUnit() * size.width
-            let width = 8 + generator.nextUnit() * 34
-            let alpha = 0.14 + generator.nextUnit() * 0.18
-            let rect = CGRect(x: x, y: 0, width: width, height: size.height)
-            context.fill(Path(rect), with: .color(statusColor.opacity(alpha)))
-        }
-    }
-
-    private static func color(for noise: CGFloat, statusColor: Color, rowFlicker: CGFloat) -> Color {
-        if noise < 0.18 {
-            return .black.opacity((0.28 + (0.18 - noise) * 2.1) * rowFlicker)
-        }
-        if noise > 0.82 {
-            return .white.opacity((0.16 + (noise - 0.82) * 2.4) * rowFlicker)
-        }
-        if noise > 0.58 {
-            return statusColor.opacity((0.18 + (noise - 0.58) * 0.9) * rowFlicker)
-        }
-        return .black.opacity(0.05 + noise * 0.12)
+        return Int(hash % 4096)
     }
 }
 
-private struct SeededNoise {
-    private var state: UInt64
+final class CellTVStaticRenderView: UIView {
+    private let imageView = UIImageView()
+    private let scanlineView = CellTVStaticScanlineView()
+    private let context = CIContext(options: [.cacheIntermediates: false])
+    private let randomFilter = CIFilter(name: "CIRandomGenerator")
+    private var displayLink: CADisplayLink?
+    private var frameIndex = 0
+    private var renderSize = CGSize(width: 220, height: 54)
+    private var statusUIColor = UIColor.systemGreen
+    private var seedOffset = 0
 
-    init(seed: UInt64) {
-        self.state = seed == 0 ? 0xD1B54A32D192ED03 : seed
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isOpaque = false
+        backgroundColor = .clear
+        isUserInteractionEnabled = false
+
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.magnificationFilter = .nearest
+        imageView.layer.minificationFilter = .nearest
+        imageView.backgroundColor = .clear
+        imageView.isOpaque = false
+        imageView.alpha = 0.78
+
+        addSubview(imageView)
+        addSubview(scanlineView)
     }
 
-    mutating func nextUnit() -> CGFloat {
-        state &+= 0x9E3779B97F4A7C15
-        var z = state
-        z = (z ^ (z >> 30)) &* 0xBF58476D1CE4E5B9
-        z = (z ^ (z >> 27)) &* 0x94D049BB133111EB
-        z ^= z >> 31
-        return CGFloat(Double(z & 0xFFFF) / Double(0xFFFF))
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imageView.frame = bounds
+        scanlineView.frame = bounds
+        updateRenderSize()
+    }
+
+    func configure(statusColor: UIColor, seedOffset: Int) {
+        self.statusUIColor = statusColor
+        self.seedOffset = seedOffset
+    }
+
+    func start() {
+        guard displayLink == nil else { return }
+        let link = CADisplayLink(target: self, selector: #selector(renderFrame))
+        link.preferredFrameRateRange = CAFrameRateRange(
+            minimum: 60,
+            maximum: Float(UIScreen.main.maximumFramesPerSecond),
+            preferred: Float(UIScreen.main.maximumFramesPerSecond)
+        )
+        link.add(to: .main, forMode: .common)
+        displayLink = link
+        renderFrame()
+    }
+
+    func stop() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+
+    @objc private func renderFrame() {
+        frameIndex &+= 1
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        imageView.image = makeNoiseImage()
+    }
+
+    private func updateRenderSize() {
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        let aspect = bounds.height / max(bounds.width, 1)
+        let width: CGFloat = 220
+        renderSize = CGSize(width: width, height: max(34, width * aspect))
+    }
+
+    private func makeNoiseImage() -> UIImage? {
+        guard let source = randomFilter?.outputImage else { return nil }
+
+        let jitterX = CGFloat(((frameIndex + seedOffset) * 37) % 8192)
+        let jitterY = CGFloat(((frameIndex + seedOffset) * 91) % 8192)
+        let components = statusUIColor.normalizedRGBA
+        let cropped = source
+            .transformed(by: CGAffineTransform(translationX: jitterX, y: jitterY))
+            .cropped(to: CGRect(origin: .zero, size: renderSize))
+            .applyingFilter("CIColorControls", parameters: [
+                kCIInputSaturationKey: 0,
+                kCIInputContrastKey: 1.95,
+                kCIInputBrightnessKey: -0.08
+            ])
+            .applyingFilter("CIColorMatrix", parameters: [
+                "inputRVector": CIVector(x: components.red, y: 0, z: 0, w: 0),
+                "inputGVector": CIVector(x: components.green, y: 0, z: 0, w: 0),
+                "inputBVector": CIVector(x: components.blue, y: 0, z: 0, w: 0),
+                "inputAVector": CIVector(x: 0, y: 0, z: 0, w: 1)
+            ])
+
+        guard let cgImage = context.createCGImage(cropped, from: CGRect(origin: .zero, size: renderSize)) else {
+            return nil
+        }
+        return UIImage(cgImage: cgImage, scale: UIScreen.main.scale, orientation: .up)
+    }
+}
+
+private final class CellTVStaticScanlineView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isOpaque = false
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        contentMode = .redraw
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        context.setFillColor(UIColor.black.withAlphaComponent(0.16).cgColor)
+        var y: CGFloat = 0
+        while y < rect.height {
+            context.fill(CGRect(x: 0, y: y, width: rect.width, height: 1))
+            y += 4
+        }
+    }
+}
+
+private extension UIColor {
+    var normalizedRGBA: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        guard getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return (0, 1, 0, 1)
+        }
+        return (red, green, blue, alpha)
     }
 }
