@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (74)",
+            date: "2026-06-08",
+            changes: [
+                "Replaced the black SpriteKit GLSL TV Static path with a native Core Image CIRandomGenerator background so the TV mode renders visibly on the iPhone.",
+                "Kept TV Static as a regular background mode next to Off, Matrix, and Video, with scanline overlay for an analog television feel.",
+                "Removed the unused SpriteKit TV shader scene from the active code path."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (73)",
             date: "2026-06-08",
             changes: [

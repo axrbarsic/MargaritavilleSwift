@@ -14,7 +14,7 @@ struct AppBackgroundView: View {
             if appBackgroundMode == .matrixRain {
                 SpriteKitEffectView(.matrixRain)
             } else if appBackgroundMode == .tvStaticNoise {
-                SpriteKitEffectView(.tvStaticNoise)
+                TVStaticNoiseBackgroundView()
             } else if appBackgroundMode == .video, let appBackgroundVideoURL {
                 LoopingVideoBackgroundView(
                     url: appBackgroundVideoURL,

@@ -65,6 +65,7 @@
 		856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */; };
 		8623867BDD224CD95F47BBF2 /* SettingsControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88F4E1B0F391C1E8C9C2F6C /* SettingsControls.swift */; };
 		87852D01D8D77739E19E6738 /* AppSettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CFB1546F72B1749BEB27E7 /* AppSettingsStoreTests.swift */; };
+		8D2078D793C208875DCC662A /* TVStaticNoiseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43FCE41FAC12F7171994989 /* TVStaticNoiseBackgroundView.swift */; };
 		8F5523652C530ACE93B68B17 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */; };
 		90E670E6CFD78A670C422204 /* MatrixRainConfigurationEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AA7911C61D036B30E2BEF6 /* MatrixRainConfigurationEnvironment.swift */; };
 		93D0CE8735DD6EAA67CEB78D /* BuildChangelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608321B44757C987209F2A54 /* BuildChangelog.swift */; };
@@ -97,7 +98,6 @@
 		E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
 		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
-		EA8668CA14F62C201AA6515A /* TVStaticNoiseSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B2FABF3F5D1209DFA7D05BA /* TVStaticNoiseSpriteScene.swift */; };
 		F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */; };
 		F516FD9FD2B66D2AC637D72F /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */; };
 		F83E4227B655B617F593C9C6 /* WorkSessionMergePolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A683672C5983A73C2DAC800F /* WorkSessionMergePolicyTests.swift */; };
@@ -125,7 +125,6 @@
 		067B3DBCAB2B48683F38F685 /* LoopingVideoBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoBackgroundView.swift; sourceTree = "<group>"; };
 		0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModels.swift; sourceTree = "<group>"; };
 		0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
-		0B2FABF3F5D1209DFA7D05BA /* TVStaticNoiseSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVStaticNoiseSpriteScene.swift; sourceTree = "<group>"; };
 		0D340AE2F35A8796533E0460 /* SummaryActionMenuExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansion.swift; sourceTree = "<group>"; };
 		11AE7DB8A2119718A8E5A240 /* VoiceNoteBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteBubble.swift; sourceTree = "<group>"; };
 		1576751457D918F28F73179E /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
@@ -198,6 +197,7 @@
 		BCAF8BEA469DB858BD47A0D4 /* OceanKeySwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OceanKeySwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
 		C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
+		C43FCE41FAC12F7171994989 /* TVStaticNoiseBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVStaticNoiseBackgroundView.swift; sourceTree = "<group>"; };
 		C53CB4860DB0F1128AAFF966 /* SummarySwipeCommitPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySwipeCommitPolicyTests.swift; sourceTree = "<group>"; };
 		C831B23410D63DEBCFBC85BF /* MatrixRainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfiguration.swift; sourceTree = "<group>"; };
 		C904268098CE3875C7C61698 /* SummaryActionMenuExpansionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansionTests.swift; sourceTree = "<group>"; };
@@ -539,6 +539,7 @@
 				B6604386501D00F125345B04 /* ExperimentalAppearanceEnvironment.swift */,
 				067B3DBCAB2B48683F38F685 /* LoopingVideoBackgroundView.swift */,
 				868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */,
+				C43FCE41FAC12F7171994989 /* TVStaticNoiseBackgroundView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -565,7 +566,6 @@
 				A0AA7911C61D036B30E2BEF6 /* MatrixRainConfigurationEnvironment.swift */,
 				449D6D5D2079C0C6419A7A6B /* MatrixRainSpriteScene.swift */,
 				53CC2C533226B89F0CF70B87 /* SpriteKitEffectView.swift */,
-				0B2FABF3F5D1209DFA7D05BA /* TVStaticNoiseSpriteScene.swift */,
 			);
 			path = SpriteKit;
 			sourceTree = "<group>";
@@ -755,7 +755,7 @@
 				839F12922CCEDD9CD0149288 /* SummarySelectionPuzzleHandle.swift in Sources */,
 				17958B1F90F6EFE7DAC18AAC /* SummarySwipeCommitPolicy.swift in Sources */,
 				EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */,
-				EA8668CA14F62C201AA6515A /* TVStaticNoiseSpriteScene.swift in Sources */,
+				8D2078D793C208875DCC662A /* TVStaticNoiseBackgroundView.swift in Sources */,
 				5E6AB58A4A3683A5394DE41A /* VoiceNoteBubble.swift in Sources */,
 				DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */,
 				141C0E990AE81553E8E12E35 /* VoiceTranscriptionContracts.swift in Sources */,
@@ -860,7 +860,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 73;
+				CURRENT_PROJECT_VERSION = 74;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -919,7 +919,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 73;
+				CURRENT_PROJECT_VERSION = 74;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
