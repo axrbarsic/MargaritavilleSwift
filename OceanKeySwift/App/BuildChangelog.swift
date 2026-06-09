@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (73)",
+            date: "2026-06-08",
+            changes: [
+                "Moved the broken-TV effect out of the Developer preview and into the regular background mode picker next to Off, Matrix, and Video.",
+                "Made TV Static render as a full-screen SpriteKit background and write opaque shader fragments directly so it cannot appear as a black preview panel.",
+                "Added persistence coverage for the TV Static background mode."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (72)",
             date: "2026-06-08",
             changes: [

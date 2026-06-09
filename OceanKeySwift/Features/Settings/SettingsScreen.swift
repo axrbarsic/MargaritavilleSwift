@@ -78,33 +78,8 @@ struct SettingsScreen: View {
         case .workflow:
             workSection
         case .developer:
-            temporaryExperimentalSection
             experimentalSection
             developerSection
-        }
-    }
-
-    private var temporaryExperimentalSection: some View {
-        SettingsPanel(
-            title: "Временное экспериментальное",
-            subtitle: "Черновые эффекты для просмотра. Не считаются постоянной частью приложения."
-        ) {
-            Toggle(isOn: $appSettings.temporaryTVStaticNoiseEnabled) {
-                SettingsInfoRow(
-                    title: "Сломанный телевизор",
-                    value: appSettings.temporaryTVStaticNoiseEnabled ? "Вариант 1" : "Выкл",
-                    systemName: "tv.fill",
-                    subtitle: "Dynamic Gray Noise из ShaderKit: быстрый серый аналоговый снег на SpriteKit shader."
-                )
-            }
-            .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.temporaryTVStaticNoiseEnabled) { _, _ in
-                feedback.confirm()
-            }
-
-            if appSettings.temporaryTVStaticNoiseEnabled {
-                TVStaticNoisePreview()
-            }
         }
     }
 
@@ -257,7 +232,7 @@ struct SettingsScreen: View {
                 title: "Заставка",
                 value: appSettings.appBackgroundMode.description,
                 systemName: "grid",
-                subtitle: "Видео хранится только локально на устройстве."
+                subtitle: backgroundModeSubtitle
             )
             if appSettings.appBackgroundMode == .matrixRain {
                 SettingsSliderRow(
@@ -272,6 +247,19 @@ struct SettingsScreen: View {
             if appSettings.appBackgroundMode == .video {
                 videoBackgroundControls
             }
+        }
+    }
+
+    private var backgroundModeSubtitle: String {
+        switch appSettings.appBackgroundMode {
+        case .off:
+            "Фон отключён, основной экран остаётся чёрным."
+        case .matrixRain:
+            "Matrix Rain как основной живой фон."
+        case .tvStaticNoise:
+            "ShaderKit Dynamic Gray Noise: аналоговый телевизионный снег как основной фон."
+        case .video:
+            "Видео хранится только локально на устройстве."
         }
     }
 
@@ -405,38 +393,4 @@ struct SettingsScreen: View {
         appSettings: AppSettingsStore()
     )
         .preferredColorScheme(.dark)
-}
-
-private struct TVStaticNoisePreview: View {
-    var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            SpriteKitEffectView(.tvStaticNoise)
-                .frame(height: 188)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .strokeBorder(.white.opacity(0.16), lineWidth: 1)
-                }
-                .overlay(alignment: .topTrailing) {
-                    Text("ShaderKit MIT")
-                        .font(.system(size: 11, weight: .black, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.86))
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 5)
-                        .background(.black.opacity(0.52), in: Capsule())
-                        .padding(10)
-                }
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text("TV Static 01")
-                    .font(.system(size: 16, weight: .black, design: .rounded))
-                Text("Серый аналоговый шум, первый кандидат.")
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.72))
-            }
-            .foregroundStyle(.white)
-            .padding(14)
-        }
-        .accessibilityLabel("Предпросмотр эффекта сломанного телевизора")
-    }
 }

@@ -82,7 +82,7 @@ final class TVStaticNoiseSpriteScene: SKScene, ResizableSpriteScene {
     // MIT License: https://github.com/twostraws/ShaderKit
     // Adapted only as a local SpriteKit shader string for OceanKey's direct SKSpriteNode wrapper.
     // The original multiplies by v_color_mix.a; our node does not rely on ShaderKit's helper setup,
-    // so output alpha is taken from SKDefaultShading() to keep the preview visible.
+    // so the background variant writes an opaque fragment directly.
     private static let dynamicGrayNoiseShaderSource = """
     float random(float offset, vec2 tex_coord, float time) {
         vec2 non_repeating = vec2(12.9898 * time, 78.233 * time);
@@ -94,14 +94,8 @@ final class TVStaticNoiseSpriteScene: SKScene, ResizableSpriteScene {
     }
 
     void main() {
-        vec4 current_color = SKDefaultShading();
-
-        if (current_color.a > 0.0) {
-            float noise = random(1.0, v_tex_coord, u_time);
-            gl_FragColor = vec4(vec3(noise), current_color.a);
-        } else {
-            gl_FragColor = current_color;
-        }
+        float noise = random(1.0, v_tex_coord, u_time + 0.371);
+        gl_FragColor = vec4(vec3(noise), 1.0);
     }
     """
 }
