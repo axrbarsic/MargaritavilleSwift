@@ -32,6 +32,9 @@ final class TVStaticNoiseSpriteScene: SKScene, ResizableSpriteScene {
         node.position = CGPoint(x: size.width / 2, y: size.height / 2)
         node.size = size
         node.zPosition = 0
+        node.color = .white
+        node.colorBlendFactor = 1
+        node.alpha = 1
         node.shader = SKShader(source: Self.dynamicGrayNoiseShaderSource)
         addChild(node)
         noiseNode = node
@@ -77,7 +80,9 @@ final class TVStaticNoiseSpriteScene: SKScene, ResizableSpriteScene {
 
     // Source: ShaderKit SHKDynamicGrayNoise.fsh by Paul Hudson / twostraws.
     // MIT License: https://github.com/twostraws/ShaderKit
-    // Adapted only as a local SpriteKit shader string for OceanKey's SKShader wrapper.
+    // Adapted only as a local SpriteKit shader string for OceanKey's direct SKSpriteNode wrapper.
+    // The original multiplies by v_color_mix.a; our node does not rely on ShaderKit's helper setup,
+    // so output alpha is taken from SKDefaultShading() to keep the preview visible.
     private static let dynamicGrayNoiseShaderSource = """
     float random(float offset, vec2 tex_coord, float time) {
         vec2 non_repeating = vec2(12.9898 * time, 78.233 * time);
@@ -92,7 +97,8 @@ final class TVStaticNoiseSpriteScene: SKScene, ResizableSpriteScene {
         vec4 current_color = SKDefaultShading();
 
         if (current_color.a > 0.0) {
-            gl_FragColor = vec4(vec3(random(1.0, v_tex_coord, u_time)), 1) * current_color.a * v_color_mix.a;
+            float noise = random(1.0, v_tex_coord, u_time);
+            gl_FragColor = vec4(vec3(noise), current_color.a);
         } else {
             gl_FragColor = current_color;
         }

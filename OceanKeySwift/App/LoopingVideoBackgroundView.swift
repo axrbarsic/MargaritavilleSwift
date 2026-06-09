@@ -139,11 +139,10 @@ struct VideoBackgroundTuning: Equatable {
 }
 
 final class VideoBackgroundPlayerView: UIView {
-    private let blurView = UIVisualEffectView(effect: nil)
+    private let blurView = VariableBlurEffectView()
     private let tintView = UIView()
     private let dimView = UIView()
     private let gridView = VideoGridOverlayView()
-    private var currentBlurStep = -1
 
     override static var layerClass: AnyClass {
         AVPlayerLayer.self
@@ -195,12 +194,7 @@ final class VideoBackgroundPlayerView: UIView {
         let grid = min(max(tuning.gridIntensity, 0), 1)
 
         let apply = {
-            let blurStep = Int((blur * 5).rounded())
-            if blurStep != self.currentBlurStep {
-                self.currentBlurStep = blurStep
-                self.blurView.effect = Self.blurEffect(for: blurStep)
-            }
-            self.blurView.alpha = blurStep == 0 ? 0 : CGFloat(0.18 + blur * 0.70)
+            self.blurView.blurIntensity = blur
             self.tintView.alpha = green <= 0.01 ? 0 : CGFloat(0.04 + green * 0.76)
             self.gridView.intensity = grid
             self.dimView.alpha = brightness < 0 ? CGFloat(abs(brightness) * 0.82) : 0
@@ -219,22 +213,48 @@ final class VideoBackgroundPlayerView: UIView {
             animations: apply
         )
     }
+}
 
-    private static func blurEffect(for step: Int) -> UIBlurEffect? {
-        switch step {
-        case 0:
-            nil
-        case 1:
-            UIBlurEffect(style: .systemUltraThinMaterialDark)
-        case 2:
-            UIBlurEffect(style: .systemThinMaterialDark)
-        case 3:
-            UIBlurEffect(style: .systemMaterialDark)
-        case 4:
-            UIBlurEffect(style: .systemThickMaterialDark)
-        default:
-            UIBlurEffect(style: .systemChromeMaterialDark)
+private final class VariableBlurEffectView: UIVisualEffectView {
+    private var animator: UIViewPropertyAnimator?
+    private var currentIntensity: Double = -1
+
+    var blurIntensity: Double {
+        get { currentIntensity }
+        set {
+            let normalized = min(max(newValue, 0), 1)
+            guard abs(normalized - currentIntensity) > 0.005 else { return }
+            currentIntensity = normalized
+            isHidden = normalized <= 0.001
+            alpha = normalized <= 0.001 ? 0 : 1
+            applyBlur(intensity: normalized)
         }
+    }
+
+    override init(effect: UIVisualEffect?) {
+        super.init(effect: effect)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        clipsToBounds = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func applyBlur(intensity: Double) {
+        animator?.stopAnimation(true)
+        effect = nil
+
+        guard intensity > 0.001 else { return }
+
+        let animator = UIViewPropertyAnimator(duration: 1, curve: .linear) {
+            self.effect = UIBlurEffect(style: .regular)
+        }
+        animator.pausesOnCompletion = true
+        animator.fractionComplete = CGFloat(intensity)
+        self.animator = animator
     }
 }
 

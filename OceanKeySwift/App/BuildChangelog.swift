@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (72)",
+            date: "2026-06-08",
+            changes: [
+                "Fixed the temporary broken-TV preview visibility by adapting ShaderKit's Dynamic Gray Noise output alpha to OceanKey's direct SKSpriteNode shader wrapper.",
+                "Kept the ShaderKit noise algorithm intact while removing the dependency on ShaderKit's color-mix helper state.",
+                "Restored video wallpaper matte blur as a real variable UIBlurEffect instead of the coarse gray material-step overlay."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (71)",
             date: "2026-06-08",
             changes: [
