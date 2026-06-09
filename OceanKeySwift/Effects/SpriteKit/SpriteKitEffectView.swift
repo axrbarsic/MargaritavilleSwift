@@ -3,6 +3,7 @@ import SwiftUI
 
 enum SpriteKitEffectKind {
     case matrixRain
+    case tvStaticNoise
 }
 
 @MainActor
@@ -54,6 +55,8 @@ struct SpriteKitEffectView: UIViewRepresentable {
             switch effect {
             case .matrixRain:
                 scene = MatrixRainSpriteScene(size: .zero, configuration: matrixConfiguration)
+            case .tvStaticNoise:
+                scene = TVStaticNoiseSpriteScene(size: .zero)
             }
         }
 

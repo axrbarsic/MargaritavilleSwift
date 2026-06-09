@@ -51,6 +51,7 @@ final class AppSettingsStore {
         static let developerVIPZebraIntensity = "developerVIPZebraIntensity"
         static let developerVIPZebraSpeed = "developerVIPZebraSpeed"
         static let developerVIPZebraSharpness = "developerVIPZebraSharpness"
+        static let temporaryTVStaticNoiseEnabled = "temporaryTVStaticNoiseEnabled"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -197,6 +198,12 @@ final class AppSettingsStore {
         }
     }
 
+    var temporaryTVStaticNoiseEnabled: Bool {
+        didSet {
+            userDefaults.set(temporaryTVStaticNoiseEnabled, forKey: Keys.temporaryTVStaticNoiseEnabled)
+        }
+    }
+
     var matrixConfiguration: MatrixRainConfiguration {
         MatrixRainConfiguration(speed: matrixSpeed)
     }
@@ -224,6 +231,7 @@ final class AppSettingsStore {
         developerVIPZebraIntensity = 0.86
         developerVIPZebraSpeed = 0.78
         developerVIPZebraSharpness = 0.62
+        temporaryTVStaticNoiseEnabled = false
     }
 
     init(
@@ -244,6 +252,7 @@ final class AppSettingsStore {
         developerVIPZebraIntensity: Double = 0.86,
         developerVIPZebraSpeed: Double = 0.78,
         developerVIPZebraSharpness: Double = 0.62,
+        temporaryTVStaticNoiseEnabled: Bool = false,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -263,6 +272,7 @@ final class AppSettingsStore {
         self.storedDeveloperVIPZebraSpeed = Self.normalizedDeveloperVIPZebraSpeed(developerVIPZebraSpeed)
         self.storedDeveloperVIPZebraSharpness = Self.normalizedDeveloperVIPZebraSharpness(developerVIPZebraSharpness)
         self.developerCellPhysicsEnabled = developerCellPhysicsEnabled
+        self.temporaryTVStaticNoiseEnabled = temporaryTVStaticNoiseEnabled
         self.userDefaults = userDefaults
     }
 
@@ -287,6 +297,7 @@ final class AppSettingsStore {
         let developerVIPZebraIntensity = userDefaults.object(forKey: Keys.developerVIPZebraIntensity) as? Double ?? 0.86
         let developerVIPZebraSpeed = userDefaults.object(forKey: Keys.developerVIPZebraSpeed) as? Double ?? 0.78
         let developerVIPZebraSharpness = userDefaults.object(forKey: Keys.developerVIPZebraSharpness) as? Double ?? 0.62
+        let temporaryTVStaticNoiseEnabled = userDefaults.object(forKey: Keys.temporaryTVStaticNoiseEnabled) as? Bool ?? false
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -305,6 +316,7 @@ final class AppSettingsStore {
             developerVIPZebraIntensity: developerVIPZebraIntensity,
             developerVIPZebraSpeed: developerVIPZebraSpeed,
             developerVIPZebraSharpness: developerVIPZebraSharpness,
+            temporaryTVStaticNoiseEnabled: temporaryTVStaticNoiseEnabled,
             userDefaults: userDefaults
         )
     }

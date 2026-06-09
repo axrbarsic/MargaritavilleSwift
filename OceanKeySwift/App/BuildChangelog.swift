@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (71)",
+            date: "2026-06-08",
+            changes: [
+                "Added a temporary experimental Settings block for the first broken-TV visual candidate.",
+                "Integrated ShaderKit's MIT Dynamic Gray Noise shader as a SpriteKit GPU preview instead of hand-rolling the TV static effect.",
+                "Persisted the temporary TV noise toggle so the preview can be switched on and off while testing."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (70)",
             date: "2026-06-08",
             changes: [

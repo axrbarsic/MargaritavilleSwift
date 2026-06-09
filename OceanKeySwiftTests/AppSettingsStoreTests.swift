@@ -68,6 +68,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     settings.developerVIPZebraIntensity = 0.77
     settings.developerVIPZebraSpeed = 1.22
     settings.developerVIPZebraSharpness = 0.44
+    settings.temporaryTVStaticNoiseEnabled = true
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
@@ -77,6 +78,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     #expect(loaded.developerVIPZebraIntensity == 0.77)
     #expect(loaded.developerVIPZebraSpeed == 1.22)
     #expect(loaded.developerVIPZebraSharpness == 0.44)
+    #expect(loaded.temporaryTVStaticNoiseEnabled)
 }
 
 @Test
@@ -169,6 +171,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.developerVIPZebraIntensity = 0.45
     settings.developerVIPZebraSpeed = 1.35
     settings.developerVIPZebraSharpness = 0.29
+    settings.temporaryTVStaticNoiseEnabled = true
 
     settings.resetToDefaults()
     let loaded = AppSettingsStore.load(userDefaults: defaults)
@@ -190,4 +193,5 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.developerVIPZebraIntensity == 0.86)
     #expect(loaded.developerVIPZebraSpeed == 0.78)
     #expect(loaded.developerVIPZebraSharpness == 0.62)
+    #expect(!loaded.temporaryTVStaticNoiseEnabled)
 }
