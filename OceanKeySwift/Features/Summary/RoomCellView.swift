@@ -121,7 +121,7 @@ struct RoomCellView: View {
             value: physicsPulse
         )
         .vipZebraEffect(
-            enabled: room.isVIP,
+            enabled: room.isVIP && !experimentalCellTVStaticEnabled,
             shape: tileShape,
             intensity: experimentalVIPZebraIntensity,
             speed: experimentalVIPZebraSpeed,
@@ -290,7 +290,7 @@ struct RoomCellView: View {
         return tileShape
             .fill(statusColor)
             .overlay {
-                if experimentalCellTVStaticEnabled {
+                if experimentalCellTVStaticEnabled, room.isVIP {
                     CellTVStaticOverlay(statusColor: statusColor, roomID: room.id)
                         .clipShape(tileShape)
                         .allowsHitTesting(false)

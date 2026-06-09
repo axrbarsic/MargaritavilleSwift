@@ -10,6 +10,22 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (80)",
+            date: "2026-06-08",
+            changes: [
+                "Removed the TV-noise cell toggle from the Background settings so it can no longer read as a global all-cells mode.",
+                "Kept TV noise only as a VIP experimental effect: regular cells never create the overlay."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (79)",
+            date: "2026-06-08",
+            changes: [
+                "Changed the broken-TV cell effect into a VIP-only mode instead of applying it to every room cell.",
+                "When the VIP TV mode is enabled, VIP cells use status-tinted TV static and the regular VIP zebra is suppressed to avoid stacked animated overlays."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (78)",
             date: "2026-06-08",
             changes: [

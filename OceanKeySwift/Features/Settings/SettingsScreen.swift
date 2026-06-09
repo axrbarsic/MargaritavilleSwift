@@ -236,7 +236,6 @@ struct SettingsScreen: View {
                 systemName: "grid",
                 subtitle: backgroundModeSubtitle
             )
-            cellTVStaticToggle
             if appSettings.appBackgroundMode == .matrixRain {
                 SettingsSliderRow(
                     title: "Скорость",
@@ -269,10 +268,10 @@ struct SettingsScreen: View {
     private var cellTVStaticToggle: some View {
         Toggle(isOn: $appSettings.developerCellTVStaticEnabled) {
             SettingsInfoRow(
-                title: "Сломанный ТВ в ячейках",
+                title: "TV-шум для VIP",
                 value: appSettings.developerCellTVStaticEnabled ? "Вкл" : "Выкл",
                 systemName: "tv.fill",
-                subtitle: "Включает цветной TV-шум внутри ячеек, окрашенный по статусу номера."
+                subtitle: "Заменяет VIP-зебру на цветной TV-шум только внутри VIP-ячеек."
             )
         }
         .tint(OceanKeyTheme.accent)
