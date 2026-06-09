@@ -120,6 +120,19 @@ struct SettingsScreen: View {
                 )
             }
 
+            Toggle(isOn: $appSettings.developerCellTVStaticEnabled) {
+                SettingsInfoRow(
+                    title: "TV-шум в ячейках",
+                    value: appSettings.developerCellTVStaticEnabled ? "Вкл" : "Выкл",
+                    systemName: "tv.fill",
+                    subtitle: "Цветной шум сломанного телевизора внутри каждой ячейки по её статусу."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerCellTVStaticEnabled) { _, _ in
+                feedback.confirm()
+            }
+
             SettingsSliderRow(
                 title: "VIP-зебра",
                 valueLabel: "\(Int((appSettings.developerVIPZebraIntensity * 100).rounded()))%",

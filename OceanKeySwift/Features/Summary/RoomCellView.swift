@@ -6,6 +6,7 @@ struct RoomCellView: View {
     @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
     @Environment(\.experimentalCellSpringIntensity) private var experimentalCellSpringIntensity
     @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
+    @Environment(\.experimentalCellTVStaticEnabled) private var experimentalCellTVStaticEnabled
     @Environment(\.experimentalVIPZebraIntensity) private var experimentalVIPZebraIntensity
     @Environment(\.experimentalVIPZebraSpeed) private var experimentalVIPZebraSpeed
     @Environment(\.experimentalVIPZebraSharpness) private var experimentalVIPZebraSharpness
@@ -285,8 +286,16 @@ struct RoomCellView: View {
     }
 
     private var cellBackground: some View {
-        tileShape
-            .fill(OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation))
+        let statusColor = OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)
+        return tileShape
+            .fill(statusColor)
+            .overlay {
+                if experimentalCellTVStaticEnabled {
+                    CellTVStaticOverlay(statusColor: statusColor, roomID: room.id)
+                        .clipShape(tileShape)
+                        .allowsHitTesting(false)
+                }
+            }
             .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
     }
 

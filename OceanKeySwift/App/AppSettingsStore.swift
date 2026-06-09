@@ -56,6 +56,7 @@ final class AppSettingsStore {
         static let developerVIPZebraIntensity = "developerVIPZebraIntensity"
         static let developerVIPZebraSpeed = "developerVIPZebraSpeed"
         static let developerVIPZebraSharpness = "developerVIPZebraSharpness"
+        static let developerCellTVStaticEnabled = "developerCellTVStaticEnabled"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -162,6 +163,12 @@ final class AppSettingsStore {
         }
     }
 
+    var developerCellTVStaticEnabled: Bool {
+        didSet {
+            userDefaults.set(developerCellTVStaticEnabled, forKey: Keys.developerCellTVStaticEnabled)
+        }
+    }
+
     var developerCellSpringIntensity: Double {
         get { storedDeveloperCellSpringIntensity }
         set {
@@ -224,6 +231,7 @@ final class AppSettingsStore {
         backgroundVideoGreenTint = 0.34
         backgroundVideoGridIntensity = 0
         developerCellPhysicsEnabled = false
+        developerCellTVStaticEnabled = false
         developerCellSpringIntensity = 0.72
         developerCellSpringSpeed = 0.82
         developerVIPZebraIntensity = 0.86
@@ -244,6 +252,7 @@ final class AppSettingsStore {
         backgroundVideoGreenTint: Double = 0.34,
         backgroundVideoGridIntensity: Double = 0,
         developerCellPhysicsEnabled: Bool = false,
+        developerCellTVStaticEnabled: Bool = false,
         developerCellSpringIntensity: Double = 0.72,
         developerCellSpringSpeed: Double = 0.82,
         developerVIPZebraIntensity: Double = 0.86,
@@ -268,6 +277,7 @@ final class AppSettingsStore {
         self.storedDeveloperVIPZebraSpeed = Self.normalizedDeveloperVIPZebraSpeed(developerVIPZebraSpeed)
         self.storedDeveloperVIPZebraSharpness = Self.normalizedDeveloperVIPZebraSharpness(developerVIPZebraSharpness)
         self.developerCellPhysicsEnabled = developerCellPhysicsEnabled
+        self.developerCellTVStaticEnabled = developerCellTVStaticEnabled
         self.userDefaults = userDefaults
     }
 
@@ -287,6 +297,7 @@ final class AppSettingsStore {
         let backgroundVideoGreenTint = userDefaults.object(forKey: Keys.backgroundVideoGreenTint) as? Double ?? 0.34
         let backgroundVideoGridIntensity = userDefaults.object(forKey: Keys.backgroundVideoGridIntensity) as? Double ?? 0
         let developerCellPhysicsEnabled = userDefaults.object(forKey: Keys.developerCellPhysicsEnabled) as? Bool ?? false
+        let developerCellTVStaticEnabled = userDefaults.object(forKey: Keys.developerCellTVStaticEnabled) as? Bool ?? false
         let developerCellSpringIntensity = userDefaults.object(forKey: Keys.developerCellSpringIntensity) as? Double ?? 0.72
         let developerCellSpringSpeed = userDefaults.object(forKey: Keys.developerCellSpringSpeed) as? Double ?? 0.82
         let developerVIPZebraIntensity = userDefaults.object(forKey: Keys.developerVIPZebraIntensity) as? Double ?? 0.86
@@ -305,6 +316,7 @@ final class AppSettingsStore {
             backgroundVideoGreenTint: backgroundVideoGreenTint,
             backgroundVideoGridIntensity: backgroundVideoGridIntensity,
             developerCellPhysicsEnabled: developerCellPhysicsEnabled,
+            developerCellTVStaticEnabled: developerCellTVStaticEnabled,
             developerCellSpringIntensity: developerCellSpringIntensity,
             developerCellSpringSpeed: developerCellSpringSpeed,
             developerVIPZebraIntensity: developerVIPZebraIntensity,

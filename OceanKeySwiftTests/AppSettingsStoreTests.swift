@@ -77,6 +77,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
 
     let settings = AppSettingsStore(userDefaults: defaults)
     settings.developerCellPhysicsEnabled = true
+    settings.developerCellTVStaticEnabled = true
     settings.developerCellSpringIntensity = 0.64
     settings.developerCellSpringSpeed = 1.14
     settings.developerVIPZebraIntensity = 0.77
@@ -86,6 +87,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.developerCellPhysicsEnabled)
+    #expect(loaded.developerCellTVStaticEnabled)
     #expect(loaded.developerCellSpringIntensity == 0.64)
     #expect(loaded.developerCellSpringSpeed == 1.14)
     #expect(loaded.developerVIPZebraIntensity == 0.77)
@@ -178,6 +180,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.backgroundVideoGreenTint = 0.81
     settings.backgroundVideoGridIntensity = 0.42
     settings.developerCellPhysicsEnabled = true
+    settings.developerCellTVStaticEnabled = true
     settings.developerCellSpringIntensity = 0.35
     settings.developerCellSpringSpeed = 1.25
     settings.developerVIPZebraIntensity = 0.45
@@ -199,6 +202,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.backgroundVideoGreenTint == 0.34)
     #expect(loaded.backgroundVideoGridIntensity == 0)
     #expect(!loaded.developerCellPhysicsEnabled)
+    #expect(!loaded.developerCellTVStaticEnabled)
     #expect(loaded.developerCellSpringIntensity == 0.72)
     #expect(loaded.developerCellSpringSpeed == 0.82)
     #expect(loaded.developerVIPZebraIntensity == 0.86)

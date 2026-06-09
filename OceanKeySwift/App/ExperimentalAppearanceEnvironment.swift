@@ -12,6 +12,10 @@ private struct ExperimentalCellSpringSpeedKey: EnvironmentKey {
     static let defaultValue = 0.82
 }
 
+private struct ExperimentalCellTVStaticEnabledKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
 private struct ExperimentalVIPZebraIntensityKey: EnvironmentKey {
     static let defaultValue = 0.86
 }
@@ -38,6 +42,11 @@ extension EnvironmentValues {
     var experimentalCellSpringSpeed: Double {
         get { self[ExperimentalCellSpringSpeedKey.self] }
         set { self[ExperimentalCellSpringSpeedKey.self] = newValue }
+    }
+
+    var experimentalCellTVStaticEnabled: Bool {
+        get { self[ExperimentalCellTVStaticEnabledKey.self] }
+        set { self[ExperimentalCellTVStaticEnabledKey.self] = newValue }
     }
 
     var experimentalVIPZebraIntensity: Double {

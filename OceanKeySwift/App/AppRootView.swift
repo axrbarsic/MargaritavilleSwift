@@ -32,6 +32,7 @@ struct AppRootView: View {
         .environment(\.experimentalCellPhysicsEnabled, appSettings.developerCellPhysicsEnabled)
         .environment(\.experimentalCellSpringIntensity, appSettings.developerCellSpringIntensity)
         .environment(\.experimentalCellSpringSpeed, appSettings.developerCellSpringSpeed)
+        .environment(\.experimentalCellTVStaticEnabled, appSettings.developerCellTVStaticEnabled)
         .environment(\.experimentalVIPZebraIntensity, appSettings.developerVIPZebraIntensity)
         .environment(\.experimentalVIPZebraSpeed, appSettings.developerVIPZebraSpeed)
         .environment(\.experimentalVIPZebraSharpness, appSettings.developerVIPZebraSharpness)

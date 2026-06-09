@@ -106,6 +106,7 @@
 		FB32AB4983152627A3E46501 /* CartDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */; };
 		FE883ABF504432B7E12BA6BE /* WorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */; };
 		FEF4E3DB4C837AA11700CCD7 /* VoiceNoteViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */; };
+		FF74F243CE456E2145C77B91 /* CellTVStaticOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F31C5A1A15C4AE22044A8C3 /* CellTVStaticOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +168,7 @@
 		7762788268738A77A93D4598 /* CartConsumablesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumablesSection.swift; sourceTree = "<group>"; };
 		77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
 		7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupComponents.swift; sourceTree = "<group>"; };
+		7F31C5A1A15C4AE22044A8C3 /* CellTVStaticOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTVStaticOverlay.swift; sourceTree = "<group>"; };
 		8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaThumbnailView.swift; sourceTree = "<group>"; };
 		85ED0B20C8238C7912F393F9 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 			isa = PBXGroup;
 			children = (
 				6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */,
+				7F31C5A1A15C4AE22044A8C3 /* CellTVStaticOverlay.swift */,
 				581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */,
 				868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */,
 				CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */,
@@ -712,6 +715,7 @@
 				0F33257171B1CD7428303898 /* CartDetailsRoute.swift in Sources */,
 				FB32AB4983152627A3E46501 /* CartDetailsScreen.swift in Sources */,
 				14A467CC5BC8CBF9F1AAF2E5 /* CartSummarySection.swift in Sources */,
+				FF74F243CE456E2145C77B91 /* CellTVStaticOverlay.swift in Sources */,
 				7FAB39EDEDEFA522FB2DA912 /* ExperimentalAppearanceEnvironment.swift in Sources */,
 				0E858357DAB729B03EFE513A /* HoldActionTarget.swift in Sources */,
 				4618198B48949C4576C5DBF7 /* InteractionFeedbackService.swift in Sources */,
@@ -860,7 +864,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -919,7 +923,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
