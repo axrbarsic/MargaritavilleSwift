@@ -20,11 +20,11 @@ private struct ExperimentalVIPFlickerSpeedKey: EnvironmentKey {
     static let defaultValue = 1.6
 }
 
-private struct ExperimentalVIPBreathingEnabledKey: EnvironmentKey {
+private struct ExperimentalVIPJellyEnabledKey: EnvironmentKey {
     static let defaultValue = false
 }
 
-private struct ExperimentalVIPBreathingSpeedKey: EnvironmentKey {
+private struct ExperimentalVIPJellySpeedKey: EnvironmentKey {
     static let defaultValue = 0.75
 }
 
@@ -54,13 +54,13 @@ extension EnvironmentValues {
         set { self[ExperimentalVIPFlickerSpeedKey.self] = newValue }
     }
 
-    var experimentalVIPBreathingEnabled: Bool {
-        get { self[ExperimentalVIPBreathingEnabledKey.self] }
-        set { self[ExperimentalVIPBreathingEnabledKey.self] = newValue }
+    var experimentalVIPJellyEnabled: Bool {
+        get { self[ExperimentalVIPJellyEnabledKey.self] }
+        set { self[ExperimentalVIPJellyEnabledKey.self] = newValue }
     }
 
-    var experimentalVIPBreathingSpeed: Double {
-        get { self[ExperimentalVIPBreathingSpeedKey.self] }
-        set { self[ExperimentalVIPBreathingSpeedKey.self] = newValue }
+    var experimentalVIPJellySpeed: Double {
+        get { self[ExperimentalVIPJellySpeedKey.self] }
+        set { self[ExperimentalVIPJellySpeedKey.self] = newValue }
     }
 }

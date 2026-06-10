@@ -59,8 +59,9 @@ final class AppSettingsStore {
         static let developerCellSpringSpeed = "developerCellSpringSpeed"
         static let developerVIPFlickerEnabled = "developerVIPFlickerEnabled"
         static let developerVIPFlickerSpeed = "developerVIPFlickerSpeed"
-        static let developerVIPBreathingEnabled = "developerVIPBreathingEnabled"
-        static let developerVIPBreathingSpeed = "developerVIPBreathingSpeed"
+        // Keep the old key names so existing installs migrate VIP breathing into the replacement VIP jelly mode.
+        static let developerVIPJellyEnabled = "developerVIPBreathingEnabled"
+        static let developerVIPJellySpeed = "developerVIPBreathingSpeed"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -77,7 +78,7 @@ final class AppSettingsStore {
     private var storedDeveloperCellSpringIntensity: Double
     private var storedDeveloperCellSpringSpeed: Double
     private var storedDeveloperVIPFlickerSpeed: Double
-    private var storedDeveloperVIPBreathingSpeed: Double
+    private var storedDeveloperVIPJellySpeed: Double
 
     var appBackgroundMode: AppBackgroundMode {
         didSet {
@@ -208,9 +209,9 @@ final class AppSettingsStore {
         }
     }
 
-    var developerVIPBreathingEnabled: Bool {
+    var developerVIPJellyEnabled: Bool {
         didSet {
-            userDefaults.set(developerVIPBreathingEnabled, forKey: Keys.developerVIPBreathingEnabled)
+            userDefaults.set(developerVIPJellyEnabled, forKey: Keys.developerVIPJellyEnabled)
         }
     }
 
@@ -238,11 +239,11 @@ final class AppSettingsStore {
         }
     }
 
-    var developerVIPBreathingSpeed: Double {
-        get { storedDeveloperVIPBreathingSpeed }
+    var developerVIPJellySpeed: Double {
+        get { storedDeveloperVIPJellySpeed }
         set {
-            storedDeveloperVIPBreathingSpeed = Self.normalizedDeveloperVIPBreathingSpeed(newValue)
-            userDefaults.set(storedDeveloperVIPBreathingSpeed, forKey: Keys.developerVIPBreathingSpeed)
+            storedDeveloperVIPJellySpeed = Self.normalizedDeveloperVIPJellySpeed(newValue)
+            userDefaults.set(storedDeveloperVIPJellySpeed, forKey: Keys.developerVIPJellySpeed)
         }
     }
 
@@ -285,8 +286,8 @@ final class AppSettingsStore {
         developerCellSpringSpeed = 0.82
         developerVIPFlickerEnabled = false
         developerVIPFlickerSpeed = 1.6
-        developerVIPBreathingEnabled = false
-        developerVIPBreathingSpeed = 0.75
+        developerVIPJellyEnabled = false
+        developerVIPJellySpeed = 0.75
     }
 
     init(
@@ -310,8 +311,8 @@ final class AppSettingsStore {
         developerCellSpringSpeed: Double = 0.82,
         developerVIPFlickerEnabled: Bool = false,
         developerVIPFlickerSpeed: Double = 1.6,
-        developerVIPBreathingEnabled: Bool = false,
-        developerVIPBreathingSpeed: Double = 0.75,
+        developerVIPJellyEnabled: Bool = false,
+        developerVIPJellySpeed: Double = 0.75,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -332,10 +333,10 @@ final class AppSettingsStore {
         self.storedDeveloperCellSpringIntensity = Self.normalizedDeveloperCellSpringIntensity(developerCellSpringIntensity)
         self.storedDeveloperCellSpringSpeed = Self.normalizedDeveloperCellSpringSpeed(developerCellSpringSpeed)
         self.storedDeveloperVIPFlickerSpeed = Self.normalizedDeveloperVIPFlickerSpeed(developerVIPFlickerSpeed)
-        self.storedDeveloperVIPBreathingSpeed = Self.normalizedDeveloperVIPBreathingSpeed(developerVIPBreathingSpeed)
+        self.storedDeveloperVIPJellySpeed = Self.normalizedDeveloperVIPJellySpeed(developerVIPJellySpeed)
         self.developerCellPhysicsEnabled = developerCellPhysicsEnabled
         self.developerVIPFlickerEnabled = developerVIPFlickerEnabled
-        self.developerVIPBreathingEnabled = developerVIPBreathingEnabled
+        self.developerVIPJellyEnabled = developerVIPJellyEnabled
         self.userDefaults = userDefaults
     }
 
@@ -367,8 +368,8 @@ final class AppSettingsStore {
         let developerCellSpringSpeed = userDefaults.object(forKey: Keys.developerCellSpringSpeed) as? Double ?? 0.82
         let developerVIPFlickerEnabled = userDefaults.object(forKey: Keys.developerVIPFlickerEnabled) as? Bool ?? false
         let developerVIPFlickerSpeed = userDefaults.object(forKey: Keys.developerVIPFlickerSpeed) as? Double ?? 1.6
-        let developerVIPBreathingEnabled = userDefaults.object(forKey: Keys.developerVIPBreathingEnabled) as? Bool ?? false
-        let developerVIPBreathingSpeed = userDefaults.object(forKey: Keys.developerVIPBreathingSpeed) as? Double ?? 0.75
+        let developerVIPJellyEnabled = userDefaults.object(forKey: Keys.developerVIPJellyEnabled) as? Bool ?? false
+        let developerVIPJellySpeed = userDefaults.object(forKey: Keys.developerVIPJellySpeed) as? Double ?? 0.75
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -390,8 +391,8 @@ final class AppSettingsStore {
             developerCellSpringSpeed: developerCellSpringSpeed,
             developerVIPFlickerEnabled: developerVIPFlickerEnabled,
             developerVIPFlickerSpeed: developerVIPFlickerSpeed,
-            developerVIPBreathingEnabled: developerVIPBreathingEnabled,
-            developerVIPBreathingSpeed: developerVIPBreathingSpeed,
+            developerVIPJellyEnabled: developerVIPJellyEnabled,
+            developerVIPJellySpeed: developerVIPJellySpeed,
             userDefaults: userDefaults
         )
     }
@@ -448,7 +449,7 @@ final class AppSettingsStore {
         min(max(value, 0.4), 4.0)
     }
 
-    static func normalizedDeveloperVIPBreathingSpeed(_ value: Double) -> Double {
+    static func normalizedDeveloperVIPJellySpeed(_ value: Double) -> Double {
         min(max(value, 0.2), 2.5)
     }
 }

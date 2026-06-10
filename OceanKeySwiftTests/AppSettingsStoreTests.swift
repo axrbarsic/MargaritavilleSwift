@@ -105,8 +105,8 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     settings.developerCellSpringSpeed = 1.14
     settings.developerVIPFlickerEnabled = true
     settings.developerVIPFlickerSpeed = 2.35
-    settings.developerVIPBreathingEnabled = true
-    settings.developerVIPBreathingSpeed = 1.45
+    settings.developerVIPJellyEnabled = true
+    settings.developerVIPJellySpeed = 1.45
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
@@ -115,8 +115,8 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     #expect(loaded.developerCellSpringSpeed == 1.14)
     #expect(loaded.developerVIPFlickerEnabled)
     #expect(loaded.developerVIPFlickerSpeed == 2.35)
-    #expect(loaded.developerVIPBreathingEnabled)
-    #expect(loaded.developerVIPBreathingSpeed == 1.45)
+    #expect(loaded.developerVIPJellyEnabled)
+    #expect(loaded.developerVIPJellySpeed == 1.45)
 }
 
 @Test
@@ -210,8 +210,8 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.developerCellSpringSpeed = 1.25
     settings.developerVIPFlickerEnabled = true
     settings.developerVIPFlickerSpeed = 3.2
-    settings.developerVIPBreathingEnabled = true
-    settings.developerVIPBreathingSpeed = 2.1
+    settings.developerVIPJellyEnabled = true
+    settings.developerVIPJellySpeed = 2.1
 
     settings.resetToDefaults()
     let loaded = AppSettingsStore.load(userDefaults: defaults)
@@ -236,6 +236,6 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.developerCellSpringSpeed == 0.82)
     #expect(!loaded.developerVIPFlickerEnabled)
     #expect(loaded.developerVIPFlickerSpeed == 1.6)
-    #expect(!loaded.developerVIPBreathingEnabled)
-    #expect(loaded.developerVIPBreathingSpeed == 0.75)
+    #expect(!loaded.developerVIPJellyEnabled)
+    #expect(loaded.developerVIPJellySpeed == 0.75)
 }

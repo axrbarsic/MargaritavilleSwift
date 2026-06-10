@@ -8,8 +8,8 @@ struct RoomCellView: View {
     @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
     @Environment(\.experimentalVIPFlickerEnabled) private var experimentalVIPFlickerEnabled
     @Environment(\.experimentalVIPFlickerSpeed) private var experimentalVIPFlickerSpeed
-    @Environment(\.experimentalVIPBreathingEnabled) private var experimentalVIPBreathingEnabled
-    @Environment(\.experimentalVIPBreathingSpeed) private var experimentalVIPBreathingSpeed
+    @Environment(\.experimentalVIPJellyEnabled) private var experimentalVIPJellyEnabled
+    @Environment(\.experimentalVIPJellySpeed) private var experimentalVIPJellySpeed
 
     @Binding var room: RoomCell
     let geometry: RoomCellGeometry
@@ -81,7 +81,7 @@ struct RoomCellView: View {
         .frame(height: geometry.tileHeight)
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .background(cellBackground)
-        .clipShape(tileShape)
+        .mask(cellMask)
         .scaleEffect(
             x: experimentalCellPhysicsEnabled && physicsPulse ? 1 + 0.09 * experimentalCellSpringIntensity : 1,
             y: experimentalCellPhysicsEnabled && physicsPulse ? 1 - 0.12 * experimentalCellSpringIntensity : 1
@@ -92,10 +92,6 @@ struct RoomCellView: View {
             .degrees(experimentalCellPhysicsEnabled && physicsPulse ? 7.5 * experimentalCellSpringIntensity : 0),
             axis: (x: 0.0, y: 1.0, z: 0.0),
             perspective: 0.72
-        )
-        .vipBreathingEffect(
-            enabled: room.isVIP && experimentalVIPBreathingEnabled,
-            speed: experimentalVIPBreathingSpeed
         )
         .background {
             GeometryReader { proxy in
@@ -289,9 +285,37 @@ struct RoomCellView: View {
 
     private var cellBackground: some View {
         let statusColor = OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)
-        return tileShape
-            .fill(statusColor)
-            .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
+        return Group {
+            if vipJellyActive {
+                VIPJellyCellChrome(
+                    color: statusColor,
+                    cornerRadius: geometry.tileCornerRadius,
+                    isMenuExpanded: isActionMenuExpanded,
+                    speed: experimentalVIPJellySpeed,
+                    seed: vipJellySeed,
+                    shadowOpacity: geometry.tileShadowOpacity
+                )
+            } else {
+                tileShape
+                    .fill(statusColor)
+                    .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
+            }
+        }
+    }
+
+    private var cellMask: some View {
+        Group {
+            if vipJellyActive {
+                VIPJellyCellMask(
+                    cornerRadius: geometry.tileCornerRadius,
+                    isMenuExpanded: isActionMenuExpanded,
+                    speed: experimentalVIPJellySpeed,
+                    seed: vipJellySeed
+                )
+            } else {
+                tileShape.fill(.black)
+            }
+        }
     }
 
     private var tileShape: UnevenRoundedRectangle {
@@ -307,6 +331,14 @@ struct RoomCellView: View {
     private func taskColor(_ task: RoomTask) -> Color {
         guard room.opened else { return OceanKeyTheme.roomForeground.opacity(0.25) }
         return room.completedTasks.contains(task) ? OceanKeyTheme.roomForeground : OceanKeyTheme.roomForeground.opacity(0.32)
+    }
+
+    private var vipJellyActive: Bool {
+        room.isVIP && experimentalVIPJellyEnabled
+    }
+
+    private var vipJellySeed: Double {
+        Double(abs(room.id.hashValue % 10_000)) / 10_000
     }
 }
 
@@ -327,112 +359,152 @@ private extension View {
         }
     }
 
-    @ViewBuilder
-    func vipBreathingEffect(enabled: Bool, speed: Double) -> some View {
-        if enabled {
-            self.modifier(VIPBreathingModifier(speed: speed))
-        } else {
-            self
-        }
-    }
 }
 
-private struct VIPBreathingModifier: ViewModifier {
+private struct VIPJellyCellChrome: View {
+    let color: Color
+    let cornerRadius: CGFloat
+    let isMenuExpanded: Bool
     let speed: Double
-
-    func body(content: Content) -> some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
-            let currentTime = timeline.date.timeIntervalSinceReferenceDate
-            let phase = currentTime * min(max(speed, 0.2), 2.5)
-            let waveA = (sin(phase * .pi * 2) + 1) * 0.5
-            let waveB = (sin(phase * .pi * 3.7 + 1.1) + 1) * 0.5
-            let waveC = (sin(phase * .pi * 5.1 + 2.4) + 1) * 0.5
-            let eased = 0.5 - cos(waveA * .pi) * 0.5
-            content
-                .scaleEffect(
-                    x: 1 + 0.038 * eased - 0.012 * waveC,
-                    y: 1 + 0.064 * waveB,
-                    anchor: .center
-                )
-                .visualEffect { view, proxy in
-                    view.distortionEffect(
-                        ShaderLibrary.vipJelly(
-                            .float(Float(currentTime)),
-                            .float(Float(speed)),
-                            .float(1.85),
-                            .float2(Float(proxy.size.width), Float(proxy.size.height))
-                        ),
-                        maxSampleOffset: CGSize(width: 34, height: 22)
-                    )
-                }
-                .overlay {
-                    VIPJellyEdgeOverlay(
-                        time: currentTime,
-                        speed: speed,
-                        energy: max(eased, max(waveB, waveC))
-                    )
-                    .allowsHitTesting(false)
-                }
-                .shadow(color: OceanKeyTheme.accent.opacity(0.20 * max(eased, waveB)), radius: 14 * max(eased, waveB), x: 0, y: 0)
-        }
-    }
-}
-
-private struct VIPJellyEdgeOverlay: View {
-    let time: TimeInterval
-    let speed: Double
-    let energy: Double
+    let seed: Double
+    let shadowOpacity: Double
 
     var body: some View {
-        GeometryReader { proxy in
-            Canvas { context, size in
-                drawEdges(context: context, size: size)
-            }
-            .frame(width: proxy.size.width, height: proxy.size.height)
-            .blendMode(.screen)
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
+            let time = timeline.date.timeIntervalSinceReferenceDate
+            let shape = VIPJellyCellShape(
+                time: time,
+                speed: speed,
+                seed: seed,
+                cornerRadius: cornerRadius,
+                isMenuExpanded: isMenuExpanded
+            )
+            shape
+                .fill(color)
+                .shadow(color: .black.opacity(shadowOpacity), radius: 5, x: 0, y: 4)
+                .overlay {
+                    shape
+                        .stroke(.white.opacity(0.16), lineWidth: 2.0)
+                        .blendMode(.screen)
+                }
         }
     }
+}
 
-    private func drawEdges(context: GraphicsContext, size: CGSize) {
-        let phase = time * min(max(speed, 0.2), 2.5)
-        let topPath = edgePath(size: size, phase: phase, top: true)
-        let bottomPath = edgePath(size: size, phase: phase, top: false)
-        context.stroke(
-            topPath,
-            with: .color(.white.opacity(0.10 + 0.22 * energy)),
-            style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round)
-        )
-        context.stroke(
-            bottomPath,
-            with: .color(OceanKeyTheme.accent.opacity(0.12 + 0.22 * energy)),
-            style: StrokeStyle(lineWidth: 2.4, lineCap: .round, lineJoin: .round)
-        )
+private struct VIPJellyCellMask: View {
+    let cornerRadius: CGFloat
+    let isMenuExpanded: Bool
+    let speed: Double
+    let seed: Double
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
+            VIPJellyCellShape(
+                time: timeline.date.timeIntervalSinceReferenceDate,
+                speed: speed,
+                seed: seed,
+                cornerRadius: cornerRadius,
+                isMenuExpanded: isMenuExpanded
+            )
+            .fill(.black)
+        }
     }
+}
 
-    private func edgePath(size: CGSize, phase: TimeInterval, top: Bool) -> Path {
+private struct VIPJellyCellShape: Shape {
+    let time: TimeInterval
+    let speed: Double
+    let seed: Double
+    let cornerRadius: CGFloat
+    let isMenuExpanded: Bool
+
+    func path(in rect: CGRect) -> Path {
+        let normalizedSpeed = min(max(speed, 0.2), 2.5)
+        let t = time * normalizedSpeed
+        let amplitude = min(rect.height * 0.16, 14)
+        let left = rect.minX
+        let right = rect.maxX
+        let top = rect.minY
+        let bottom = rect.maxY
+        let radius = min(cornerRadius, rect.height * 0.46, rect.width * 0.12)
+        let bottomRadius = isMenuExpanded ? 0 : radius
+
         var path = Path()
-        let steps = 18
-        for index in 0...steps {
-            let point = edgePoint(size: size, phase: phase, index: index, steps: steps, top: top)
-            if index == 0 {
-                path.move(to: point)
-            } else {
-                path.addLine(to: point)
-            }
+        path.move(to: CGPoint(x: left + radius, y: top + jellyOffset(edge: 0, unit: 0, time: t, amplitude: amplitude)))
+        addHorizontalEdge(to: &path, rect: rect, y: top, fromX: left + radius, toX: right - radius, edge: 0, time: t, amplitude: amplitude)
+        path.addQuadCurve(
+            to: CGPoint(x: right, y: top + radius),
+            control: CGPoint(x: right + jellyOffset(edge: 4, unit: 0.25, time: t, amplitude: amplitude * 0.45), y: top)
+        )
+        addVerticalEdge(to: &path, rect: rect, x: right, fromY: top + radius, toY: bottom - bottomRadius, edge: 1, time: t, amplitude: amplitude)
+        if bottomRadius > 0 {
+            path.addQuadCurve(
+                to: CGPoint(x: right - bottomRadius, y: bottom),
+                control: CGPoint(x: right, y: bottom + jellyOffset(edge: 5, unit: 0.75, time: t, amplitude: amplitude * 0.45))
+            )
         }
+        addHorizontalEdge(to: &path, rect: rect, y: bottom, fromX: right - bottomRadius, toX: left + bottomRadius, edge: 2, time: t, amplitude: amplitude)
+        if bottomRadius > 0 {
+            path.addQuadCurve(
+                to: CGPoint(x: left, y: bottom - bottomRadius),
+                control: CGPoint(x: left + jellyOffset(edge: 6, unit: 0.35, time: t, amplitude: amplitude * 0.45), y: bottom)
+            )
+        }
+        addVerticalEdge(to: &path, rect: rect, x: left, fromY: bottom - bottomRadius, toY: top + radius, edge: 3, time: t, amplitude: amplitude)
+        path.addQuadCurve(
+            to: CGPoint(x: left + radius, y: top),
+            control: CGPoint(x: left, y: top + jellyOffset(edge: 7, unit: 0.9, time: t, amplitude: amplitude * 0.45))
+        )
+        path.closeSubpath()
         return path
     }
 
-    private func edgePoint(size: CGSize, phase: TimeInterval, index: Int, steps: Int, top: Bool) -> CGPoint {
-        let x = size.width * CGFloat(index) / CGFloat(steps)
-        let unit = Double(index) / Double(steps)
-        let wave = top
-            ? sin((unit * 3.4 + phase * 0.83) * .pi * 2) * 5.5
-                + sin((unit * 7.1 - phase * 0.47) * .pi * 2) * 2.8
-            : sin((unit * 4.7 - phase * 0.68 + 0.9) * .pi * 2) * 5.0
-                + sin((unit * 6.3 + phase * 0.39) * .pi * 2) * 2.6
-        let offset = CGFloat(4 + wave * energy)
-        return CGPoint(x: x, y: top ? offset : size.height - offset)
+    private func addHorizontalEdge(
+        to path: inout Path,
+        rect: CGRect,
+        y: CGFloat,
+        fromX: CGFloat,
+        toX: CGFloat,
+        edge: Int,
+        time: Double,
+        amplitude: CGFloat
+    ) {
+        let steps = 16
+        for index in 1...steps {
+            let unit = Double(index) / Double(steps)
+            let x = fromX + (toX - fromX) * CGFloat(unit)
+            let offset = jellyOffset(edge: edge, unit: unit, time: time, amplitude: amplitude)
+            path.addLine(to: CGPoint(x: x, y: y + offset))
+        }
+    }
+
+    private func addVerticalEdge(
+        to path: inout Path,
+        rect: CGRect,
+        x: CGFloat,
+        fromY: CGFloat,
+        toY: CGFloat,
+        edge: Int,
+        time: Double,
+        amplitude: CGFloat
+    ) {
+        let steps = 6
+        for index in 1...steps {
+            let unit = Double(index) / Double(steps)
+            let y = fromY + (toY - fromY) * CGFloat(unit)
+            let offset = jellyOffset(edge: edge, unit: unit, time: time, amplitude: amplitude * 0.45)
+            path.addLine(to: CGPoint(x: x + offset, y: y))
+        }
+    }
+
+    private func jellyOffset(edge: Int, unit: Double, time: Double, amplitude: CGFloat) -> CGFloat {
+        let edgeSeed = seed * 19.37 + Double(edge) * 0.731
+        let slow = sin((unit * (1.7 + edgeSeed.truncatingRemainder(dividingBy: 1.9)) + time * (0.31 + edgeSeed * 0.017) + edgeSeed) * .pi * 2)
+        let medium = sin((unit * (3.1 + edgeSeed.truncatingRemainder(dividingBy: 2.4)) - time * (0.47 + seed * 0.09) + edgeSeed * 1.41) * .pi * 2)
+        let fast = sin((unit * (5.3 + seed * 2.1) + time * (0.73 + Double(edge) * 0.021) + edgeSeed * 2.17) * .pi * 2)
+        let drift = sin((time * 0.113 + seed * 8.0 + Double(edge)) * .pi * 2)
+        let value = slow * 0.48 + medium * 0.32 + fast * 0.15 + drift * 0.05
+        return CGFloat(value) * amplitude
     }
 }
 

@@ -144,27 +144,27 @@ struct SettingsScreen: View {
                 )
             }
 
-            Toggle(isOn: $appSettings.developerVIPBreathingEnabled) {
+            Toggle(isOn: $appSettings.developerVIPJellyEnabled) {
                 SettingsInfoRow(
-                    title: "VIP-дыхание",
-                    value: appSettings.developerVIPBreathingEnabled ? "Вкл" : "Выкл",
-                    systemName: "lungs.fill",
-                    subtitle: "Плавное расширение и сжатие VIP-ячейки как живой статусный отклик."
+                    title: "VIP-желе",
+                    value: appSettings.developerVIPJellyEnabled ? "Вкл" : "Выкл",
+                    systemName: "water.waves",
+                    subtitle: "Живая форма VIP-ячейки: двигается сам контур, а не внутренняя линия."
                 )
             }
             .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.developerVIPBreathingEnabled) { _, _ in
+            .onChange(of: appSettings.developerVIPJellyEnabled) { _, _ in
                 feedback.confirm()
             }
 
-            if appSettings.developerVIPBreathingEnabled {
+            if appSettings.developerVIPJellyEnabled {
                 SettingsSliderRow(
-                    title: "Скорость дыхания",
-                    valueLabel: "\(String(format: "%.2f", appSettings.developerVIPBreathingSpeed))x",
-                    systemName: "wind",
+                    title: "Скорость желе",
+                    valueLabel: "\(String(format: "%.2f", appSettings.developerVIPJellySpeed))x",
+                    systemName: "speedometer",
                     range: 0.2...2.5,
                     defaultValue: 0.75,
-                    value: $appSettings.developerVIPBreathingSpeed
+                    value: $appSettings.developerVIPJellySpeed
                 )
             }
         }

@@ -35,8 +35,8 @@ struct AppRootView: View {
         .environment(\.experimentalCellSpringSpeed, appSettings.developerCellSpringSpeed)
         .environment(\.experimentalVIPFlickerEnabled, appSettings.developerVIPFlickerEnabled)
         .environment(\.experimentalVIPFlickerSpeed, appSettings.developerVIPFlickerSpeed)
-        .environment(\.experimentalVIPBreathingEnabled, appSettings.developerVIPBreathingEnabled)
-        .environment(\.experimentalVIPBreathingSpeed, appSettings.developerVIPBreathingSpeed)
+        .environment(\.experimentalVIPJellyEnabled, appSettings.developerVIPJellyEnabled)
+        .environment(\.experimentalVIPJellySpeed, appSettings.developerVIPJellySpeed)
         .environment(
             \.interactionFeedback,
             .live(interactionFeedbackService)
