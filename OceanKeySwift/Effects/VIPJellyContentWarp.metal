@@ -42,3 +42,57 @@ using namespace metal;
     float2 displacement = float2(dx * 0.8, dy * 1.15) * amplitude * weight;
     return position - displacement;
 }
+
+static float2 vipJellyDisplacement(float2 position, float time, float speed, float seed, float2 size, float amplitude) {
+    float2 safe = max(size, float2(1.0, 1.0));
+    float2 uv = clamp(position / safe, float2(0.0, 0.0), float2(1.0, 1.0));
+    float t = time * clamp(speed, 0.2, 2.5);
+    float ph = seed * 37.0;
+    const float tau = 6.2831853;
+
+    float dx =
+        sin((uv.y * 1.5 + t * 0.29 + ph) * tau) * 0.44 +
+        sin((uv.y * 3.1 - t * 0.37 + uv.x * 1.4 + ph * 1.7) * tau) * 0.34 +
+        sin((uv.x * 2.8 + t * 0.19 + ph * 2.3) * tau) * 0.22;
+    float dy =
+        sin((uv.x * 1.7 - t * 0.31 + ph * 1.3) * tau) * 0.44 +
+        sin((uv.x * 3.0 + t * 0.27 + uv.y * 1.5 + ph * 0.7) * tau) * 0.34 +
+        sin((uv.y * 2.5 - t * 0.23 + ph * 2.9) * tau) * 0.22;
+
+    float edge = min(min(uv.x, 1.0 - uv.x) * 2.0, min(uv.y, 1.0 - uv.y) * 2.0);
+    float weight = mix(1.0, 0.38, smoothstep(0.0, 0.85, clamp(edge, 0.0, 1.0)));
+    return float2(dx * 0.95, dy * 1.28) * amplitude * weight;
+}
+
+static float roundedBoxMask(float2 position, float2 size, float radius) {
+    float2 center = size * 0.5;
+    float2 halfSize = max(size * 0.5 - float2(radius, radius), float2(1.0, 1.0));
+    float2 d = abs(position - center) - halfSize;
+    float signedDistance = length(max(d, float2(0.0, 0.0))) + min(max(d.x, d.y), 0.0) - radius;
+    return 1.0 - smoothstep(-0.75, 1.35, signedDistance);
+}
+
+// Layer effect version: samples the already composited room cell and applies
+// the same displacement to color and alpha. This keeps fill, number, S/L/B,
+// badges, and the visible contour as one deformed material.
+[[ stitchable ]] half4 vipJellyUnifiedLayer(
+    float2 position,
+    SwiftUI::Layer layer,
+    float time,
+    float speed,
+    float seed,
+    float2 size,
+    float amplitude,
+    float cornerRadius
+) {
+    float2 safe = max(size, float2(1.0, 1.0));
+    float2 displacement = vipJellyDisplacement(position, time, speed, seed, safe, amplitude);
+    float2 sourcePosition = position - displacement;
+    half4 color = layer.sample(sourcePosition);
+
+    float radius = clamp(cornerRadius, 1.0, min(safe.x, safe.y) * 0.5);
+    float alpha = roundedBoxMask(sourcePosition, safe, radius);
+    color.a *= half(alpha);
+    color.rgb *= half(alpha);
+    return color;
+}

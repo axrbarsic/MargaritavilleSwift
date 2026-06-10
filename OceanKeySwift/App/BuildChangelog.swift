@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (93)",
+            date: "2026-06-09",
+            changes: [
+                "Replaced the invisible VIP jelly distortion with a SwiftUI layerEffect shader that samples the full composited cell layer.",
+                "Moved the VIP jelly silhouette into the Metal shader alpha mask so the cell contour and its contents deform through the same field.",
+                "Removed the pre-warp static clipping for VIP jelly cells so the animated contour is visible again."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (92)",
             date: "2026-06-09",
             changes: [

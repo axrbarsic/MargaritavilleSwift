@@ -129,12 +129,13 @@ struct RoomCellView: View {
                     .allowsHitTesting(false)
             }
         }
-        .clipShape(tileShape)
-        .vipJellyUnifiedWarp(
+        .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
+        .vipJellyUnifiedLayer(
             enabled: vipJellyActive,
             time: vipJellyTime,
             speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed
+            seed: vipJellySeed,
+            cornerRadius: geometry.tileCornerRadius
         )
         .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
         .scaleEffect(
@@ -301,13 +302,16 @@ struct RoomCellView: View {
         onTaskToggle(task)
     }
 
-    // Статичная форма-заливка: вся «желейность» теперь живёт в ЕДИНОМ
-    // distortionEffect поверх растеризованной ячейки, поэтому фону не нужна
-    // собственная анимированная клякса. Тень — после warp, по силуэту.
+    // VIP source must stay rectangular here. The Metal layer effect below
+    // creates the animated alpha silhouette; a pre-clip would kill the jelly.
+    @ViewBuilder
     private var cellFill: some View {
-        tileShape.fill(
-            OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)
-        )
+        let fill = OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)
+        if vipJellyActive {
+            Rectangle().fill(fill)
+        } else {
+            tileShape.fill(fill)
+        }
     }
 
     private var tileShape: UnevenRoundedRectangle {
@@ -359,31 +363,42 @@ private extension View {
     /// деформируется одним Metal-полем. Контур и содержимое по построению
     /// двигаются вместе — никакой отдельной кляксы и имитаций per-label.
     @ViewBuilder
-    func vipJellyUnifiedWarp(
+    func vipJellyUnifiedLayer(
         enabled: Bool,
         time: TimeInterval?,
         speed: Double,
-        seed: Double
+        seed: Double,
+        cornerRadius: CGFloat
     ) -> some View {
         if enabled, let time {
             self
                 .compositingGroup()
                 .visualEffect { content, proxy in
-                    let amplitude = min(max(proxy.size.height * 0.16, 6), 12)
-                    return content.distortionEffect(
-                        ShaderLibrary.vipJellyUnifiedWarp(
+                    let amplitude = min(max(proxy.size.height * 0.24, 10), 20)
+                    return content.layerEffect(
+                        ShaderLibrary.vipJellyUnifiedLayer(
                             .float(Float(time)),
                             .float(Float(speed)),
                             .float(Float(seed)),
                             .float2(Float(proxy.size.width), Float(proxy.size.height)),
-                            .float(Float(amplitude))
+                            .float(Float(amplitude)),
+                            .float(Float(cornerRadius))
                         ),
                         maxSampleOffset: CGSize(
-                            width: amplitude,
-                            height: amplitude * 1.3
+                            width: amplitude * 1.1,
+                            height: amplitude * 1.45
                         )
                     )
                 }
+        } else {
+            self
+        }
+    }
+
+    @ViewBuilder
+    func roomCellStaticClip(enabled: Bool, shape: UnevenRoundedRectangle) -> some View {
+        if enabled {
+            self.clipShape(shape)
         } else {
             self
         }
