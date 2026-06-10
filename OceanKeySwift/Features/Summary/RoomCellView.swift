@@ -93,14 +93,13 @@ struct RoomCellView: View {
         .padding(.trailing, geometry.tileTrailingPadding)
         .frame(height: geometry.tileHeight)
         .foregroundStyle(OceanKeyTheme.roomForeground)
+        .background(cellBackground(time: vipJellyTime))
         .vipJellyLayerWarp(
             enabled: vipJellyActive,
             time: vipJellyTime,
             speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed,
-            size: CGSize(width: actionMenuCellWidth, height: geometry.tileHeight)
+            seed: vipJellySeed
         )
-        .background(cellBackground(time: vipJellyTime))
         .vipFlickerEffect(
             enabled: room.isVIP && experimentalVIPFlickerEnabled && !vipJellyActive,
             shape: tileShape,
@@ -392,21 +391,26 @@ private extension View {
         enabled: Bool,
         time: TimeInterval?,
         speed: Double,
-        seed: Double,
-        size: CGSize
+        seed: Double
     ) -> some View {
         if enabled, let time {
-            let amplitude = min(size.height * 0.11, 10)
-            self.distortionEffect(
-                ShaderLibrary.vipJellyContentWarp(
-                    .float(Float(time)),
-                    .float(Float(speed)),
-                    .float(Float(seed)),
-                    .float2(Float(size.width), Float(size.height)),
-                    .float(Float(amplitude))
-                ),
-                maxSampleOffset: CGSize(width: amplitude * 0.3, height: amplitude)
-            )
+            self
+                .compositingGroup()
+                .visualEffect { content, proxy in
+                    content.distortionEffect(
+                        ShaderLibrary.vipJellyContentWarp(
+                            .float(Float(time)),
+                            .float(Float(speed)),
+                            .float(Float(seed)),
+                            .float2(Float(proxy.size.width), Float(proxy.size.height)),
+                            .float(Float(min(max(proxy.size.height * 0.24, 8), 22)))
+                        ),
+                        maxSampleOffset: CGSize(
+                            width: min(max(proxy.size.height * 0.24, 8), 22) * 0.6,
+                            height: min(max(proxy.size.height * 0.24, 8), 22)
+                        )
+                    )
+                }
         } else {
             self
         }

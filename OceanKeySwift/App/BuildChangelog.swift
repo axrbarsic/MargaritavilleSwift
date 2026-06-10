@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (91)",
+            date: "2026-06-09",
+            changes: [
+                "Fixed VIP jelly content warp so the room number and S/L/B layer uses repeating local shader coordinates instead of collapsing to a nearly static edge sample.",
+                "Moved VIP jelly deformation onto the composited cell layer so the status fill, room number, and S/L/B controls warp as one material.",
+                "Increased the Metal warp amplitude and sample offset so content deformation is visibly tied to the moving jelly cell."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (90)",
             date: "2026-06-09",
             changes: [
