@@ -386,23 +386,48 @@ private struct VIPJellyCellChrome: View {
                 cornerRadius: cornerRadius,
                 isMenuExpanded: isMenuExpanded
             )
-            shape
-                .fill(color)
-                .shadow(color: .black.opacity(shadowOpacity), radius: 5, x: 0, y: 4)
-                .overlay {
-                    ZStack {
-                        shape
-                            .fill(.white.opacity(flickerEnabled ? 0.04 + flash * 0.38 : 0))
-                            .blendMode(.screen)
-                        shape
-                            .fill(.black.opacity(dip))
-                            .blendMode(.multiply)
-                        shape
-                            .stroke(.white.opacity(0.16 + flash * 0.22), lineWidth: 2.0)
-                            .blendMode(.screen)
-                    }
-                    .compositingGroup()
+            ZStack {
+                shape
+                    .fill(color)
+                shape
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .white.opacity(0.24 + flash * 0.12),
+                                .white.opacity(0.06),
+                                .clear,
+                                .black.opacity(0.18 + dip * 0.14)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.softLight)
+                shape
+                    .stroke(.white.opacity(0.20 + flash * 0.10), lineWidth: 1.4)
+                    .blur(radius: 0.35)
+                    .offset(x: -0.8, y: -0.8)
+                    .blendMode(.screen)
+                shape
+                    .stroke(.black.opacity(0.18 + dip * 0.16), lineWidth: 2.2)
+                    .blur(radius: 0.9)
+                    .offset(x: 1.2, y: 1.3)
+                    .blendMode(.multiply)
+                ZStack {
+                    shape
+                        .fill(.white.opacity(flickerEnabled ? 0.04 + flash * 0.38 : 0))
+                        .blendMode(.screen)
+                    shape
+                        .fill(.black.opacity(dip))
+                        .blendMode(.multiply)
+                    shape
+                        .stroke(.white.opacity(0.16 + flash * 0.22), lineWidth: 2.0)
+                        .blendMode(.screen)
                 }
+                .compositingGroup()
+            }
+            .compositingGroup()
+            .shadow(color: .black.opacity(shadowOpacity + 0.08), radius: 8, x: 0, y: 5)
         }
     }
 }
