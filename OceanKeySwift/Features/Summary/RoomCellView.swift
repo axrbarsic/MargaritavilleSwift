@@ -81,6 +81,11 @@ struct RoomCellView: View {
         .frame(height: geometry.tileHeight)
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .background(cellBackground)
+        .vipFlickerEffect(
+            enabled: room.isVIP && experimentalVIPFlickerEnabled,
+            shape: tileShape,
+            speed: experimentalVIPFlickerSpeed
+        )
         .mask(cellMask)
         .scaleEffect(
             x: experimentalCellPhysicsEnabled && physicsPulse ? 1 + 0.09 * experimentalCellSpringIntensity : 1,
@@ -119,11 +124,6 @@ struct RoomCellView: View {
                 )
                 : .default,
             value: physicsPulse
-        )
-        .vipFlickerEffect(
-            enabled: room.isVIP && experimentalVIPFlickerEnabled,
-            shape: tileShape,
-            speed: experimentalVIPFlickerSpeed
         )
         .overlay(alignment: .bottomTrailing) {
             if let scheduleLabel = room.scheduleLabel {
@@ -469,13 +469,17 @@ private struct VIPJellyCellShape: Shape {
         time: Double,
         amplitude: CGFloat
     ) {
-        let steps = 16
+        let steps = 24
+        var points: [CGPoint] = []
+        points.reserveCapacity(steps + 1)
+        points.append(CGPoint(x: fromX, y: y + jellyOffset(edge: edge, unit: 0, time: time, amplitude: amplitude)))
         for index in 1...steps {
             let unit = Double(index) / Double(steps)
             let x = fromX + (toX - fromX) * CGFloat(unit)
             let offset = jellyOffset(edge: edge, unit: unit, time: time, amplitude: amplitude)
-            path.addLine(to: CGPoint(x: x, y: y + offset))
+            points.append(CGPoint(x: x, y: y + offset))
         }
+        addSmoothEdge(to: &path, points: points)
     }
 
     private func addVerticalEdge(
@@ -488,12 +492,35 @@ private struct VIPJellyCellShape: Shape {
         time: Double,
         amplitude: CGFloat
     ) {
-        let steps = 6
+        let steps = 10
+        var points: [CGPoint] = []
+        points.reserveCapacity(steps + 1)
+        points.append(CGPoint(x: x + jellyOffset(edge: edge, unit: 0, time: time, amplitude: amplitude * 0.45), y: fromY))
         for index in 1...steps {
             let unit = Double(index) / Double(steps)
             let y = fromY + (toY - fromY) * CGFloat(unit)
             let offset = jellyOffset(edge: edge, unit: unit, time: time, amplitude: amplitude * 0.45)
-            path.addLine(to: CGPoint(x: x + offset, y: y))
+            points.append(CGPoint(x: x + offset, y: y))
+        }
+        addSmoothEdge(to: &path, points: points)
+    }
+
+    private func addSmoothEdge(to path: inout Path, points: [CGPoint]) {
+        guard points.count > 1 else { return }
+        for index in 0..<(points.count - 1) {
+            let previous = points[max(index - 1, 0)]
+            let current = points[index]
+            let next = points[index + 1]
+            let afterNext = points[min(index + 2, points.count - 1)]
+            let control1 = CGPoint(
+                x: current.x + (next.x - previous.x) / 6,
+                y: current.y + (next.y - previous.y) / 6
+            )
+            let control2 = CGPoint(
+                x: next.x - (afterNext.x - current.x) / 6,
+                y: next.y - (afterNext.y - current.y) / 6
+            )
+            path.addCurve(to: next, control1: control1, control2: control2)
         }
     }
 
@@ -501,9 +528,9 @@ private struct VIPJellyCellShape: Shape {
         let edgeSeed = seed * 19.37 + Double(edge) * 0.731
         let slow = sin((unit * (1.7 + edgeSeed.truncatingRemainder(dividingBy: 1.9)) + time * (0.31 + edgeSeed * 0.017) + edgeSeed) * .pi * 2)
         let medium = sin((unit * (3.1 + edgeSeed.truncatingRemainder(dividingBy: 2.4)) - time * (0.47 + seed * 0.09) + edgeSeed * 1.41) * .pi * 2)
-        let fast = sin((unit * (5.3 + seed * 2.1) + time * (0.73 + Double(edge) * 0.021) + edgeSeed * 2.17) * .pi * 2)
+        let fast = sin((unit * (4.6 + seed * 1.7) + time * (0.61 + Double(edge) * 0.017) + edgeSeed * 2.17) * .pi * 2)
         let drift = sin((time * 0.113 + seed * 8.0 + Double(edge)) * .pi * 2)
-        let value = slow * 0.48 + medium * 0.32 + fast * 0.15 + drift * 0.05
+        let value = slow * 0.54 + medium * 0.30 + fast * 0.10 + drift * 0.06
         return CGFloat(value) * amplitude
     }
 }
@@ -517,26 +544,20 @@ private struct VIPFlickerOverlay: View {
             let time = timeline.date.timeIntervalSinceReferenceDate
             let normalizedSpeed = min(max(speed, 0.4), 4.0)
             let shimmer = flickerValue(time: time, speed: normalizedSpeed)
-            shape
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            .black.opacity(0.10 + shimmer * 0.18),
-                            .white.opacity(0.18 + shimmer * 0.36),
-                            OceanKeyTheme.accent.opacity(0.10 + shimmer * 0.22),
-                            .white.opacity(0.08 + shimmer * 0.30)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .blendMode(shimmer > 0.54 ? .plusLighter : .overlay)
-                .clipShape(shape)
-                .overlay {
-                    shape
-                        .stroke(.white.opacity(0.10 + shimmer * 0.28), lineWidth: 1.2)
-                        .blendMode(.screen)
-                }
+            let flash = pow(shimmer, 2.2)
+            let dip = max(0, 0.5 - shimmer) * 0.42
+            ZStack {
+                shape
+                    .fill(.white.opacity(0.06 + flash * 0.42))
+                    .blendMode(.screen)
+                shape
+                    .fill(.black.opacity(dip))
+                    .blendMode(.multiply)
+                shape
+                    .stroke(.white.opacity(0.08 + flash * 0.24), lineWidth: 1.2)
+                    .blendMode(.screen)
+            }
+            .compositingGroup()
         }
     }
 

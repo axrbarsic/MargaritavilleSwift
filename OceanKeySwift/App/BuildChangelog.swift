@@ -10,6 +10,14 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (86)",
+            date: "2026-06-09",
+            changes: [
+                "Smoothed VIP jelly edges with cubic curves so the cell no longer catches angular polygon corners while wobbling.",
+                "Clipped VIP flicker through the same jelly cell mask and replaced the diagonal light gradient with a uniform natural flash."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (85)",
             date: "2026-06-09",
             changes: [
