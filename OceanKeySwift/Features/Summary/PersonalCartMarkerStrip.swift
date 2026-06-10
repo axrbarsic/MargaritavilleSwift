@@ -32,12 +32,12 @@ private struct PersonalCartMarkerButton: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 12, weight: .black, design: .rounded))
+                .font(.system(size: 17, weight: .black, design: .rounded))
                 .monospacedDigit()
                 .lineLimit(1)
-                .minimumScaleFactor(0.75)
+                .minimumScaleFactor(0.82)
                 .foregroundStyle(foreground)
-                .frame(width: 32, height: 25)
+                .frame(width: 34, height: 26)
                 .background(fill)
                 .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 .overlay {

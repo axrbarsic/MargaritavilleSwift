@@ -10,6 +10,14 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (98)",
+            date: "2026-06-10",
+            changes: [
+                "Made the personal cart marker floor numbers larger and bolder while keeping them inside the compact marker buttons.",
+                "Marked the currently selected floor in the marker picker so reopening a marker shows the active choice."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (97)",
             date: "2026-06-10",
             changes: [

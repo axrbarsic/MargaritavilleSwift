@@ -62,11 +62,11 @@ struct SummaryHeader: View {
         ) {
             if let slot = activePersonalCartMarkerSlot {
                 ForEach(PersonalCartMarkers.allowedFloors, id: \.self) { floor in
-                    Button("Этаж \(floor)") {
+                    Button(floorPickerTitle(floor, for: slot)) {
                         setPersonalCartMarkerFloor(floor, for: slot)
                     }
                 }
-                Button("Очистить", role: .destructive) {
+                Button(clearPickerTitle(for: slot), role: .destructive) {
                     setPersonalCartMarkerFloor(nil, for: slot)
                 }
             }
@@ -102,6 +102,16 @@ struct SummaryHeader: View {
         feedback.confirm()
         personalCartMarkers = personalCartMarkers.settingFloor(floor, for: slot)
         activePersonalCartMarkerSlot = nil
+    }
+
+    private func floorPickerTitle(_ floor: Int, for slot: PersonalCartMarkerSlot) -> String {
+        let prefix = personalCartMarkers.floor(for: slot) == floor ? "✓ " : ""
+        return "\(prefix)Этаж \(floor)"
+    }
+
+    private func clearPickerTitle(for slot: PersonalCartMarkerSlot) -> String {
+        let prefix = personalCartMarkers.floor(for: slot) == nil ? "✓ " : ""
+        return "\(prefix)Очистить"
     }
 }
 
