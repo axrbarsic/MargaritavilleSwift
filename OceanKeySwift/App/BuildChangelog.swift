@@ -10,6 +10,22 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (100)",
+            date: "2026-06-10",
+            changes: [
+                "Fixed media viewing so video pages only play when the video is the active full-screen item, preventing background video audio while viewing photos.",
+                "Paused looping video thumbnails while the media viewer is open and kept silent loop previews for video thumbnails in room and cart media."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.2.0 (99)",
+            date: "2026-06-10",
+            changes: [
+                "Fixed setup selection so switching one cart between floors or buildings no longer deletes rooms already picked on another floor.",
+                "Workday cart sections now keep all selected rooms for a cart and summarize multi-floor cart labels like A4/A5."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (98)",
             date: "2026-06-10",
             changes: [

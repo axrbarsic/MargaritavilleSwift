@@ -21,7 +21,10 @@ struct MediaViewerScreen: View {
 
             TabView(selection: $selectedID) {
                 ForEach(attachments) { attachment in
-                    MediaViewerPage(attachment: attachment)
+                    MediaViewerPage(
+                        attachment: attachment,
+                        isActive: attachment.id == selectedID
+                    )
                         .tag(attachment.id)
                 }
             }
@@ -88,6 +91,7 @@ struct MediaViewerScreen: View {
 
 private struct MediaViewerPage: View {
     let attachment: MediaAttachment
+    let isActive: Bool
     private let fileStore = LocalMediaFileStore()
 
     var body: some View {
@@ -95,7 +99,10 @@ private struct MediaViewerPage: View {
         case .photo:
             ZoomablePhotoView(url: fileStore.url(for: attachment))
         case .video:
-            FullScreenVideoPlayer(url: fileStore.url(for: attachment))
+            FullScreenVideoPlayer(
+                url: fileStore.url(for: attachment),
+                isActive: isActive
+            )
         case .audio:
             Color.black
         }
@@ -156,15 +163,17 @@ private struct ZoomablePhotoView: UIViewRepresentable {
 
 private struct FullScreenVideoPlayer: View {
     let url: URL
+    let isActive: Bool
 
     var body: some View {
-        FullScreenVideoPlayerView(url: url)
+        FullScreenVideoPlayerView(url: url, isActive: isActive)
             .ignoresSafeArea()
     }
 }
 
 private struct FullScreenVideoPlayerView: UIViewRepresentable {
     let url: URL
+    let isActive: Bool
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -172,12 +181,12 @@ private struct FullScreenVideoPlayerView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> FullScreenPlayerView {
         let view = FullScreenPlayerView()
-        context.coordinator.configure(url: url, in: view)
+        context.coordinator.configure(url: url, isActive: isActive, in: view)
         return view
     }
 
     func updateUIView(_ view: FullScreenPlayerView, context: Context) {
-        context.coordinator.configure(url: url, in: view)
+        context.coordinator.configure(url: url, isActive: isActive, in: view)
     }
 
     static func dismantleUIView(_ view: FullScreenPlayerView, coordinator: Coordinator) {
@@ -191,9 +200,13 @@ private struct FullScreenVideoPlayerView: UIViewRepresentable {
         private var looper: AVPlayerLooper?
 
         @MainActor
-        func configure(url: URL, in view: FullScreenPlayerView) {
+        func configure(url: URL, isActive: Bool, in view: FullScreenPlayerView) {
             guard currentURL != url else {
-                player?.play()
+                if isActive {
+                    player?.play()
+                } else {
+                    player?.pause()
+                }
                 return
             }
             currentURL = url
@@ -205,7 +218,9 @@ private struct FullScreenVideoPlayerView: UIViewRepresentable {
             player = queuePlayer
             looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
             view.playerLayer.player = queuePlayer
-            queuePlayer.play()
+            if isActive {
+                queuePlayer.play()
+            }
         }
 
         func stop() {

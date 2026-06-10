@@ -4,6 +4,7 @@ import UIKit
 
 struct MediaThumbnailView: View {
     let attachment: MediaAttachment
+    var isPreviewActive = true
     let fileStore = LocalMediaFileStore()
 
     @State private var image: UIImage?
@@ -12,7 +13,10 @@ struct MediaThumbnailView: View {
         ZStack(alignment: .bottomLeading) {
             Group {
                 if attachment.kind == .video {
-                    LoopingVideoThumbnailView(url: fileStore.url(for: attachment))
+                    LoopingVideoThumbnailView(
+                        url: fileStore.url(for: attachment),
+                        isPlaying: isPreviewActive
+                    )
                 } else if let image {
                     Image(uiImage: image)
                         .resizable()
@@ -96,6 +100,7 @@ struct MediaThumbnailView: View {
 
 private struct LoopingVideoThumbnailView: UIViewRepresentable {
     let url: URL
+    let isPlaying: Bool
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -103,12 +108,17 @@ private struct LoopingVideoThumbnailView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> ThumbnailPlayerView {
         let view = ThumbnailPlayerView()
-        context.coordinator.configure(url: url, in: view)
+        context.coordinator.configure(url: url, isPlaying: isPlaying, in: view)
         return view
     }
 
     func updateUIView(_ view: ThumbnailPlayerView, context: Context) {
-        context.coordinator.configure(url: url, in: view)
+        context.coordinator.configure(url: url, isPlaying: isPlaying, in: view)
+    }
+
+    static func dismantleUIView(_ view: ThumbnailPlayerView, coordinator: Coordinator) {
+        coordinator.stop()
+        view.playerLayer.player = nil
     }
 
     final class Coordinator {
@@ -117,9 +127,13 @@ private struct LoopingVideoThumbnailView: UIViewRepresentable {
         private var looper: AVPlayerLooper?
 
         @MainActor
-        func configure(url: URL, in view: ThumbnailPlayerView) {
+        func configure(url: URL, isPlaying: Bool, in view: ThumbnailPlayerView) {
             guard currentURL != url else {
-                player?.play()
+                if isPlaying {
+                    player?.play()
+                } else {
+                    player?.pause()
+                }
                 return
             }
             currentURL = url
@@ -132,7 +146,17 @@ private struct LoopingVideoThumbnailView: UIViewRepresentable {
             player = queuePlayer
             looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
             view.playerLayer.player = queuePlayer
-            queuePlayer.play()
+            if isPlaying {
+                queuePlayer.play()
+            }
+        }
+
+        func stop() {
+            player?.pause()
+            player?.removeAllItems()
+            player = nil
+            looper = nil
+            currentURL = nil
         }
     }
 }

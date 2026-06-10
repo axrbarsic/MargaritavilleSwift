@@ -137,15 +137,6 @@ extension WorkSessionSelectionState {
         let cart = WorkSessionSelectionRules.clampedCartNumber(cartNumber)
         cartBindings[cart] = WorkSessionCartBinding(cartNumber: cart, territoryID: territory.id)
         cartBindingUpdatedAt[cart] = changedAt
-        if let rooms = cartRoomSelections[cart] {
-            let keptRooms = rooms.filter { territory.rooms.contains($0) }
-            let removedRooms = rooms.subtracting(keptRooms)
-            for room in removedRooms {
-                markRoomSelection(cart: cart, room: room, changedAt: changedAt)
-            }
-            cartRoomSelections[cart] = keptRooms
-        }
-        trimEmptyRoomSelections()
         return .changed
     }
 
@@ -240,7 +231,7 @@ enum WorkSessionBuilder {
         return selection.selectedCartNumbers.compactMap { cartNumber in
             guard let territory = selection.territory(forCart: cartNumber) else { return nil }
             let rooms = selection
-                .rooms(forCart: cartNumber, territory: territory)
+                .rooms(forCart: cartNumber)
                 .sorted(by: RoomCatalog.compareRoomIDs)
                 .map { roomID in
                     existingByID[roomID] ?? RoomCell(
@@ -254,7 +245,11 @@ enum WorkSessionBuilder {
             guard !rooms.isEmpty || selection.cartBindings[cartNumber] != nil else {
                 return nil
             }
-            return CartSection(id: cartNumber, building: territory.label, rooms: rooms)
+            let buildingLabel = RoomCatalog.territorySummaryLabel(
+                for: rooms.map(\.id),
+                fallback: territory.label
+            )
+            return CartSection(id: cartNumber, building: buildingLabel, rooms: rooms)
         }
     }
 }

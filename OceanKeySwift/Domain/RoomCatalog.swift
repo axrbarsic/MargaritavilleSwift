@@ -86,6 +86,24 @@ enum RoomCatalog {
         territories.first { $0.rooms.contains(room) }
     }
 
+    static func territorySummaryLabel(for rooms: some Sequence<RoomID>, fallback: String) -> String {
+        let labels = Set(rooms.compactMap { territory(for: $0)?.label })
+        guard !labels.isEmpty else { return fallback }
+        return labels.sorted { compareTerritoryLabels($0, $1) }.joined(separator: "/")
+    }
+
+    private static func compareTerritoryLabels(_ left: String, _ right: String) -> Bool {
+        guard let leftTerritory = territory(id: left),
+              let rightTerritory = territory(id: right)
+        else {
+            return left < right
+        }
+        if leftTerritory.building != rightTerritory.building {
+            return leftTerritory.building.label < rightTerritory.building.label
+        }
+        return leftTerritory.floor < rightTerritory.floor
+    }
+
     private static func parseRoomID(_ value: RoomID) -> (number: Int, suffix: String)? {
         let pattern = #"^(\d+)([A-Z]*)$"#
         guard let regex = try? NSRegularExpression(pattern: pattern) else { return nil }

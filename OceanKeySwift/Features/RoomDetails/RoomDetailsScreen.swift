@@ -151,7 +151,10 @@ struct RoomDetailsScreen: View {
                         ForEach(visualMediaAttachments) { attachment in
                             ZStack(alignment: .topTrailing) {
                                 Button(action: { selectedMedia = attachment }) {
-                                    MediaThumbnailView(attachment: attachment)
+                                    MediaThumbnailView(
+                                        attachment: attachment,
+                                        isPreviewActive: selectedMedia == nil
+                                    )
                                 }
                                 .buttonStyle(.plain)
 

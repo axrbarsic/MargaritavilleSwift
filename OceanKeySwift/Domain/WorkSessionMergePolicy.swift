@@ -111,11 +111,14 @@ enum WorkSessionMergePolicy {
                 mergedCart = territory.map { CartSection(id: cartID, building: $0.label, rooms: []) }
             }
             guard var cart = mergedCart else { return nil }
-            cart.building = territory?.label ?? cart.building
-            let selectedRooms = selection.rooms(forCart: cartID, territory: territory ?? RoomCatalog.territories[0])
+            let selectedRooms = selection.rooms(forCart: cartID)
             cart.rooms = cart.rooms
                 .filter { selectedRooms.contains($0.id) }
                 .sorted { RoomCatalog.compareRoomIDs($0.id, $1.id) }
+            cart.building = RoomCatalog.territorySummaryLabel(
+                for: cart.rooms.map(\.id),
+                fallback: territory?.label ?? cart.building
+            )
             return cart
         }
     }
@@ -140,7 +143,10 @@ enum WorkSessionMergePolicy {
         }
         return CartSection(
             id: local.id,
-            building: territory?.label ?? local.building,
+            building: RoomCatalog.territorySummaryLabel(
+                for: rooms.map(\.id),
+                fallback: territory?.label ?? local.building
+            ),
             rooms: rooms.sorted { RoomCatalog.compareRoomIDs($0.id, $1.id) },
             note: newestValue(
                 local: local.note,

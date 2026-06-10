@@ -173,6 +173,23 @@ func storeSelectionRebuildsCartsWhilePreservingRoomState() {
 }
 
 @Test
+func cartSelectionKeepsRoomsAcrossTerritorySwitches() {
+    let store = WorkSessionStore(carts: [])
+    let a4 = RoomCatalog.territory(id: "A4")!
+    let a5 = RoomCatalog.territory(id: "A5")!
+
+    store.toggleCartSelection(8)
+    store.setCartBinding(cartNumber: 8, territory: a4)
+    store.toggleRoomSelection(cartNumber: 8, room: "401")
+    store.setCartBinding(cartNumber: 8, territory: a5)
+    store.toggleRoomSelection(cartNumber: 8, room: "501")
+
+    #expect(store.selectedRooms(forCart: 8) == Set(["401", "501"]))
+    #expect(store.carts.first { $0.id == 8 }?.building == "A4/A5")
+    #expect(store.carts.first { $0.id == 8 }?.rooms.map(\.id) == ["401", "501"])
+}
+
+@Test
 func lockedWorkdayIgnoresSelectionEdits() {
     var selection = WorkSessionSelectionState()
     selection.toggleCart(7)
