@@ -28,10 +28,6 @@ private struct ExperimentalVIPJellySpeedKey: EnvironmentKey {
     static let defaultValue = 0.75
 }
 
-private struct ExperimentalVIPJellyDepthEnabledKey: EnvironmentKey {
-    static let defaultValue = false
-}
-
 extension EnvironmentValues {
     var experimentalCellPhysicsEnabled: Bool {
         get { self[ExperimentalCellPhysicsEnabledKey.self] }
@@ -66,10 +62,5 @@ extension EnvironmentValues {
     var experimentalVIPJellySpeed: Double {
         get { self[ExperimentalVIPJellySpeedKey.self] }
         set { self[ExperimentalVIPJellySpeedKey.self] = newValue }
-    }
-
-    var experimentalVIPJellyDepthEnabled: Bool {
-        get { self[ExperimentalVIPJellyDepthEnabledKey.self] }
-        set { self[ExperimentalVIPJellyDepthEnabledKey.self] = newValue }
     }
 }
