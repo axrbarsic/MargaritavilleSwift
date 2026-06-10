@@ -343,6 +343,25 @@ struct SettingsScreen: View {
 
     private var tvStaticBackgroundControls: some View {
         VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 10) {
+                SettingsInfoRow(
+                    title: "Вариант шума",
+                    value: appSettings.tvStaticVariant.title,
+                    systemName: "tv.fill",
+                    subtitle: appSettings.tvStaticVariant.description
+                )
+
+                Picker("Вариант шума", selection: $appSettings.tvStaticVariant) {
+                    ForEach(TVStaticNoiseVariant.allCases) { variant in
+                        Text(variant.title).tag(variant)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: appSettings.tvStaticVariant) { _, _ in
+                    feedback.confirm()
+                }
+            }
+
             SettingsSliderRow(
                 title: "Яркость",
                 valueLabel: "\(Int((appSettings.tvStaticBrightness * 100).rounded()))%",

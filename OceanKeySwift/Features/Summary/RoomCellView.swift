@@ -82,7 +82,7 @@ struct RoomCellView: View {
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .background(cellBackground)
         .vipFlickerEffect(
-            enabled: room.isVIP && experimentalVIPFlickerEnabled,
+            enabled: room.isVIP && experimentalVIPFlickerEnabled && !vipJellyActive,
             shape: tileShape,
             speed: experimentalVIPFlickerSpeed
         )
@@ -293,7 +293,9 @@ struct RoomCellView: View {
                     isMenuExpanded: isActionMenuExpanded,
                     speed: experimentalVIPJellySpeed,
                     seed: vipJellySeed,
-                    shadowOpacity: geometry.tileShadowOpacity
+                    shadowOpacity: geometry.tileShadowOpacity,
+                    flickerEnabled: experimentalVIPFlickerEnabled,
+                    flickerSpeed: experimentalVIPFlickerSpeed
                 )
             } else {
                 tileShape
@@ -368,10 +370,15 @@ private struct VIPJellyCellChrome: View {
     let speed: Double
     let seed: Double
     let shadowOpacity: Double
+    let flickerEnabled: Bool
+    let flickerSpeed: Double
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
             let time = timeline.date.timeIntervalSinceReferenceDate
+            let shimmer = vipFlickerValue(time: time, speed: min(max(flickerSpeed, 0.4), 4.0))
+            let flash = flickerEnabled ? pow(shimmer, 2.2) : 0
+            let dip = flickerEnabled ? max(0, 0.5 - shimmer) * 0.42 : 0
             let shape = VIPJellyCellShape(
                 time: time,
                 speed: speed,
@@ -383,9 +390,18 @@ private struct VIPJellyCellChrome: View {
                 .fill(color)
                 .shadow(color: .black.opacity(shadowOpacity), radius: 5, x: 0, y: 4)
                 .overlay {
-                    shape
-                        .stroke(.white.opacity(0.16), lineWidth: 2.0)
-                        .blendMode(.screen)
+                    ZStack {
+                        shape
+                            .fill(.white.opacity(flickerEnabled ? 0.04 + flash * 0.38 : 0))
+                            .blendMode(.screen)
+                        shape
+                            .fill(.black.opacity(dip))
+                            .blendMode(.multiply)
+                        shape
+                            .stroke(.white.opacity(0.16 + flash * 0.22), lineWidth: 2.0)
+                            .blendMode(.screen)
+                    }
+                    .compositingGroup()
                 }
         }
     }
@@ -543,7 +559,7 @@ private struct VIPFlickerOverlay: View {
         TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
             let time = timeline.date.timeIntervalSinceReferenceDate
             let normalizedSpeed = min(max(speed, 0.4), 4.0)
-            let shimmer = flickerValue(time: time, speed: normalizedSpeed)
+            let shimmer = vipFlickerValue(time: time, speed: normalizedSpeed)
             let flash = pow(shimmer, 2.2)
             let dip = max(0, 0.5 - shimmer) * 0.42
             ZStack {
@@ -561,13 +577,14 @@ private struct VIPFlickerOverlay: View {
         }
     }
 
-    private func flickerValue(time: TimeInterval, speed: Double) -> Double {
-        let fast = sin(time * 32.0 * speed)
-        let faster = sin(time * 71.0 * speed + 1.7)
-        let pulse = sin(time * 11.0 * speed + 0.4)
-        let combined = fast * 0.42 + faster * 0.34 + pulse * 0.24
-        return min(max((combined + 1) * 0.5, 0), 1)
-    }
+}
+
+private func vipFlickerValue(time: TimeInterval, speed: Double) -> Double {
+    let fast = sin(time * 32.0 * speed)
+    let faster = sin(time * 71.0 * speed + 1.7)
+    let pulse = sin(time * 11.0 * speed + 0.4)
+    let combined = fast * 0.42 + faster * 0.34 + pulse * 0.24
+    return min(max((combined + 1) * 0.5, 0), 1)
 }
 
 private struct RoomMediaIndicator: View {

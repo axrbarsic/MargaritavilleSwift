@@ -50,6 +50,7 @@ final class AppSettingsStore {
         static let backgroundVideoBrightness = "backgroundVideoBrightness"
         static let backgroundVideoGreenTint = "backgroundVideoGreenTint"
         static let backgroundVideoGridIntensity = "backgroundVideoGridIntensity"
+        static let tvStaticVariant = "tvStaticVariant"
         static let tvStaticSpeed = "tvStaticSpeed"
         static let tvStaticParticleSize = "tvStaticParticleSize"
         static let tvStaticBrightness = "tvStaticBrightness"
@@ -165,6 +166,12 @@ final class AppSettingsStore {
         }
     }
 
+    var tvStaticVariant: TVStaticNoiseVariant {
+        didSet {
+            userDefaults.set(tvStaticVariant.rawValue, forKey: Keys.tvStaticVariant)
+        }
+    }
+
     var tvStaticSpeed: Double {
         get { storedTVStaticSpeed }
         set {
@@ -253,6 +260,7 @@ final class AppSettingsStore {
 
     var tvStaticNoiseConfiguration: TVStaticNoiseConfiguration {
         TVStaticNoiseConfiguration(
+            variant: tvStaticVariant,
             speed: tvStaticSpeed,
             particleSize: tvStaticParticleSize,
             brightness: tvStaticBrightness,
@@ -277,6 +285,7 @@ final class AppSettingsStore {
         backgroundVideoBrightness = 0.08
         backgroundVideoGreenTint = 0.34
         backgroundVideoGridIntensity = 0
+        tvStaticVariant = TVStaticNoiseConfiguration.default.variant
         tvStaticSpeed = TVStaticNoiseConfiguration.default.speed
         tvStaticParticleSize = TVStaticNoiseConfiguration.default.particleSize
         tvStaticBrightness = TVStaticNoiseConfiguration.default.brightness
@@ -302,6 +311,7 @@ final class AppSettingsStore {
         backgroundVideoBrightness: Double = 0.08,
         backgroundVideoGreenTint: Double = 0.34,
         backgroundVideoGridIntensity: Double = 0,
+        tvStaticVariant: TVStaticNoiseVariant = TVStaticNoiseConfiguration.default.variant,
         tvStaticSpeed: Double = TVStaticNoiseConfiguration.default.speed,
         tvStaticParticleSize: Double = TVStaticNoiseConfiguration.default.particleSize,
         tvStaticBrightness: Double = TVStaticNoiseConfiguration.default.brightness,
@@ -320,6 +330,7 @@ final class AppSettingsStore {
         self.roomTaskLongPress = roomTaskLongPress
         self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
         self.backgroundVideoRelativePath = backgroundVideoRelativePath
+        self.tvStaticVariant = tvStaticVariant
         self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
         self.storedMatrixSpeed = Self.normalizedMatrixSpeed(matrixSpeed)
         self.storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(backgroundVideoBlur)
@@ -363,6 +374,9 @@ final class AppSettingsStore {
             ?? TVStaticNoiseConfiguration.default.brightness
         let tvStaticGreenTint = userDefaults.object(forKey: Keys.tvStaticGreenTint) as? Double
             ?? TVStaticNoiseConfiguration.default.greenTint
+        let tvStaticVariant = userDefaults.string(forKey: Keys.tvStaticVariant)
+            .flatMap(TVStaticNoiseVariant.init(rawValue:))
+            ?? TVStaticNoiseConfiguration.default.variant
         let developerCellPhysicsEnabled = userDefaults.object(forKey: Keys.developerCellPhysicsEnabled) as? Bool ?? false
         let developerCellSpringIntensity = userDefaults.object(forKey: Keys.developerCellSpringIntensity) as? Double ?? 0.72
         let developerCellSpringSpeed = userDefaults.object(forKey: Keys.developerCellSpringSpeed) as? Double ?? 0.82
@@ -382,6 +396,7 @@ final class AppSettingsStore {
             backgroundVideoBrightness: backgroundVideoBrightness,
             backgroundVideoGreenTint: backgroundVideoGreenTint,
             backgroundVideoGridIntensity: backgroundVideoGridIntensity,
+            tvStaticVariant: tvStaticVariant,
             tvStaticSpeed: tvStaticSpeed,
             tvStaticParticleSize: tvStaticParticleSize,
             tvStaticBrightness: tvStaticBrightness,

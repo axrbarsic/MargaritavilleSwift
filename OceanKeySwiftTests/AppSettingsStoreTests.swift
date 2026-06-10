@@ -77,15 +77,18 @@ func appSettingsPersistsTVStaticBackgroundSettings() {
 
     let settings = AppSettingsStore(userDefaults: defaults)
     settings.appBackgroundMode = .tvStaticNoise
+    settings.tvStaticVariant = .horizontalTear
     settings.tvStaticBrightness = 0.31
     settings.tvStaticGreenTint = 0.76
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.appBackgroundMode == .tvStaticNoise)
+    #expect(loaded.tvStaticVariant == .horizontalTear)
     #expect(loaded.tvStaticBrightness == 0.31)
     #expect(loaded.tvStaticGreenTint == 0.76)
     #expect(loaded.tvStaticNoiseConfiguration == TVStaticNoiseConfiguration(
+        variant: .horizontalTear,
         speed: TVStaticNoiseConfiguration.default.speed,
         particleSize: TVStaticNoiseConfiguration.default.particleSize,
         brightness: 0.31,
@@ -203,6 +206,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.backgroundVideoBrightness = 0.33
     settings.backgroundVideoGreenTint = 0.81
     settings.backgroundVideoGridIntensity = 0.42
+    settings.tvStaticVariant = .greenTerminal
     settings.tvStaticBrightness = 0.44
     settings.tvStaticGreenTint = 0.93
     settings.developerCellPhysicsEnabled = true
@@ -227,6 +231,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.backgroundVideoBrightness == 0.08)
     #expect(loaded.backgroundVideoGreenTint == 0.34)
     #expect(loaded.backgroundVideoGridIntensity == 0)
+    #expect(loaded.tvStaticVariant == TVStaticNoiseConfiguration.default.variant)
     #expect(loaded.tvStaticSpeed == TVStaticNoiseConfiguration.default.speed)
     #expect(loaded.tvStaticParticleSize == TVStaticNoiseConfiguration.default.particleSize)
     #expect(loaded.tvStaticBrightness == TVStaticNoiseConfiguration.default.brightness)

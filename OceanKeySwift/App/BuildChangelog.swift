@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (87)",
+            date: "2026-06-09",
+            changes: [
+                "Added selectable Broken TV background variants: Analog, Fine, Tear, Green, and Hard.",
+                "Persisted the selected TV-static variant and included it in the background renderer configuration.",
+                "Moved VIP flicker into the jelly cell renderer when VIP jelly is active, so flashes follow the blob shape instead of the old rectangle."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (86)",
             date: "2026-06-09",
             changes: [
