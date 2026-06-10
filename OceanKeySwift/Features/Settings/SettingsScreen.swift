@@ -158,19 +158,6 @@ struct SettingsScreen: View {
             }
 
             if appSettings.developerVIPJellyEnabled {
-                Toggle(isOn: $appSettings.developerVIPJellyDepthEnabled) {
-                    SettingsInfoRow(
-                        title: "Объём кляксы",
-                        value: appSettings.developerVIPJellyDepthEnabled ? "Вкл" : "Выкл",
-                        systemName: "cube.transparent.fill",
-                        subtitle: "Сильный свет, внутренняя тень и объёмная поверхность VIP-желе."
-                    )
-                }
-                .tint(OceanKeyTheme.accent)
-                .onChange(of: appSettings.developerVIPJellyDepthEnabled) { _, _ in
-                    feedback.confirm()
-                }
-
                 SettingsSliderRow(
                     title: "Скорость желе",
                     valueLabel: "\(String(format: "%.2f", appSettings.developerVIPJellySpeed))x",

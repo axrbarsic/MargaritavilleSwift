@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (90)",
+            date: "2026-06-09",
+            changes: [
+                "Hid and force-disabled the unfinished VIP jelly depth experiment so it cannot remain active from saved settings.",
+                "Started the performance audit by collapsing VIP jelly animation work to one frame clock per VIP cell instead of separate clocks for background, mask, and each label.",
+                "Replaced per-label fake motion with a single Metal distortion pass that warps the rendered room number and S/L/B layer together."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (89)",
             date: "2026-06-09",
             changes: [

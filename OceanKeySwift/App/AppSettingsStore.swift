@@ -394,7 +394,6 @@ final class AppSettingsStore {
         let developerVIPFlickerSpeed = userDefaults.object(forKey: Keys.developerVIPFlickerSpeed) as? Double ?? 1.6
         let developerVIPJellyEnabled = userDefaults.object(forKey: Keys.developerVIPJellyEnabled) as? Bool ?? false
         let developerVIPJellySpeed = userDefaults.object(forKey: Keys.developerVIPJellySpeed) as? Double ?? 0.75
-        let developerVIPJellyDepthEnabled = userDefaults.object(forKey: Keys.developerVIPJellyDepthEnabled) as? Bool ?? false
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -419,7 +418,7 @@ final class AppSettingsStore {
             developerVIPFlickerSpeed: developerVIPFlickerSpeed,
             developerVIPJellyEnabled: developerVIPJellyEnabled,
             developerVIPJellySpeed: developerVIPJellySpeed,
-            developerVIPJellyDepthEnabled: developerVIPJellyDepthEnabled,
+            developerVIPJellyDepthEnabled: false,
             userDefaults: userDefaults
         )
     }

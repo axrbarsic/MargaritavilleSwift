@@ -110,7 +110,6 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     settings.developerVIPFlickerSpeed = 2.35
     settings.developerVIPJellyEnabled = true
     settings.developerVIPJellySpeed = 1.45
-    settings.developerVIPJellyDepthEnabled = true
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
@@ -121,7 +120,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     #expect(loaded.developerVIPFlickerSpeed == 2.35)
     #expect(loaded.developerVIPJellyEnabled)
     #expect(loaded.developerVIPJellySpeed == 1.45)
-    #expect(loaded.developerVIPJellyDepthEnabled)
+    #expect(!loaded.developerVIPJellyDepthEnabled)
 }
 
 @Test

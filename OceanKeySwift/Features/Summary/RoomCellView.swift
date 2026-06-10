@@ -61,6 +61,18 @@ struct RoomCellView: View {
     }
 
     private var tileBody: some View {
+        Group {
+            if vipJellyActive {
+                TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
+                    tileBodyContent(vipJellyTime: timeline.date.timeIntervalSinceReferenceDate)
+                }
+            } else {
+                tileBodyContent(vipJellyTime: nil)
+            }
+        }
+    }
+
+    private func tileBodyContent(vipJellyTime: TimeInterval?) -> some View {
         HStack(spacing: geometry.taskSpacing) {
             HoldActionTarget(
                 enabled: true,
@@ -74,12 +86,6 @@ struct RoomCellView: View {
                     .foregroundStyle(OceanKeyTheme.roomForeground)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .vipJellyContentMotion(
-                enabled: vipJellyActive,
-                speed: experimentalVIPJellySpeed,
-                seed: vipJellySeed,
-                phase: 0
-            )
 
             ForEach(RoomTask.allCases) { taskButton($0) }
         }
@@ -87,13 +93,20 @@ struct RoomCellView: View {
         .padding(.trailing, geometry.tileTrailingPadding)
         .frame(height: geometry.tileHeight)
         .foregroundStyle(OceanKeyTheme.roomForeground)
-        .background(cellBackground)
+        .vipJellyLayerWarp(
+            enabled: vipJellyActive,
+            time: vipJellyTime,
+            speed: experimentalVIPJellySpeed,
+            seed: vipJellySeed,
+            size: CGSize(width: actionMenuCellWidth, height: geometry.tileHeight)
+        )
+        .background(cellBackground(time: vipJellyTime))
         .vipFlickerEffect(
             enabled: room.isVIP && experimentalVIPFlickerEnabled && !vipJellyActive,
             shape: tileShape,
             speed: experimentalVIPFlickerSpeed
         )
-        .mask(cellMask)
+        .mask(cellMask(time: vipJellyTime))
         .scaleEffect(
             x: experimentalCellPhysicsEnabled && physicsPulse ? 1 + 0.09 * experimentalCellSpringIntensity : 1,
             y: experimentalCellPhysicsEnabled && physicsPulse ? 1 - 0.12 * experimentalCellSpringIntensity : 1
@@ -171,12 +184,6 @@ struct RoomCellView: View {
                 .foregroundStyle(taskColor(task))
                 .frame(width: 50, height: 54)
         }
-        .vipJellyContentMotion(
-            enabled: vipJellyActive,
-            speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed,
-            phase: task.jellyMotionPhase
-        )
     }
 
     private var actionMenuDragGesture: some Gesture {
@@ -296,11 +303,12 @@ struct RoomCellView: View {
         onTaskToggle(task)
     }
 
-    private var cellBackground: some View {
+    private func cellBackground(time: TimeInterval?) -> some View {
         let statusColor = OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)
         return Group {
-            if vipJellyActive {
+            if vipJellyActive, let time {
                 VIPJellyCellChrome(
+                    time: time,
                     color: statusColor,
                     cornerRadius: geometry.tileCornerRadius,
                     isMenuExpanded: isActionMenuExpanded,
@@ -319,10 +327,11 @@ struct RoomCellView: View {
         }
     }
 
-    private var cellMask: some View {
+    private func cellMask(time: TimeInterval?) -> some View {
         Group {
-            if vipJellyActive {
+            if vipJellyActive, let time {
                 VIPJellyCellMask(
+                    time: time,
                     cornerRadius: geometry.tileCornerRadius,
                     isMenuExpanded: isActionMenuExpanded,
                     speed: experimentalVIPJellySpeed,
@@ -379,60 +388,33 @@ private extension View {
 
 private extension View {
     @ViewBuilder
-    func vipJellyContentMotion(
+    func vipJellyLayerWarp(
         enabled: Bool,
+        time: TimeInterval?,
         speed: Double,
         seed: Double,
-        phase: Double
+        size: CGSize
     ) -> some View {
-        if enabled {
-            modifier(VIPJellyContentMotionModifier(speed: speed, seed: seed, phase: phase))
+        if enabled, let time {
+            let amplitude = min(size.height * 0.11, 10)
+            self.distortionEffect(
+                ShaderLibrary.vipJellyContentWarp(
+                    .float(Float(time)),
+                    .float(Float(speed)),
+                    .float(Float(seed)),
+                    .float2(Float(size.width), Float(size.height)),
+                    .float(Float(amplitude))
+                ),
+                maxSampleOffset: CGSize(width: amplitude * 0.3, height: amplitude)
+            )
         } else {
             self
         }
     }
 }
 
-private struct VIPJellyContentMotionModifier: ViewModifier {
-    let speed: Double
-    let seed: Double
-    let phase: Double
-
-    func body(content: Content) -> some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
-            let time = timeline.date.timeIntervalSinceReferenceDate * min(max(speed, 0.2), 2.5)
-            let waveA = sin(time * 1.7 + seed * 9.0 + phase)
-            let waveB = sin(time * 2.3 + seed * 13.0 + phase * 0.7)
-            content
-                .scaleEffect(
-                    x: 1 + waveA * 0.018,
-                    y: 1 + waveB * 0.014,
-                    anchor: .center
-                )
-                .offset(x: waveB * 1.8, y: waveA * 1.2)
-                .rotation3DEffect(
-                    .degrees(waveA * 1.8),
-                    axis: (x: 0.35, y: 1.0, z: 0.0),
-                    perspective: 0.68
-                )
-        }
-    }
-}
-
-private extension RoomTask {
-    var jellyMotionPhase: Double {
-        switch self {
-        case .stripped:
-            1.2
-        case .linen:
-            2.4
-        case .balcony:
-            3.6
-        }
-    }
-}
-
 private struct VIPJellyCellChrome: View {
+    let time: TimeInterval
     let color: Color
     let cornerRadius: CGFloat
     let isMenuExpanded: Bool
@@ -444,105 +426,101 @@ private struct VIPJellyCellChrome: View {
     let depthEnabled: Bool
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
-            let time = timeline.date.timeIntervalSinceReferenceDate
-            let shimmer = vipFlickerValue(time: time, speed: min(max(flickerSpeed, 0.4), 4.0))
-            let flash = flickerEnabled ? pow(shimmer, 2.2) : 0
-            let dip = flickerEnabled ? max(0, 0.5 - shimmer) * 0.42 : 0
-            let shape = VIPJellyCellShape(
-                time: time,
-                speed: speed,
-                seed: seed,
-                cornerRadius: cornerRadius,
-                isMenuExpanded: isMenuExpanded
-            )
+        let shimmer = vipFlickerValue(time: time, speed: min(max(flickerSpeed, 0.4), 4.0))
+        let flash = flickerEnabled ? pow(shimmer, 2.2) : 0
+        let dip = flickerEnabled ? max(0, 0.5 - shimmer) * 0.42 : 0
+        let shape = VIPJellyCellShape(
+            time: time,
+            speed: speed,
+            seed: seed,
+            cornerRadius: cornerRadius,
+            isMenuExpanded: isMenuExpanded
+        )
+        ZStack {
+            shape
+                .fill(color)
+            if depthEnabled {
+                shape
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                .white.opacity(0.52 + flash * 0.14),
+                                .white.opacity(0.18),
+                                .clear
+                            ],
+                            center: .topLeading,
+                            startRadius: 4,
+                            endRadius: 210
+                        )
+                    )
+                    .blendMode(.screen)
+                shape
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .clear,
+                                .black.opacity(0.08),
+                                .black.opacity(0.36 + dip * 0.18)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.multiply)
+                shape
+                    .stroke(.white.opacity(0.42 + flash * 0.12), lineWidth: 2.4)
+                    .blur(radius: 0.45)
+                    .offset(x: -1.1, y: -1.1)
+                    .blendMode(.screen)
+                shape
+                    .stroke(.black.opacity(0.34 + dip * 0.18), lineWidth: 3.6)
+                    .blur(radius: 1.2)
+                    .offset(x: 1.7, y: 1.8)
+                    .blendMode(.multiply)
+                shape
+                    .stroke(.white.opacity(0.18), lineWidth: 0.8)
+                    .blur(radius: 0.1)
+                    .blendMode(.screen)
+            }
             ZStack {
                 shape
-                    .fill(color)
-                if depthEnabled {
-                    shape
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    .white.opacity(0.52 + flash * 0.14),
-                                    .white.opacity(0.18),
-                                    .clear
-                                ],
-                                center: .topLeading,
-                                startRadius: 4,
-                                endRadius: 210
-                            )
-                        )
-                        .blendMode(.screen)
-                    shape
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    .clear,
-                                    .black.opacity(0.08),
-                                    .black.opacity(0.36 + dip * 0.18)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .blendMode(.multiply)
-                    shape
-                        .stroke(.white.opacity(0.42 + flash * 0.12), lineWidth: 2.4)
-                        .blur(radius: 0.45)
-                        .offset(x: -1.1, y: -1.1)
-                        .blendMode(.screen)
-                    shape
-                        .stroke(.black.opacity(0.34 + dip * 0.18), lineWidth: 3.6)
-                        .blur(radius: 1.2)
-                        .offset(x: 1.7, y: 1.8)
-                        .blendMode(.multiply)
-                    shape
-                        .stroke(.white.opacity(0.18), lineWidth: 0.8)
-                        .blur(radius: 0.1)
-                        .blendMode(.screen)
-                }
-                ZStack {
-                    shape
-                        .fill(.white.opacity(flickerEnabled ? 0.04 + flash * 0.38 : 0))
-                        .blendMode(.screen)
-                    shape
-                        .fill(.black.opacity(dip))
-                        .blendMode(.multiply)
-                    shape
-                        .stroke(.white.opacity(0.16 + flash * 0.22), lineWidth: 2.0)
-                        .blendMode(.screen)
-                }
-                .compositingGroup()
+                    .fill(.white.opacity(flickerEnabled ? 0.04 + flash * 0.38 : 0))
+                    .blendMode(.screen)
+                shape
+                    .fill(.black.opacity(dip))
+                    .blendMode(.multiply)
+                shape
+                    .stroke(.white.opacity(0.16 + flash * 0.22), lineWidth: 2.0)
+                    .blendMode(.screen)
             }
             .compositingGroup()
-            .shadow(
-                color: .black.opacity(depthEnabled ? shadowOpacity + 0.18 : shadowOpacity),
-                radius: depthEnabled ? 10 : 5,
-                x: 0,
-                y: depthEnabled ? 7 : 4
-            )
         }
+        .compositingGroup()
+        .shadow(
+            color: .black.opacity(depthEnabled ? shadowOpacity + 0.18 : shadowOpacity),
+            radius: depthEnabled ? 10 : 5,
+            x: 0,
+            y: depthEnabled ? 7 : 4
+        )
     }
 }
 
 private struct VIPJellyCellMask: View {
+    let time: TimeInterval
     let cornerRadius: CGFloat
     let isMenuExpanded: Bool
     let speed: Double
     let seed: Double
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
-            VIPJellyCellShape(
-                time: timeline.date.timeIntervalSinceReferenceDate,
-                speed: speed,
-                seed: seed,
-                cornerRadius: cornerRadius,
-                isMenuExpanded: isMenuExpanded
-            )
-            .fill(.black)
-        }
+        VIPJellyCellShape(
+            time: time,
+            speed: speed,
+            seed: seed,
+            cornerRadius: cornerRadius,
+            isMenuExpanded: isMenuExpanded
+        )
+        .fill(.black)
     }
 }
 
