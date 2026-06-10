@@ -15,7 +15,13 @@ struct SummaryHeader: View {
                 softButton(systemName: "line.3.horizontal", action: onOpenSettings)
                     .opacity(CGFloat(1) - min(selectionPuzzleProgress * CGFloat(1.65), CGFloat(1)))
 
-                Spacer(minLength: 8)
+                PersonalCartMarkerStrip(
+                    markers: personalCartMarkers,
+                    building: .a,
+                    onTap: openPersonalCartMarkerPicker
+                )
+
+                Spacer(minLength: 6)
 
                 HStack(spacing: 12) {
                     Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
@@ -29,12 +35,14 @@ struct SummaryHeader: View {
 
                 PersonalCartMarkerStrip(
                     markers: personalCartMarkers,
+                    building: .b,
                     onTap: openPersonalCartMarkerPicker
                 )
 
-                Spacer(minLength: 8)
+                Spacer(minLength: 94)
             }
-            .padding(.horizontal, 18)
+            .padding(.leading, 18)
+            .padding(.trailing, 10)
             .frame(width: proxy.size.width, height: proxy.size.height)
             .overlay {
                 SummarySelectionPuzzleHandle(

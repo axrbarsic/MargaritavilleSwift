@@ -2,11 +2,12 @@ import SwiftUI
 
 struct PersonalCartMarkerStrip: View {
     let markers: PersonalCartMarkers
+    let building: Building
     let onTap: (PersonalCartMarkerSlot) -> Void
 
     var body: some View {
-        HStack(spacing: 5) {
-            ForEach(PersonalCartMarkers.slots) { slot in
+        HStack(spacing: 6) {
+            ForEach(slots) { slot in
                 PersonalCartMarkerButton(
                     slot: slot,
                     floor: markers.floor(for: slot),
@@ -16,6 +17,10 @@ struct PersonalCartMarkerStrip: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Метки персональных тележек")
+    }
+
+    private var slots: [PersonalCartMarkerSlot] {
+        PersonalCartMarkers.slots.filter { $0.building == building }
     }
 }
 
@@ -27,12 +32,12 @@ private struct PersonalCartMarkerButton: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 11, weight: .black, design: .rounded))
+                .font(.system(size: 12, weight: .black, design: .rounded))
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
                 .foregroundStyle(foreground)
-                .frame(width: 24, height: 24)
+                .frame(width: 32, height: 25)
                 .background(fill)
                 .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 .overlay {
@@ -88,6 +93,7 @@ private struct PersonalCartMarkerButton: View {
             bYellowFloor: 5,
             bGrayFloor: 2
         ),
+        building: .a,
         onTap: { _ in }
     )
     .padding()
