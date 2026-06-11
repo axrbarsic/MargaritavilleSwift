@@ -53,6 +53,10 @@ struct WorkSetupScreen: View {
                                 dayCategoryFilter: dayCategoryFilter,
                                 dayCategoryTimePreset: dayCategoryTimePreset,
                                 dayCategoryCounts: dayCategoryCounts,
+                                offTerritorySelectionGroups: offTerritorySelectionGroups(
+                                    forCart: cartNumber,
+                                    currentTerritory: effectiveTerritory(forCart: cartNumber)
+                                ),
                                 roomCategory: { roomID in workSession.room(id: roomID)?.dayCategory },
                                 roomCategoryTime: { roomID in workSession.room(id: roomID)?.dayCategoryTime },
                                 onActiveDayCategoryChanged: setActiveDayCategory,
@@ -181,6 +185,20 @@ struct WorkSetupScreen: View {
 
     private func blockedRooms(forCart cartNumber: Int) -> [RoomID: Int] {
         workSession.blockedRooms(forCart: cartNumber, territory: effectiveTerritory(forCart: cartNumber))
+    }
+
+    private func offTerritorySelectionGroups(
+        forCart cartNumber: Int,
+        currentTerritory: Territory
+    ) -> [WorkSetupTerritorySelectionGroup] {
+        let selectedRooms = workSession.selectedRooms(forCart: cartNumber)
+        guard !selectedRooms.isEmpty else { return [] }
+        return workSession.effectiveCatalog.compactMap { territory in
+            guard territory.id != currentTerritory.id else { return nil }
+            let rooms = territory.rooms.filter { selectedRooms.contains($0) }
+            guard !rooms.isEmpty else { return nil }
+            return WorkSetupTerritorySelectionGroup(territory: territory, rooms: rooms)
+        }
     }
 }
 

@@ -100,6 +100,9 @@ verification.
   12 PM, 2 PM, and 5 PM. Selected setup tiles display the category badge plus
   the selected time; non-Due-Out categories stay time-free. Category and filter
   chips now show live selected-room counters.
+- Margaritaville setup now shows a compact "already selected in other zones"
+  strip for the focused cart, so switching one cart between buildings/floors
+  no longer looks like earlier room picks disappeared.
 - Margaritaville simple-cycle status protects completed rooms: regular advance
   stops at green, and returning a room to yellow requires the explicit reset
   action from the tile menu.

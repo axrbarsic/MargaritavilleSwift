@@ -105,6 +105,7 @@ struct CartSetupCard: View {
     let dayCategoryFilter: RoomDayCategory?
     let dayCategoryTimePreset: RoomDayCategoryTimePreset?
     let dayCategoryCounts: RoomDayCategoryCounts
+    let offTerritorySelectionGroups: [WorkSetupTerritorySelectionGroup]
     let roomCategory: (RoomID) -> RoomDayCategory?
     let roomCategoryTime: (RoomID) -> Date?
     let onActiveDayCategoryChanged: (RoomDayCategory) -> Void
@@ -122,6 +123,7 @@ struct CartSetupCard: View {
                 territories: territories,
                 onChanged: onTerritoryChanged
             )
+            WorkSetupTerritorySelectionSummary(groups: offTerritorySelectionGroups)
             if dayCategoriesEnabled {
                 RoomDayCategoryControls(
                     activeCategory: activeDayCategory,
@@ -188,131 +190,6 @@ struct CartSetupCard: View {
             Array(repeating: GridItem(.flexible(minimum: 44), spacing: 8), count: 4)
         }
     }
-}
-
-struct TerritoryPicker: View {
-    let territory: Territory
-    let territories: [Territory]
-    let onChanged: (Territory) -> Void
-
-    private var buildings: [Building] {
-        Array(Set(territories.map(\.building))).sorted { $0.label < $1.label }
-    }
-
-    private var floors: [Int] {
-        Array(Set(territories.map(\.floor))).sorted()
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            HStack(spacing: 8) {
-                ForEach(buildings, id: \.self) { building in
-                    pickerChip(
-                        building.label,
-                        selected: territory.building == building,
-                        action: { update(building: building, floor: territory.floor) }
-                    )
-                }
-            }
-
-            HStack(spacing: 8) {
-                ForEach(floors, id: \.self) { floor in
-                    pickerChip(
-                        "\(floor)",
-                        selected: territory.floor == floor,
-                        action: { update(building: territory.building, floor: floor) }
-                    )
-                }
-            }
-        }
-    }
-
-    private func update(building: Building, floor: Int) {
-        if let next = territories.first(where: { $0.building == building && $0.floor == floor }) {
-            onChanged(next)
-        }
-    }
-
-    private func pickerChip(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.system(size: 15, weight: .black, design: .rounded))
-                .frame(minWidth: 46)
-                .padding(.vertical, 10)
-                .foregroundStyle(selected ? OceanKeyTheme.roomForeground : .white)
-                .background(selected ? OceanKeyTheme.accent : .black.opacity(0.16))
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-struct RoomPickButton: View {
-    let room: RoomID
-    let selected: Bool
-    let blockedByCart: Int?
-    let layout: HotelSummaryLayout
-    let dayCategory: RoomDayCategory?
-    let dayCategoryTime: Date?
-    let showsDayCategory: Bool
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            VStack(spacing: 3) {
-                Text(RoomCatalog.displayRoomID(room, compactLetteredLabels: true))
-                    .font(.system(size: 18, weight: .black, design: .rounded))
-                    .monospacedDigit()
-                if let blockedByCart {
-                    Text("T\(blockedByCart)")
-                        .font(.system(size: 9, weight: .black, design: .rounded))
-                }
-                if showsDayCategory, selected, let dayCategory {
-                    VStack(spacing: 2) {
-                        Text(dayCategory.shortTitle)
-                        if let dayCategoryTime {
-                            Text(RoomPickButton.timeFormatter.string(from: dayCategoryTime))
-                                .monospacedDigit()
-                        }
-                    }
-                    .font(.system(size: 10, weight: .black, design: .rounded))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.58)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(Color.black.opacity(0.22))
-                    .clipShape(Capsule())
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: layout == .squareGrid4 ? nil : 48)
-            .aspectRatio(layout == .squareGrid4 ? 1 : nil, contentMode: .fit)
-            .foregroundStyle(foreground)
-            .background(background)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .disabled(blockedByCart != nil)
-    }
-
-    private var foreground: Color {
-        blockedByCart == nil ? (selected ? OceanKeyTheme.roomForeground : .white) : OceanKeyTheme.secondaryText.opacity(0.42)
-    }
-
-    private var background: Color {
-        if blockedByCart != nil { return .black.opacity(0.10) }
-        if selected, let dayCategory {
-            return OceanKeyTheme.fill(for: dayCategory)
-        }
-        return selected ? OceanKeyTheme.accent : .black.opacity(0.20)
-    }
-
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "h:mm a"
-        return formatter
-    }()
 }
 
 struct EmptySetupHint: View {

@@ -234,3 +234,6 @@ Simulator unless explicitly allowed.
 - Margaritaville square summary tiles now expose voice/media, VIP, schedule,
   and reset through a native context menu, and the grid reuses compact media
   and VIP indicators.
+- Margaritaville setup shows selected rooms from other buildings/floors of the
+  same cart as compact chips, making multi-territory cart selection visible
+  while the main grid is focused on one territory.
