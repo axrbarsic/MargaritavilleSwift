@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.2.0 (121)",
+            date: "2026-06-11",
+            changes: [
+                "Split WorkSessionStore note/media mutations and shared mutation plumbing into focused extension files.",
+                "Kept work-session behavior unchanged while reducing the central store file size."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (120)",
             date: "2026-06-11",
             changes: [

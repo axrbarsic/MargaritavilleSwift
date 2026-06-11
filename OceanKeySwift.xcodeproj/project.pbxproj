@@ -65,6 +65,7 @@
 		6E67EAAFCDF174CA9E7BEF1E /* AIVisualPresetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF216385A680EB15CDC68033 /* AIVisualPresetStore.swift */; };
 		6E8224B3CE09925B70B72798 /* RoomDayCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */; };
 		714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */; };
+		736AF3EE04B04D65B3A85050 /* WorkSessionStore+NotesMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A634B938E0A735D04C16660 /* WorkSessionStore+NotesMedia.swift */; };
 		7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */; };
 		737F1A575F371EAC9B6103EF /* PersistentWorkSessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */; };
 		74F755CC983F8493F4FAF4A6 /* PerformanceTelemetryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A45905838B30EDFC18C397 /* PerformanceTelemetryStoreTests.swift */; };
@@ -104,6 +105,7 @@
 		A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A7943D626E20E20C9F481 /* SpriteKit.framework */; };
 		A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8F64AABB38A2036C634BCB /* SwiftData.framework */; };
 		A630CB74A998E3B1A321DF76 /* SwiftDataWorkSessionRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */; };
+		A68B88A64A9479384D017E1E /* WorkSessionStore+Mutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B4BE6B357ED35BEC65007 /* WorkSessionStore+Mutation.swift */; };
 		A703675234FF769CF867B2BD /* MatrixRainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C831B23410D63DEBCFBC85BF /* MatrixRainConfiguration.swift */; };
 		A727B57A65048FA67FE9E425 /* AppleSyncStatusEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E24444682CDA12B877EB67 /* AppleSyncStatusEnvironment.swift */; };
 		A81C9CEAA6F5C0B8AB7C4BF0 /* BuildChangelogScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */; };
@@ -175,6 +177,7 @@
 		11AE7DB8A2119718A8E5A240 /* VoiceNoteBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteBubble.swift; sourceTree = "<group>"; };
 		1576751457D918F28F73179E /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
 		1909D54CE539693E2E057B69 /* WorkSessionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistory.swift; sourceTree = "<group>"; };
+		1A634B938E0A735D04C16660 /* WorkSessionStore+NotesMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+NotesMedia.swift"; sourceTree = "<group>"; };
 		1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyTheme.swift; sourceTree = "<group>"; };
 		1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentWorkSessionMapper.swift; sourceTree = "<group>"; };
 		2062FCE470A9842405988074 /* WorkSetupTerritorySelectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupTerritorySelectionSummary.swift; sourceTree = "<group>"; };
@@ -208,6 +211,7 @@
 		48296E16DE0C7CFD8EF178F7 /* SettingsWorkSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWorkSection.swift; sourceTree = "<group>"; };
 		4A5F4387C50664235699ED2C /* KeychainSecretStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainSecretStore.swift; sourceTree = "<group>"; };
 		4A5FB5B5BF1C322BC8B5C892 /* PersistentAIVisualPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentAIVisualPreset.swift; sourceTree = "<group>"; };
+		4C1B4BE6B357ED35BEC65007 /* WorkSessionStore+Mutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Mutation.swift"; sourceTree = "<group>"; };
 		4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionStoreTests.swift; sourceTree = "<group>"; };
 		4D3F2DE20CF0C54E078DB861 /* VIPJellyContentWarp.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = VIPJellyContentWarp.metal; sourceTree = "<group>"; };
 		4E3A3C8B003CBAF03504F695 /* RuntimeDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeDiagnosticsTests.swift; sourceTree = "<group>"; };
@@ -572,6 +576,8 @@
 				88C6DC22DBFBABE7D92B1127 /* WorkSessionStore+Catalog.swift */,
 				01619659028AB1BB43A6C515 /* WorkSessionStore+Consumables.swift */,
 				B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */,
+				4C1B4BE6B357ED35BEC65007 /* WorkSessionStore+Mutation.swift */,
+				1A634B938E0A735D04C16660 /* WorkSessionStore+NotesMedia.swift */,
 				FE907719B6B3BAB75721FA29 /* WorkSessionStore+Persistence.swift */,
 				A3FA8304DBB6369130113E5E /* WorkSessionStore+Selection.swift */,
 				32C549A9354A68C777D55168 /* WorkSessionStore+SimpleCycle.swift */,
@@ -953,6 +959,8 @@
 				1CDF226FBBF41CB2AD9D107F /* WorkSessionStore+Catalog.swift in Sources */,
 				2519903CBAEE2385242CC63B /* WorkSessionStore+Consumables.swift in Sources */,
 				F516FD9FD2B66D2AC637D72F /* WorkSessionStore+History.swift in Sources */,
+				A68B88A64A9479384D017E1E /* WorkSessionStore+Mutation.swift in Sources */,
+				736AF3EE04B04D65B3A85050 /* WorkSessionStore+NotesMedia.swift in Sources */,
 				3886B379568EF546F95B3A4B /* WorkSessionStore+Persistence.swift in Sources */,
 				AB643CF5E38CEC4927C7E316 /* WorkSessionStore+Selection.swift in Sources */,
 				C7F1B8A70A1DA89F2ACD3F61 /* WorkSessionStore+SimpleCycle.swift in Sources */,
@@ -1048,7 +1056,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 120;
+				CURRENT_PROJECT_VERSION = 121;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1107,7 +1115,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 120;
+				CURRENT_PROJECT_VERSION = 121;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
