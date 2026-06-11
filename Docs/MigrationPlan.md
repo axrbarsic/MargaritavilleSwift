@@ -99,6 +99,10 @@ verification.
 - Margaritaville setup category controls include a 15-minute optional time
   toggle. When enabled, selected room tiles display the category badge plus the
   selected time; when disabled, category assignment remains time-free.
+- Margaritaville has a native catalog editor in Settings. Added/removed room
+  numbers are stored as per-hotel catalog overrides in the active SwiftData
+  store, update setup grids immediately, and deletion is blocked for rooms that
+  are already in the active workday.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

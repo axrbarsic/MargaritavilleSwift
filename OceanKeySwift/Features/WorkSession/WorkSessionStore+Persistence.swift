@@ -13,6 +13,7 @@ struct WorkSessionLoadFailure: LocalizedError, Sendable {
 extension WorkSessionStore {
     func apply(snapshot: WorkSessionSnapshot) {
         selection = snapshot.selection
+        catalogOverrides = snapshot.catalogOverrides
         carts = snapshot.carts
         history = snapshot.history
         lastPersistenceError = nil
@@ -24,7 +25,12 @@ extension WorkSessionStore {
 
     func persist() {
         guard let repository else { return }
-        repository.save(snapshot: WorkSessionSnapshot(selection: selection, carts: carts, history: history))
+        repository.save(snapshot: WorkSessionSnapshot(
+            selection: selection,
+            catalogOverrides: catalogOverrides,
+            carts: carts,
+            history: history
+        ))
         lastPersistenceError = nil
     }
 
@@ -62,6 +68,7 @@ extension WorkSessionStore {
                 return WorkSessionStore(
                     carts: snapshot.carts,
                     selection: snapshot.selection,
+                    catalogOverrides: snapshot.catalogOverrides,
                     history: snapshot.history,
                     hotelProfile: hotelProfile,
                     repository: repository

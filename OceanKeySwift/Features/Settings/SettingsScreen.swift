@@ -1,7 +1,7 @@
-import PhotosUI
 import SwiftUI
 
 struct SettingsScreen: View {
+    @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
     @Bindable var aiVisualPresetStore: AIVisualPresetStore
     let activeHotel: HotelProfile
@@ -14,7 +14,6 @@ struct SettingsScreen: View {
     @State private var isChangelogPresented = false
     @State private var isResetConfirmationPresented = false
     @State private var pendingHotelSelection: HotelProfile?
-    @State private var selectedBackgroundVideoItem: PhotosPickerItem?
 
     var body: some View {
         ZStack {
@@ -104,9 +103,15 @@ struct SettingsScreen: View {
             appearanceSection
             settingsSection
         case .background:
-            backgroundSection
+            SettingsBackgroundSection(appSettings: appSettings)
         case .workflow:
-            workSection
+            SettingsWorkSection(
+                appSettings: appSettings,
+                workSession: workSession,
+                activeHotel: activeHotel,
+                appleSyncStatus: appleSyncStatus,
+                onPendingHotelSelection: { pendingHotelSelection = $0 }
+            )
         case .developer:
             experimentalSection
             deepSeekLabSection
@@ -251,212 +256,6 @@ struct SettingsScreen: View {
         }
     }
 
-    private var backgroundSection: some View {
-        SettingsPanel(
-            title: "Фон приложения",
-            subtitle: "Matrix Rain или локальное видео как живая заставка основного экрана."
-        ) {
-            Picker("Заставка", selection: $appSettings.appBackgroundMode) {
-                ForEach(AppBackgroundMode.allCases) { mode in
-                    Text(mode.title).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: appSettings.appBackgroundMode) { _, _ in
-                feedback.confirm()
-            }
-
-            SettingsInfoRow(
-                title: "Заставка",
-                value: appSettings.appBackgroundMode.description,
-                systemName: "grid",
-                subtitle: backgroundModeSubtitle
-            )
-            if appSettings.appBackgroundMode == .matrixRain {
-                SettingsSliderRow(
-                    title: "Скорость",
-                    valueLabel: "\(String(format: "%.2f", appSettings.matrixSpeed))x",
-                    systemName: "speedometer",
-                    range: 0.08...3.0,
-                    defaultValue: MatrixRainConfiguration.default.speed,
-                    value: $appSettings.matrixSpeed
-                )
-            }
-            if appSettings.appBackgroundMode == .tvStaticNoise {
-                tvStaticBackgroundControls
-            }
-            if appSettings.appBackgroundMode == .video {
-                videoBackgroundControls
-            }
-        }
-    }
-
-    private var backgroundModeSubtitle: String {
-        switch appSettings.appBackgroundMode {
-        case .off:
-            "Фон отключён, основной экран остаётся чёрным."
-        case .matrixRain:
-            "Matrix Rain как основной живой фон."
-        case .tvStaticNoise:
-            "ShaderKit Dynamic Gray Noise: аналоговый телевизионный снег как основной фон."
-        case .video:
-            "Видео хранится только локально на устройстве."
-        }
-    }
-
-    private var videoBackgroundControls: some View {
-        let videoStatus = appSettings.backgroundVideoRelativePath == nil ? "Выбрать" : "Выбрано"
-
-        return VStack(alignment: .leading, spacing: 12) {
-            PhotosPicker(
-                selection: $selectedBackgroundVideoItem,
-                matching: .videos,
-                photoLibrary: .shared()
-            ) {
-                BackgroundVideoPickerLabel(videoStatus: videoStatus)
-            }
-            .buttonStyle(.plain)
-            .onChange(of: selectedBackgroundVideoItem) { _, item in
-                guard let item else { return }
-                Task { await importBackgroundVideo(item) }
-            }
-
-            SettingsSliderRow(
-                title: "Матовость",
-                valueLabel: "\(Int((appSettings.backgroundVideoBlur * 100).rounded()))%",
-                systemName: "aqi.medium",
-                range: 0...1,
-                defaultValue: 0.28,
-                value: $appSettings.backgroundVideoBlur
-            )
-            SettingsSliderRow(
-                title: "Яркость",
-                valueLabel: "\(Int((appSettings.backgroundVideoBrightness * 100).rounded()))%",
-                systemName: "sun.max.fill",
-                range: -0.85...0.85,
-                defaultValue: 0.08,
-                value: $appSettings.backgroundVideoBrightness
-            )
-            SettingsSliderRow(
-                title: "Зелёный",
-                valueLabel: "\(Int((appSettings.backgroundVideoGreenTint * 100).rounded()))%",
-                systemName: "leaf.fill",
-                range: 0...1,
-                defaultValue: 0.34,
-                value: $appSettings.backgroundVideoGreenTint
-            )
-            SettingsSliderRow(
-                title: "Сетка",
-                valueLabel: "\(Int((appSettings.backgroundVideoGridIntensity * 100).rounded()))%",
-                systemName: "squareshape.split.3x3",
-                range: 0...1,
-                defaultValue: 0,
-                value: $appSettings.backgroundVideoGridIntensity
-            )
-        }
-    }
-
-    private var tvStaticBackgroundControls: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            VStack(alignment: .leading, spacing: 10) {
-                SettingsInfoRow(
-                    title: "Вариант шума",
-                    value: appSettings.tvStaticVariant.title,
-                    systemName: "tv.fill",
-                    subtitle: appSettings.tvStaticVariant.description
-                )
-
-                Picker("Вариант шума", selection: $appSettings.tvStaticVariant) {
-                    ForEach(TVStaticNoiseVariant.allCases) { variant in
-                        Text(variant.title).tag(variant)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: appSettings.tvStaticVariant) { _, _ in
-                    feedback.confirm()
-                }
-            }
-
-            SettingsSliderRow(
-                title: "Яркость",
-                valueLabel: "\(Int((appSettings.tvStaticBrightness * 100).rounded()))%",
-                systemName: "sun.max.fill",
-                range: -1...1,
-                defaultValue: TVStaticNoiseConfiguration.default.brightness,
-                value: $appSettings.tvStaticBrightness
-            )
-            SettingsSliderRow(
-                title: "Зелёный",
-                valueLabel: "\(Int((appSettings.tvStaticGreenTint * 100).rounded()))%",
-                systemName: "leaf.fill",
-                range: 0...1,
-                defaultValue: TVStaticNoiseConfiguration.default.greenTint,
-                value: $appSettings.tvStaticGreenTint
-            )
-        }
-    }
-
-    private var workSection: some View {
-        SettingsPanel(
-            title: "Работа",
-            subtitle: "Поведение раздвижного меню ячейки и рабочие жесты на основном экране."
-        ) {
-            SettingsInfoRow(
-                title: "Синхронизация Apple",
-                value: appleSyncStatus.statusLabel,
-                systemName: appleSyncStatus.isCloudActive ? "icloud.fill" : "externaldrive.fill",
-                subtitle: appleSyncStatus.detailsLabel
-            )
-
-            hotelPicker
-
-            Toggle(isOn: $appSettings.summaryActionMenuAllowsMultiple) {
-                SettingsInfoRow(
-                    title: "Мульти-меню",
-                    value: appSettings.summaryActionMenuAllowsMultiple ? "Несколько" : "Одно",
-                    systemName: "rectangle.stack.fill",
-                    subtitle: "По умолчанию открыто только одно меню ячейки; этот режим разрешает несколько."
-                )
-            }
-            .tint(OceanKeyTheme.accent)
-            .onChange(of: appSettings.summaryActionMenuAllowsMultiple) { _, _ in
-                feedback.confirm()
-            }
-        }
-    }
-
-    private var hotelPicker: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SettingsInfoRow(
-                title: "Отель",
-                value: activeHotel.name,
-                systemName: "building.2.fill",
-                subtitle: "Переключение открывает отдельную рабочую базу выбранного отеля."
-            )
-
-            HStack(spacing: 10) {
-                ForEach(HotelProfile.all) { profile in
-                    Button {
-                        guard profile.id != activeHotel.id else { return }
-                        feedback.confirm()
-                        pendingHotelSelection = profile
-                    } label: {
-                        Text(profile.name)
-                            .font(.system(size: 14, weight: .black, design: .rounded))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 44)
-                            .foregroundStyle(profile.id == activeHotel.id ? OceanKeyTheme.roomForeground : .white)
-                            .background(profile.id == activeHotel.id ? OceanKeyTheme.accent : .black.opacity(0.20))
-                            .clipShape(RoundedRectangle(cornerRadius: 13, style: .continuous))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-    }
-
     private func applyHotelSelection(_ profile: HotelProfile) {
         feedback.confirm()
         onSelectHotel(profile)
@@ -496,22 +295,11 @@ struct SettingsScreen: View {
         appSettings.resetToDefaults()
     }
 
-    @MainActor
-    private func importBackgroundVideo(_ item: PhotosPickerItem) async {
-        do {
-            guard let pickedVideo = try await item.loadTransferable(type: PickedBackgroundVideo.self) else { return }
-            let relativePath = try BackgroundVideoFileStore().saveVideo(from: pickedVideo.url)
-            appSettings.backgroundVideoRelativePath = relativePath
-            appSettings.appBackgroundMode = .video
-            feedback.confirm()
-        } catch {
-            feedback.holdWarning()
-        }
-    }
 }
 
 #Preview {
     SettingsScreen(
+        workSession: .preview(),
         appSettings: AppSettingsStore(),
         aiVisualPresetStore: try! AIVisualPresetStore(inMemory: true),
         activeHotel: .current,

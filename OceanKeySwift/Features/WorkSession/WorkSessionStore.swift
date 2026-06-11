@@ -9,17 +9,20 @@ final class WorkSessionStore {
 
     var carts: [CartSection]
     var selection: WorkSessionSelectionState
+    var catalogOverrides: [RoomCatalogOverride]
     var history: [WorkSessionHistoryEntry]
 
     init(
         carts: [CartSection],
         selection: WorkSessionSelectionState? = nil,
+        catalogOverrides: [RoomCatalogOverride] = [],
         history: [WorkSessionHistoryEntry] = [],
         hotelProfile: HotelProfile = .current,
         repository: WorkSessionRepository? = nil
     ) {
         self.carts = carts
         self.selection = selection ?? Self.selectionState(from: carts, hotelProfile: hotelProfile)
+        self.catalogOverrides = catalogOverrides
         self.history = history
         self.hotelProfile = hotelProfile
         self.repository = repository
@@ -39,6 +42,10 @@ final class WorkSessionStore {
         carts.flatMap { cart in
             cart.rooms.map(\.id)
         }
+    }
+
+    var effectiveCatalog: [Territory] {
+        RoomCatalog.effectiveTerritories(for: hotelProfile, overrides: catalogOverrides)
     }
 
     func toggleTask(_ task: RoomTask, roomId: RoomCell.ID) {

@@ -155,6 +155,7 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
             PersistentWorkSession.self,
             PersistentCartBinding.self,
             PersistentRoomSelection.self,
+            PersistentCatalogOverride.self,
             PersistentCart.self,
             PersistentCartConsumable.self,
             PersistentRoom.self,

@@ -61,6 +61,7 @@ struct SummaryScreen: View {
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsScreen(
+                workSession: workSession,
                 appSettings: appSettings,
                 aiVisualPresetStore: aiVisualPresetStore,
                 activeHotel: activeHotel,

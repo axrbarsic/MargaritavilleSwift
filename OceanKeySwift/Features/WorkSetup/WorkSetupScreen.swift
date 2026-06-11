@@ -47,7 +47,7 @@ struct WorkSetupScreen: View {
                                 selectedRooms: workSession.selectedRooms(forCart: cartNumber),
                                 blockedRooms: blockedRooms(forCart: cartNumber),
                                 isFocused: selectedCartNumber == cartNumber,
-                                territories: workSession.hotelProfile.catalog,
+                                territories: workSession.effectiveCatalog,
                                 layout: workSession.hotelProfile.summaryLayout,
                                 dayCategoriesEnabled: workSession.hotelProfile.dayCategoriesEnabled,
                                 activeDayCategory: activeDayCategory,
@@ -86,6 +86,7 @@ struct WorkSetupScreen: View {
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsScreen(
+                workSession: workSession,
                 appSettings: appSettings,
                 aiVisualPresetStore: aiVisualPresetStore,
                 activeHotel: activeHotel,
@@ -153,7 +154,15 @@ struct WorkSetupScreen: View {
     }
 
     private func effectiveTerritory(forCart cartNumber: Int) -> Territory {
-        workSession.territory(forCart: cartNumber)
+        if let territoryID = workSession.selection.cartBindings[cartNumber]?.territoryID,
+           let territory = workSession.catalogTerritory(id: territoryID) {
+            return territory
+        }
+        if let territory = workSession.territory(forCart: cartNumber) {
+            return territory
+        }
+        let boundTerritoryIDs = Set(workSession.selection.cartBindings.values.map(\.territoryID))
+        return workSession.effectiveCatalog.first { !boundTerritoryIDs.contains($0.id) }
             ?? WorkSessionSelectionRules.preferredTerritory(
                 forCart: cartNumber,
                 existingBindings: workSession.selection.cartBindings,

@@ -6,6 +6,7 @@ enum PersistentWorkSessionMapper {
         WorkSessionSnapshot(
             schemaVersion: session.schemaVersion,
             selection: selection(from: session),
+            catalogOverrides: catalogOverrides(from: session.catalogOverrides ?? []),
             carts: (session.carts ?? [])
                 .sorted { $0.displayOrder < $1.displayOrder }
                 .map(cart(from:)),
@@ -24,6 +25,7 @@ enum PersistentWorkSessionMapper {
         session.workdayLocked = snapshot.selection.workdayLocked
         session.workdayLockUpdatedAt = snapshot.selection.workdayLockUpdatedAt
         syncCartBindings(snapshot.selection, session: session, context: context)
+        syncCatalogOverrides(snapshot.catalogOverrides, session: session, context: context)
         syncRoomSelections(
             snapshot.selection.cartRoomSelections,
             metadata: snapshot.selection.roomSelectionUpdatedAt,

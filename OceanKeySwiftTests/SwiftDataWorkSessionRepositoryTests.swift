@@ -174,6 +174,14 @@ private func makeMargaritavilleTestSnapshot() -> WorkSessionSnapshot {
             workdayLocked: true,
             workdayLockUpdatedAt: selectedAt
         ),
+        catalogOverrides: [
+            RoomCatalogOverride(
+                roomID: "113",
+                territoryID: "A1",
+                isRemoved: false,
+                updatedAt: selectedAt
+            )
+        ],
         carts: [cart],
         history: [
             WorkSessionHistoryEntry(
@@ -323,6 +331,20 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
             workdayLocked: true,
             workdayLockUpdatedAt: selectionAt
         ),
+        catalogOverrides: [
+            RoomCatalogOverride(
+                roomID: "101",
+                territoryID: "A1",
+                isRemoved: true,
+                updatedAt: removedSelectionAt
+            ),
+            RoomCatalogOverride(
+                roomID: "113",
+                territoryID: "A1",
+                isRemoved: false,
+                updatedAt: selectionAt
+            )
+        ],
         carts: carts,
         history: history,
         updatedAt: Date(timeIntervalSince1970: 1_801_018_000)

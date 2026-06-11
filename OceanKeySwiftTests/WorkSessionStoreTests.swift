@@ -221,6 +221,33 @@ func margaritavilleCatalogPreservesRealRoomLists() {
 }
 
 @Test
+func margaritavilleCatalogOverridesAddAndRemoveRooms() {
+    let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
+
+    #expect(store.addCatalogRoom("113") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("113") == true)
+    #expect(store.addCatalogRoom("113") == .duplicate)
+
+    #expect(store.removeCatalogRoom("113") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("113") == false)
+
+    #expect(store.removeCatalogRoom("101") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("101") == false)
+    #expect(store.addCatalogRoom("101") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("101") == true)
+}
+
+@Test
+func margaritavilleCatalogDeletionBlocksActiveRooms() {
+    let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
+    store.toggleCartSelection(1)
+    store.toggleRoomSelection(cartNumber: 1, room: "101")
+
+    #expect(store.removeCatalogRoom("101") == .blockedActiveRoom)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("101") == true)
+}
+
+@Test
 func roomSelectionPreventsCrossCartDuplicates() {
     var selection = WorkSessionSelectionState()
     selection.toggleCart(1)

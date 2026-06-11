@@ -96,6 +96,71 @@ enum RoomCatalog {
         profile.territory(for: room)
     }
 
+    static func effectiveTerritories(
+        for profile: HotelProfile,
+        overrides: [RoomCatalogOverride]
+    ) -> [Territory] {
+        var roomSets = Dictionary(
+            uniqueKeysWithValues: profile.catalog.map { territory in
+                (territory.id, Set(territory.rooms))
+            }
+        )
+        let territoryOrder = Dictionary(
+            uniqueKeysWithValues: profile.catalog.enumerated().map { index, territory in
+                (territory.id, index)
+            }
+        )
+
+        for override in overrides {
+            guard profile.territory(id: override.territoryID) != nil else { continue }
+            if override.isRemoved {
+                roomSets[override.territoryID, default: []].remove(override.roomID)
+            } else {
+                roomSets[override.territoryID, default: []].insert(override.roomID)
+            }
+        }
+
+        return profile.catalog.compactMap { territory in
+            let rooms = (roomSets[territory.id] ?? [])
+                .sorted(by: compareRoomIDs)
+            guard !rooms.isEmpty || territoryOrder[territory.id] != nil else { return nil }
+            return Territory(floor: territory.floor, building: territory.building, rooms: rooms)
+        }
+    }
+
+    static func inferredTerritory(for room: RoomID, in profile: HotelProfile) -> Territory? {
+        if let existing = territory(for: room, in: profile) {
+            return existing
+        }
+        guard let parsed = parseRoomID(room) else { return nil }
+        let floor = parsed.number / 100
+        let sameFloor = profile.catalog.filter { $0.floor == floor }
+        guard !sameFloor.isEmpty else { return nil }
+
+        if profile.id == HotelProfile.margaritaville.id,
+           let bTerritory = sameFloor.first(where: { $0.building == .b }),
+           let bStart = bTerritory.rooms.compactMap({ parseRoomID($0)?.number }).min(),
+           parsed.number >= bStart {
+            return bTerritory
+        }
+
+        if profile.id == HotelProfile.margaritaville.id,
+           let aTerritory = sameFloor.first(where: { $0.building == .a }) {
+            return aTerritory
+        }
+
+        if let aTerritory = sameFloor.first(where: { $0.building == .a }),
+           let aMax = aTerritory.rooms.compactMap({ parseRoomID($0)?.number }).max(),
+           parsed.number <= aMax {
+            return aTerritory
+        }
+        return sameFloor.first(where: { $0.building == .b }) ?? sameFloor.first
+    }
+
+    static func contains(_ room: RoomID, in territories: [Territory]) -> Bool {
+        territories.contains { $0.rooms.contains(room) }
+    }
+
     static func territorySummaryLabel(for rooms: some Sequence<RoomID>, fallback: String) -> String {
         let labels = Set(rooms.compactMap { territory(for: $0)?.label })
         guard !labels.isEmpty else { return fallback }

@@ -12,6 +12,7 @@ final class PersistentWorkSession {
     var workdayLockUpdatedAt: Date?
     @Relationship(deleteRule: .cascade, inverse: \PersistentCartBinding.session) var cartBindings: [PersistentCartBinding]?
     @Relationship(deleteRule: .cascade, inverse: \PersistentRoomSelection.session) var roomSelections: [PersistentRoomSelection]?
+    @Relationship(deleteRule: .cascade, inverse: \PersistentCatalogOverride.session) var catalogOverrides: [PersistentCatalogOverride]?
     @Relationship(deleteRule: .cascade, inverse: \PersistentCart.session) var carts: [PersistentCart]?
     @Relationship(deleteRule: .cascade, inverse: \PersistentHistoryEntry.session) var historyEntries: [PersistentHistoryEntry]?
 
@@ -23,6 +24,7 @@ final class PersistentWorkSession {
         workdayLockUpdatedAt: Date? = nil,
         cartBindings: [PersistentCartBinding] = [],
         roomSelections: [PersistentRoomSelection] = [],
+        catalogOverrides: [PersistentCatalogOverride] = [],
         carts: [PersistentCart] = [],
         historyEntries: [PersistentHistoryEntry] = []
     ) {
@@ -33,8 +35,30 @@ final class PersistentWorkSession {
         self.workdayLockUpdatedAt = workdayLockUpdatedAt
         self.cartBindings = cartBindings
         self.roomSelections = roomSelections
+        self.catalogOverrides = catalogOverrides
         self.carts = carts
         self.historyEntries = historyEntries
+    }
+}
+
+@Model
+final class PersistentCatalogOverride {
+    var roomID: String = ""
+    var territoryID: String = ""
+    var isRemoved: Bool = false
+    var updatedAt: Date = Date()
+    var session: PersistentWorkSession?
+
+    init(
+        roomID: String,
+        territoryID: String,
+        isRemoved: Bool,
+        updatedAt: Date
+    ) {
+        self.roomID = roomID
+        self.territoryID = territoryID
+        self.isRemoved = isRemoved
+        self.updatedAt = updatedAt
     }
 }
 
