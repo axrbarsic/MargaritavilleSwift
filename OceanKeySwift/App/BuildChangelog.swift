@@ -10,6 +10,14 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (112)",
+            date: "2026-06-11",
+            changes: [
+                "Changed Margaritaville setup time controls to Due Out presets: 12 PM, 2 PM, and 5 PM.",
+                "Prevented non-Due-Out setup categories from carrying an accidental time value."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (111)",
             date: "2026-06-11",
             changes: [

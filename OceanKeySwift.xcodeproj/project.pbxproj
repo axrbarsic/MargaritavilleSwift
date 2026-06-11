@@ -92,6 +92,7 @@
 		97DE906DE602F300E58EBD25 /* PersistentAIVisualPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5FB5B5BF1C322BC8B5C892 /* PersistentAIVisualPreset.swift */; };
 		98D664EC55E77F9E55545A73 /* MargaritavilleCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4295E2664F3F1E0142B794 /* MargaritavilleCatalogEditorSection.swift */; };
 		9A12B43A26BB9BB84920CC5C /* PersistentWorkSessionMapper+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA1FF459FA36ED5D33AEC3 /* PersistentWorkSessionMapper+Consumables.swift */; };
+		A0F4DEA862576518F5DE79B9 /* RoomDayCategoryTimePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F9168B8A1F20B6D178E584 /* RoomDayCategoryTimePreset.swift */; };
 		A14E1FEB0B3FF5F4FBB0F8CE /* HotelProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837AB162FC2FEFE8B350FCB4 /* HotelProfile.swift */; };
 		A199E38C0D372F4506DC5865 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A7943D626E20E20C9F481 /* SpriteKit.framework */; };
 		A28D4B3E35CDC765A6DF09ED /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8F64AABB38A2036C634BCB /* SwiftData.framework */; };
@@ -241,6 +242,7 @@
 		BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategory.swift; sourceTree = "<group>"; };
 		BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		BCAF8BEA469DB858BD47A0D4 /* OceanKeySwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OceanKeySwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0F9168B8A1F20B6D178E584 /* RoomDayCategoryTimePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryTimePreset.swift; sourceTree = "<group>"; };
 		C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
 		C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
 		C3ED70772827CF4F9FACCE5C /* OceanKeyPresetBackupDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyPresetBackupDocument.swift; sourceTree = "<group>"; };
@@ -639,6 +641,7 @@
 				A5E3CFB6CDA7132DA0EFA9B9 /* RoomCatalog.swift */,
 				0A6EF704A334D5BFA95B89C9 /* RoomCatalogOverride.swift */,
 				BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */,
+				C0F9168B8A1F20B6D178E584 /* RoomDayCategoryTimePreset.swift */,
 				0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */,
 				6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */,
 				1909D54CE539693E2E057B69 /* WorkSessionHistory.swift */,
@@ -847,6 +850,7 @@
 				714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */,
 				6E8224B3CE09925B70B72798 /* RoomDayCategory.swift in Sources */,
 				9100B7600535F51A42B2CCC1 /* RoomDayCategoryControls.swift in Sources */,
+				A0F4DEA862576518F5DE79B9 /* RoomDayCategoryTimePreset.swift in Sources */,
 				7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */,
 				ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */,
 				4D990915A5767A1B75BAE1C3 /* RoomMediaIndicator.swift in Sources */,
@@ -980,7 +984,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 112;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1039,7 +1043,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 112;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

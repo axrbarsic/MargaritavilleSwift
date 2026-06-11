@@ -96,9 +96,9 @@ verification.
   OOO; the category, optional category time, and category update timestamp
   round-trip through SwiftData and write a history event. The current OceanKey
   profile ignores category commands and keeps the S/L/B workflow unchanged.
-- Margaritaville setup category controls include a 15-minute optional time
-  toggle. When enabled, selected room tiles display the category badge plus the
-  selected time; when disabled, category assignment remains time-free.
+- Margaritaville setup category controls include Due Out time presets for
+  12 PM, 2 PM, and 5 PM. Selected setup tiles display the category badge plus
+  the selected time; non-Due-Out categories stay time-free.
 - Margaritaville simple-cycle status protects completed rooms: regular advance
   stops at green, and returning a room to yellow requires the explicit reset
   action from the tile menu.

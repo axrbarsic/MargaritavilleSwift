@@ -173,6 +173,18 @@ func margaritavilleRoomDayCategoryIsStoredWithHistory() {
 }
 
 @Test
+func margaritavilleDueOutTimePresetsUseExpectedHours() {
+    let calendar = Calendar(identifier: .gregorian)
+    let base = calendar.date(from: DateComponents(year: 2026, month: 6, day: 11, hour: 9))!
+
+    let hours = RoomDayCategoryTimePreset.allCases.map { preset in
+        calendar.component(.hour, from: preset.dateToday(now: base, calendar: calendar))
+    }
+
+    #expect(hours == [12, 14, 17])
+}
+
+@Test
 func dayCategoryIsIgnoredForTaskHotel() {
     let store = WorkSessionStore.preview()
 

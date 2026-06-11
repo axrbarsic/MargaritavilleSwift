@@ -103,14 +103,12 @@ struct CartSetupCard: View {
     let dayCategoriesEnabled: Bool
     let activeDayCategory: RoomDayCategory
     let dayCategoryFilter: RoomDayCategory?
-    let appliesDayCategoryTime: Bool
-    let dayCategoryTimeSelection: RoomScheduleSelection
+    let dayCategoryTimePreset: RoomDayCategoryTimePreset?
     let roomCategory: (RoomID) -> RoomDayCategory?
     let roomCategoryTime: (RoomID) -> Date?
     let onActiveDayCategoryChanged: (RoomDayCategory) -> Void
     let onDayCategoryFilterChanged: (RoomDayCategory?) -> Void
-    let onAppliesDayCategoryTimeChanged: (Bool) -> Void
-    let onDayCategoryTimeSelectionChanged: (RoomScheduleSelection) -> Void
+    let onDayCategoryTimePresetChanged: (RoomDayCategoryTimePreset?) -> Void
     let onFocus: () -> Void
     let onTerritoryChanged: (Territory) -> Void
     let onRoomToggle: (RoomID) -> Void
@@ -127,12 +125,10 @@ struct CartSetupCard: View {
                 RoomDayCategoryControls(
                     activeCategory: activeDayCategory,
                     filter: dayCategoryFilter,
-                    appliesTime: appliesDayCategoryTime,
-                    timeSelection: dayCategoryTimeSelection,
+                    activeTimePreset: dayCategoryTimePreset,
                     onActiveChanged: onActiveDayCategoryChanged,
                     onFilterChanged: onDayCategoryFilterChanged,
-                    onAppliesTimeChanged: onAppliesDayCategoryTimeChanged,
-                    onTimeSelectionChanged: onDayCategoryTimeSelectionChanged
+                    onTimePresetChanged: onDayCategoryTimePresetChanged
                 )
             }
             roomGrid
