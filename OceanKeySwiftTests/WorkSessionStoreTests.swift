@@ -373,6 +373,26 @@ func cartSelectionKeepsRoomsAcrossTerritorySwitches() {
 }
 
 @Test
+func margaritavilleCartSelectionKeepsRoomsAcrossTerritorySwitches() {
+    let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
+    let a3 = RoomCatalog.territory(id: "A3", in: .margaritaville)!
+    let b3 = RoomCatalog.territory(id: "B3", in: .margaritaville)!
+
+    store.toggleCartSelection(5)
+    store.setCartBinding(cartNumber: 5, territory: a3)
+    store.toggleRoomSelection(cartNumber: 5, room: "314")
+    store.setDayCategory(.dueOut, roomId: "314")
+    store.setCartBinding(cartNumber: 5, territory: b3)
+    store.toggleRoomSelection(cartNumber: 5, room: "330")
+    store.setDayCategory(.stayover, roomId: "330")
+
+    #expect(store.selectedRooms(forCart: 5) == Set(["314", "330"]))
+    #expect(store.carts.first { $0.id == 5 }?.building == "A3/B3")
+    #expect(store.room(id: "314")?.dayCategory == .dueOut)
+    #expect(store.room(id: "330")?.dayCategory == .stayover)
+}
+
+@Test
 func lockedWorkdayIgnoresSelectionEdits() {
     var selection = WorkSessionSelectionState()
     selection.toggleCart(7)
