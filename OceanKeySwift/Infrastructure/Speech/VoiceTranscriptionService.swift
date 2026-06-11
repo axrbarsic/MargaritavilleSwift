@@ -60,7 +60,7 @@ private func requestMicrophonePermission() async -> Bool {
 @MainActor
 final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     private static let logger = Logger(
-        subsystem: "com.alex.oceankey.swift",
+        subsystem: "com.alex.margaritaville.swift",
         category: "VoiceTranscription"
     )
 

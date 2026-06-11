@@ -10,15 +10,15 @@ func runtimeDiagnosticsReadsProMotionOptIn() {
 @Test
 func appleSyncStatusReportsCloudKitAndFallbackModes() {
     let active = AppleSyncStatus(
-        requestedMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"),
-        activeMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"),
+        requestedMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift"),
+        activeMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift"),
         accountStatus: .available
     )
     #expect(active.statusLabel == "iCloud активен")
     #expect(active.isCloudActive)
 
     let fallback = AppleSyncStatus(
-        requestedMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"),
+        requestedMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift"),
         activeMode: .localOnly,
         accountStatus: .unknown
     )
@@ -26,8 +26,8 @@ func appleSyncStatusReportsCloudKitAndFallbackModes() {
     #expect(!fallback.isCloudActive)
 
     let noAccount = AppleSyncStatus(
-        requestedMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"),
-        activeMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"),
+        requestedMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift"),
+        activeMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift"),
         accountStatus: .noAccount
     )
     #expect(noAccount.statusLabel == "Нет iCloud")

@@ -77,13 +77,13 @@ func swiftDataRepositoriesUsePhysicallyIsolatedStoresPerHotel() throws {
 func inMemoryCloudKitModeFallsBackToLocalStorage() throws {
     let repository = try SwiftDataWorkSessionRepository(
         inMemory: true,
-        syncMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift")
+        syncMode: .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift")
     )
     let snapshot = makePersistentTestSnapshot()
 
     try repository.saveImmediately(snapshot: snapshot)
 
-    #expect(repository.syncMode == .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift"))
+    #expect(repository.syncMode == .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift"))
     #expect(repository.activeSyncMode == .localOnly)
     let loaded = try #require(try repository.loadSnapshot())
     #expect(loaded == snapshot)
@@ -94,7 +94,7 @@ func defaultAppleSyncConfigurationUsesLocalStorageUntilProvisioningSupportsCloud
     #expect(AppleSyncConfiguration.defaultSyncMode == .localOnly)
     #expect(
         AppleSyncConfiguration.cloudKitSyncMode
-            == .privateCloudKit(containerIdentifier: "iCloud.com.alex.oceankey.swift")
+            == .privateCloudKit(containerIdentifier: "iCloud.com.alex.margaritaville.swift")
     )
 }
 

@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (1)",
+            date: "2026-06-11",
+            changes: [
+                "Split Margaritaville into a separate installed iOS app with its own bundle identifier and app storage.",
+                "The app now boots directly into the Margaritaville workflow instead of showing a hotel chooser.",
+                "Simplified the Margaritaville summary header to match the main OceanKey structure: settings, center stats, and the edit-entry handle."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (121)",
             date: "2026-06-11",
             changes: [

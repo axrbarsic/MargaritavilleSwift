@@ -1,15 +1,16 @@
-name: OceanKeySwift
+name: MargaritavilleSwift
 options:
-  bundleIdPrefix: com.alex.oceankey
+  bundleIdPrefix: com.alex.margaritaville
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "0.2.0"
-    CURRENT_PROJECT_VERSION: "121"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
     DEVELOPMENT_TEAM: J6MW4855LU
+    CODE_SIGN_STYLE: Automatic
 targets:
   OceanKeySwift:
     type: application
@@ -28,9 +29,9 @@ targets:
       - sdk: CloudKit.framework
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.alex.oceankey.swift
+        PRODUCT_BUNDLE_IDENTIFIER: com.alex.margaritaville.swift
         "CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]": OceanKeySwift/OceanKeySwift.entitlements
-        INFOPLIST_KEY_CFBundleDisplayName: OceanKey Swift
+        INFOPLIST_KEY_CFBundleDisplayName: Margaritaville
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -38,13 +39,13 @@ targets:
     info:
       path: OceanKeySwift/Info.plist
       properties:
-        CFBundleDisplayName: OceanKey Swift
+        CFBundleDisplayName: Margaritaville
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CADisableMinimumFrameDurationOnPhone: true
-        NSCameraUsageDescription: OceanKey uses the camera to attach local photos and videos to carts and rooms.
-        NSMicrophoneUsageDescription: OceanKey records audio while capturing local videos.
-        NSSpeechRecognitionUsageDescription: OceanKey transcribes local Russian voice notes into editable text.
+        NSCameraUsageDescription: Margaritaville uses the camera to attach local photos and videos to carts and rooms.
+        NSMicrophoneUsageDescription: Margaritaville records audio while capturing local videos.
+        NSSpeechRecognitionUsageDescription: Margaritaville transcribes local voice notes into editable text.
         UIBackgroundModes:
           - remote-notification
         UILaunchScreen: {}
@@ -58,3 +59,11 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
       - target: OceanKeySwift
+schemes:
+  OceanKeySwift:
+    build:
+      targets:
+        OceanKeySwift: all
+    test:
+      targets:
+        - OceanKeySwiftTests

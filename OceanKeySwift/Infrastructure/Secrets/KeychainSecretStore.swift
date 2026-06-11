@@ -14,7 +14,7 @@ struct KeychainSecretStore: SecretStore {
 
     private let service: String
 
-    init(service: String = "com.alex.oceankey.swift.secrets") {
+    init(service: String = "com.alex.margaritaville.swift.secrets") {
         self.service = service
     }
 

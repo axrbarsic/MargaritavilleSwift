@@ -59,10 +59,9 @@ struct SettingsBackgroundSection: View {
 
     private var videoControls: some View {
         VStack(alignment: .leading, spacing: 12) {
+            let videoStatus = appSettings.backgroundVideoRelativePath == nil ? "Выбрать" : "Выбрано"
             PhotosPicker(selection: $selectedBackgroundVideoItem, matching: .videos, photoLibrary: .shared()) {
-                BackgroundVideoPickerLabel(
-                    videoStatus: appSettings.backgroundVideoRelativePath == nil ? "Выбрать" : "Выбрано"
-                )
+                BackgroundVideoPickerLabel(videoStatus: videoStatus)
             }
             .buttonStyle(.plain)
             .onChange(of: selectedBackgroundVideoItem) { _, item in

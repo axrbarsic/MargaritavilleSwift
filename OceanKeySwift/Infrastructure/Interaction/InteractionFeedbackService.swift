@@ -122,7 +122,7 @@ final class InteractionFeedbackService {
 }
 
 private final class InteractionSoundPlayer {
-    private static let logger = Logger(subsystem: "com.alex.oceankey.swift", category: "InteractionSound")
+    private static let logger = Logger(subsystem: "com.alex.margaritaville.swift", category: "InteractionSound")
 
     private var selectPlayer: AVAudioPlayer?
     private var deselectPlayer: AVAudioPlayer?

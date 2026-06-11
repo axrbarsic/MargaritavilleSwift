@@ -6,20 +6,18 @@ struct AppRootView: View {
     @Bindable var aiVisualPresetStore: AIVisualPresetStore
     @Bindable var performanceTelemetry: PerformanceTelemetryStore
     let interactionFeedbackService: InteractionFeedbackService
-    let activeHotel: HotelProfile?
+    let activeHotel: HotelProfile
     let onSelectHotel: (HotelProfile) -> Void
 
     var body: some View {
         NavigationStack {
-            if activeHotel == nil {
-                HotelSelectionScreen(onSelect: onSelectHotel)
-            } else if workSession.selection.workdayLocked {
+            if workSession.selection.workdayLocked {
                 SummaryScreen(
                     workSession: workSession,
                     appSettings: appSettings,
                     aiVisualPresetStore: aiVisualPresetStore,
                     performanceTelemetry: performanceTelemetry,
-                    activeHotel: activeHotel ?? workSession.hotelProfile,
+                    activeHotel: activeHotel,
                     onSelectHotel: onSelectHotel
                 )
             } else {
@@ -28,7 +26,7 @@ struct AppRootView: View {
                     appSettings: appSettings,
                     aiVisualPresetStore: aiVisualPresetStore,
                     performanceTelemetry: performanceTelemetry,
-                    activeHotel: activeHotel ?? workSession.hotelProfile,
+                    activeHotel: activeHotel,
                     onSelectHotel: onSelectHotel
                 )
             }

@@ -12,6 +12,7 @@ struct SummaryHeader: View {
     let counts: SummaryCounts
     var progressLabel: String?
     var statusChips: [StatusChip] = []
+    var showsPersonalCartMarkers = true
     @Binding var personalCartMarkers: PersonalCartMarkers
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
@@ -25,21 +26,25 @@ struct SummaryHeader: View {
                 softButton(systemName: "line.3.horizontal", action: onOpenSettings)
                     .opacity(CGFloat(1) - min(selectionPuzzleProgress * CGFloat(1.65), CGFloat(1)))
 
-                PersonalCartMarkerStrip(
-                    markers: personalCartMarkers,
-                    building: .a,
-                    onTap: openPersonalCartMarkerPicker
-                )
+                if showsPersonalCartMarkers {
+                    PersonalCartMarkerStrip(
+                        markers: personalCartMarkers,
+                        building: .a,
+                        onTap: openPersonalCartMarkerPicker
+                    )
+                }
 
                 Spacer(minLength: 6)
 
                 centerStats
 
-                PersonalCartMarkerStrip(
-                    markers: personalCartMarkers,
-                    building: .b,
-                    onTap: openPersonalCartMarkerPicker
-                )
+                if showsPersonalCartMarkers {
+                    PersonalCartMarkerStrip(
+                        markers: personalCartMarkers,
+                        building: .b,
+                        onTap: openPersonalCartMarkerPicker
+                    )
+                }
 
                 Spacer(minLength: 94)
             }

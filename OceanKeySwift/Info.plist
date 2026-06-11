@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>OceanKey Swift</string>
+	<string>Margaritaville</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -23,11 +23,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>OceanKey uses the camera to attach local photos and videos to carts and rooms.</string>
+	<string>Margaritaville uses the camera to attach local photos and videos to carts and rooms.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>OceanKey records audio while capturing local videos.</string>
+	<string>Margaritaville records audio while capturing local videos.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>OceanKey transcribes local Russian voice notes into editable text.</string>
+	<string>Margaritaville transcribes local voice notes into editable text.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -9,7 +9,7 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     }
 
     private static let logger = Logger(
-        subsystem: "com.alex.oceankey.swift",
+        subsystem: "com.alex.margaritaville.swift",
         category: "SwiftDataWorkSessionRepository"
     )
 
@@ -239,10 +239,10 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
 
 private final class SwiftDataWorkSessionWriter: @unchecked Sendable {
     private let logger = Logger(
-        subsystem: "com.alex.oceankey.swift",
+        subsystem: "com.alex.margaritaville.swift",
         category: "SwiftDataWorkSessionWriter"
     )
-    private let queue = DispatchQueue(label: "com.alex.oceankey.swift.swiftdata-writer", qos: .utility)
+    private let queue = DispatchQueue(label: "com.alex.margaritaville.swift.swiftdata-writer", qos: .utility)
     private let container: ModelContainer
 
     init(container: ModelContainer) {

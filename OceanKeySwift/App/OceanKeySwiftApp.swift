@@ -5,7 +5,7 @@ import SwiftUI
 struct OceanKeySwiftApp: App {
     @State private var workSession: WorkSessionStore
     @State private var appSettings: AppSettingsStore
-    @State private var activeHotel: HotelProfile?
+    @State private var activeHotel: HotelProfile
     @State private var workSessionRepository: SwiftDataWorkSessionRepository
     @State private var aiVisualPresetStore: AIVisualPresetStore
     @State private var performanceTelemetry: PerformanceTelemetryStore
@@ -17,8 +17,8 @@ struct OceanKeySwiftApp: App {
 
     init() {
         let settings = AppSettingsStore.load()
-        let selectedHotel = HotelProfile.profile(id: settings.selectedHotelID)
-        let bootProfile = selectedHotel ?? .current
+        let bootProfile = HotelProfile.margaritaville
+        settings.selectedHotelID = bootProfile.id
         let repository = SwiftDataWorkSessionRepository(
             hotelID: bootProfile.id,
             syncMode: AppleSyncConfiguration.defaultSyncMode
@@ -29,7 +29,7 @@ struct OceanKeySwiftApp: App {
             repository: repository
         ))
         _appSettings = State(initialValue: settings)
-        _activeHotel = State(initialValue: selectedHotel)
+        _activeHotel = State(initialValue: bootProfile)
         _aiVisualPresetStore = State(initialValue: Self.makeAIVisualPresetStore())
         _performanceTelemetry = State(initialValue: PerformanceTelemetryStore())
         _appleSyncStatus = State(initialValue: .repository(repository))
@@ -76,7 +76,6 @@ struct OceanKeySwiftApp: App {
                     performanceTelemetry.start()
                 }
                 .task {
-                    guard activeHotel != nil else { return }
                     await loadWorkSessionIfNeeded()
                     await refreshAppleSyncStatusIfNeeded()
                 }
@@ -90,6 +89,7 @@ struct OceanKeySwiftApp: App {
 
     @MainActor
     private func selectHotel(_ hotelProfile: HotelProfile) {
+        guard hotelProfile.id == HotelProfile.margaritaville.id else { return }
         let repository = SwiftDataWorkSessionRepository(
             hotelID: hotelProfile.id,
             syncMode: AppleSyncConfiguration.defaultSyncMode
