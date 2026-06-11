@@ -13,6 +13,8 @@ struct WorkSetupScreen: View {
     @State private var isSettingsPresented = false
     @State private var activeDayCategory: RoomDayCategory = .dueOut
     @State private var dayCategoryFilter: RoomDayCategory?
+    @State private var appliesDayCategoryTime = false
+    @State private var dayCategoryTimeSelection = RoomScheduleSelection.defaultSelection()
 
     var body: some View {
         ZStack {
@@ -50,9 +52,14 @@ struct WorkSetupScreen: View {
                                 dayCategoriesEnabled: workSession.hotelProfile.dayCategoriesEnabled,
                                 activeDayCategory: activeDayCategory,
                                 dayCategoryFilter: dayCategoryFilter,
+                                appliesDayCategoryTime: appliesDayCategoryTime,
+                                dayCategoryTimeSelection: dayCategoryTimeSelection,
                                 roomCategory: { roomID in workSession.room(id: roomID)?.dayCategory },
+                                roomCategoryTime: { roomID in workSession.room(id: roomID)?.dayCategoryTime },
                                 onActiveDayCategoryChanged: { activeDayCategory = $0 },
                                 onDayCategoryFilterChanged: { dayCategoryFilter = $0 },
+                                onAppliesDayCategoryTimeChanged: { appliesDayCategoryTime = $0 },
+                                onDayCategoryTimeSelectionChanged: { dayCategoryTimeSelection = $0 },
                                 onFocus: { selectedCartNumber = cartNumber },
                                 onTerritoryChanged: { territory in
                                     feedback.confirm()
@@ -141,7 +148,8 @@ struct WorkSetupScreen: View {
         } else {
             feedback.confirm()
         }
-        workSession.setDayCategory(activeDayCategory, roomId: room)
+        let selectedTime = appliesDayCategoryTime ? dayCategoryTimeSelection.dateToday() : nil
+        workSession.setDayCategory(activeDayCategory, time: selectedTime, roomId: room)
     }
 
     private func effectiveTerritory(forCart cartNumber: Int) -> Territory {

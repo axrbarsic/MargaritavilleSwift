@@ -103,9 +103,14 @@ struct CartSetupCard: View {
     let dayCategoriesEnabled: Bool
     let activeDayCategory: RoomDayCategory
     let dayCategoryFilter: RoomDayCategory?
+    let appliesDayCategoryTime: Bool
+    let dayCategoryTimeSelection: RoomScheduleSelection
     let roomCategory: (RoomID) -> RoomDayCategory?
+    let roomCategoryTime: (RoomID) -> Date?
     let onActiveDayCategoryChanged: (RoomDayCategory) -> Void
     let onDayCategoryFilterChanged: (RoomDayCategory?) -> Void
+    let onAppliesDayCategoryTimeChanged: (Bool) -> Void
+    let onDayCategoryTimeSelectionChanged: (RoomScheduleSelection) -> Void
     let onFocus: () -> Void
     let onTerritoryChanged: (Territory) -> Void
     let onRoomToggle: (RoomID) -> Void
@@ -122,8 +127,12 @@ struct CartSetupCard: View {
                 RoomDayCategoryControls(
                     activeCategory: activeDayCategory,
                     filter: dayCategoryFilter,
+                    appliesTime: appliesDayCategoryTime,
+                    timeSelection: dayCategoryTimeSelection,
                     onActiveChanged: onActiveDayCategoryChanged,
-                    onFilterChanged: onDayCategoryFilterChanged
+                    onFilterChanged: onDayCategoryFilterChanged,
+                    onAppliesTimeChanged: onAppliesDayCategoryTimeChanged,
+                    onTimeSelectionChanged: onDayCategoryTimeSelectionChanged
                 )
             }
             roomGrid
@@ -158,6 +167,7 @@ struct CartSetupCard: View {
                     blockedByCart: blockedRooms[room],
                     layout: layout,
                     dayCategory: roomCategory(room),
+                    dayCategoryTime: roomCategoryTime(room),
                     showsDayCategory: dayCategoriesEnabled,
                     onTap: { onRoomToggle(room) }
                 )
@@ -245,6 +255,7 @@ struct RoomPickButton: View {
     let blockedByCart: Int?
     let layout: HotelSummaryLayout
     let dayCategory: RoomDayCategory?
+    let dayCategoryTime: Date?
     let showsDayCategory: Bool
     let onTap: () -> Void
 
@@ -259,14 +270,20 @@ struct RoomPickButton: View {
                         .font(.system(size: 9, weight: .black, design: .rounded))
                 }
                 if showsDayCategory, selected, let dayCategory {
-                    Text(dayCategory.shortTitle)
-                        .font(.system(size: 10, weight: .black, design: .rounded))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.22))
-                        .clipShape(Capsule())
+                    VStack(spacing: 2) {
+                        Text(dayCategory.shortTitle)
+                        if let dayCategoryTime {
+                            Text(RoomPickButton.timeFormatter.string(from: dayCategoryTime))
+                                .monospacedDigit()
+                        }
+                    }
+                    .font(.system(size: 10, weight: .black, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.58)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.black.opacity(0.22))
+                    .clipShape(Capsule())
                 }
             }
             .frame(maxWidth: .infinity)
@@ -291,71 +308,13 @@ struct RoomPickButton: View {
         }
         return selected ? OceanKeyTheme.accent : .black.opacity(0.20)
     }
-}
 
-struct RoomDayCategoryControls: View {
-    let activeCategory: RoomDayCategory
-    let filter: RoomDayCategory?
-    let onActiveChanged: (RoomDayCategory) -> Void
-    let onFilterChanged: (RoomDayCategory?) -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            Text("Категория")
-                .font(.system(size: 13, weight: .black, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(RoomDayCategory.allCases) { category in
-                        Button {
-                            onActiveChanged(category)
-                        } label: {
-                            Text(category.title)
-                                .font(.system(size: 14, weight: .black, design: .rounded))
-                                .lineLimit(1)
-                                .padding(.horizontal, 12)
-                                .frame(height: 38)
-                                .foregroundStyle(.black)
-                                .background(
-                                    OceanKeyTheme.fill(for: category)
-                                        .opacity(activeCategory == category ? 1 : 0.48)
-                                )
-                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(activeCategory == category ? .white.opacity(0.72) : .clear, lineWidth: 1.5)
-                                }
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-
-            HStack(spacing: 8) {
-                filterChip("Все", selected: filter == nil) {
-                    onFilterChanged(nil)
-                }
-                ForEach(RoomDayCategory.allCases) { category in
-                    filterChip(category.shortTitle, selected: filter == category) {
-                        onFilterChanged(category)
-                    }
-                }
-            }
-        }
-    }
-
-    private func filterChip(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.system(size: 12, weight: .black, design: .rounded))
-                .frame(minWidth: 38)
-                .padding(.vertical, 8)
-                .foregroundStyle(selected ? OceanKeyTheme.roomForeground : .white)
-                .background(selected ? OceanKeyTheme.secondaryText : .black.opacity(0.18))
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "h:mm a"
+        return formatter
+    }()
 }
 
 struct EmptySetupHint: View {

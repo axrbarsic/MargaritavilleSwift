@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (108)",
+            date: "2026-06-11",
+            changes: [
+                "Added optional 15-minute time tagging to Margaritaville setup categories.",
+                "Moved day-category setup controls into their own SwiftUI component to keep setup files smaller and cleaner.",
+                "Selected Margaritaville setup tiles now show both the category badge and its optional time."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (107)",
             date: "2026-06-11",
             changes: [

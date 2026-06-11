@@ -96,6 +96,9 @@ verification.
   OOO; the category, optional category time, and category update timestamp
   round-trip through SwiftData and write a history event. The current OceanKey
   profile ignores category commands and keeps the S/L/B workflow unchanged.
+- Margaritaville setup category controls include a 15-minute optional time
+  toggle. When enabled, selected room tiles display the category badge plus the
+  selected time; when disabled, category assignment remains time-free.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

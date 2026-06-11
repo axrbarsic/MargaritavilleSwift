@@ -121,6 +121,7 @@ func margaritavilleSimpleCycleAdvancesStatusesAndTimes() throws {
 
 @Test
 func margaritavilleRoomDayCategoryIsStoredWithHistory() {
+    let categoryTime = Date(timeIntervalSince1970: 1_802_506_400)
     let store = WorkSessionStore(
         carts: [
             CartSection(
@@ -132,10 +133,11 @@ func margaritavilleRoomDayCategoryIsStoredWithHistory() {
         hotelProfile: .margaritaville
     )
 
-    store.setDayCategory(.dueOut, roomId: "101")
+    store.setDayCategory(.dueOut, time: categoryTime, roomId: "101")
 
     let room = store.room(id: "101")
     #expect(room?.dayCategory == .dueOut)
+    #expect(room?.dayCategoryTime == categoryTime)
     #expect(room?.dayCategoryUpdatedAt != nil)
     #expect(store.history.first?.kind == .roomDayCategoryChanged)
 }
