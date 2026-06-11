@@ -225,6 +225,8 @@ Simulator unless explicitly allowed.
 - Margaritaville has the first simple-cycle summary: 4-column square room grid,
   yellow -> red -> green room taps, purple scheduled rooms, live status chips,
   progress label, and visible current-status/scheduled time on every tile.
+- Margaritaville green rooms are protected from accidental reset: the normal
+  status action stops at green, and yellow reset is an explicit menu action.
 - Margaritaville catalog editing is now native: Settings can add/remove room
   numbers, infer the correct building/floor from the room number, persist the
   override in the Margaritaville SwiftData store, and block deleting rooms that

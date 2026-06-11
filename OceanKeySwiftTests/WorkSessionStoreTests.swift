@@ -120,6 +120,36 @@ func margaritavilleSimpleCycleAdvancesStatusesAndTimes() throws {
 }
 
 @Test
+func margaritavilleReadyRoomIgnoresNormalAdvanceUntilExplicitReset() {
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    store.toggleOpen(roomId: "101")
+    store.toggleOpen(roomId: "101")
+    let readyHistoryCount = store.history.count
+
+    store.toggleOpen(roomId: "101")
+
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .ready)
+    #expect(store.room(id: "101")?.completedTasks == Set(RoomTask.allCases))
+    #expect(store.history.count == readyHistoryCount)
+
+    store.resetSimpleCycle(roomId: "101")
+
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .pending)
+    #expect(store.room(id: "101")?.completedTasks.isEmpty == true)
+    #expect(store.history.first?.kind == .roomStatusChanged)
+}
+
+@Test
 func margaritavilleRoomDayCategoryIsStoredWithHistory() {
     let categoryTime = Date(timeIntervalSince1970: 1_802_506_400)
     let store = WorkSessionStore(

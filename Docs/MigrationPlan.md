@@ -99,6 +99,9 @@ verification.
 - Margaritaville setup category controls include a 15-minute optional time
   toggle. When enabled, selected room tiles display the category badge plus the
   selected time; when disabled, category assignment remains time-free.
+- Margaritaville simple-cycle status protects completed rooms: regular advance
+  stops at green, and returning a room to yellow requires the explicit reset
+  action from the tile menu.
 - Margaritaville has a native catalog editor in Settings. Added/removed room
   numbers are stored as per-hotel catalog overrides in the active SwiftData
   store, update setup grids immediately, and deletion is blocked for rooms that

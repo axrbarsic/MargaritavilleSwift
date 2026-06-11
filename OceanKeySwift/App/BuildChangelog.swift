@@ -10,6 +10,14 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (111)",
+            date: "2026-06-11",
+            changes: [
+                "Added a regression test proving Margaritaville green rooms do not reset from a normal status tap.",
+                "Documented the guarded simple-cycle reset path so completed Margaritaville rooms only return to yellow through the explicit reset action."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (110)",
             date: "2026-06-11",
             changes: [
