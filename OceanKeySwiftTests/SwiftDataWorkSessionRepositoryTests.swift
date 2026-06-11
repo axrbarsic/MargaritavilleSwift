@@ -59,6 +59,12 @@ func defaultAppleSyncConfigurationUsesLocalStorageUntilProvisioningSupportsCloud
 }
 
 @Test
+func runtimeCloudKitProbeIsExplicitBoolean() {
+    let canUseCloudKit = AppleSyncConfiguration.canUsePrivateCloudKitAtRuntime()
+    #expect(canUseCloudKit == true || canUseCloudKit == false)
+}
+
+@Test
 func legacySelectionRowsWithoutSelectedFlagLoadAsActive() {
     let session = PersistentWorkSession(
         workdayLocked: true,

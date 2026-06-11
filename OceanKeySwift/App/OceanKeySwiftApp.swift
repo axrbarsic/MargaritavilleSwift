@@ -26,11 +26,25 @@ struct OceanKeySwiftApp: App {
 
     @MainActor
     private static func makeAIVisualPresetStore() -> AIVisualPresetStore {
+        if !AppleSyncConfiguration.canUsePrivateCloudKitAtRuntime() {
+            return (try? AIVisualPresetStore(
+                localFallbackReason: "У текущей сборки нет iCloud/CloudKit entitlement. Используй ручной backup в Файлы/iCloud Drive."
+            )) ?? Self.makeInMemoryAIVisualPresetStore()
+        }
         do {
             return try AIVisualPresetStore()
         } catch {
             return (try? AIVisualPresetStore(localFallbackReason: error.localizedDescription))
-                ?? (try! AIVisualPresetStore(inMemory: true))
+                ?? Self.makeInMemoryAIVisualPresetStore()
+        }
+    }
+
+    @MainActor
+    private static func makeInMemoryAIVisualPresetStore() -> AIVisualPresetStore {
+        do {
+            return try AIVisualPresetStore(inMemory: true)
+        } catch {
+            return AIVisualPresetStore.emptyMemoryOnly(lastError: error.localizedDescription)
         }
     }
 

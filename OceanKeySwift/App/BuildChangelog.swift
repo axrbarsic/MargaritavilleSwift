@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (104)",
+            date: "2026-06-10",
+            changes: [
+                "Fixed physical iPhone startup by skipping CloudKit-backed AI preset storage when the installed build has no iCloud entitlement.",
+                "AI/live-wallpaper presets now fall back directly to local storage plus manual Files/iCloud Drive backup on Personal Team builds.",
+                "Removed the last force-unwrap fallback from AI preset store startup so a storage setup failure is shown as state instead of crashing."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (103)",
             date: "2026-06-10",
             changes: [

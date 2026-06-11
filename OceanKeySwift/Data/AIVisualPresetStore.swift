@@ -50,7 +50,7 @@ final class AIVisualPresetStore {
         }
     }
 
-    private let container: ModelContainer
+    private let container: ModelContainer?
     let storageMode: StorageMode
     private(set) var presets: [AIVisualPreset] = []
     private(set) var lastError: String?
@@ -58,6 +58,12 @@ final class AIVisualPresetStore {
     init(container: ModelContainer, storageMode: StorageMode) {
         self.container = container
         self.storageMode = storageMode
+    }
+
+    private init(storageMode: StorageMode, lastError: String) {
+        self.container = nil
+        self.storageMode = storageMode
+        self.lastError = lastError
     }
 
     convenience init(inMemory: Bool = false) throws {
@@ -99,6 +105,11 @@ final class AIVisualPresetStore {
     }
 
     func load() {
+        guard let container else {
+            presets = []
+            lastError = lastError ?? "SwiftData store недоступен."
+            return
+        }
         do {
             let context = ModelContext(container)
             let descriptor = FetchDescriptor<PersistentAIVisualPreset>(
@@ -112,6 +123,10 @@ final class AIVisualPresetStore {
     }
 
     func save(draft: AIVisualPresetDraft, modelTier: DeepSeekModelTier, prompt: String) {
+        guard let container else {
+            lastError = "SwiftData store недоступен, пресет не сохранён."
+            return
+        }
         do {
             let now = Date()
             let context = ModelContext(container)
@@ -135,6 +150,10 @@ final class AIVisualPresetStore {
     }
 
     func delete(_ preset: AIVisualPreset) {
+        guard let container else {
+            lastError = "SwiftData store недоступен, удалить пресет невозможно."
+            return
+        }
         do {
             let context = ModelContext(container)
             let id = preset.id
@@ -184,5 +203,9 @@ final class AIVisualPresetStore {
             withIntermediateDirectories: true
         )
         return applicationSupportURL.appendingPathComponent("ai-visual-presets.store")
+    }
+
+    static func emptyMemoryOnly(lastError: String) -> AIVisualPresetStore {
+        AIVisualPresetStore(storageMode: .memoryOnly, lastError: lastError)
     }
 }

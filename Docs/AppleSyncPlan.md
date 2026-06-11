@@ -54,12 +54,17 @@ be added behind that boundary after the domain model and input flow are stable.
      com.alex.oceankey.swift` contains neither `aps-environment` nor
      `com.apple.developer.icloud-*` entitlements and does not support the
      `iCloud.com.alex.oceankey.swift` container.
-   - Build 103 keeps real CloudKit entitlements limited to simulator/future
+   - Build 104 keeps real CloudKit entitlements limited to simulator/future
      validation so physical iPhone installs keep working with Alex's Personal
      Team profile. AI/live-wallpaper preset protection is therefore a manual
      Files export path for now: the app writes a lightweight JSON backup
      document with preset/config data, and Alex can save that document to
      iCloud Drive through the system exporter.
+   - Runtime code must not create any CloudKit-backed SwiftData container on
+     physical Personal Team builds. Until the paid Developer Program
+     entitlements exist, simulator builds may keep validating the CloudKit path
+     while installed iPhone builds go directly to local fallback instead of
+     probing CloudKit and risking a startup trap.
    - To unblock real iPhone sync, enable iCloud/CloudKit and Push Notifications
      for App ID `com.alex.oceankey.swift`, attach/create container
      `iCloud.com.alex.oceankey.swift`, regenerate/download the development
