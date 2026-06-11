@@ -166,6 +166,21 @@ final class WorkSessionStore {
         }
     }
 
+    func setDayCategory(_ category: RoomDayCategory?, time: Date? = nil, roomId: RoomCell.ID) {
+        guard hotelProfile.dayCategoriesEnabled else { return }
+        mutateRoom(roomId, history: { before, after, _ in
+            guard before.dayCategory != after.dayCategory || before.dayCategoryTime != after.dayCategoryTime else {
+                return nil
+            }
+            let label = after.dayCategory?.title ?? "без категории"
+            return (.roomDayCategoryChanged, "\(after.id): \(label)")
+        }) { room, changedAt in
+            room.dayCategory = category
+            room.dayCategoryTime = category == nil ? nil : time
+            room.dayCategoryUpdatedAt = changedAt
+        }
+    }
+
     @discardableResult
     func advanceScheduledRooms(now: Date = Date()) -> [RoomCell.ID] {
         var openedRoomIDs: [RoomCell.ID] = []

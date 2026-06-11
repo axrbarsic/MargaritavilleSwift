@@ -120,6 +120,37 @@ func margaritavilleSimpleCycleAdvancesStatusesAndTimes() throws {
 }
 
 @Test
+func margaritavilleRoomDayCategoryIsStoredWithHistory() {
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    store.setDayCategory(.dueOut, roomId: "101")
+
+    let room = store.room(id: "101")
+    #expect(room?.dayCategory == .dueOut)
+    #expect(room?.dayCategoryUpdatedAt != nil)
+    #expect(store.history.first?.kind == .roomDayCategoryChanged)
+}
+
+@Test
+func dayCategoryIsIgnoredForTaskHotel() {
+    let store = WorkSessionStore.preview()
+
+    store.setDayCategory(.dueOut, roomId: "303")
+
+    #expect(store.room(id: "303")?.dayCategory == nil)
+    #expect(!store.history.contains { $0.kind == .roomDayCategoryChanged })
+}
+
+@Test
 func vipAndScheduleMutationsRecordFieldTimestamps() {
     let store = WorkSessionStore.preview()
 

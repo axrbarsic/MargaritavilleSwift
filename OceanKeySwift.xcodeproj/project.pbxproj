@@ -55,6 +55,7 @@
 		620D522DC5593DD3F3BDEB91 /* VoiceTranscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AFB0966095D79AA80CAF5F /* VoiceTranscriptionService.swift */; };
 		630D9BF8C070EDF39CF079C6 /* WorkSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C627CE3B38115F411539408 /* WorkSessionStoreTests.swift */; };
 		6E67EAAFCDF174CA9E7BEF1E /* AIVisualPresetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF216385A680EB15CDC68033 /* AIVisualPresetStore.swift */; };
+		6E8224B3CE09925B70B72798 /* RoomDayCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */; };
 		714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */; };
 		7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */; };
 		737F1A575F371EAC9B6103EF /* PersistentWorkSessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */; };
@@ -218,6 +219,7 @@
 		B5680F4D3B4245E31F8AB215 /* InteractionFeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionFeedbackService.swift; sourceTree = "<group>"; };
 		B6604386501D00F125345B04 /* ExperimentalAppearanceEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentalAppearanceEnvironment.swift; sourceTree = "<group>"; };
 		BB8F64AABB38A2036C634BCB /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
+		BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategory.swift; sourceTree = "<group>"; };
 		BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		BCAF8BEA469DB858BD47A0D4 /* OceanKeySwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OceanKeySwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C101C82A766E12EFA3ECB00C /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
@@ -609,6 +611,7 @@
 				6EF2871D52FD44F8399FAEB1 /* CartConsumables.swift */,
 				837AB162FC2FEFE8B350FCB4 /* HotelProfile.swift */,
 				A5E3CFB6CDA7132DA0EFA9B9 /* RoomCatalog.swift */,
+				BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */,
 				0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */,
 				6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */,
 				1909D54CE539693E2E057B69 /* WorkSessionHistory.swift */,
@@ -808,6 +811,7 @@
 				8547E85F7C729B1350CF7C3B /* RoomCatalog.swift in Sources */,
 				CDCECFDE80C1B36038EDE677 /* RoomCellGeometry.swift in Sources */,
 				714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */,
+				6E8224B3CE09925B70B72798 /* RoomDayCategory.swift in Sources */,
 				7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */,
 				ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */,
 				392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */,
@@ -936,7 +940,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 106;
+				CURRENT_PROJECT_VERSION = 107;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -995,7 +999,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 106;
+				CURRENT_PROJECT_VERSION = 107;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

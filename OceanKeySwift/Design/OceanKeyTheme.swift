@@ -30,6 +30,10 @@ enum OceanKeyTheme {
         return Color.status(hex: hex(for: status, usesPurpleScheduled: usesPurpleScheduled), saturationMultiplier: saturation)
     }
 
+    static func fill(for dayCategory: RoomDayCategory) -> Color {
+        Color(hex: hex(for: dayCategory))
+    }
+
     private static func hex(for status: RoomStatus, usesPurpleScheduled: Bool = false) -> UInt32 {
         switch status {
         case .pending: 0xFFD83D
@@ -47,6 +51,16 @@ enum OceanKeyTheme {
         case .inProgress: 0x0877FF
         case .ready: 0x00E524
         case .scheduled: usesPurpleScheduled ? 0x9B63FF : 0xFF31B8
+        }
+    }
+
+    private static func hex(for dayCategory: RoomDayCategory) -> UInt32 {
+        switch dayCategory {
+        case .dueOut: 0xFFD83D
+        case .stayover: 0x25D366
+        case .departed: 0xFF3B30
+        case .pickUp: 0x2F80FF
+        case .outOfOrder: 0x8E5BFF
         }
     }
 }

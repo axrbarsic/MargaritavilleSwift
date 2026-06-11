@@ -100,6 +100,7 @@ private struct WorkSessionHistoryCard: View {
         case .roomTaskChanged: "checklist"
         case .roomVIPChanged: "star.fill"
         case .roomScheduleChanged: "clock.fill"
+        case .roomDayCategoryChanged: "tag.fill"
         case .roomTextNoteChanged, .cartNoteChanged: "note.text"
         case .roomVoiceTranscriptChanged: "mic.fill"
         case .roomMediaAdded, .cartMediaAdded: "camera.fill"

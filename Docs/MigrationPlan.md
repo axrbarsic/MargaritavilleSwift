@@ -91,6 +91,11 @@ verification.
 - Settings can switch hotels with confirmation. The last selected hotel is
   remembered in app settings, while visual/background/developer settings remain
   app-wide.
+- Margaritaville setup now has day-category tagging as domain data, not a
+  view-only flag. Rooms can be marked Due Out, Stayover, Departed, Pick Up, or
+  OOO; the category, optional category time, and category update timestamp
+  round-trip through SwiftData and write a history event. The current OceanKey
+  profile ignores category commands and keeps the S/L/B workflow unchanged.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

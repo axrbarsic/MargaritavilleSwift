@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (107)",
+            date: "2026-06-11",
+            changes: [
+                "Added Margaritaville day-category tagging for setup rooms: Due Out, Stayover, Departed, Pick Up, and OOO.",
+                "Persisted room day-category data, optional category time, and update timestamps through SwiftData and visual history.",
+                "Added setup category chips and a category filter for Margaritaville without changing the current OceanKey S/L/B setup flow."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (106)",
             date: "2026-06-11",
             changes: [

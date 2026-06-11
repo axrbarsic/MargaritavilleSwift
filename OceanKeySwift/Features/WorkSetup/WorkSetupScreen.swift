@@ -11,6 +11,8 @@ struct WorkSetupScreen: View {
 
     @State private var selectedCartNumber = 1
     @State private var isSettingsPresented = false
+    @State private var activeDayCategory: RoomDayCategory = .dueOut
+    @State private var dayCategoryFilter: RoomDayCategory?
 
     var body: some View {
         ZStack {
@@ -45,6 +47,12 @@ struct WorkSetupScreen: View {
                                 isFocused: selectedCartNumber == cartNumber,
                                 territories: workSession.hotelProfile.catalog,
                                 layout: workSession.hotelProfile.summaryLayout,
+                                dayCategoriesEnabled: workSession.hotelProfile.dayCategoriesEnabled,
+                                activeDayCategory: activeDayCategory,
+                                dayCategoryFilter: dayCategoryFilter,
+                                roomCategory: { roomID in workSession.room(id: roomID)?.dayCategory },
+                                onActiveDayCategoryChanged: { activeDayCategory = $0 },
+                                onDayCategoryFilterChanged: { dayCategoryFilter = $0 },
                                 onFocus: { selectedCartNumber = cartNumber },
                                 onTerritoryChanged: { territory in
                                     feedback.confirm()
@@ -52,9 +60,8 @@ struct WorkSetupScreen: View {
                                     workSession.setCartBinding(cartNumber: cartNumber, territory: territory)
                                 },
                                 onRoomToggle: { room in
-                                    playRoomSelectionFeedback(cartNumber: cartNumber, room: room)
                                     selectedCartNumber = cartNumber
-                                    workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
+                                    toggleRoom(cartNumber: cartNumber, room: room)
                                 }
                             )
                         }
@@ -107,6 +114,34 @@ struct WorkSetupScreen: View {
         } else {
             feedback.select()
         }
+    }
+
+    private func toggleRoom(cartNumber: Int, room: RoomID) {
+        if workSession.hotelProfile.dayCategoriesEnabled {
+            toggleMargaritavilleRoom(cartNumber: cartNumber, room: room)
+            return
+        }
+        playRoomSelectionFeedback(cartNumber: cartNumber, room: room)
+        workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
+    }
+
+    private func toggleMargaritavilleRoom(cartNumber: Int, room: RoomID) {
+        let selectedRooms = workSession.selectedRooms(forCart: cartNumber)
+        let existingCategory = workSession.room(id: room)?.dayCategory
+        if selectedRooms.contains(room), existingCategory == activeDayCategory {
+            feedback.deselect()
+            workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
+            return
+        }
+
+        if !selectedRooms.contains(room) {
+            feedback.select()
+            let result = workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
+            guard result == .changed else { return }
+        } else {
+            feedback.confirm()
+        }
+        workSession.setDayCategory(activeDayCategory, roomId: room)
     }
 
     private func effectiveTerritory(forCart cartNumber: Int) -> Territory {

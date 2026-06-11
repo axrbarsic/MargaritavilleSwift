@@ -128,6 +128,9 @@ final class PersistentRoom {
     var scheduledTime: Date?
     var scheduledUpdatedAt: Date?
     var statusChangedAt: Date?
+    var dayCategoryRawValue: String?
+    var dayCategoryTime: Date?
+    var dayCategoryUpdatedAt: Date?
     var selectedAt: Date?
     var openedAt: Date?
     var strippedAt: Date?
@@ -155,6 +158,9 @@ final class PersistentRoom {
         scheduledTime: Date? = nil,
         scheduledUpdatedAt: Date? = nil,
         statusChangedAt: Date? = nil,
+        dayCategoryRawValue: String? = nil,
+        dayCategoryTime: Date? = nil,
+        dayCategoryUpdatedAt: Date? = nil,
         mediaAttachments: [PersistentMediaAttachment] = []
     ) {
         self.roomID = roomID
@@ -170,6 +176,9 @@ final class PersistentRoom {
         self.scheduledTime = scheduledTime
         self.scheduledUpdatedAt = scheduledUpdatedAt
         self.statusChangedAt = statusChangedAt
+        self.dayCategoryRawValue = dayCategoryRawValue
+        self.dayCategoryTime = dayCategoryTime
+        self.dayCategoryUpdatedAt = dayCategoryUpdatedAt
         self.mediaAttachments = mediaAttachments
     }
 }

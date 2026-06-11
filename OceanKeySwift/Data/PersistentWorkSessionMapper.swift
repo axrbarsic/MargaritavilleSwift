@@ -96,6 +96,9 @@ enum PersistentWorkSessionMapper {
             scheduledTime: record.scheduledTime,
             scheduledUpdatedAt: record.scheduledUpdatedAt,
             statusChangedAt: record.statusChangedAt,
+            dayCategory: record.dayCategoryRawValue.flatMap(RoomDayCategory.init(rawValue:)),
+            dayCategoryTime: record.dayCategoryTime,
+            dayCategoryUpdatedAt: record.dayCategoryUpdatedAt,
             timeline: RoomTimeline(
                 selectedAt: record.selectedAt,
                 openedAt: record.openedAt,
@@ -281,7 +284,10 @@ enum PersistentWorkSessionMapper {
                     vipUpdatedAt: room.vipUpdatedAt,
                     scheduledTime: room.scheduledTime,
                     scheduledUpdatedAt: room.scheduledUpdatedAt,
-                    statusChangedAt: room.statusChangedAt
+                    statusChangedAt: room.statusChangedAt,
+                    dayCategoryRawValue: room.dayCategory?.rawValue,
+                    dayCategoryTime: room.dayCategoryTime,
+                    dayCategoryUpdatedAt: room.dayCategoryUpdatedAt
                 )
                 context.insert(record)
                 existing[room.id] = record
@@ -301,6 +307,9 @@ enum PersistentWorkSessionMapper {
             record.scheduledTime = room.scheduledTime
             record.scheduledUpdatedAt = room.scheduledUpdatedAt
             record.statusChangedAt = room.statusChangedAt
+            record.dayCategoryRawValue = room.dayCategory?.rawValue
+            record.dayCategoryTime = room.dayCategoryTime
+            record.dayCategoryUpdatedAt = room.dayCategoryUpdatedAt
             record.selectedAt = room.timeline.selectedAt
             record.openedAt = room.timeline.openedAt
             record.strippedAt = room.timeline.strippedAt

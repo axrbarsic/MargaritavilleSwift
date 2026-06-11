@@ -197,6 +197,7 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
     let mediaAt = Date(timeIntervalSince1970: 1_801_010_800)
     let vipAt = Date(timeIntervalSince1970: 1_801_012_000)
     let scheduleAt = Date(timeIntervalSince1970: 1_801_013_000)
+    let categoryAt = Date(timeIntervalSince1970: 1_801_013_500)
     let selectionAt = Date(timeIntervalSince1970: 1_801_016_000)
     let removedSelectionAt = Date(timeIntervalSince1970: 1_801_017_000)
     let roomMediaID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
@@ -219,6 +220,9 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
                     vipUpdatedAt: vipAt,
                     scheduledTime: nil,
                     scheduledUpdatedAt: nil,
+                    dayCategory: .dueOut,
+                    dayCategoryTime: Date(timeIntervalSince1970: 1_801_022_400),
+                    dayCategoryUpdatedAt: categoryAt,
                     timeline: RoomTimeline(
                         selectedAt: selectedAt,
                         openedAt: openedAt,

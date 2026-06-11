@@ -7,6 +7,7 @@ enum WorkSessionHistoryKind: String, Codable, CaseIterable, Sendable {
     case roomTaskChanged
     case roomVIPChanged
     case roomScheduleChanged
+    case roomDayCategoryChanged
     case roomTextNoteChanged
     case roomVoiceTranscriptChanged
     case roomMediaAdded

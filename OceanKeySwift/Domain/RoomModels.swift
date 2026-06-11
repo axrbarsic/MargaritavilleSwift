@@ -29,6 +29,9 @@ struct RoomCell: Codable, Identifiable, Equatable, Sendable {
     var scheduledTime: Date? = nil
     var scheduledUpdatedAt: Date?
     var statusChangedAt: Date? = nil
+    var dayCategory: RoomDayCategory? = nil
+    var dayCategoryTime: Date? = nil
+    var dayCategoryUpdatedAt: Date? = nil
     var timeline = RoomTimeline()
     var textNote: String?
     var textNoteUpdatedAt: Date?
