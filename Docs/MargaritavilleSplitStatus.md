@@ -26,6 +26,28 @@ Date: 2026-06-11
 - Retrying with `-allowProvisioningDeviceRegistration` still fails with `No Accounts`.
 - Do not use an old OceanKey bundle id as a shortcut; that would break the separate-app goal.
 
+## Verified Signing Fallback
+
+- A temporary debug build succeeds when overriding the bundle id to the existing
+  profile `AXR.OCEANKEY`:
+
+```sh
+xcodebuild build \
+  -project MargaritavilleSwift.xcodeproj \
+  -scheme OceanKeySwift \
+  -configuration Debug \
+  -destination 'generic/platform=iOS' \
+  -derivedDataPath .build/DerivedDataDeviceFallback \
+  CODE_SIGN_STYLE=Automatic \
+  DEVELOPMENT_TEAM=J6MW4855LU \
+  PRODUCT_BUNDLE_IDENTIFIER=AXR.OCEANKEY
+```
+
+- The built app still displays as `Margaritaville`, but its bundle id is
+  `AXR.OCEANKEY`.
+- This is only a fallback for temporary device testing. The intended permanent
+  bundle id remains `com.alex.margaritaville.swift`.
+
 ## Next Action
 
 When Xcode can see the Apple account and iPhone is available, run:
