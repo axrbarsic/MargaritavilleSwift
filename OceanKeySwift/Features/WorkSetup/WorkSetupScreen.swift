@@ -52,6 +52,7 @@ struct WorkSetupScreen: View {
                                 activeDayCategory: activeDayCategory,
                                 dayCategoryFilter: dayCategoryFilter,
                                 dayCategoryTimePreset: dayCategoryTimePreset,
+                                dayCategoryCounts: dayCategoryCounts,
                                 roomCategory: { roomID in workSession.room(id: roomID)?.dayCategory },
                                 roomCategoryTime: { roomID in workSession.room(id: roomID)?.dayCategoryTime },
                                 onActiveDayCategoryChanged: setActiveDayCategory,
@@ -108,6 +109,10 @@ struct WorkSetupScreen: View {
         }
         selectedCartNumber = cartNumber
         workSession.toggleCartSelection(cartNumber)
+    }
+
+    private var dayCategoryCounts: RoomDayCategoryCounts {
+        RoomDayCategoryCounts(rooms: workSession.carts.flatMap(\.rooms))
     }
 
     private func openSettings() {

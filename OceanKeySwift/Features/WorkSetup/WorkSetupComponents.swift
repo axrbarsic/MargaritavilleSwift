@@ -104,6 +104,7 @@ struct CartSetupCard: View {
     let activeDayCategory: RoomDayCategory
     let dayCategoryFilter: RoomDayCategory?
     let dayCategoryTimePreset: RoomDayCategoryTimePreset?
+    let dayCategoryCounts: RoomDayCategoryCounts
     let roomCategory: (RoomID) -> RoomDayCategory?
     let roomCategoryTime: (RoomID) -> Date?
     let onActiveDayCategoryChanged: (RoomDayCategory) -> Void
@@ -126,6 +127,7 @@ struct CartSetupCard: View {
                     activeCategory: activeDayCategory,
                     filter: dayCategoryFilter,
                     activeTimePreset: dayCategoryTimePreset,
+                    categoryCounts: dayCategoryCounts,
                     onActiveChanged: onActiveDayCategoryChanged,
                     onFilterChanged: onDayCategoryFilterChanged,
                     onTimePresetChanged: onDayCategoryTimePresetChanged

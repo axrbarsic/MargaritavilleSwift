@@ -98,7 +98,8 @@ verification.
   profile ignores category commands and keeps the S/L/B workflow unchanged.
 - Margaritaville setup category controls include Due Out time presets for
   12 PM, 2 PM, and 5 PM. Selected setup tiles display the category badge plus
-  the selected time; non-Due-Out categories stay time-free.
+  the selected time; non-Due-Out categories stay time-free. Category and filter
+  chips now show live selected-room counters.
 - Margaritaville simple-cycle status protects completed rooms: regular advance
   stops at green, and returning a room to yellow requires the explicit reset
   action from the tile menu.

@@ -185,6 +185,22 @@ func margaritavilleDueOutTimePresetsUseExpectedHours() {
 }
 
 @Test
+func roomDayCategoryCountsIgnoreUncategorizedRooms() {
+    let rooms = [
+        RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false, dayCategory: .dueOut),
+        RoomCell(id: "102", opened: false, completedTasks: [], isVIP: false, dayCategory: .dueOut),
+        RoomCell(id: "103", opened: false, completedTasks: [], isVIP: false, dayCategory: .pickUp),
+        RoomCell(id: "104", opened: false, completedTasks: [], isVIP: false)
+    ]
+
+    let counts = RoomDayCategoryCounts(rooms: rooms)
+
+    #expect(counts[.dueOut] == 2)
+    #expect(counts[.pickUp] == 1)
+    #expect(counts[.stayover] == 0)
+}
+
+@Test
 func dayCategoryIsIgnoredForTaskHotel() {
     let store = WorkSessionStore.preview()
 

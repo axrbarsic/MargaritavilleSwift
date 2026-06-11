@@ -4,6 +4,7 @@ struct RoomDayCategoryControls: View {
     let activeCategory: RoomDayCategory
     let filter: RoomDayCategory?
     let activeTimePreset: RoomDayCategoryTimePreset?
+    let categoryCounts: RoomDayCategoryCounts
     let onActiveChanged: (RoomDayCategory) -> Void
     let onFilterChanged: (RoomDayCategory?) -> Void
     let onTimePresetChanged: (RoomDayCategoryTimePreset?) -> Void
@@ -31,21 +32,7 @@ struct RoomDayCategoryControls: View {
                         feedback.tap()
                         onActiveChanged(category)
                     } label: {
-                        Text(category.title)
-                            .font(.system(size: 14, weight: .black, design: .rounded))
-                            .lineLimit(1)
-                            .padding(.horizontal, 12)
-                            .frame(height: 38)
-                            .foregroundStyle(.black)
-                            .background(
-                                OceanKeyTheme.fill(for: category)
-                                    .opacity(activeCategory == category ? 1 : 0.48)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .stroke(activeCategory == category ? .white.opacity(0.72) : .clear, lineWidth: 1.5)
-                            }
+                        categoryLabel(category, selected: activeCategory == category)
                     }
                     .buttonStyle(.plain)
                 }
@@ -72,10 +59,37 @@ struct RoomDayCategoryControls: View {
                 onFilterChanged(nil)
             }
             ForEach(RoomDayCategory.allCases) { category in
-                filterChip(category.shortTitle, selected: filter == category) {
+                filterChip("\(category.shortTitle) \(categoryCounts[category])", selected: filter == category) {
                     onFilterChanged(category)
                 }
             }
+        }
+    }
+
+    private func categoryLabel(_ category: RoomDayCategory, selected: Bool) -> some View {
+        HStack(spacing: 7) {
+            Text(category.title)
+                .lineLimit(1)
+            Text("\(categoryCounts[category])")
+                .monospacedDigit()
+                .font(.system(size: 12, weight: .black, design: .rounded))
+                .padding(.horizontal, 7)
+                .frame(height: 22)
+                .background(Color.black.opacity(0.22))
+                .clipShape(Capsule())
+        }
+        .font(.system(size: 14, weight: .black, design: .rounded))
+        .padding(.horizontal, 12)
+        .frame(height: 38)
+        .foregroundStyle(.black)
+        .background(
+            OceanKeyTheme.fill(for: category)
+                .opacity(selected ? 1 : 0.48)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(selected ? .white.opacity(0.72) : .clear, lineWidth: 1.5)
         }
     }
 

@@ -120,6 +120,7 @@
 		D5CD02ADB5EE620804D9D027 /* SummaryActionMenuExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D340AE2F35A8796533E0460 /* SummaryActionMenuExpansion.swift */; };
 		D7C8F5EDA09CC6A0CC492A28 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A07FDDB084B7AAC0AC13CF80 /* Speech.framework */; };
 		DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1576751457D918F28F73179E /* VoiceNoteViewModel.swift */; };
+		DC34412E2921F2B476A52C64 /* RoomDayCategoryCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06023E7C35E3B124CFCE2F /* RoomDayCategoryCounts.swift */; };
 		E239F137FD94F82D7BB15630 /* VoiceTranscriptionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B82D451283BB546D3D7D4 /* VoiceTranscriptionPanel.swift */; };
 		E2FB98DAD907E998676B5E8A /* SettingsWorkSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48296E16DE0C7CFD8EF178F7 /* SettingsWorkSection.swift */; };
 		E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */; };
@@ -216,6 +217,7 @@
 		868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
 		868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeySwiftApp.swift; sourceTree = "<group>"; };
 		88C6DC22DBFBABE7D92B1127 /* WorkSessionStore+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Catalog.swift"; sourceTree = "<group>"; };
+		8E06023E7C35E3B124CFCE2F /* RoomDayCategoryCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryCounts.swift; sourceTree = "<group>"; };
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
 		8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellGeometry.swift; sourceTree = "<group>"; };
@@ -641,6 +643,7 @@
 				A5E3CFB6CDA7132DA0EFA9B9 /* RoomCatalog.swift */,
 				0A6EF704A334D5BFA95B89C9 /* RoomCatalogOverride.swift */,
 				BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */,
+				8E06023E7C35E3B124CFCE2F /* RoomDayCategoryCounts.swift */,
 				C0F9168B8A1F20B6D178E584 /* RoomDayCategoryTimePreset.swift */,
 				0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */,
 				6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */,
@@ -850,6 +853,7 @@
 				714CD792974E34438F3A1014 /* RoomCellView.swift in Sources */,
 				6E8224B3CE09925B70B72798 /* RoomDayCategory.swift in Sources */,
 				9100B7600535F51A42B2CCC1 /* RoomDayCategoryControls.swift in Sources */,
+				DC34412E2921F2B476A52C64 /* RoomDayCategoryCounts.swift in Sources */,
 				A0F4DEA862576518F5DE79B9 /* RoomDayCategoryTimePreset.swift in Sources */,
 				7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */,
 				ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */,
@@ -984,7 +988,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 112;
+				CURRENT_PROJECT_VERSION = 113;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1043,7 +1047,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 112;
+				CURRENT_PROJECT_VERSION = 113;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
