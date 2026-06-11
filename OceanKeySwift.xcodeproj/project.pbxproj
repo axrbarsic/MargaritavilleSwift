@@ -131,6 +131,7 @@
 		E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
 		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
+		EC1B4C09981D3D3041FDF34A /* DeepSeekLabComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E6606AF30446DCF1175598 /* DeepSeekLabComponents.swift */; };
 		F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */; };
 		F37A1F24D173F6D132B8CAFA /* MargaritavilleSummaryRoomGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75B206F1B983D1596C0227F /* MargaritavilleSummaryRoomGroupingTests.swift */; };
 		F516FD9FD2B66D2AC637D72F /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */; };
@@ -231,6 +232,7 @@
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
 		8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellGeometry.swift; sourceTree = "<group>"; };
+		97E6606AF30446DCF1175598 /* DeepSeekLabComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekLabComponents.swift; sourceTree = "<group>"; };
 		9D456FBA6F34948A76DD74F8 /* AppleCloudAccountProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCloudAccountProbe.swift; sourceTree = "<group>"; };
 		A0140F499B7DFDBF51DC2AA4 /* SettingsBackgroundSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackgroundSection.swift; sourceTree = "<group>"; };
 		A07FDDB084B7AAC0AC13CF80 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
@@ -688,6 +690,7 @@
 			isa = PBXGroup;
 			children = (
 				BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */,
+				97E6606AF30446DCF1175598 /* DeepSeekLabComponents.swift */,
 				31E58CD7B758732E19881D39 /* DeepSeekLabSection.swift */,
 				2A4295E2664F3F1E0142B794 /* MargaritavilleCatalogEditorSection.swift */,
 				A0140F499B7DFDBF51DC2AA4 /* SettingsBackgroundSection.swift */,
@@ -834,6 +837,7 @@
 				FB32AB4983152627A3E46501 /* CartDetailsScreen.swift in Sources */,
 				14A467CC5BC8CBF9F1AAF2E5 /* CartSummarySection.swift in Sources */,
 				C4D34B6FAFA91D684198AC8F /* DeepSeekClient.swift in Sources */,
+				EC1B4C09981D3D3041FDF34A /* DeepSeekLabComponents.swift in Sources */,
 				58043B05FD377097855B0E36 /* DeepSeekLabSection.swift in Sources */,
 				279D1565C16FFBFE94CA6C81 /* DeepSeekModels.swift in Sources */,
 				7FAB39EDEDEFA522FB2DA912 /* ExperimentalAppearanceEnvironment.swift in Sources */,
@@ -1012,7 +1016,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 117;
+				CURRENT_PROJECT_VERSION = 118;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1071,7 +1075,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 117;
+				CURRENT_PROJECT_VERSION = 118;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

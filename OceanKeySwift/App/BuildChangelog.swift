@@ -10,6 +10,14 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (118)",
+            date: "2026-06-11",
+            changes: [
+                "Split DeepSeek Lab visual components out of the main settings section.",
+                "Kept the AI preset generator behavior unchanged while reducing settings file size."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (117)",
             date: "2026-06-11",
             changes: [
