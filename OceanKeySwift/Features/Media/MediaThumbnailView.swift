@@ -17,6 +17,7 @@ struct MediaThumbnailView: View {
                         url: fileStore.url(for: attachment),
                         isPlaying: isPreviewActive
                     )
+                    .id("\(attachment.id.uuidString)-\(isPreviewActive)")
                 } else if let image {
                     Image(uiImage: image)
                         .resizable()
