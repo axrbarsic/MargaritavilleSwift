@@ -26,6 +26,7 @@
 		149EF7313B6A406216DEDDD3 /* MediaViewerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8848A3AD3F9D0BCE2F025E5 /* MediaViewerScreen.swift */; };
 		14A467CC5BC8CBF9F1AAF2E5 /* CartSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */; };
 		17958B1F90F6EFE7DAC18AAC /* SummarySwipeCommitPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C930282AAFB3CC145E46D544 /* SummarySwipeCommitPolicy.swift */; };
+		18E1D395388AC6BC82D9157E /* AppSettingsStoreLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82177A5CB34A951AEAD093D /* AppSettingsStoreLoading.swift */; };
 		1CDF226FBBF41CB2AD9D107F /* WorkSessionStore+Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C6DC22DBFBABE7D92B1127 /* WorkSessionStore+Catalog.swift */; };
 		20634D173CAF4424922CA0DB /* WorkSessionSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE700A892F09B415394914D /* WorkSessionSnapshot.swift */; };
 		21201E301476E7CD55CDD211 /* LocalWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF40D409EFD665315F16C6 /* LocalWorkSessionRepository.swift */; };
@@ -119,6 +120,7 @@
 		C4D34B6FAFA91D684198AC8F /* DeepSeekClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16DA8B825CB661AAAB26DE1 /* DeepSeekClient.swift */; };
 		C73F9B0839DCB8945BC76C5E /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0655DECA8F86F1748E5A8A9B /* click.wav */; };
 		C7F1B8A70A1DA89F2ACD3F61 /* WorkSessionStore+SimpleCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C549A9354A68C777D55168 /* WorkSessionStore+SimpleCycle.swift */; };
+		CA94ABF0FBA63ED7D8721290 /* AppSettingsStoreKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9070F80FCE3BCA9F705F1109 /* AppSettingsStoreKeys.swift */; };
 		CD93640CE2E2659E71DC69FE /* CartConsumablesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7762788268738A77A93D4598 /* CartConsumablesSection.swift */; };
 		CDCECFDE80C1B36038EDE677 /* RoomCellGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */; };
 		CDEB880791759C750A6CBF53 /* SpriteKitEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CC2C533226B89F0CF70B87 /* SpriteKitEffectView.swift */; };
@@ -133,8 +135,10 @@
 		E432FF25F655FE85BAED6F1E /* BuildChangelogEntriesMid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93FBCF61966183A079577D /* BuildChangelogEntriesMid.swift */; };
 		E4C3E30218536D8EDB0F05A8 /* BackgroundVideoFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32871C27FCEBEF323FDE3E1 /* BackgroundVideoFileStore.swift */; };
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
+		E8123D05FC9D69F94CD63618 /* AppBackgroundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AC3716188E398F010C6968 /* AppBackgroundMode.swift */; };
 		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
 		EC1B4C09981D3D3041FDF34A /* DeepSeekLabComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E6606AF30446DCF1175598 /* DeepSeekLabComponents.swift */; };
+		F090D2C9AB22B90E4063FD59 /* AppSettingsStoreDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4F28ACD8793035390665DF /* AppSettingsStoreDefaults.swift */; };
 		F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */; };
 		F37A1F24D173F6D132B8CAFA /* MargaritavilleSummaryRoomGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75B206F1B983D1596C0227F /* MargaritavilleSummaryRoomGroupingTests.swift */; };
 		F516FD9FD2B66D2AC637D72F /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */; };
@@ -235,8 +239,10 @@
 		868CBF052F1B053DB4F2FBA0 /* OceanKeySwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeySwiftApp.swift; sourceTree = "<group>"; };
 		88C6DC22DBFBABE7D92B1127 /* WorkSessionStore+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Catalog.swift"; sourceTree = "<group>"; };
 		8E06023E7C35E3B124CFCE2F /* RoomDayCategoryCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryCounts.swift; sourceTree = "<group>"; };
+		8E4F28ACD8793035390665DF /* AppSettingsStoreDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreDefaults.swift; sourceTree = "<group>"; };
 		8EE7E0CA1AD0D30B9986CADF /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
 		8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+		9070F80FCE3BCA9F705F1109 /* AppSettingsStoreKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreKeys.swift; sourceTree = "<group>"; };
 		9409BE249A939DD94FA67426 /* RoomCellGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellGeometry.swift; sourceTree = "<group>"; };
 		97E6606AF30446DCF1175598 /* DeepSeekLabComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekLabComponents.swift; sourceTree = "<group>"; };
 		9D456FBA6F34948A76DD74F8 /* AppleCloudAccountProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCloudAccountProbe.swift; sourceTree = "<group>"; };
@@ -280,11 +286,13 @@
 		D14392CAF529EF78B4841747 /* AppleSyncEntitlementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncEntitlementTests.swift; sourceTree = "<group>"; };
 		D16DA8B825CB661AAAB26DE1 /* DeepSeekClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekClient.swift; sourceTree = "<group>"; };
 		D221253E9DCEF3666178BF1F /* RuntimeDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeDiagnostics.swift; sourceTree = "<group>"; };
+		D82177A5CB34A951AEAD093D /* AppSettingsStoreLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreLoading.swift; sourceTree = "<group>"; };
 		DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		DD8A5F3E8A1246EC011FB56F /* PersonalCartMarkerStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCartMarkerStrip.swift; sourceTree = "<group>"; };
 		DEC5A6449A20B95C1537B2C9 /* SwiftDataWorkSessionRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepositoryTests.swift; sourceTree = "<group>"; };
 		E715506238EC7FFF5AC1F195 /* AIVisualPresetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIVisualPresetStoreTests.swift; sourceTree = "<group>"; };
 		E7AAB559BEB598BFAB429AB4 /* SummarySelectionPuzzleHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySelectionPuzzleHandle.swift; sourceTree = "<group>"; };
+		E8AC3716188E398F010C6968 /* AppBackgroundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundMode.swift; sourceTree = "<group>"; };
 		EA1A7943D626E20E20C9F481 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		EAE700A892F09B415394914D /* WorkSessionSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionSnapshot.swift; sourceTree = "<group>"; };
 		ED5A6E1FABD4ECD894D9A452 /* AppBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundView.swift; sourceTree = "<group>"; };
@@ -646,12 +654,16 @@
 		EB46BA9A2511009474D5840B /* App */ = {
 			isa = PBXGroup;
 			children = (
+				E8AC3716188E398F010C6968 /* AppBackgroundMode.swift */,
 				4EBB035F8E992FD2AF55A8FC /* AppBackgroundModeEnvironment.swift */,
 				3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */,
 				ED5A6E1FABD4ECD894D9A452 /* AppBackgroundView.swift */,
 				FC89AE31D50DA5860DBEDD53 /* AppBuildInfo.swift */,
 				B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */,
 				A229714857D6D952BA687014 /* AppSettingsStore.swift */,
+				8E4F28ACD8793035390665DF /* AppSettingsStoreDefaults.swift */,
+				9070F80FCE3BCA9F705F1109 /* AppSettingsStoreKeys.swift */,
+				D82177A5CB34A951AEAD093D /* AppSettingsStoreLoading.swift */,
 				608321B44757C987209F2A54 /* BuildChangelog.swift */,
 				F0DC890AC0BAC80EADEBD1D8 /* BuildChangelogEntriesArchive.swift */,
 				3DD3447B9C0AF3D8AAB7BF93 /* BuildChangelogEntriesLegacy.swift */,
@@ -830,12 +842,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E67EAAFCDF174CA9E7BEF1E /* AIVisualPresetStore.swift in Sources */,
+				E8123D05FC9D69F94CD63618 /* AppBackgroundMode.swift in Sources */,
 				BA1ECF280752FFF426599CBC /* AppBackgroundModeEnvironment.swift in Sources */,
 				043A1D13C4D3931888D1815E /* AppBackgroundVideoEnvironment.swift in Sources */,
 				FB2DCA9C3911969BAF7D82C3 /* AppBackgroundView.swift in Sources */,
 				09D30B3BED384CE9D99707EA /* AppBuildInfo.swift in Sources */,
 				856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */,
 				366D12C14372662249291AE9 /* AppSettingsStore.swift in Sources */,
+				F090D2C9AB22B90E4063FD59 /* AppSettingsStoreDefaults.swift in Sources */,
+				CA94ABF0FBA63ED7D8721290 /* AppSettingsStoreKeys.swift in Sources */,
+				18E1D395388AC6BC82D9157E /* AppSettingsStoreLoading.swift in Sources */,
 				BFB3353CA1DF402C0F1222D5 /* AppleCloudAccountProbe.swift in Sources */,
 				06DACBC44C930BBFDE23F934 /* AppleSyncConfiguration.swift in Sources */,
 				A727B57A65048FA67FE9E425 /* AppleSyncStatusEnvironment.swift in Sources */,
@@ -1032,7 +1048,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 119;
+				CURRENT_PROJECT_VERSION = 120;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1091,7 +1107,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 119;
+				CURRENT_PROJECT_VERSION = 120;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

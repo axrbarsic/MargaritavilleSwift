@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.2.0 (120)",
+            date: "2026-06-11",
+            changes: [
+                "Split AppSettingsStore helper code into focused Swift extension files.",
+                "Kept settings behavior unchanged while reducing the central settings store file size."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (119)",
             date: "2026-06-11",
             changes: [
