@@ -229,3 +229,6 @@ Simulator unless explicitly allowed.
   numbers, infer the correct building/floor from the room number, persist the
   override in the Margaritaville SwiftData store, and block deleting rooms that
   are already in the active workday.
+- Margaritaville square summary tiles now expose voice/media, VIP, schedule,
+  and reset through a native context menu, and the grid reuses compact media
+  and VIP indicators.

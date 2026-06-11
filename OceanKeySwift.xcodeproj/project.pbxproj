@@ -45,6 +45,7 @@
 		4618198B48949C4576C5DBF7 /* InteractionFeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5680F4D3B4245E31F8AB215 /* InteractionFeedbackService.swift */; };
 		469914E1D57ABFC62A127B96 /* PersistentWorkSessionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0A2610829CE5A6476F226 /* PersistentWorkSessionModels.swift */; };
 		475B146104651391A0ED33E4 /* PersistentWorkSessionMapper+Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C843CCF9A1D8613083BC424D /* PersistentWorkSessionMapper+Catalog.swift */; };
+		4D990915A5767A1B75BAE1C3 /* RoomMediaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3869F6F8244080D966ADE574 /* RoomMediaIndicator.swift */; };
 		4F75F6A971EBDD3D63855F5D /* SummarySwipeCommitPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53CB4860DB0F1128AAFF966 /* SummarySwipeCommitPolicyTests.swift */; };
 		5006A98ED241831B60701B20 /* SettingsBackgroundVideoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0A4851617BB7FC453CD8 /* SettingsBackgroundVideoPicker.swift */; };
 		527B878A69C30E46C76091E1 /* WorkSetupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C06E17287428AB435FFE0E /* WorkSetupScreen.swift */; };
@@ -74,10 +75,12 @@
 		8547E85F7C729B1350CF7C3B /* RoomCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E3CFB6CDA7132DA0EFA9B9 /* RoomCatalog.swift */; };
 		856BDD1AEC33680D598CA693 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00D64ADD5F7CDDCA26155C8 /* AppRootView.swift */; };
 		85CAE9712A89B21543FBAE3E /* HotelSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D949654A70213B91B8F281 /* HotelSelectionScreen.swift */; };
+		85D705678CAFA1A115C66FE0 /* VIPJellyEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D33B9D04ED0790D0311A3 /* VIPJellyEffects.swift */; };
 		8623867BDD224CD95F47BBF2 /* SettingsControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88F4E1B0F391C1E8C9C2F6C /* SettingsControls.swift */; };
 		8644D03B4964470C44521126 /* OceanKeyPresetBackupDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3ED70772827CF4F9FACCE5C /* OceanKeyPresetBackupDocument.swift */; };
 		87852D01D8D77739E19E6738 /* AppSettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CFB1546F72B1749BEB27E7 /* AppSettingsStoreTests.swift */; };
 		890E1BC90E023BE94B4946C9 /* PersonalCartMarkerStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A5F3E8A1246EC011FB56F /* PersonalCartMarkerStrip.swift */; };
+		8A5A40260FB756BB629B0D53 /* RoomActionPuzzlePullOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D1D27C8BDC5C842891A41F /* RoomActionPuzzlePullOverlay.swift */; };
 		8CECF869B23D86602BF9C7D9 /* VIPJellyContentWarp.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4D3F2DE20CF0C54E078DB861 /* VIPJellyContentWarp.metal */; };
 		8D2078D793C208875DCC662A /* TVStaticNoiseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43FCE41FAC12F7171994989 /* TVStaticNoiseBackgroundView.swift */; };
 		8F5523652C530ACE93B68B17 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EFBAE95AF4F46E1B0BAE485 /* PhotosUI.framework */; };
@@ -148,6 +151,7 @@
 		067B3DBCAB2B48683F38F685 /* LoopingVideoBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoBackgroundView.swift; sourceTree = "<group>"; };
 		0956CB0FF1C79B5413C7DC64 /* RoomModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModels.swift; sourceTree = "<group>"; };
 		09A09E81466D75F733FDB699 /* MargaritavilleSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummarySection.swift; sourceTree = "<group>"; };
+		09D1D27C8BDC5C842891A41F /* RoomActionPuzzlePullOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomActionPuzzlePullOverlay.swift; sourceTree = "<group>"; };
 		0A6EF704A334D5BFA95B89C9 /* RoomCatalogOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalogOverride.swift; sourceTree = "<group>"; };
 		0A9E41E37C7F57A624740F18 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
 		0D340AE2F35A8796533E0460 /* SummaryActionMenuExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansion.swift; sourceTree = "<group>"; };
@@ -172,6 +176,7 @@
 		35D69AE220AA11A895CB8FD5 /* CartDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsScreen.swift; sourceTree = "<group>"; };
 		35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepository.swift; sourceTree = "<group>"; };
 		366D4AAFEFE9FDBCE75E5577 /* PersonalCartMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCartMarkers.swift; sourceTree = "<group>"; };
+		3869F6F8244080D966ADE574 /* RoomMediaIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMediaIndicator.swift; sourceTree = "<group>"; };
 		3A66CA79C454C0F64B64E853 /* OceanKeySwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OceanKeySwift.entitlements; sourceTree = "<group>"; };
 		3CC537DE278380CBBA0A1D85 /* AppBackgroundVideoEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundVideoEnvironment.swift; sourceTree = "<group>"; };
 		3CC54D512493ADEF1EB26177 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
@@ -190,6 +195,7 @@
 		53CC2C533226B89F0CF70B87 /* SpriteKitEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitEffectView.swift; sourceTree = "<group>"; };
 		581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomActionMenuLampTransition.swift; sourceTree = "<group>"; };
 		608321B44757C987209F2A54 /* BuildChangelog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelog.swift; sourceTree = "<group>"; };
+		624D33B9D04ED0790D0311A3 /* VIPJellyEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPJellyEffects.swift; sourceTree = "<group>"; };
 		6B7CFFB5930B36918B6DF816 /* PerformanceTelemetryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTelemetryStore.swift; sourceTree = "<group>"; };
 		6C58577B44759140A59C3B18 /* WorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionRepository.swift; sourceTree = "<group>"; };
 		6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSummarySection.swift; sourceTree = "<group>"; };
@@ -579,7 +585,9 @@
 				09A09E81466D75F733FDB699 /* MargaritavilleSummarySection.swift */,
 				DD8A5F3E8A1246EC011FB56F /* PersonalCartMarkerStrip.swift */,
 				581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */,
+				09D1D27C8BDC5C842891A41F /* RoomActionPuzzlePullOverlay.swift */,
 				868A0FE8D28575CF2B3F8304 /* RoomCellView.swift */,
+				3869F6F8244080D966ADE574 /* RoomMediaIndicator.swift */,
 				CA51E54DB659431A15729529 /* RoomScheduleRoute.swift */,
 				B55CBE9F99AD8814E390BE3C /* RoomScheduleSheet.swift */,
 				0D340AE2F35A8796533E0460 /* SummaryActionMenuExpansion.swift */,
@@ -588,6 +596,7 @@
 				77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */,
 				E7AAB559BEB598BFAB429AB4 /* SummarySelectionPuzzleHandle.swift */,
 				C930282AAFB3CC145E46D544 /* SummarySwipeCommitPolicy.swift */,
+				624D33B9D04ED0790D0311A3 /* VIPJellyEffects.swift */,
 			);
 			path = Summary;
 			sourceTree = "<group>";
@@ -831,6 +840,7 @@
 				890E1BC90E023BE94B4946C9 /* PersonalCartMarkerStrip.swift in Sources */,
 				9707C15DF96CCB849CAAB2D6 /* PersonalCartMarkers.swift in Sources */,
 				BFB26C1A0A7C67F26219BFA4 /* RoomActionMenuLampTransition.swift in Sources */,
+				8A5A40260FB756BB629B0D53 /* RoomActionPuzzlePullOverlay.swift in Sources */,
 				8547E85F7C729B1350CF7C3B /* RoomCatalog.swift in Sources */,
 				7EC61CF341FAAB0B8FA0C2A2 /* RoomCatalogOverride.swift in Sources */,
 				CDCECFDE80C1B36038EDE677 /* RoomCellGeometry.swift in Sources */,
@@ -839,6 +849,7 @@
 				9100B7600535F51A42B2CCC1 /* RoomDayCategoryControls.swift in Sources */,
 				7E9A3CC7A2F7829E1F4FA73D /* RoomDetailsMode.swift in Sources */,
 				ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */,
+				4D990915A5767A1B75BAE1C3 /* RoomMediaIndicator.swift in Sources */,
 				392929D2E5B73C033AA829A9 /* RoomModels.swift in Sources */,
 				6131A697881AE94294650A03 /* RoomScheduleRoute.swift in Sources */,
 				FA5C69080CC5FCF5A7FEE8B5 /* RoomScheduleSelection.swift in Sources */,
@@ -862,6 +873,7 @@
 				EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */,
 				8D2078D793C208875DCC662A /* TVStaticNoiseBackgroundView.swift in Sources */,
 				8CECF869B23D86602BF9C7D9 /* VIPJellyContentWarp.metal in Sources */,
+				85D705678CAFA1A115C66FE0 /* VIPJellyEffects.swift in Sources */,
 				5E6AB58A4A3683A5394DE41A /* VoiceNoteBubble.swift in Sources */,
 				DB942E5DBC000AD9D8A734B9 /* VoiceNoteViewModel.swift in Sources */,
 				141C0E990AE81553E8E12E35 /* VoiceTranscriptionContracts.swift in Sources */,
@@ -968,7 +980,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 109;
+				CURRENT_PROJECT_VERSION = 110;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1027,7 +1039,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 109;
+				CURRENT_PROJECT_VERSION = 110;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

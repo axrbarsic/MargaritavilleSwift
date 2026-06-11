@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (110)",
+            date: "2026-06-11",
+            changes: [
+                "Added Margaritaville square-tile actions for voice/media, VIP, scheduling, and reset.",
+                "Reused the shared media badge on Margaritaville tiles so rooms with audio, photo, or video are visible in the grid.",
+                "Moved VIP jelly and media indicator rendering into shared summary components."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (109)",
             date: "2026-06-11",
             changes: [

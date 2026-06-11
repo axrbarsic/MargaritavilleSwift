@@ -103,6 +103,10 @@ verification.
   numbers are stored as per-hotel catalog overrides in the active SwiftData
   store, update setup grids immediately, and deletion is blocked for rooms that
   are already in the active workday.
+- Margaritaville summary tiles now share the native room action surface:
+  long-press context actions open voice/media, toggle VIP, schedule time, and
+  reset completed rooms. Media and VIP badges are visible directly on the
+  square grid.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

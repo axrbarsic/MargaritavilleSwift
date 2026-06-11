@@ -110,6 +110,10 @@ struct SummaryScreen: View {
                         cart: $cart,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         onAdvance: toggleOpen,
+                        onOpenDetails: { roomID, mode in
+                            roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
+                        },
+                        onVIPToggle: workSession.toggleVIP,
                         onReset: workSession.resetSimpleCycle,
                         onSchedule: openSchedule
                     )
