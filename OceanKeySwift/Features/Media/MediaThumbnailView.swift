@@ -5,6 +5,8 @@ import UIKit
 struct MediaThumbnailView: View {
     let attachment: MediaAttachment
     var isPreviewActive = true
+    var width: CGFloat = 132
+    var height: CGFloat = 182
     let fileStore = LocalMediaFileStore()
 
     @State private var image: UIImage?
@@ -31,7 +33,7 @@ struct MediaThumbnailView: View {
                         }
                 }
             }
-            .frame(width: 96, height: 132)
+            .frame(width: width, height: height)
             .clipped()
 
             HStack(spacing: 4) {

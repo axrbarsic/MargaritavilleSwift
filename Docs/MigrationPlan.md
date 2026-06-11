@@ -61,6 +61,10 @@ verification.
 - Room/cart multimodal notes share the native media foundation: voice
   recordings save as local playable audio bubbles with transcript text, and
   photo/video attachments use local-only metadata and vertical previews.
+- Room/cart media browsing now uses one shared vertical attachment grid. Video
+  thumbnails are muted previews that are stopped before opening the full-screen
+  viewer, and full-screen video renders through a direct native AVPlayerLayer
+  rather than nesting AVPlayerViewController inside a paged SwiftUI view.
 - Event history: room/cart/selection/status/note/media/schedule changes append
   timestamped domain history entries. Each entry carries a lightweight visual
   snapshot of the main screen state, and Settings can already open a compact

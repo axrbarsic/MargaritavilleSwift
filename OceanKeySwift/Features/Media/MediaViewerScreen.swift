@@ -1,5 +1,4 @@
 import AVFoundation
-import AVKit
 import SwiftUI
 import UIKit
 
@@ -167,12 +166,12 @@ private struct FullScreenVideoPlayer: View {
     let isActive: Bool
 
     var body: some View {
-        FullScreenVideoPlayerView(url: url, isActive: isActive)
+        FullScreenVideoLayerView(url: url, isActive: isActive)
             .ignoresSafeArea()
     }
 }
 
-private struct FullScreenVideoPlayerView: UIViewControllerRepresentable {
+private struct FullScreenVideoLayerView: UIViewRepresentable {
     let url: URL
     let isActive: Bool
 
@@ -180,22 +179,19 @@ private struct FullScreenVideoPlayerView: UIViewControllerRepresentable {
         Coordinator()
     }
 
-    func makeUIViewController(context: Context) -> AVPlayerViewController {
-        let controller = AVPlayerViewController()
-        controller.view.backgroundColor = .black
-        controller.videoGravity = .resizeAspect
-        controller.showsPlaybackControls = true
-        context.coordinator.configure(url: url, isActive: isActive, in: controller)
-        return controller
+    func makeUIView(context: Context) -> FullScreenPlayerView {
+        let view = FullScreenPlayerView()
+        context.coordinator.configure(url: url, isActive: isActive, in: view)
+        return view
     }
 
-    func updateUIViewController(_ controller: AVPlayerViewController, context: Context) {
-        context.coordinator.configure(url: url, isActive: isActive, in: controller)
+    func updateUIView(_ view: FullScreenPlayerView, context: Context) {
+        context.coordinator.configure(url: url, isActive: isActive, in: view)
     }
 
-    static func dismantleUIViewController(_ controller: AVPlayerViewController, coordinator: Coordinator) {
+    static func dismantleUIView(_ view: FullScreenPlayerView, coordinator: Coordinator) {
         coordinator.stop()
-        controller.player = nil
+        view.playerLayer.player = nil
     }
 
     final class Coordinator {
@@ -204,7 +200,7 @@ private struct FullScreenVideoPlayerView: UIViewControllerRepresentable {
         private var looper: AVPlayerLooper?
 
         @MainActor
-        func configure(url: URL, isActive: Bool, in controller: AVPlayerViewController) {
+        func configure(url: URL, isActive: Bool, in view: FullScreenPlayerView) {
             guard currentURL != url else {
                 if isActive {
                     player?.play()
@@ -221,7 +217,7 @@ private struct FullScreenVideoPlayerView: UIViewControllerRepresentable {
             queuePlayer.preventsDisplaySleepDuringVideoPlayback = false
             player = queuePlayer
             looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
-            controller.player = queuePlayer
+            view.playerLayer.player = queuePlayer
             if isActive {
                 queuePlayer.play()
             }
@@ -234,6 +230,28 @@ private struct FullScreenVideoPlayerView: UIViewControllerRepresentable {
             looper = nil
             currentURL = nil
         }
+    }
+}
+
+private final class FullScreenPlayerView: UIView {
+    override static var layerClass: AnyClass {
+        AVPlayerLayer.self
+    }
+
+    var playerLayer: AVPlayerLayer {
+        layer as! AVPlayerLayer
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .black
+        playerLayer.videoGravity = .resizeAspect
+        playerLayer.masksToBounds = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

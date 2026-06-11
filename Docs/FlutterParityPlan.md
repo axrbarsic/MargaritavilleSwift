@@ -213,6 +213,10 @@ Simulator unless explicitly allowed.
   cells show compact top-right indicators when text, voice, photo, or video
   data exists. Room/cart attachments can be deleted and their local files are
   cleaned up.
+- Room/cart photo and video attachments now render through one shared vertical
+  media grid. Muted video thumbnail previews stop before the viewer opens, and
+  full-screen video uses a direct native AVPlayerLayer so playback is not
+  coupled to a paged SwiftUI container.
 - Video wallpaper controls now include stronger green tint, wider brightness,
   matte blur, scanline/grid overlay, and the playback watchdog.
 - OceanKeySwift now has first-class hotel profiles instead of one hard-coded

@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (117)",
+            date: "2026-06-11",
+            changes: [
+                "Replaced room/cart media rows with a shared vertical media grid.",
+                "Stopped thumbnail video previews before opening the full-screen viewer.",
+                "Changed full-screen video playback to a direct AVPlayerLayer lifecycle for more reliable video rendering."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (116)",
             date: "2026-06-11",
             changes: [

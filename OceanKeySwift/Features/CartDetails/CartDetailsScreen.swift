@@ -9,6 +9,7 @@ struct CartDetailsScreen: View {
     @State private var draftVoiceTranscript = ""
     @State private var captureKind: MediaKind?
     @State private var selectedMedia: MediaAttachment?
+    @State private var mediaPreviewPlaybackEnabled = true
     @State private var mediaError: String?
 
     var body: some View {
@@ -43,7 +44,9 @@ struct CartDetailsScreen: View {
             )
             .ignoresSafeArea()
         }
-        .fullScreenCover(item: $selectedMedia) { attachment in
+        .fullScreenCover(item: $selectedMedia, onDismiss: {
+            mediaPreviewPlaybackEnabled = true
+        }) { attachment in
             MediaViewerScreen(attachments: visualMediaAttachments, initialAttachment: attachment)
         }
     }
@@ -125,33 +128,12 @@ struct CartDetailsScreen: View {
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .foregroundStyle(OceanKeyTheme.secondaryText)
             } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(visualMediaAttachments) { attachment in
-                            ZStack(alignment: .topTrailing) {
-                                Button(action: { selectedMedia = attachment }) {
-                                    MediaThumbnailView(
-                                        attachment: attachment,
-                                        isPreviewActive: selectedMedia == nil
-                                    )
-                                }
-                                .buttonStyle(.plain)
-
-                                Button(action: { deleteMediaAttachment(attachment) }) {
-                                    Image(systemName: "trash.fill")
-                                        .font(.system(size: 12, weight: .black))
-                                        .foregroundStyle(.white)
-                                        .frame(width: 28, height: 28)
-                                        .background(OceanKeyTheme.pending.opacity(0.92), in: Circle())
-                                        .shadow(color: .black.opacity(0.34), radius: 3, x: 0, y: 1)
-                                }
-                                .buttonStyle(.plain)
-                                .padding(6)
-                                .accessibilityLabel("Удалить медиа")
-                            }
-                        }
-                    }
-                }
+                MediaAttachmentGrid(
+                    attachments: visualMediaAttachments,
+                    previewsEnabled: mediaPreviewPlaybackEnabled && selectedMedia == nil,
+                    onOpen: openMediaAttachment,
+                    onDelete: deleteMediaAttachment
+                )
             }
         }
     }
@@ -230,6 +212,11 @@ struct CartDetailsScreen: View {
         LocalMediaFileStore().delete(attachment)
         workSession.removeCartMedia(attachment, cartId: route.cartID)
         loadDraft()
+    }
+
+    private func openMediaAttachment(_ attachment: MediaAttachment) {
+        mediaPreviewPlaybackEnabled = false
+        selectedMedia = attachment
     }
 
     private var updatedLabel: String? {

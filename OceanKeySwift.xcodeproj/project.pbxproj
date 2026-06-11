@@ -66,6 +66,7 @@
 		7372F4BC701E763F5FA24463 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A96102C3B06D870C8E09F17 /* OceanKeyTheme.swift */; };
 		737F1A575F371EAC9B6103EF /* PersistentWorkSessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF609A6F4519C8C100DE4E3 /* PersistentWorkSessionMapper.swift */; };
 		74F755CC983F8493F4FAF4A6 /* PerformanceTelemetryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A45905838B30EDFC18C397 /* PerformanceTelemetryStoreTests.swift */; };
+		757E2C55899CD8EEEF937826 /* MediaAttachmentGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C962FB118D8ED612901EAA /* MediaAttachmentGrid.swift */; };
 		7621009AF01399FC9909112E /* PersistentWorkSessionMapper+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518A5DCCC251B5717E676891 /* PersistentWorkSessionMapper+History.swift */; };
 		799665048AEA94BD4F3094DB /* WorkSetupComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E65593F7CDFD82D3B068D4D /* WorkSetupComponents.swift */; };
 		7BC970B9E599552DDDB75700 /* SummaryRoomActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43979E9CB31E899E35B928E /* SummaryRoomActionMenu.swift */; };
@@ -202,6 +203,7 @@
 		4EBB035F8E992FD2AF55A8FC /* AppBackgroundModeEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundModeEnvironment.swift; sourceTree = "<group>"; };
 		518A5DCCC251B5717E676891 /* PersistentWorkSessionMapper+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistentWorkSessionMapper+History.swift"; sourceTree = "<group>"; };
 		53CC2C533226B89F0CF70B87 /* SpriteKitEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitEffectView.swift; sourceTree = "<group>"; };
+		57C962FB118D8ED612901EAA /* MediaAttachmentGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaAttachmentGrid.swift; sourceTree = "<group>"; };
 		581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomActionMenuLampTransition.swift; sourceTree = "<group>"; };
 		5F756574E42D022AA585A0F0 /* WorkSetupTerritoryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupTerritoryPicker.swift; sourceTree = "<group>"; };
 		608321B44757C987209F2A54 /* BuildChangelog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelog.swift; sourceTree = "<group>"; };
@@ -572,6 +574,7 @@
 			isa = PBXGroup;
 			children = (
 				DB4A5B1A271E2E7404DA2C20 /* CameraCaptureView.swift */,
+				57C962FB118D8ED612901EAA /* MediaAttachmentGrid.swift */,
 				8377961D9FA078CC4BABE3DE /* MediaThumbnailView.swift */,
 				F8848A3AD3F9D0BCE2F025E5 /* MediaViewerScreen.swift */,
 			);
@@ -848,6 +851,7 @@
 				A703675234FF769CF867B2BD /* MatrixRainConfiguration.swift in Sources */,
 				90E670E6CFD78A670C422204 /* MatrixRainConfigurationEnvironment.swift in Sources */,
 				42218A4468C7741A018E32BC /* MatrixRainSpriteScene.swift in Sources */,
+				757E2C55899CD8EEEF937826 /* MediaAttachmentGrid.swift in Sources */,
 				53CE312477D9329530227EB4 /* MediaThumbnailView.swift in Sources */,
 				149EF7313B6A406216DEDDD3 /* MediaViewerScreen.swift in Sources */,
 				8644D03B4964470C44521126 /* OceanKeyPresetBackupDocument.swift in Sources */,
@@ -1008,7 +1012,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 116;
+				CURRENT_PROJECT_VERSION = 117;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1067,7 +1071,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 116;
+				CURRENT_PROJECT_VERSION = 117;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
