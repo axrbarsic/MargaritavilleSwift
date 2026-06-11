@@ -119,8 +119,8 @@ Simulator unless explicitly allowed.
 - Current Swift gesture rule: inactive tap/long-press recognizers must not stay
   attached to room controls, and vertical scroll must beat row-level
   swipe/tap/long-press interactions when the finger starts on a cell.
-- The summary header puzzle handle is functional again: dragging the puzzle
-  returns from the main screen to first-screen cart/room editing.
+- The summary header edit-entry button returns from the main screen to
+  first-screen cart/room editing without extra cart marker controls.
 - Room scheduling now uses a native hour/minute/AM-PM sheet with 15-minute
   increments, pink schedule status priority, automatic due-time opening, and
   local iOS notifications.

@@ -12,92 +12,54 @@ struct SummaryHeader: View {
     let counts: SummaryCounts
     var progressLabel: String?
     var statusChips: [StatusChip] = []
-    var showsPersonalCartMarkers = true
-    @Binding var personalCartMarkers: PersonalCartMarkers
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
     @Environment(\.interactionFeedback) private var feedback
-    @State private var selectionPuzzleProgress: CGFloat = 0
-    @State private var activePersonalCartMarkerSlot: PersonalCartMarkerSlot?
 
     var body: some View {
-        GeometryReader { proxy in
-            HStack(spacing: 8) {
-                softButton(systemName: "line.3.horizontal", action: onOpenSettings)
-                    .opacity(CGFloat(1) - min(selectionPuzzleProgress * CGFloat(1.65), CGFloat(1)))
+        HStack(spacing: 12) {
+            headerIconButton(
+                systemName: "line.3.horizontal",
+                accessibilityLabel: "Открыть настройки",
+                action: onOpenSettings
+            )
 
-                if showsPersonalCartMarkers {
-                    PersonalCartMarkerStrip(
-                        markers: personalCartMarkers,
-                        building: .a,
-                        onTap: openPersonalCartMarkerPicker
-                    )
-                }
+            Spacer(minLength: 8)
 
-                Spacer(minLength: 6)
+            centerStats
+                .frame(maxWidth: .infinity)
 
-                centerStats
+            Spacer(minLength: 8)
 
-                if showsPersonalCartMarkers {
-                    PersonalCartMarkerStrip(
-                        markers: personalCartMarkers,
-                        building: .b,
-                        onTap: openPersonalCartMarkerPicker
-                    )
-                }
-
-                Spacer(minLength: 94)
-            }
-            .padding(.leading, 18)
-            .padding(.trailing, 10)
-            .frame(width: proxy.size.width, height: proxy.size.height)
-            .overlay {
-                SummarySelectionPuzzleHandle(
-                    progress: $selectionPuzzleProgress,
-                    onComplete: onOpenSelection
-                )
-            }
+            headerIconButton(
+                systemName: "square.grid.3x3",
+                accessibilityLabel: "Открыть выбор комнат",
+                action: openSelection
+            )
         }
+        .padding(.horizontal, 18)
         .frame(height: 48)
-        .confirmationDialog(
-            activePersonalCartMarkerSlot?.title ?? "Метка тележки",
-            isPresented: Binding(
-                get: { activePersonalCartMarkerSlot != nil },
-                set: { if !$0 { activePersonalCartMarkerSlot = nil } }
-            ),
-            titleVisibility: .visible
-        ) {
-            if let slot = activePersonalCartMarkerSlot {
-                ForEach(PersonalCartMarkers.allowedFloors, id: \.self) { floor in
-                    Button(floorPickerTitle(floor, for: slot)) {
-                        setPersonalCartMarkerFloor(floor, for: slot)
-                    }
-                }
-                Button(clearPickerTitle(for: slot), role: .destructive) {
-                    setPersonalCartMarkerFloor(nil, for: slot)
-                }
-            }
-        } message: {
-            if let slot = activePersonalCartMarkerSlot {
-                Text("Выбери этаж для \(slot.title) метки здания \(slot.building.label).")
-            }
-        }
     }
 
-    private func softButton(systemName: String, action: @escaping () -> Void) -> some View {
+    private func headerIconButton(
+        systemName: String,
+        accessibilityLabel: String,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 24, weight: .black))
+                .font(.system(size: 23, weight: .black))
                 .frame(width: 48, height: 48)
                 .foregroundStyle(OceanKeyTheme.secondaryText)
-                .background(.black.opacity(0.08))
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(OceanKeyTheme.accent.opacity(0.16), lineWidth: 1)
-                }
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private func openSelection() {
+        feedback.confirm()
+        onOpenSelection()
     }
 
     @ViewBuilder
@@ -136,38 +98,11 @@ struct SummaryHeader: View {
         }
     }
 
-    private func openPersonalCartMarkerPicker(_ slot: PersonalCartMarkerSlot) {
-        feedback.tap()
-        activePersonalCartMarkerSlot = slot
-    }
-
-    private func setPersonalCartMarkerFloor(_ floor: Int?, for slot: PersonalCartMarkerSlot) {
-        feedback.confirm()
-        personalCartMarkers = personalCartMarkers.settingFloor(floor, for: slot)
-        activePersonalCartMarkerSlot = nil
-    }
-
-    private func floorPickerTitle(_ floor: Int, for slot: PersonalCartMarkerSlot) -> String {
-        let prefix = personalCartMarkers.floor(for: slot) == floor ? "✓ " : ""
-        return "\(prefix)Этаж \(floor)"
-    }
-
-    private func clearPickerTitle(for slot: PersonalCartMarkerSlot) -> String {
-        let prefix = personalCartMarkers.floor(for: slot) == nil ? "✓ " : ""
-        return "\(prefix)Очистить"
-    }
 }
 
 #Preview {
-    @Previewable @State var markers = PersonalCartMarkers(
-        aYellowFloor: 3,
-        aGrayFloor: nil,
-        bYellowFloor: 5,
-        bGrayFloor: 2
-    )
     SummaryHeader(
         counts: SummaryCounts(total: 10, completed: 10, remaining: 0),
-        personalCartMarkers: $markers,
         onOpenSettings: {},
         onOpenSelection: {}
     )

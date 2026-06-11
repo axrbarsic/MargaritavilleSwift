@@ -32,8 +32,6 @@ struct SummaryScreen: View {
                     counts: workSession.counts,
                     progressLabel: summaryProgressLabel,
                     statusChips: summaryStatusChips,
-                    showsPersonalCartMarkers: workSession.hotelProfile.summaryLayout != .squareGrid4,
-                    personalCartMarkers: $appSettings.personalCartMarkers,
                     onOpenSettings: openSettings,
                     onOpenSelection: openSelection
                 )

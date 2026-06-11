@@ -8,7 +8,7 @@ Date: 2026-06-11
 - Margaritaville has its own worktree in `/Users/alex/Developer/MargaritavilleSwift`.
 - Margaritaville bundle id is `com.alex.margaritaville.swift`.
 - The app boots directly into Margaritaville and does not show the hotel picker.
-- The summary header keeps the OceanKey structure: settings button, center stats, edit-entry handle.
+- The summary header keeps the OceanKey structure: settings button, center stats, edit-entry button.
 
 ## Verified
 

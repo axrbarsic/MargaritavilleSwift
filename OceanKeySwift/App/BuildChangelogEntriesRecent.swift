@@ -8,7 +8,7 @@ extension BuildChangelog {
             changes: [
                 "Split Margaritaville into a separate installed iOS app with its own bundle identifier and app storage.",
                 "The app now boots directly into the Margaritaville workflow instead of showing a hotel chooser.",
-                "Simplified the Margaritaville summary header to match the main OceanKey structure: settings, center stats, and the edit-entry handle."
+                "Simplified the Margaritaville summary header to match the main OceanKey structure: settings, center stats, and a direct edit-entry button."
             ]
         ),
         BuildChangelogEntry(
