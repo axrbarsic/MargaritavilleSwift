@@ -10,6 +10,14 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (116)",
+            date: "2026-06-11",
+            changes: [
+                "Grouped Margaritaville summary tiles into separate building/floor islands inside a cart.",
+                "Added regression coverage so a multi-territory Margaritaville cart renders A3 and B3 as separate summary groups."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (115)",
             date: "2026-06-11",
             changes: [

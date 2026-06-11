@@ -107,6 +107,7 @@
 		ABC0A671535A620304D99B74 /* RoomDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1034E32B098922B2FC6F084 /* RoomDetailsScreen.swift */; };
 		ADA805779E0A090FA473DE44 /* WorkSessionMergePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F946AED9FB90B790B07F606A /* WorkSessionMergePolicy.swift */; };
 		ADE238EEBC86AEC1A5A483B2 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85ED0B20C8238C7912F393F9 /* AVKit.framework */; };
+		BA0816F3C3D6588659B42DE3 /* MargaritavilleSummaryRoomGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DA66DA9D25901FF15738148 /* MargaritavilleSummaryRoomGrouping.swift */; };
 		BA1ECF280752FFF426599CBC /* AppBackgroundModeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB035F8E992FD2AF55A8FC /* AppBackgroundModeEnvironment.swift */; };
 		BFB26C1A0A7C67F26219BFA4 /* RoomActionMenuLampTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */; };
 		BFB3353CA1DF402C0F1222D5 /* AppleCloudAccountProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D456FBA6F34948A76DD74F8 /* AppleCloudAccountProbe.swift */; };
@@ -130,6 +131,7 @@
 		E79D1EED7C47265E97AAB005 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8BBFB5474764DC44B4456 /* SummaryScreen.swift */; };
 		EA1F06A3B816D8C63F06C999 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB0EFE6ABD3A6B013CDC36 /* SwiftDataWorkSessionRepository.swift */; };
 		F27FCB29F753D95AA30B2A36 /* WorkSessionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A877BC80B88CEC9638203 /* WorkSessionHistoryScreen.swift */; };
+		F37A1F24D173F6D132B8CAFA /* MargaritavilleSummaryRoomGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75B206F1B983D1596C0227F /* MargaritavilleSummaryRoomGroupingTests.swift */; };
 		F516FD9FD2B66D2AC637D72F /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3371DBE699E1184CA308038 /* WorkSessionStore+History.swift */; };
 		F83E4227B655B617F593C9C6 /* WorkSessionMergePolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A683672C5983A73C2DAC800F /* WorkSessionMergePolicyTests.swift */; };
 		FA5C69080CC5FCF5A7FEE8B5 /* RoomScheduleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C4BBF9C1E7AA6CADF950 /* RoomScheduleSelection.swift */; };
@@ -171,6 +173,7 @@
 		2997A598AB1E6A8F5F843FE2 /* CartDetailsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsRoute.swift; sourceTree = "<group>"; };
 		2A4295E2664F3F1E0142B794 /* MargaritavilleCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleCatalogEditorSection.swift; sourceTree = "<group>"; };
 		2B2E0A4851617BB7FC453CD8 /* SettingsBackgroundVideoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackgroundVideoPicker.swift; sourceTree = "<group>"; };
+		2DA66DA9D25901FF15738148 /* MargaritavilleSummaryRoomGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummaryRoomGrouping.swift; sourceTree = "<group>"; };
 		30E24444682CDA12B877EB67 /* AppleSyncStatusEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncStatusEnvironment.swift; sourceTree = "<group>"; };
 		31317A47FB0AB2FCC1E94C8A /* HoldActionTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldActionTarget.swift; sourceTree = "<group>"; };
 		314C5E013DA7A2394C52AF41 /* RoomDayCategoryControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryControls.swift; sourceTree = "<group>"; };
@@ -245,6 +248,7 @@
 		B55CBE9F99AD8814E390BE3C /* RoomScheduleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSheet.swift; sourceTree = "<group>"; };
 		B5680F4D3B4245E31F8AB215 /* InteractionFeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionFeedbackService.swift; sourceTree = "<group>"; };
 		B6604386501D00F125345B04 /* ExperimentalAppearanceEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentalAppearanceEnvironment.swift; sourceTree = "<group>"; };
+		B75B206F1B983D1596C0227F /* MargaritavilleSummaryRoomGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummaryRoomGroupingTests.swift; sourceTree = "<group>"; };
 		BB8F64AABB38A2036C634BCB /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
 		BC070BE6C1E7461435DE8E6C /* RoomDayCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategory.swift; sourceTree = "<group>"; };
 		BC4FC7308CA762295F9D6626 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
@@ -485,6 +489,7 @@
 				E715506238EC7FFF5AC1F195 /* AIVisualPresetStoreTests.swift */,
 				D14392CAF529EF78B4841747 /* AppleSyncEntitlementTests.swift */,
 				71CFB1546F72B1749BEB27E7 /* AppSettingsStoreTests.swift */,
+				B75B206F1B983D1596C0227F /* MargaritavilleSummaryRoomGroupingTests.swift */,
 				00A45905838B30EDFC18C397 /* PerformanceTelemetryStoreTests.swift */,
 				4E3A3C8B003CBAF03504F695 /* RuntimeDiagnosticsTests.swift */,
 				C904268098CE3875C7C61698 /* SummaryActionMenuExpansionTests.swift */,
@@ -595,6 +600,7 @@
 			isa = PBXGroup;
 			children = (
 				6CD15DBDCE80476FF0F4FEC9 /* CartSummarySection.swift */,
+				2DA66DA9D25901FF15738148 /* MargaritavilleSummaryRoomGrouping.swift */,
 				09A09E81466D75F733FDB699 /* MargaritavilleSummarySection.swift */,
 				DD8A5F3E8A1246EC011FB56F /* PersonalCartMarkerStrip.swift */,
 				581AA4C2C21D792F644F4B08 /* RoomActionMenuLampTransition.swift */,
@@ -789,6 +795,7 @@
 				83EB07869078ACDF236ED14B /* AIVisualPresetStoreTests.swift in Sources */,
 				87852D01D8D77739E19E6738 /* AppSettingsStoreTests.swift in Sources */,
 				C049A7C4CC4F9626A8CE7178 /* AppleSyncEntitlementTests.swift in Sources */,
+				F37A1F24D173F6D132B8CAFA /* MargaritavilleSummaryRoomGroupingTests.swift in Sources */,
 				74F755CC983F8493F4FAF4A6 /* PerformanceTelemetryStoreTests.swift in Sources */,
 				10CBAE8DA13FE056254B65D4 /* RuntimeDiagnosticsTests.swift in Sources */,
 				333A65A0C26F32AD550D5161 /* SummaryActionMenuExpansionTests.swift in Sources */,
@@ -836,6 +843,7 @@
 				21201E301476E7CD55CDD211 /* LocalWorkSessionRepository.swift in Sources */,
 				39D81BCD68AFEF090FCC1D4E /* LoopingVideoBackgroundView.swift in Sources */,
 				98D664EC55E77F9E55545A73 /* MargaritavilleCatalogEditorSection.swift in Sources */,
+				BA0816F3C3D6588659B42DE3 /* MargaritavilleSummaryRoomGrouping.swift in Sources */,
 				2F31A8530B2DC8C01BA3A3A5 /* MargaritavilleSummarySection.swift in Sources */,
 				A703675234FF769CF867B2BD /* MatrixRainConfiguration.swift in Sources */,
 				90E670E6CFD78A670C422204 /* MatrixRainConfigurationEnvironment.swift in Sources */,
@@ -1000,7 +1008,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 115;
+				CURRENT_PROJECT_VERSION = 116;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1059,7 +1067,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 115;
+				CURRENT_PROJECT_VERSION = 116;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

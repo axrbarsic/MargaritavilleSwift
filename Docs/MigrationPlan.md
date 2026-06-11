@@ -114,6 +114,9 @@ verification.
   long-press context actions open voice/media, toggle VIP, schedule time, and
   reset completed rooms. Media and VIP badges are visible directly on the
   square grid.
+- Margaritaville summary now groups rooms inside each cart by the room's
+  building/floor territory, so one cart spanning A3 and B3 renders as separate
+  square-grid islands instead of one mixed A3/B3 block.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

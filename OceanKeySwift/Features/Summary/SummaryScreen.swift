@@ -108,6 +108,7 @@ struct SummaryScreen: View {
                 ForEach($workSession.carts) { $cart in
                     MargaritavilleSummarySection(
                         cart: $cart,
+                        territories: workSession.effectiveCatalog,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         onAdvance: toggleOpen,
                         onOpenDetails: { roomID, mode in

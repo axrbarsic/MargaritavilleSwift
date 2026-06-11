@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MargaritavilleSummarySection: View {
     @Binding var cart: CartSection
+    let territories: [Territory]
     let statusPaletteSaturation: Double
     let onAdvance: (RoomCell.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
@@ -15,33 +16,57 @@ struct MargaritavilleSummarySection: View {
     )
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(cart.building)
-                    .font(.system(size: 24, weight: .black, design: .rounded))
-                Spacer()
-                Text("\(cart.rooms.count)")
-                    .font(.system(size: 18, weight: .black, design: .rounded))
-                    .monospacedDigit()
-            }
-            .foregroundStyle(.white)
-            .padding(.horizontal, 4)
-
-            LazyVGrid(columns: columns, spacing: 8) {
-                ForEach($cart.rooms) { $room in
-                    MargaritavilleRoomTile(
-                        room: room,
-                        statusPaletteSaturation: statusPaletteSaturation,
-                        onAdvance: { onAdvance(room.id) },
-                        onOpenDetails: { mode in onOpenDetails(room.id, mode) },
-                        onVIPToggle: { onVIPToggle(room.id) },
-                        onReset: { onReset(room.id) },
-                        onSchedule: { onSchedule(room.id) }
-                    )
-                }
+        VStack(alignment: .leading, spacing: 14) {
+            ForEach(roomGroups) { group in
+                roomGroup(group)
             }
         }
         .padding(.vertical, 8)
+    }
+
+    private func roomGroup(_ group: MargaritavilleSummaryRoomGroup) -> some View {
+        VStack(alignment: .leading, spacing: 9) {
+            groupHeader(group)
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(group.rooms) { room in
+                    tile(for: room)
+                }
+            }
+        }
+    }
+
+    private func groupHeader(_ group: MargaritavilleSummaryRoomGroup) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("Тележка \(cart.id)")
+            Spacer()
+            Text(group.label)
+            Text("\(group.rooms.count)")
+                .monospacedDigit()
+                .foregroundStyle(OceanKeyTheme.secondaryText)
+        }
+        .font(.system(size: 22, weight: .black, design: .rounded))
+        .foregroundStyle(.white)
+        .padding(.horizontal, 4)
+    }
+
+    private func tile(for room: RoomCell) -> some View {
+        MargaritavilleRoomTile(
+            room: room,
+            statusPaletteSaturation: statusPaletteSaturation,
+            onAdvance: { onAdvance(room.id) },
+            onOpenDetails: { mode in onOpenDetails(room.id, mode) },
+            onVIPToggle: { onVIPToggle(room.id) },
+            onReset: { onReset(room.id) },
+            onSchedule: { onSchedule(room.id) }
+        )
+    }
+
+    private var roomGroups: [MargaritavilleSummaryRoomGroup] {
+        MargaritavilleSummaryRoomGrouping.groups(
+            rooms: cart.rooms,
+            territories: territories,
+            fallbackLabel: cart.building
+        )
     }
 }
 

@@ -237,3 +237,6 @@ Simulator unless explicitly allowed.
 - Margaritaville setup shows selected rooms from other buildings/floors of the
   same cart as compact chips, making multi-territory cart selection visible
   while the main grid is focused on one territory.
+- Margaritaville summary now splits a single cart's rooms into separate
+  building/floor grid islands, matching the reference requirement for visible
+  grouped sections.
