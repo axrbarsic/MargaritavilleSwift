@@ -1,17 +1,20 @@
-# OceanKeySwift Agent Instructions
+# MargaritavilleSwift Agent Instructions
 
 ## Language And Context
 
 - Always answer Alex in Russian unless he explicitly asks otherwise.
-- This repository is the native iOS rewrite of OceanKey.
+- This worktree is the separate native iOS Margaritaville app split out of
+  OceanKeySwift.
+- The main Washington/OceanKey app lives in `/Users/alex/Developer/OceanKeySwift`
+  and must remain separate from this worktree.
 - The Flutter reference app is `/Users/alex/Developer/OceanKeyFlutterRun`.
 - Do not edit the Flutter app while porting unless Alex explicitly asks.
 - Android and Web are frozen for this migration track until Alex changes that.
 
 ## Global Goal
 
-The primary goal is full practical migration of OceanKey from Flutter to native
-Swift/iOS, not completion of one isolated subtask.
+The primary goal is a stable standalone Margaritaville iOS app, not completion
+of one isolated subtask.
 
 Do not stop just because one subgoal is complete. After finishing a coherent
 piece, immediately continue to the next highest-priority migration gap unless:
@@ -43,14 +46,19 @@ critical path automatically.
 - Use the physical iPhone by default. Do not use the iOS Simulator unless Alex
   explicitly allows it.
 - Current physical device target:
-  `00008140-001248C20298801C`.
+  `85E776B1-9069-5E68-BC3A-3BCAA4AAB870`.
+- Bundle identifier:
+  `com.alex.margaritaville.swift`.
+- If physical-device build fails with `No Accounts` or missing profile for
+  `com.alex.margaritaville.swift`, do not swap to an old OceanKey bundle id.
+  That is a signing/provisioning blocker, not an app-code blocker.
 - For build/install checks, use:
 
 ```sh
 xcodegen generate
-xcodebuild -project OceanKeySwift.xcodeproj -scheme OceanKeySwift -configuration Debug -destination 'generic/platform=iOS' -derivedDataPath .build/DerivedDataDevice -allowProvisioningUpdates build
-xcrun devicectl device install app --device 00008140-001248C20298801C .build/DerivedDataDevice/Build/Products/Debug-iphoneos/OceanKeySwift.app
-xcrun devicectl device process launch --device 00008140-001248C20298801C com.alex.oceankey.swift
+xcodebuild -project MargaritavilleSwift.xcodeproj -scheme OceanKeySwift -configuration Debug -destination 'generic/platform=iOS' -derivedDataPath .build/DerivedDataDevice -allowProvisioningUpdates build
+xcrun devicectl device install app --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB870 .build/DerivedDataDevice/Build/Products/Debug-iphoneos/OceanKeySwift.app
+xcrun devicectl device process launch --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB870 --terminate-existing com.alex.margaritaville.swift
 ```
 
 ## Build Number Discipline
