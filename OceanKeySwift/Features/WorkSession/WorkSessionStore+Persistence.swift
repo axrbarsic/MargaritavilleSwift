@@ -28,8 +28,15 @@ extension WorkSessionStore {
         lastPersistenceError = nil
     }
 
-    static func bootstrapping(repository: WorkSessionRepository = SwiftDataWorkSessionRepository()) -> WorkSessionStore {
-        WorkSessionStore(carts: seedCarts(), repository: repository)
+    static func bootstrapping(
+        hotelProfile: HotelProfile = .current,
+        repository: WorkSessionRepository = SwiftDataWorkSessionRepository()
+    ) -> WorkSessionStore {
+        WorkSessionStore(
+            carts: seedCarts(hotelProfile: hotelProfile),
+            hotelProfile: hotelProfile,
+            repository: repository
+        )
     }
 
     static func loadSnapshot(
@@ -46,30 +53,43 @@ extension WorkSessionStore {
         }
     }
 
-    static func load(repository: WorkSessionRepository = SwiftDataWorkSessionRepository()) -> WorkSessionStore {
+    static func load(
+        hotelProfile: HotelProfile = .current,
+        repository: WorkSessionRepository = SwiftDataWorkSessionRepository()
+    ) -> WorkSessionStore {
         do {
             if let snapshot = try repository.loadSnapshot() {
                 return WorkSessionStore(
                     carts: snapshot.carts,
                     selection: snapshot.selection,
                     history: snapshot.history,
+                    hotelProfile: hotelProfile,
                     repository: repository
                 )
             }
         } catch {
-            let store = WorkSessionStore(carts: seedCarts(), repository: repository)
+            let store = WorkSessionStore(
+                carts: seedCarts(hotelProfile: hotelProfile),
+                hotelProfile: hotelProfile,
+                repository: repository
+            )
             store.lastPersistenceError = error
             return store
         }
-        return WorkSessionStore(carts: seedCarts(), repository: repository)
+        return WorkSessionStore(
+            carts: seedCarts(hotelProfile: hotelProfile),
+            hotelProfile: hotelProfile,
+            repository: repository
+        )
     }
 
     static func preview() -> WorkSessionStore {
         WorkSessionStore(carts: seedCarts())
     }
 
-    private static func seedCarts() -> [CartSection] {
-        [
+    private static func seedCarts(hotelProfile: HotelProfile = .current) -> [CartSection] {
+        guard hotelProfile.id == HotelProfile.current.id else { return [] }
+        return [
             CartSection(id: 7, building: "A3", rooms: [
                 RoomCell(id: "303", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: true),
                 RoomCell(id: "304", opened: true, completedTasks: Set(RoomTask.allCases), isVIP: false),

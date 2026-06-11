@@ -78,6 +78,48 @@ func scheduledRoomOpensAndClearsScheduleWhenDue() {
 }
 
 @Test
+func margaritavilleSimpleCycleAdvancesStatusesAndTimes() throws {
+    let selectedAt = Date(timeIntervalSince1970: 1_802_500_000)
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [
+                    RoomCell(
+                        id: "101",
+                        opened: false,
+                        completedTasks: [],
+                        isVIP: false,
+                        statusChangedAt: selectedAt,
+                        timeline: RoomTimeline(selectedAt: selectedAt)
+                    )
+                ]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .pending)
+
+    store.toggleOpen(roomId: "101")
+    let openedRoom = store.room(id: "101")
+
+    #expect(openedRoom?.status(in: .simpleCycle) == .open)
+    #expect(openedRoom?.statusChangedAt != selectedAt)
+
+    let openedStatusAt = try #require(openedRoom?.statusChangedAt)
+    store.toggleOpen(roomId: "101")
+    let readyRoom = store.room(id: "101")
+
+    #expect(readyRoom?.status(in: .simpleCycle) == .ready)
+    #expect(readyRoom?.completedTasks == Set(RoomTask.allCases))
+    #expect(readyRoom?.statusChangedAt != openedStatusAt)
+    #expect(store.counts.completed == 1)
+    #expect(store.history.prefix(2).allSatisfy { $0.kind == .roomStatusChanged })
+}
+
+@Test
 func vipAndScheduleMutationsRecordFieldTimestamps() {
     let store = WorkSessionStore.preview()
 

@@ -215,3 +215,13 @@ Simulator unless explicitly allowed.
   cleaned up.
 - Video wallpaper controls now include stronger green tint, wider brightness,
   matte blur, scanline/grid overlay, and the playback watchdog.
+- OceanKeySwift now has first-class hotel profiles instead of one hard-coded
+  property: the current OceanKey workflow remains the default S/L/B full-width
+  room flow, while Margaritaville can be selected from a startup hotel chooser
+  or Settings.
+- Work-session persistence is isolated per hotel through separate SwiftData
+  store files. The existing OceanKey store is migrated forward from the legacy
+  default store path so Margaritaville data cannot overwrite current-hotel data.
+- Margaritaville has the first simple-cycle summary: 4-column square room grid,
+  yellow -> red -> green room taps, purple scheduled rooms, live status chips,
+  progress label, and visible current-status/scheduled time on every tile.

@@ -26,7 +26,7 @@ struct Territory: Codable, Hashable, Identifiable, Sendable {
 }
 
 enum RoomCatalog {
-    static let territories: [Territory] = [2, 3, 4, 5].flatMap { floor in
+    static let currentTerritories: [Territory] = [2, 3, 4, 5].flatMap { floor in
         [
             Territory(
                 floor: floor,
@@ -42,6 +42,8 @@ enum RoomCatalog {
             )
         ]
     }
+
+    static let territories = currentTerritories
 
     static func roomsOnFloor(_ floor: Int, from: Int, through: Int) -> [RoomID] {
         (from...through).map { "\(floor * 100 + $0)" }
@@ -82,8 +84,16 @@ enum RoomCatalog {
         territories.first { $0.id == id }
     }
 
+    static func territory(id: String, in profile: HotelProfile) -> Territory? {
+        profile.territory(id: id)
+    }
+
     static func territory(for room: RoomID) -> Territory? {
         territories.first { $0.rooms.contains(room) }
+    }
+
+    static func territory(for room: RoomID, in profile: HotelProfile) -> Territory? {
+        profile.territory(for: room)
     }
 
     static func territorySummaryLabel(for rooms: some Sequence<RoomID>, fallback: String) -> String {
@@ -92,9 +102,31 @@ enum RoomCatalog {
         return labels.sorted { compareTerritoryLabels($0, $1) }.joined(separator: "/")
     }
 
+    static func territorySummaryLabel(
+        for rooms: some Sequence<RoomID>,
+        fallback: String,
+        profile: HotelProfile
+    ) -> String {
+        let labels = Set(rooms.compactMap { territory(for: $0, in: profile)?.label })
+        guard !labels.isEmpty else { return fallback }
+        return labels.sorted { compareTerritoryLabels($0, $1, profile: profile) }.joined(separator: "/")
+    }
+
     private static func compareTerritoryLabels(_ left: String, _ right: String) -> Bool {
         guard let leftTerritory = territory(id: left),
               let rightTerritory = territory(id: right)
+        else {
+            return left < right
+        }
+        if leftTerritory.building != rightTerritory.building {
+            return leftTerritory.building.label < rightTerritory.building.label
+        }
+        return leftTerritory.floor < rightTerritory.floor
+    }
+
+    private static func compareTerritoryLabels(_ left: String, _ right: String, profile: HotelProfile) -> Bool {
+        guard let leftTerritory = territory(id: left, in: profile),
+              let rightTerritory = territory(id: right, in: profile)
         else {
             return left < right
         }

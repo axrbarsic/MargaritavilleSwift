@@ -1,7 +1,17 @@
 import SwiftUI
 
 struct SummaryHeader: View {
+    struct StatusChip: Identifiable, Equatable {
+        let status: RoomStatus
+        let count: Int
+        let usesPurpleScheduled: Bool
+
+        var id: RoomStatus { status }
+    }
+
     let counts: SummaryCounts
+    var progressLabel: String?
+    var statusChips: [StatusChip] = []
     @Binding var personalCartMarkers: PersonalCartMarkers
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
@@ -23,15 +33,7 @@ struct SummaryHeader: View {
 
                 Spacer(minLength: 6)
 
-                HStack(spacing: 12) {
-                    Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
-                    Text("\(counts.completed)").foregroundStyle(OceanKeyTheme.ready)
-                    Text("\(counts.remaining)").foregroundStyle(Color(hex: 0xFF4A4A))
-                }
-                .font(.system(size: 22, weight: .black, design: .rounded))
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+                centerStats
 
                 PersonalCartMarkerStrip(
                     markers: personalCartMarkers,
@@ -91,6 +93,42 @@ struct SummaryHeader: View {
                 }
         }
         .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private var centerStats: some View {
+        if let progressLabel, !statusChips.isEmpty {
+            HStack(spacing: 6) {
+                Text(progressLabel)
+                    .font(.system(size: 18, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+                    .monospacedDigit()
+                ForEach(statusChips) { chip in
+                    Text("\(chip.count)")
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(.black)
+                        .frame(minWidth: 24, minHeight: 22)
+                        .background(OceanKeyTheme.fill(
+                            for: chip.status,
+                            usesPurpleScheduled: chip.usesPurpleScheduled
+                        ))
+                        .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                }
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.62)
+        } else {
+            HStack(spacing: 12) {
+                Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
+                Text("\(counts.completed)").foregroundStyle(OceanKeyTheme.ready)
+                Text("\(counts.remaining)").foregroundStyle(Color(hex: 0xFF4A4A))
+            }
+            .font(.system(size: 22, weight: .black, design: .rounded))
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+        }
     }
 
     private func openPersonalCartMarkerPicker(_ slot: PersonalCartMarkerSlot) {

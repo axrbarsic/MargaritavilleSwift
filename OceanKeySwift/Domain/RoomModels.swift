@@ -28,6 +28,7 @@ struct RoomCell: Codable, Identifiable, Equatable, Sendable {
     var vipUpdatedAt: Date?
     var scheduledTime: Date? = nil
     var scheduledUpdatedAt: Date?
+    var statusChangedAt: Date? = nil
     var timeline = RoomTimeline()
     var textNote: String?
     var textNoteUpdatedAt: Date?
@@ -36,7 +37,7 @@ struct RoomCell: Codable, Identifiable, Equatable, Sendable {
     var mediaAttachments: [MediaAttachment]?
 
     var isReady: Bool {
-        opened && completedTasks.count == RoomTask.allCases.count
+        isReady(in: .tasksSLB)
     }
 
     var hasAnyTask: Bool {
@@ -44,11 +45,25 @@ struct RoomCell: Codable, Identifiable, Equatable, Sendable {
     }
 
     var status: RoomStatus {
+        status(in: .tasksSLB)
+    }
+
+    func isReady(in workflowKind: HotelWorkflowKind) -> Bool {
+        switch workflowKind {
+        case .tasksSLB, .simpleCycle:
+            opened && completedTasks.count == RoomTask.allCases.count
+        }
+    }
+
+    func status(in workflowKind: HotelWorkflowKind) -> RoomStatus {
         if scheduledTime != nil {
             return .scheduled
         }
-        if isReady {
+        if isReady(in: workflowKind) {
             return .ready
+        }
+        if workflowKind == .simpleCycle {
+            return opened ? .open : .pending
         }
         if !completedTasks.isEmpty {
             return .inProgress
@@ -57,6 +72,15 @@ struct RoomCell: Codable, Identifiable, Equatable, Sendable {
             return .open
         }
         return .pending
+    }
+
+    mutating func markStatusChangedIfNeeded(
+        from previousStatus: RoomStatus,
+        workflowKind: HotelWorkflowKind,
+        changedAt: Date
+    ) {
+        guard status(in: workflowKind) != previousStatus else { return }
+        statusChangedAt = changedAt
     }
 
     mutating func markTaskStateUpdated(_ task: RoomTask, at changedAt: Date) {

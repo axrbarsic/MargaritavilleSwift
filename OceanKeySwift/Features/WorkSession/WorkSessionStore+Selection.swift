@@ -6,7 +6,7 @@ extension WorkSessionStore {
     }
 
     func territory(forCart cartNumber: Int) -> Territory? {
-        selection.territory(forCart: cartNumber)
+        selection.territory(forCart: cartNumber, hotelProfile: hotelProfile)
     }
 
     func selectedRooms(forCart cartNumber: Int) -> Set<RoomID> {
@@ -20,7 +20,7 @@ extension WorkSessionStore {
     @discardableResult
     func toggleCartSelection(_ cartNumber: Int) -> WorkSessionSelectionCommandResult {
         let changedAt = Date()
-        let result = selection.toggleCart(cartNumber, changedAt: changedAt)
+        let result = selection.toggleCart(cartNumber, hotelProfile: hotelProfile, changedAt: changedAt)
         reconcileCartsAfterSelectionChange(
             result,
             title: "Тележка \(cartNumber): выбор изменен",
@@ -75,14 +75,15 @@ extension WorkSessionStore {
         return result
     }
 
-    static func selectionState(from carts: [CartSection]) -> WorkSessionSelectionState {
+    static func selectionState(from carts: [CartSection], hotelProfile: HotelProfile = .current) -> WorkSessionSelectionState {
         var state = WorkSessionSelectionState()
         for cart in carts {
-            let territory = RoomCatalog.territory(id: cart.building)
-                ?? cart.rooms.lazy.compactMap { RoomCatalog.territory(for: $0.id) }.first
+            let territory = RoomCatalog.territory(id: cart.building, in: hotelProfile)
+                ?? cart.rooms.lazy.compactMap { RoomCatalog.territory(for: $0.id, in: hotelProfile) }.first
                 ?? WorkSessionSelectionRules.preferredTerritory(
                     forCart: cart.id,
-                    existingBindings: state.cartBindings
+                    existingBindings: state.cartBindings,
+                    hotelProfile: hotelProfile
                 )
             let cartNumber = WorkSessionSelectionRules.clampedCartNumber(cart.id)
             state.cartBindings[cartNumber] = WorkSessionCartBinding(
@@ -105,7 +106,8 @@ extension WorkSessionStore {
         guard result == .changed else { return }
         carts = WorkSessionBuilder.makeCarts(
             from: selection,
-            preserving: carts.flatMap(\.rooms)
+            preserving: carts.flatMap(\.rooms),
+            hotelProfile: hotelProfile
         )
         appendHistory(kind: .selectionChanged, title: title, happenedAt: happenedAt)
         persist()

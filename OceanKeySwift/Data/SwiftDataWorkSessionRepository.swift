@@ -18,19 +18,25 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     private let legacyRepository: LocalWorkSessionRepository?
     let syncMode: SyncMode
     let activeSyncMode: SyncMode
+    let hotelID: String
 
     init(
+        hotelID: String = HotelProfile.current.id,
         syncMode: SyncMode = .localOnly,
         container: ModelContainer? = nil,
         activeSyncMode: SyncMode? = nil,
         legacyRepository: LocalWorkSessionRepository? = LocalWorkSessionRepository()
     ) {
+        self.hotelID = hotelID
         self.syncMode = syncMode
         if let container {
             self.container = container
             self.activeSyncMode = activeSyncMode ?? syncMode
         } else {
-            let resolved = SwiftDataWorkSessionRepository.makeDefaultContainer(requestedSyncMode: syncMode)
+            let resolved = SwiftDataWorkSessionRepository.makeDefaultContainer(
+                requestedSyncMode: syncMode,
+                hotelID: hotelID
+            )
             self.container = resolved.container
             self.activeSyncMode = resolved.activeSyncMode
         }
@@ -38,9 +44,18 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         self.legacyRepository = legacyRepository
     }
 
-    convenience init(inMemory: Bool, syncMode: SyncMode = .localOnly) throws {
-        let container = try SwiftDataWorkSessionRepository.makeContainer(inMemory: inMemory, syncMode: syncMode)
+    convenience init(
+        hotelID: String = HotelProfile.current.id,
+        inMemory: Bool,
+        syncMode: SyncMode = .localOnly
+    ) throws {
+        let container = try SwiftDataWorkSessionRepository.makeContainer(
+            inMemory: inMemory,
+            syncMode: syncMode,
+            hotelID: hotelID
+        )
         self.init(
+            hotelID: hotelID,
             syncMode: syncMode,
             container: container,
             activeSyncMode: inMemory ? .localOnly : syncMode,
@@ -77,17 +92,17 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         return try context.fetch(descriptor).first.map(PersistentWorkSessionMapper.snapshot(from:))
     }
 
-    private static func makeDefaultContainer(requestedSyncMode: SyncMode) -> (
+    private static func makeDefaultContainer(requestedSyncMode: SyncMode, hotelID: String) -> (
         container: ModelContainer,
         activeSyncMode: SyncMode
     ) {
         do {
-            return (try makeContainer(inMemory: false, syncMode: requestedSyncMode), requestedSyncMode)
+            return (try makeContainer(inMemory: false, syncMode: requestedSyncMode, hotelID: hotelID), requestedSyncMode)
         } catch {
             logger.error("Requested SwiftData container failed: \(error.localizedDescription, privacy: .public)")
             if requestedSyncMode != .localOnly {
                 do {
-                    let container = try makeContainer(inMemory: false, syncMode: .localOnly)
+                    let container = try makeContainer(inMemory: false, syncMode: .localOnly, hotelID: hotelID)
                     logger.error("Falling back to persistent local SwiftData after CloudKit container failure.")
                     return (container, .localOnly)
                 } catch {
@@ -96,14 +111,18 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
             }
             logger.error("Falling back to in-memory local SwiftData.")
             do {
-                return (try makeContainer(inMemory: true, syncMode: .localOnly), .localOnly)
+                return (try makeContainer(inMemory: true, syncMode: .localOnly, hotelID: hotelID), .localOnly)
             } catch {
                 preconditionFailure("Unable to create any SwiftData work-session store: \(error.localizedDescription)")
             }
         }
     }
 
-    private static func makeContainer(inMemory: Bool, syncMode: SyncMode) throws -> ModelContainer {
+    private static func makeContainer(
+        inMemory: Bool,
+        syncMode: SyncMode,
+        hotelID: String = HotelProfile.current.id
+    ) throws -> ModelContainer {
         let schema = Schema([
             PersistentWorkSession.self,
             PersistentCartBinding.self,
@@ -124,14 +143,14 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         } else {
             configuration = ModelConfiguration(
                 schema: schema,
-                url: try persistentStoreURL(),
+                url: try persistentStoreURL(hotelID: hotelID),
                 cloudKitDatabase: cloudKitDatabase(for: syncMode, inMemory: false)
             )
         }
         return try ModelContainer(for: schema, configurations: [configuration])
     }
 
-    private static func persistentStoreURL() throws -> URL {
+    private static func persistentStoreURL(hotelID: String) throws -> URL {
         guard let applicationSupportURL = FileManager.default.urls(
             for: .applicationSupportDirectory,
             in: .userDomainMask
@@ -142,7 +161,32 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
             at: applicationSupportURL,
             withIntermediateDirectories: true
         )
-        return applicationSupportURL.appendingPathComponent("default.store")
+        let storeURL = applicationSupportURL.appendingPathComponent("workSession-\(safeStoreID(hotelID)).store")
+        if hotelID == HotelProfile.current.id {
+            try migrateLegacyDefaultStoreIfNeeded(in: applicationSupportURL, to: storeURL)
+        }
+        return storeURL
+    }
+
+    private static func safeStoreID(_ hotelID: String) -> String {
+        hotelID
+            .lowercased()
+            .filter { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" }
+    }
+
+    private static func migrateLegacyDefaultStoreIfNeeded(in directory: URL, to storeURL: URL) throws {
+        let fileManager = FileManager.default
+        guard !fileManager.fileExists(atPath: storeURL.path) else { return }
+        let legacyURL = directory.appendingPathComponent("default.store")
+        guard fileManager.fileExists(atPath: legacyURL.path) else { return }
+        for suffix in ["", "-shm", "-wal"] {
+            let source = URL(fileURLWithPath: legacyURL.path + suffix)
+            let destination = URL(fileURLWithPath: storeURL.path + suffix)
+            guard fileManager.fileExists(atPath: source.path),
+                  !fileManager.fileExists(atPath: destination.path)
+            else { continue }
+            try fileManager.copyItem(at: source, to: destination)
+        }
     }
 
     private static func cloudKitDatabase(

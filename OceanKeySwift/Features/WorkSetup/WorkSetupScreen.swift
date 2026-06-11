@@ -5,6 +5,8 @@ struct WorkSetupScreen: View {
     @Bindable var appSettings: AppSettingsStore
     @Bindable var aiVisualPresetStore: AIVisualPresetStore
     @Bindable var performanceTelemetry: PerformanceTelemetryStore
+    let activeHotel: HotelProfile
+    let onSelectHotel: (HotelProfile) -> Void
     @Environment(\.interactionFeedback) private var feedback
 
     @State private var selectedCartNumber = 1
@@ -41,6 +43,7 @@ struct WorkSetupScreen: View {
                                 selectedRooms: workSession.selectedRooms(forCart: cartNumber),
                                 blockedRooms: blockedRooms(forCart: cartNumber),
                                 isFocused: selectedCartNumber == cartNumber,
+                                territories: workSession.hotelProfile.catalog,
                                 onFocus: { selectedCartNumber = cartNumber },
                                 onTerritoryChanged: { territory in
                                     feedback.confirm()
@@ -69,7 +72,9 @@ struct WorkSetupScreen: View {
         .sheet(isPresented: $isSettingsPresented) {
             SettingsScreen(
                 appSettings: appSettings,
-                aiVisualPresetStore: aiVisualPresetStore
+                aiVisualPresetStore: aiVisualPresetStore,
+                activeHotel: activeHotel,
+                onSelectHotel: onSelectHotel
             )
                 .preferredColorScheme(.dark)
         }
@@ -107,7 +112,8 @@ struct WorkSetupScreen: View {
         workSession.territory(forCart: cartNumber)
             ?? WorkSessionSelectionRules.preferredTerritory(
                 forCart: cartNumber,
-                existingBindings: workSession.selection.cartBindings
+                existingBindings: workSession.selection.cartBindings,
+                hotelProfile: workSession.hotelProfile
             )
     }
 
@@ -121,7 +127,9 @@ struct WorkSetupScreen: View {
         workSession: .preview(),
         appSettings: AppSettingsStore(),
         aiVisualPresetStore: try! AIVisualPresetStore(inMemory: true),
-        performanceTelemetry: PerformanceTelemetryStore()
+        performanceTelemetry: PerformanceTelemetryStore(),
+        activeHotel: .current,
+        onSelectHotel: { _ in }
     )
         .preferredColorScheme(.dark)
 }

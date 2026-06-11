@@ -168,6 +168,20 @@ func appSettingsPersistsPersonalCartMarkers() {
 }
 
 @Test
+func appSettingsPersistsSelectedHotel() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.selectedHotelID = HotelProfile.margaritaville.id
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.selectedHotelID == HotelProfile.margaritaville.id)
+}
+
+@Test
 func appSettingsPersistsStatusPaletteSaturation() {
     let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!

@@ -58,9 +58,13 @@ struct WorkSessionSelectionState: Codable, Equatable, Sendable {
     }
 
     func territory(forCart cartNumber: Int) -> Territory? {
+        territory(forCart: cartNumber, hotelProfile: .current)
+    }
+
+    func territory(forCart cartNumber: Int, hotelProfile: HotelProfile) -> Territory? {
         let cart = WorkSessionSelectionRules.clampedCartNumber(cartNumber)
         guard let binding = cartBindings[cart] else { return nil }
-        return RoomCatalog.territory(id: binding.territoryID)
+        return RoomCatalog.territory(id: binding.territoryID, in: hotelProfile)
     }
 }
 
@@ -79,6 +83,15 @@ enum WorkSessionSelectionRules {
         9: "A5"
     ]
 
+    static let margaritavillePreferredTerritoryByCart: [Int: String] = [
+        1: "A1",
+        2: "B1",
+        3: "A2",
+        4: "B2",
+        5: "A3",
+        6: "B3"
+    ]
+
     static func clampedCartNumber(_ cartNumber: Int) -> Int {
         min(max(cartNumber, cartRange.lowerBound), cartRange.upperBound)
     }
@@ -87,15 +100,26 @@ enum WorkSessionSelectionRules {
         forCart cartNumber: Int,
         existingBindings: [Int: WorkSessionCartBinding]
     ) -> Territory {
+        preferredTerritory(forCart: cartNumber, existingBindings: existingBindings, hotelProfile: .current)
+    }
+
+    static func preferredTerritory(
+        forCart cartNumber: Int,
+        existingBindings: [Int: WorkSessionCartBinding],
+        hotelProfile: HotelProfile
+    ) -> Territory {
         let cart = clampedCartNumber(cartNumber)
-        if let preferredID = preferredTerritoryByCart[cart],
-           let preferred = RoomCatalog.territory(id: preferredID) {
+        let preferredMap = hotelProfile.id == HotelProfile.margaritaville.id
+            ? margaritavillePreferredTerritoryByCart
+            : preferredTerritoryByCart
+        if let preferredID = preferredMap[cart],
+           let preferred = RoomCatalog.territory(id: preferredID, in: hotelProfile) {
             return preferred
         }
 
         let boundTerritoryIDs = Set(existingBindings.values.map(\.territoryID))
-        return RoomCatalog.territories.first { !boundTerritoryIDs.contains($0.id) }
-            ?? RoomCatalog.territories[0]
+        return hotelProfile.catalog.first { !boundTerritoryIDs.contains($0.id) }
+            ?? hotelProfile.catalog[0]
     }
 }
 
@@ -111,6 +135,15 @@ extension WorkSessionSelectionState {
         _ cartNumber: Int,
         changedAt: Date = Date()
     ) -> WorkSessionSelectionCommandResult {
+        toggleCart(cartNumber, hotelProfile: .current, changedAt: changedAt)
+    }
+
+    @discardableResult
+    mutating func toggleCart(
+        _ cartNumber: Int,
+        hotelProfile: HotelProfile,
+        changedAt: Date = Date()
+    ) -> WorkSessionSelectionCommandResult {
         guard !workdayLocked else { return .ignored }
         let cart = WorkSessionSelectionRules.clampedCartNumber(cartNumber)
         if cartBindings[cart] != nil {
@@ -120,7 +153,8 @@ extension WorkSessionSelectionState {
 
         let territory = WorkSessionSelectionRules.preferredTerritory(
             forCart: cart,
-            existingBindings: cartBindings
+            existingBindings: cartBindings,
+            hotelProfile: hotelProfile
         )
         cartBindings[cart] = WorkSessionCartBinding(cartNumber: cart, territoryID: territory.id)
         cartBindingUpdatedAt[cart] = changedAt
@@ -225,11 +259,12 @@ enum WorkSessionBuilder {
     static func makeCarts(
         from selection: WorkSessionSelectionState,
         preserving existingRooms: [RoomCell] = [],
+        hotelProfile: HotelProfile = .current,
         now: Date = Date()
     ) -> [CartSection] {
         let existingByID = Dictionary(uniqueKeysWithValues: existingRooms.map { ($0.id, $0) })
         return selection.selectedCartNumbers.compactMap { cartNumber in
-            guard let territory = selection.territory(forCart: cartNumber) else { return nil }
+            guard let territory = selection.territory(forCart: cartNumber, hotelProfile: hotelProfile) else { return nil }
             let rooms = selection
                 .rooms(forCart: cartNumber)
                 .sorted(by: RoomCatalog.compareRoomIDs)
@@ -239,6 +274,7 @@ enum WorkSessionBuilder {
                         opened: false,
                         completedTasks: [],
                         isVIP: false,
+                        statusChangedAt: now,
                         timeline: RoomTimeline(selectedAt: now)
                     )
                 }
@@ -247,7 +283,8 @@ enum WorkSessionBuilder {
             }
             let buildingLabel = RoomCatalog.territorySummaryLabel(
                 for: rooms.map(\.id),
-                fallback: territory.label
+                fallback: territory.label,
+                profile: hotelProfile
             )
             return CartSection(id: cartNumber, building: buildingLabel, rooms: rooms)
         }

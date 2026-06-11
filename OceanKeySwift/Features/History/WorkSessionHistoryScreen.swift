@@ -96,6 +96,7 @@ private struct WorkSessionHistoryCard: View {
         switch entry.kind {
         case .roomOpened, .scheduledRoomAutoOpened: "door.left.hand.open"
         case .roomClosed: "door.left.hand.closed"
+        case .roomStatusChanged: "paintpalette.fill"
         case .roomTaskChanged: "checklist"
         case .roomVIPChanged: "star.fill"
         case .roomScheduleChanged: "clock.fill"

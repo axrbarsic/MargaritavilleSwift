@@ -7,6 +7,8 @@ struct SummaryScreen: View {
     @Bindable var appSettings: AppSettingsStore
     @Bindable var aiVisualPresetStore: AIVisualPresetStore
     @Bindable var performanceTelemetry: PerformanceTelemetryStore
+    let activeHotel: HotelProfile
+    let onSelectHotel: (HotelProfile) -> Void
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.scheduleNotifications) private var scheduleNotifications
     @State private var expandedActionMenuRoomIDs: Set<RoomCell.ID> = []
@@ -17,7 +19,9 @@ struct SummaryScreen: View {
 
     var body: some View {
         ZStack {
-            if isSettingsPresented {
+            if workSession.hotelProfile.summaryLayout == .squareGrid4 {
+                Color.black.ignoresSafeArea()
+            } else if isSettingsPresented {
                 Color.black.ignoresSafeArea()
             } else {
                 AppBackgroundView()
@@ -26,35 +30,15 @@ struct SummaryScreen: View {
             VStack(spacing: 18) {
                 SummaryHeader(
                     counts: workSession.counts,
+                    progressLabel: summaryProgressLabel,
+                    statusChips: summaryStatusChips,
                     personalCartMarkers: $appSettings.personalCartMarkers,
                     onOpenSettings: openSettings,
                     onOpenSelection: openSelection
                 )
 
                 ScrollView {
-                    LazyVStack(spacing: 18) {
-                        ForEach($workSession.carts) { $cart in
-                            CartSummarySection(
-                                cart: $cart,
-                                geometry: appSettings.roomCellGeometry,
-                                taskControlsUseLongPress: appSettings.roomTaskLongPress,
-                                statusPaletteSaturation: appSettings.statusPaletteSaturation,
-                                actionMenuAllowsMultiple: appSettings.summaryActionMenuAllowsMultiple,
-                                expandedActionMenuRoomIDs: $expandedActionMenuRoomIDs,
-                                onOpenCartDetails: { cartID in
-                                    expandedActionMenuRoomIDs.removeAll()
-                                    cartDetailsRoute = CartDetailsRoute(cartID: cartID)
-                                },
-                                onOpenDetails: { roomID, mode in
-                                    roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
-                                },
-                                onOpenToggle: toggleOpen,
-                                onTaskToggle: workSession.toggleTask,
-                                onVIPToggle: workSession.toggleVIP,
-                                onScheduleToggle: openSchedule
-                            )
-                        }
-                    }
+                    summarySections
                     .padding(.horizontal, 8)
                     .padding(.bottom, 28)
                 }
@@ -78,7 +62,9 @@ struct SummaryScreen: View {
         .sheet(isPresented: $isSettingsPresented) {
             SettingsScreen(
                 appSettings: appSettings,
-                aiVisualPresetStore: aiVisualPresetStore
+                aiVisualPresetStore: aiVisualPresetStore,
+                activeHotel: activeHotel,
+                onSelectHotel: onSelectHotel
             )
                 .preferredColorScheme(.dark)
         }
@@ -111,6 +97,64 @@ struct SummaryScreen: View {
         workSession.toggleOpen(roomId: roomID)
         if hadSchedule, workSession.room(id: roomID)?.scheduledTime == nil {
             scheduleNotifications.cancelRoom(roomID)
+        }
+    }
+
+    @ViewBuilder
+    private var summarySections: some View {
+        if workSession.hotelProfile.summaryLayout == .squareGrid4 {
+            LazyVStack(spacing: 20) {
+                ForEach($workSession.carts) { $cart in
+                    MargaritavilleSummarySection(
+                        cart: $cart,
+                        statusPaletteSaturation: appSettings.statusPaletteSaturation,
+                        onAdvance: toggleOpen,
+                        onReset: workSession.resetSimpleCycle,
+                        onSchedule: openSchedule
+                    )
+                }
+            }
+        } else {
+            LazyVStack(spacing: 18) {
+                ForEach($workSession.carts) { $cart in
+                    CartSummarySection(
+                        cart: $cart,
+                        geometry: appSettings.roomCellGeometry,
+                        taskControlsUseLongPress: appSettings.roomTaskLongPress,
+                        statusPaletteSaturation: appSettings.statusPaletteSaturation,
+                        actionMenuAllowsMultiple: appSettings.summaryActionMenuAllowsMultiple,
+                        expandedActionMenuRoomIDs: $expandedActionMenuRoomIDs,
+                        onOpenCartDetails: { cartID in
+                            expandedActionMenuRoomIDs.removeAll()
+                            cartDetailsRoute = CartDetailsRoute(cartID: cartID)
+                        },
+                        onOpenDetails: { roomID, mode in
+                            roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
+                        },
+                        onOpenToggle: toggleOpen,
+                        onTaskToggle: workSession.toggleTask,
+                        onVIPToggle: workSession.toggleVIP,
+                        onScheduleToggle: openSchedule
+                    )
+                }
+            }
+        }
+    }
+
+    private var summaryProgressLabel: String? {
+        guard workSession.hotelProfile.workflowKind == .simpleCycle else { return nil }
+        return "\(workSession.counts.completed)/\(workSession.counts.total)"
+    }
+
+    private var summaryStatusChips: [SummaryHeader.StatusChip] {
+        guard workSession.hotelProfile.workflowKind == .simpleCycle else { return [] }
+        let rooms = workSession.carts.flatMap(\.rooms)
+        return [.open, .ready, .scheduled, .pending].map { status in
+            SummaryHeader.StatusChip(
+                status: status,
+                count: rooms.filter { $0.status(in: .simpleCycle) == status }.count,
+                usesPurpleScheduled: true
+            )
         }
     }
 
@@ -154,6 +198,8 @@ struct SummaryScreen: View {
         workSession: .preview(),
         appSettings: AppSettingsStore(),
         aiVisualPresetStore: try! AIVisualPresetStore(inMemory: true),
-        performanceTelemetry: PerformanceTelemetryStore()
+        performanceTelemetry: PerformanceTelemetryStore(),
+        activeHotel: .current,
+        onSelectHotel: { _ in }
     )
 }

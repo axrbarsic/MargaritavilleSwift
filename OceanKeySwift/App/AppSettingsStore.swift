@@ -66,6 +66,7 @@ final class AppSettingsStore {
         static let developerVIPJellyEnabled = "developerVIPBreathingEnabled"
         static let developerVIPJellySpeed = "developerVIPBreathingSpeed"
         static let developerVIPJellyDefaultEnabledMigration = "developerVIPJellyDefaultEnabledMigration_v94"
+        static let selectedHotelID = "selectedHotelID"
     }
 
     @ObservationIgnored private let userDefaults: UserDefaults
@@ -86,6 +87,16 @@ final class AppSettingsStore {
     var deepSeekModelTier: DeepSeekModelTier {
         didSet {
             userDefaults.set(deepSeekModelTier.rawValue, forKey: Keys.deepSeekModelTier)
+        }
+    }
+
+    var selectedHotelID: String? {
+        didSet {
+            if let selectedHotelID {
+                userDefaults.set(selectedHotelID, forKey: Keys.selectedHotelID)
+            } else {
+                userDefaults.removeObject(forKey: Keys.selectedHotelID)
+            }
         }
     }
 
@@ -313,6 +324,7 @@ final class AppSettingsStore {
         developerVIPFlickerSpeed = 1.6
         developerVIPJellyEnabled = true
         developerVIPJellySpeed = 0.75
+        selectedHotelID = nil
     }
 
     init(
@@ -341,6 +353,7 @@ final class AppSettingsStore {
         developerVIPFlickerSpeed: Double = 1.6,
         developerVIPJellyEnabled: Bool = true,
         developerVIPJellySpeed: Double = 0.75,
+        selectedHotelID: String? = nil,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -368,6 +381,7 @@ final class AppSettingsStore {
         self.deepSeekModelTier = deepSeekModelTier
         self.developerVIPFlickerEnabled = developerVIPFlickerEnabled
         self.developerVIPJellyEnabled = developerVIPJellyEnabled
+        self.selectedHotelID = selectedHotelID
         self.userDefaults = userDefaults
     }
 
@@ -408,6 +422,7 @@ final class AppSettingsStore {
         let developerVIPFlickerSpeed = userDefaults.object(forKey: Keys.developerVIPFlickerSpeed) as? Double ?? 1.6
         let developerVIPJellyEnabled = Self.migratedDeveloperVIPJellyEnabled(userDefaults: userDefaults)
         let developerVIPJellySpeed = userDefaults.object(forKey: Keys.developerVIPJellySpeed) as? Double ?? 0.75
+        let selectedHotelID = userDefaults.string(forKey: Keys.selectedHotelID)
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -434,6 +449,7 @@ final class AppSettingsStore {
             developerVIPFlickerSpeed: developerVIPFlickerSpeed,
             developerVIPJellyEnabled: developerVIPJellyEnabled,
             developerVIPJellySpeed: developerVIPJellySpeed,
+            selectedHotelID: selectedHotelID,
             userDefaults: userDefaults
         )
     }

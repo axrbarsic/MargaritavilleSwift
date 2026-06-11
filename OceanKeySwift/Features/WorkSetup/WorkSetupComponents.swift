@@ -98,6 +98,7 @@ struct CartSetupCard: View {
     let selectedRooms: Set<RoomID>
     let blockedRooms: [RoomID: Int]
     let isFocused: Bool
+    let territories: [Territory]
     let onFocus: () -> Void
     let onTerritoryChanged: (Territory) -> Void
     let onRoomToggle: (RoomID) -> Void
@@ -105,7 +106,11 @@ struct CartSetupCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 13) {
             header
-            TerritoryPicker(territory: territory, onChanged: onTerritoryChanged)
+            TerritoryPicker(
+                territory: territory,
+                territories: territories,
+                onChanged: onTerritoryChanged
+            )
             roomGrid
         }
         .padding(14)
@@ -145,12 +150,21 @@ struct CartSetupCard: View {
 
 struct TerritoryPicker: View {
     let territory: Territory
+    let territories: [Territory]
     let onChanged: (Territory) -> Void
+
+    private var buildings: [Building] {
+        Array(Set(territories.map(\.building))).sorted { $0.label < $1.label }
+    }
+
+    private var floors: [Int] {
+        Array(Set(territories.map(\.floor))).sorted()
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 9) {
             HStack(spacing: 8) {
-                ForEach(Building.allCases, id: \.self) { building in
+                ForEach(buildings, id: \.self) { building in
                     pickerChip(
                         building.label,
                         selected: territory.building == building,
@@ -160,7 +174,7 @@ struct TerritoryPicker: View {
             }
 
             HStack(spacing: 8) {
-                ForEach([2, 3, 4, 5], id: \.self) { floor in
+                ForEach(floors, id: \.self) { floor in
                     pickerChip(
                         "\(floor)",
                         selected: territory.floor == floor,
@@ -172,7 +186,7 @@ struct TerritoryPicker: View {
     }
 
     private func update(building: Building, floor: Int) {
-        if let next = RoomCatalog.territory(id: "\(building.label)\(floor)") {
+        if let next = territories.first(where: { $0.building == building && $0.floor == floor }) {
             onChanged(next)
         }
     }

@@ -4,6 +4,8 @@ import SwiftUI
 struct SettingsScreen: View {
     @Bindable var appSettings: AppSettingsStore
     @Bindable var aiVisualPresetStore: AIVisualPresetStore
+    let activeHotel: HotelProfile
+    let onSelectHotel: (HotelProfile) -> Void
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.interactionFeedback) private var feedback
@@ -379,6 +381,8 @@ struct SettingsScreen: View {
                 subtitle: appleSyncStatus.detailsLabel
             )
 
+            hotelPicker
+
             Toggle(isOn: $appSettings.summaryActionMenuAllowsMultiple) {
                 SettingsInfoRow(
                     title: "Мульти-меню",
@@ -390,6 +394,39 @@ struct SettingsScreen: View {
             .tint(OceanKeyTheme.accent)
             .onChange(of: appSettings.summaryActionMenuAllowsMultiple) { _, _ in
                 feedback.confirm()
+            }
+        }
+    }
+
+    private var hotelPicker: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SettingsInfoRow(
+                title: "Отель",
+                value: activeHotel.name,
+                systemName: "building.2.fill",
+                subtitle: "Переключение открывает отдельную рабочую базу выбранного отеля."
+            )
+
+            HStack(spacing: 10) {
+                ForEach(HotelProfile.all) { profile in
+                    Button {
+                        guard profile.id != activeHotel.id else { return }
+                        feedback.confirm()
+                        onSelectHotel(profile)
+                        dismiss()
+                    } label: {
+                        Text(profile.name)
+                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 44)
+                            .foregroundStyle(profile.id == activeHotel.id ? OceanKeyTheme.roomForeground : .white)
+                            .background(profile.id == activeHotel.id ? OceanKeyTheme.accent : .black.opacity(0.20))
+                            .clipShape(RoundedRectangle(cornerRadius: 13, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                }
             }
         }
     }
@@ -443,7 +480,9 @@ struct SettingsScreen: View {
 #Preview {
     SettingsScreen(
         appSettings: AppSettingsStore(),
-        aiVisualPresetStore: try! AIVisualPresetStore(inMemory: true)
+        aiVisualPresetStore: try! AIVisualPresetStore(inMemory: true),
+        activeHotel: .current,
+        onSelectHotel: { _ in }
     )
         .preferredColorScheme(.dark)
 }

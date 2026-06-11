@@ -12,32 +12,41 @@ enum OceanKeyTheme {
     static let open = Color(hex: 0xFF3B30)
     static let inProgress = Color(hex: 0x2F80FF)
     static let scheduled = Color(hex: 0xFF4DB8)
+    static let margaritavilleScheduled = Color(hex: 0x8E5BFF)
     static let roomForeground = Color(hex: 0x050505)
 
     static func fill(for status: RoomStatus, saturation: Double = 1) -> Color {
-        if saturation >= 1.5 {
-            return Color(hex: vividHex(for: status))
-        }
-        return Color.status(hex: hex(for: status), saturationMultiplier: saturation)
+        fill(for: status, saturation: saturation, usesPurpleScheduled: false)
     }
 
-    private static func hex(for status: RoomStatus) -> UInt32 {
+    static func fill(
+        for status: RoomStatus,
+        saturation: Double = 1,
+        usesPurpleScheduled: Bool
+    ) -> Color {
+        if saturation >= 1.5 {
+            return Color(hex: vividHex(for: status, usesPurpleScheduled: usesPurpleScheduled))
+        }
+        return Color.status(hex: hex(for: status, usesPurpleScheduled: usesPurpleScheduled), saturationMultiplier: saturation)
+    }
+
+    private static func hex(for status: RoomStatus, usesPurpleScheduled: Bool = false) -> UInt32 {
         switch status {
         case .pending: 0xFFD83D
         case .open: 0xFF3B30
         case .inProgress: 0x2F80FF
         case .ready: 0x25D366
-        case .scheduled: 0xFF4DB8
+        case .scheduled: usesPurpleScheduled ? 0x8E5BFF : 0xFF4DB8
         }
     }
 
-    private static func vividHex(for status: RoomStatus) -> UInt32 {
+    private static func vividHex(for status: RoomStatus, usesPurpleScheduled: Bool = false) -> UInt32 {
         switch status {
         case .pending: 0xFFC400
         case .open: 0xFF1208
         case .inProgress: 0x0877FF
         case .ready: 0x00E524
-        case .scheduled: 0xFF31B8
+        case .scheduled: usesPurpleScheduled ? 0x9B63FF : 0xFF31B8
         }
     }
 }

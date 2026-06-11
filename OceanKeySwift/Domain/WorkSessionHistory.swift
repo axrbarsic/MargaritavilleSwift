@@ -3,6 +3,7 @@ import Foundation
 enum WorkSessionHistoryKind: String, Codable, CaseIterable, Sendable {
     case roomOpened
     case roomClosed
+    case roomStatusChanged
     case roomTaskChanged
     case roomVIPChanged
     case roomScheduleChanged

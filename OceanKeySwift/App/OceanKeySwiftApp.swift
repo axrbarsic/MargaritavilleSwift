@@ -5,20 +5,31 @@ import SwiftUI
 struct OceanKeySwiftApp: App {
     @State private var workSession: WorkSessionStore
     @State private var appSettings: AppSettingsStore
+    @State private var activeHotel: HotelProfile?
+    @State private var workSessionRepository: SwiftDataWorkSessionRepository
     @State private var aiVisualPresetStore: AIVisualPresetStore
     @State private var performanceTelemetry: PerformanceTelemetryStore
     @State private var appleSyncStatus: AppleSyncStatus
     @State private var didRequestWorkSessionLoad = false
     @State private var didRequestAppleSyncStatus = false
-    private let workSessionRepository: SwiftDataWorkSessionRepository
     private let interactionFeedback = InteractionFeedbackService()
     private let scheduleNotifications = LocalScheduleNotificationService()
 
     init() {
-        let repository = SwiftDataWorkSessionRepository(syncMode: AppleSyncConfiguration.defaultSyncMode)
-        workSessionRepository = repository
-        _workSession = State(initialValue: WorkSessionStore.bootstrapping(repository: repository))
-        _appSettings = State(initialValue: AppSettingsStore.load())
+        let settings = AppSettingsStore.load()
+        let selectedHotel = HotelProfile.profile(id: settings.selectedHotelID)
+        let bootProfile = selectedHotel ?? .current
+        let repository = SwiftDataWorkSessionRepository(
+            hotelID: bootProfile.id,
+            syncMode: AppleSyncConfiguration.defaultSyncMode
+        )
+        _workSessionRepository = State(initialValue: repository)
+        _workSession = State(initialValue: WorkSessionStore.bootstrapping(
+            hotelProfile: bootProfile,
+            repository: repository
+        ))
+        _appSettings = State(initialValue: settings)
+        _activeHotel = State(initialValue: selectedHotel)
         _aiVisualPresetStore = State(initialValue: Self.makeAIVisualPresetStore())
         _performanceTelemetry = State(initialValue: PerformanceTelemetryStore())
         _appleSyncStatus = State(initialValue: .repository(repository))
@@ -55,7 +66,9 @@ struct OceanKeySwiftApp: App {
                 appSettings: appSettings,
                 aiVisualPresetStore: aiVisualPresetStore,
                 performanceTelemetry: performanceTelemetry,
-                interactionFeedbackService: interactionFeedback
+                interactionFeedbackService: interactionFeedback,
+                activeHotel: activeHotel,
+                onSelectHotel: selectHotel
             )
                 .environment(\.appleSyncStatus, appleSyncStatus)
                 .environment(\.scheduleNotifications, .live(scheduleNotifications))
@@ -63,6 +76,7 @@ struct OceanKeySwiftApp: App {
                     performanceTelemetry.start()
                 }
                 .task {
+                    guard activeHotel != nil else { return }
                     await loadWorkSessionIfNeeded()
                     await refreshAppleSyncStatusIfNeeded()
                 }
@@ -71,6 +85,28 @@ struct OceanKeySwiftApp: App {
                         await refreshAppleSyncStatusIfNeeded(force: true)
                     }
                 }
+        }
+    }
+
+    @MainActor
+    private func selectHotel(_ hotelProfile: HotelProfile) {
+        let repository = SwiftDataWorkSessionRepository(
+            hotelID: hotelProfile.id,
+            syncMode: AppleSyncConfiguration.defaultSyncMode
+        )
+        workSessionRepository = repository
+        workSession = WorkSessionStore.bootstrapping(
+            hotelProfile: hotelProfile,
+            repository: repository
+        )
+        appSettings.selectedHotelID = hotelProfile.id
+        activeHotel = hotelProfile
+        appleSyncStatus = .repository(repository)
+        didRequestWorkSessionLoad = false
+        didRequestAppleSyncStatus = false
+        Task {
+            await loadWorkSessionIfNeeded()
+            await refreshAppleSyncStatusIfNeeded(force: true)
         }
     }
 

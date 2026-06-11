@@ -4,6 +4,7 @@ import Observation
 @Observable
 final class WorkSessionStore {
     @ObservationIgnored let repository: WorkSessionRepository?
+    @ObservationIgnored let hotelProfile: HotelProfile
     @ObservationIgnored var lastPersistenceError: Error?
 
     var carts: [CartSection]
@@ -14,17 +15,19 @@ final class WorkSessionStore {
         carts: [CartSection],
         selection: WorkSessionSelectionState? = nil,
         history: [WorkSessionHistoryEntry] = [],
+        hotelProfile: HotelProfile = .current,
         repository: WorkSessionRepository? = nil
     ) {
         self.carts = carts
-        self.selection = selection ?? Self.selectionState(from: carts)
+        self.selection = selection ?? Self.selectionState(from: carts, hotelProfile: hotelProfile)
         self.history = history
+        self.hotelProfile = hotelProfile
         self.repository = repository
     }
 
     var counts: SummaryCounts {
         let rooms = carts.flatMap(\.rooms)
-        let completed = rooms.filter(\.isReady).count
+        let completed = rooms.filter { $0.isReady(in: hotelProfile.workflowKind) }.count
         return SummaryCounts(
             total: rooms.count,
             completed: completed,
@@ -48,6 +51,7 @@ final class WorkSessionStore {
             )
         }) { room, changedAt in
             guard room.opened else { return }
+            let previousStatus = room.status(in: hotelProfile.workflowKind)
             let previousTasks = room.completedTasks
             if room.completedTasks.contains(task) {
                 room.completedTasks.remove(task)
@@ -62,10 +66,19 @@ final class WorkSessionStore {
                 nextTasks: room.completedTasks,
                 changedAt: changedAt
             )
+            room.markStatusChangedIfNeeded(
+                from: previousStatus,
+                workflowKind: hotelProfile.workflowKind,
+                changedAt: changedAt
+            )
         }
     }
 
     func toggleOpen(roomId: RoomCell.ID) {
+        if hotelProfile.workflowKind == .simpleCycle {
+            advanceSimpleCycle(roomId: roomId)
+            return
+        }
         mutateRoom(roomId, history: { before, after, _ in
             guard before.opened != after.opened else { return nil }
             return (
@@ -73,6 +86,7 @@ final class WorkSessionStore {
                 "\(after.id): \(after.opened ? "открыта" : "закрыта")"
             )
         }) { room, changedAt in
+            let previousStatus = room.status(in: hotelProfile.workflowKind)
             let previousOpened = room.opened
             let previousTasks = room.completedTasks
             if room.opened {
@@ -88,6 +102,11 @@ final class WorkSessionStore {
                 nextOpened: room.opened,
                 previousTasks: previousTasks,
                 nextTasks: room.completedTasks,
+                changedAt: changedAt
+            )
+            room.markStatusChangedIfNeeded(
+                from: previousStatus,
+                workflowKind: hotelProfile.workflowKind,
                 changedAt: changedAt
             )
         }
@@ -113,12 +132,18 @@ final class WorkSessionStore {
                 "\(after.id): время \(after.scheduledTime == nil ? "снято" : "установлено")"
             )
         }) { room, changedAt in
+            let previousStatus = room.status(in: hotelProfile.workflowKind)
             if room.scheduledTime == nil {
                 room.scheduledTime = Calendar.current.date(byAdding: .minute, value: 15, to: changedAt)
             } else {
                 room.scheduledTime = nil
             }
             room.scheduledUpdatedAt = changedAt
+            room.markStatusChangedIfNeeded(
+                from: previousStatus,
+                workflowKind: hotelProfile.workflowKind,
+                changedAt: changedAt
+            )
         }
     }
 
@@ -130,8 +155,14 @@ final class WorkSessionStore {
                 "\(after.id): время \(after.scheduledTime == nil ? "снято" : "установлено")"
             )
         }) { room, changedAt in
+            let previousStatus = room.status(in: hotelProfile.workflowKind)
             room.scheduledTime = scheduledTime
             room.scheduledUpdatedAt = changedAt
+            room.markStatusChangedIfNeeded(
+                from: previousStatus,
+                workflowKind: hotelProfile.workflowKind,
+                changedAt: changedAt
+            )
         }
     }
 
@@ -144,9 +175,15 @@ final class WorkSessionStore {
                 var room = carts[cartIndex].rooms[roomIndex]
                 guard let scheduledTime = room.scheduledTime else { continue }
                 guard scheduledTime <= now else { continue }
+                let previousStatus = room.status(in: hotelProfile.workflowKind)
                 guard !room.opened, room.completedTasks.isEmpty else {
                     room.scheduledTime = nil
                     room.scheduledUpdatedAt = now
+                    room.markStatusChangedIfNeeded(
+                        from: previousStatus,
+                        workflowKind: hotelProfile.workflowKind,
+                        changedAt: now
+                    )
                     carts[cartIndex].rooms[roomIndex] = room
                     didMutate = true
                     continue
@@ -157,6 +194,11 @@ final class WorkSessionStore {
                 room.scheduledTime = nil
                 room.scheduledUpdatedAt = now
                 room.timeline.openedAt = room.timeline.openedAt ?? now
+                room.markStatusChangedIfNeeded(
+                    from: previousStatus,
+                    workflowKind: hotelProfile.workflowKind,
+                    changedAt: now
+                )
                 carts[cartIndex].rooms[roomIndex] = room
                 openedRoomIDs.append(room.id)
                 didMutate = true
@@ -280,7 +322,7 @@ final class WorkSessionStore {
         persist()
     }
 
-    private func mutateRoom(
+    func mutateRoom(
         _ roomId: RoomCell.ID,
         history makeHistory: ((RoomCell, RoomCell, Date) -> (WorkSessionHistoryKind, String)?)? = nil,
         update: (inout RoomCell, Date) -> Void
@@ -302,7 +344,7 @@ final class WorkSessionStore {
         persist()
     }
 
-    private func mutateRoom(
+    func mutateRoom(
         _ roomId: RoomCell.ID,
         history makeHistory: ((RoomCell, RoomCell, Date) -> (WorkSessionHistoryKind, String)?)? = nil,
         update: (inout RoomCell) -> Void
