@@ -165,6 +165,29 @@ func catalogMatchesKnownTerritories() {
 }
 
 @Test
+func margaritavilleCatalogPreservesRealRoomLists() {
+    let profile = HotelProfile.margaritaville
+    let a1 = RoomCatalog.territory(id: "A1", in: profile)
+    let b2 = RoomCatalog.territory(id: "B2", in: profile)
+    let b3 = RoomCatalog.territory(id: "B3", in: profile)
+
+    #expect(profile.catalog.count == 6)
+    #expect(a1?.rooms.first == "101")
+    #expect(a1?.rooms.last == "129")
+    #expect(a1?.rooms.count == 27)
+    #expect(a1?.rooms.contains("113") == false)
+    #expect(a1?.rooms.contains("121") == false)
+    #expect(b2?.rooms.first == "239")
+    #expect(b2?.rooms.last == "270")
+    #expect(b2?.rooms.count == 31)
+    #expect(b2?.rooms.contains("261") == false)
+    #expect(b3?.rooms.first == "330")
+    #expect(b3?.rooms.last == "370")
+    #expect(b3?.rooms.count == 40)
+    #expect(b3?.rooms.contains("350") == false)
+}
+
+@Test
 func roomSelectionPreventsCrossCartDuplicates() {
     var selection = WorkSessionSelectionState()
     selection.toggleCart(1)

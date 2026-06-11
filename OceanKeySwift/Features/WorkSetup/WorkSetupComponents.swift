@@ -99,6 +99,7 @@ struct CartSetupCard: View {
     let blockedRooms: [RoomID: Int]
     let isFocused: Bool
     let territories: [Territory]
+    let layout: HotelSummaryLayout
     let onFocus: () -> Void
     let onTerritoryChanged: (Territory) -> Void
     let onRoomToggle: (RoomID) -> Void
@@ -135,15 +136,25 @@ struct CartSetupCard: View {
     }
 
     private var roomGrid: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 66), spacing: 8)], spacing: 8) {
+        LazyVGrid(columns: roomGridColumns, spacing: 8) {
             ForEach(territory.rooms, id: \.self) { room in
                 RoomPickButton(
                     room: room,
                     selected: selectedRooms.contains(room),
                     blockedByCart: blockedRooms[room],
+                    layout: layout,
                     onTap: { onRoomToggle(room) }
                 )
             }
+        }
+    }
+
+    private var roomGridColumns: [GridItem] {
+        switch layout {
+        case .fullWidthBars:
+            [GridItem(.adaptive(minimum: 66), spacing: 8)]
+        case .squareGrid4:
+            Array(repeating: GridItem(.flexible(minimum: 44), spacing: 8), count: 4)
         }
     }
 }
@@ -209,6 +220,7 @@ struct RoomPickButton: View {
     let room: RoomID
     let selected: Bool
     let blockedByCart: Int?
+    let layout: HotelSummaryLayout
     let onTap: () -> Void
 
     var body: some View {
@@ -223,7 +235,8 @@ struct RoomPickButton: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 48)
+            .frame(height: layout == .squareGrid4 ? nil : 48)
+            .aspectRatio(layout == .squareGrid4 ? 1 : nil, contentMode: .fit)
             .foregroundStyle(foreground)
             .background(background)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

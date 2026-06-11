@@ -44,6 +44,7 @@ struct WorkSetupScreen: View {
                                 blockedRooms: blockedRooms(forCart: cartNumber),
                                 isFocused: selectedCartNumber == cartNumber,
                                 territories: workSession.hotelProfile.catalog,
+                                layout: workSession.hotelProfile.summaryLayout,
                                 onFocus: { selectedCartNumber = cartNumber },
                                 onTerritoryChanged: { territory in
                                     feedback.confirm()

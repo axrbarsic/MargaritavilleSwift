@@ -10,6 +10,15 @@ struct BuildChangelogEntry: Identifiable, Equatable {
 enum BuildChangelog {
     static let entries = [
         BuildChangelogEntry(
+            version: "0.2.0 (106)",
+            date: "2026-06-11",
+            changes: [
+                "Added a confirmation step before switching hotels from Settings so a work session is not changed accidentally.",
+                "Hardened multi-hotel persistence with a regression test that writes OceanKey and Margaritaville into separate physical SwiftData store files.",
+                "Adjusted Margaritaville setup room picking to use fixed 4-column square tiles while keeping the current OceanKey setup layout unchanged."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.2.0 (105)",
             date: "2026-06-11",
             changes: [

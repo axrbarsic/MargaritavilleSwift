@@ -13,6 +13,7 @@ struct SettingsScreen: View {
     @State private var selectedCategory: SettingsCategory = .appearance
     @State private var isChangelogPresented = false
     @State private var isResetConfirmationPresented = false
+    @State private var pendingHotelSelection: HotelProfile?
     @State private var selectedBackgroundVideoItem: PhotosPickerItem?
 
     var body: some View {
@@ -48,6 +49,32 @@ struct SettingsScreen: View {
         } message: {
             Text("Размер ячеек, режимы меню, палитра и Matrix-настройки вернутся к значениям по умолчанию.")
         }
+        .confirmationDialog(
+            "Переключить отель?",
+            isPresented: hotelSwitchConfirmationBinding,
+            titleVisibility: .visible,
+            presenting: pendingHotelSelection
+        ) { profile in
+            Button("Открыть \(profile.name)", role: .destructive) {
+                applyHotelSelection(profile)
+            }
+            Button("Отмена", role: .cancel) {
+                pendingHotelSelection = nil
+            }
+        } message: { profile in
+            Text("Текущая рабочая база будет закрыта, а данные \(profile.name) откроются из отдельного хранилища.")
+        }
+    }
+
+    private var hotelSwitchConfirmationBinding: Binding<Bool> {
+        Binding(
+            get: { pendingHotelSelection != nil },
+            set: { isPresented in
+                if !isPresented {
+                    pendingHotelSelection = nil
+                }
+            }
+        )
     }
 
     private var header: some View {
@@ -412,8 +439,7 @@ struct SettingsScreen: View {
                     Button {
                         guard profile.id != activeHotel.id else { return }
                         feedback.confirm()
-                        onSelectHotel(profile)
-                        dismiss()
+                        pendingHotelSelection = profile
                     } label: {
                         Text(profile.name)
                             .font(.system(size: 14, weight: .black, design: .rounded))
@@ -429,6 +455,13 @@ struct SettingsScreen: View {
                 }
             }
         }
+    }
+
+    private func applyHotelSelection(_ profile: HotelProfile) {
+        feedback.confirm()
+        onSelectHotel(profile)
+        pendingHotelSelection = nil
+        dismiss()
     }
 
     private var settingsSection: some View {

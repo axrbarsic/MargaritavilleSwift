@@ -81,6 +81,16 @@ verification.
 - Runtime diagnostics for ProMotion and Apple sync remain available in code,
   but Settings is intentionally limited to working controls and the build
   changelog so the menu does not collect passive status rows.
+- Multi-hotel support is now represented as `HotelProfile`, not as duplicated
+  screens. OceanKey keeps the S/L/B full-width workflow, and Margaritaville
+  uses a simple-cycle profile with a 4-column square summary/setup layout.
+- Work-session SwiftData stores are physically separated per hotel with
+  `workSession-<hotelID>.store`; the current OceanKey store migrates from the
+  legacy `default.store` path, while Margaritaville cannot read or overwrite
+  OceanKey workday data.
+- Settings can switch hotels with confirmation. The last selected hotel is
+  remembered in app settings, while visual/background/developer settings remain
+  app-wide.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

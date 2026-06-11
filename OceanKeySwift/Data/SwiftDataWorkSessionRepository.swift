@@ -23,6 +23,7 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     init(
         hotelID: String = HotelProfile.current.id,
         syncMode: SyncMode = .localOnly,
+        storeDirectory: URL? = nil,
         container: ModelContainer? = nil,
         activeSyncMode: SyncMode? = nil,
         legacyRepository: LocalWorkSessionRepository? = LocalWorkSessionRepository()
@@ -35,7 +36,8 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         } else {
             let resolved = SwiftDataWorkSessionRepository.makeDefaultContainer(
                 requestedSyncMode: syncMode,
-                hotelID: hotelID
+                hotelID: hotelID,
+                storeDirectory: storeDirectory
             )
             self.container = resolved.container
             self.activeSyncMode = resolved.activeSyncMode
@@ -92,17 +94,34 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         return try context.fetch(descriptor).first.map(PersistentWorkSessionMapper.snapshot(from:))
     }
 
-    private static func makeDefaultContainer(requestedSyncMode: SyncMode, hotelID: String) -> (
+    private static func makeDefaultContainer(
+        requestedSyncMode: SyncMode,
+        hotelID: String,
+        storeDirectory: URL?
+    ) -> (
         container: ModelContainer,
         activeSyncMode: SyncMode
     ) {
         do {
-            return (try makeContainer(inMemory: false, syncMode: requestedSyncMode, hotelID: hotelID), requestedSyncMode)
+            return (
+                try makeContainer(
+                    inMemory: false,
+                    syncMode: requestedSyncMode,
+                    hotelID: hotelID,
+                    storeDirectory: storeDirectory
+                ),
+                requestedSyncMode
+            )
         } catch {
             logger.error("Requested SwiftData container failed: \(error.localizedDescription, privacy: .public)")
             if requestedSyncMode != .localOnly {
                 do {
-                    let container = try makeContainer(inMemory: false, syncMode: .localOnly, hotelID: hotelID)
+                    let container = try makeContainer(
+                        inMemory: false,
+                        syncMode: .localOnly,
+                        hotelID: hotelID,
+                        storeDirectory: storeDirectory
+                    )
                     logger.error("Falling back to persistent local SwiftData after CloudKit container failure.")
                     return (container, .localOnly)
                 } catch {
@@ -111,7 +130,15 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
             }
             logger.error("Falling back to in-memory local SwiftData.")
             do {
-                return (try makeContainer(inMemory: true, syncMode: .localOnly, hotelID: hotelID), .localOnly)
+                return (
+                    try makeContainer(
+                        inMemory: true,
+                        syncMode: .localOnly,
+                        hotelID: hotelID,
+                        storeDirectory: storeDirectory
+                    ),
+                    .localOnly
+                )
             } catch {
                 preconditionFailure("Unable to create any SwiftData work-session store: \(error.localizedDescription)")
             }
@@ -121,7 +148,8 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     private static func makeContainer(
         inMemory: Bool,
         syncMode: SyncMode,
-        hotelID: String = HotelProfile.current.id
+        hotelID: String = HotelProfile.current.id,
+        storeDirectory: URL? = nil
     ) throws -> ModelContainer {
         let schema = Schema([
             PersistentWorkSession.self,
@@ -143,18 +171,23 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         } else {
             configuration = ModelConfiguration(
                 schema: schema,
-                url: try persistentStoreURL(hotelID: hotelID),
+                url: try persistentStoreURL(hotelID: hotelID, storeDirectory: storeDirectory),
                 cloudKitDatabase: cloudKitDatabase(for: syncMode, inMemory: false)
             )
         }
         return try ModelContainer(for: schema, configurations: [configuration])
     }
 
-    private static func persistentStoreURL(hotelID: String) throws -> URL {
-        guard let applicationSupportURL = FileManager.default.urls(
+    private static func persistentStoreURL(hotelID: String, storeDirectory: URL?) throws -> URL {
+        let applicationSupportURL: URL
+        if let storeDirectory {
+            applicationSupportURL = storeDirectory
+        } else if let defaultURL = FileManager.default.urls(
             for: .applicationSupportDirectory,
             in: .userDomainMask
-        ).first else {
+        ).first {
+            applicationSupportURL = defaultURL
+        } else {
             throw CocoaError(.fileNoSuchFile)
         }
         try FileManager.default.createDirectory(

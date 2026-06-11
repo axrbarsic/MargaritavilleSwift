@@ -34,6 +34,46 @@ func swiftDataRepositoryUpdatesExistingGraphWithoutKeepingStaleChildren() throws
 }
 
 @Test
+func swiftDataRepositoriesUsePhysicallyIsolatedStoresPerHotel() throws {
+    let storeDirectory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("OceanKeySwiftStoreIsolation-\(UUID().uuidString)", isDirectory: true)
+    defer { try? FileManager.default.removeItem(at: storeDirectory) }
+
+    let currentRepository = SwiftDataWorkSessionRepository(
+        hotelID: HotelProfile.current.id,
+        syncMode: .localOnly,
+        storeDirectory: storeDirectory,
+        legacyRepository: nil
+    )
+    let margaritavilleRepository = SwiftDataWorkSessionRepository(
+        hotelID: HotelProfile.margaritaville.id,
+        syncMode: .localOnly,
+        storeDirectory: storeDirectory,
+        legacyRepository: nil
+    )
+    let currentSnapshot = makePersistentTestSnapshot()
+    let margaritavilleSnapshot = makeMargaritavilleTestSnapshot()
+
+    try currentRepository.saveImmediately(snapshot: currentSnapshot)
+    try margaritavilleRepository.saveImmediately(snapshot: margaritavilleSnapshot)
+
+    #expect(try currentRepository.loadSnapshot() == currentSnapshot)
+    #expect(try margaritavilleRepository.loadSnapshot() == margaritavilleSnapshot)
+    #expect(
+        FileManager.default.fileExists(
+            atPath: storeDirectory.appendingPathComponent("workSession-current.store").path
+        )
+    )
+    #expect(
+        FileManager.default.fileExists(
+            atPath: storeDirectory.appendingPathComponent("workSession-margaritaville.store").path
+        )
+    )
+    #expect(try currentRepository.loadSnapshot()?.carts.first?.rooms.first?.id == "303")
+    #expect(try margaritavilleRepository.loadSnapshot()?.carts.first?.rooms.first?.id == "101")
+}
+
+@Test
 func inMemoryCloudKitModeFallsBackToLocalStorage() throws {
     let repository = try SwiftDataWorkSessionRepository(
         inMemory: true,
@@ -107,6 +147,46 @@ func legacySelectionRowsWithoutSelectedFlagLoadAsActive() {
     #expect(snapshot.selection.cartBindings[7]?.territoryID == "A3")
     #expect(snapshot.selection.rooms(forCart: 7).contains("303"))
     #expect(snapshot.carts.first?.rooms.first?.id == "303")
+}
+
+private func makeMargaritavilleTestSnapshot() -> WorkSessionSnapshot {
+    let selectedAt = Date(timeIntervalSince1970: 1_804_000_000)
+    let cart = CartSection(
+        id: 1,
+        building: "A1",
+        rooms: [
+            RoomCell(
+                id: "101",
+                opened: false,
+                completedTasks: [],
+                isVIP: false,
+                statusChangedAt: selectedAt,
+                timeline: RoomTimeline(selectedAt: selectedAt)
+            )
+        ]
+    )
+    let counts = SummaryCounts(total: 1, completed: 0, remaining: 1)
+    return WorkSessionSnapshot(
+        schemaVersion: 1,
+        selection: WorkSessionSelectionState(
+            cartBindings: [1: WorkSessionCartBinding(cartNumber: 1, territoryID: "A1")],
+            cartRoomSelections: [1: ["101"]],
+            workdayLocked: true,
+            workdayLockUpdatedAt: selectedAt
+        ),
+        carts: [cart],
+        history: [
+            WorkSessionHistoryEntry(
+                happenedAt: selectedAt,
+                kind: .selectionChanged,
+                title: "Margaritaville: 101 выбрана",
+                roomID: "101",
+                cartID: 1,
+                snapshot: WorkSessionHistorySnapshot(carts: [cart], counts: counts)
+            )
+        ],
+        updatedAt: selectedAt
+    )
 }
 
 private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
