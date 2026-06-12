@@ -1,0 +1,9 @@
+schemaVersion: 1
+enabledWorkflows:
+  - simulator
+  - ui-automation
+  - debugging
+sessionDefaults:
+  projectPath: ./MargaritavilleSwift.xcodeproj
+  scheme: OceanKeySwift
+  simulatorName: iPhone 17 Pro Max
