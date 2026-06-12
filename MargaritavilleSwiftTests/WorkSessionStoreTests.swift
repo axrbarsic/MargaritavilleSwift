@@ -1,0 +1,481 @@
+import Testing
+import Foundation
+@testable import MargaritavilleSwift
+
+@Test
+func taskToggleUpdatesRoomStatus() {
+    let store = WorkSessionStore.preview()
+
+    store.toggleTask(.stripped, roomId: "307")
+
+    let room = store.carts.flatMap(\.rooms).first { $0.id == "307" }
+    #expect(room?.status == .inProgress)
+    #expect(room?.completedTasks == [.stripped])
+    #expect(room?.strippedUpdatedAt != nil)
+}
+
+@Test
+func taskToggleRequiresOpenRoom() {
+    let store = WorkSessionStore.preview()
+
+    store.toggleTask(.stripped, roomId: "401")
+
+    let room = store.room(id: "401")
+    #expect(room?.opened == false)
+    #expect(room?.completedTasks.isEmpty == true)
+    #expect(room?.status == .pending)
+}
+
+@Test
+func readyStatusRequiresOpenRoom() {
+    let room = RoomCell(
+        id: "999",
+        opened: false,
+        completedTasks: Set(RoomTask.allCases),
+        isVIP: false
+    )
+
+    #expect(room.isReady == false)
+    #expect(room.status == .inProgress)
+}
+
+@Test
+func scheduledStatusOverridesCurrentRoomWork() {
+    let room = RoomCell(
+        id: "999",
+        opened: true,
+        completedTasks: Set(RoomTask.allCases),
+        isVIP: false,
+        scheduledTime: Date()
+    )
+
+    #expect(room.status == .scheduled)
+}
+
+@Test
+func scheduledRoomOpensAndClearsScheduleWhenDue() {
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "B5",
+                rooms: [RoomCell(id: "401", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ]
+    )
+    let dueAt = Date(timeIntervalSinceNow: -60)
+    store.setSchedule(dueAt, roomId: "401")
+
+    let openedRoomIDs = store.advanceScheduledRooms(now: Date())
+
+    let room = store.room(id: "401")
+    #expect(openedRoomIDs == ["401"])
+    #expect(room?.opened == true)
+    #expect(room?.openedUpdatedAt != nil)
+    #expect(room?.scheduledTime == nil)
+    #expect(room?.scheduledUpdatedAt != nil)
+    #expect(room?.timeline.openedAt != nil)
+}
+
+@Test
+func margaritavilleSimpleCycleAdvancesStatusesAndTimes() throws {
+    let selectedAt = Date(timeIntervalSince1970: 1_802_500_000)
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [
+                    RoomCell(
+                        id: "101",
+                        opened: false,
+                        completedTasks: [],
+                        isVIP: false,
+                        statusChangedAt: selectedAt,
+                        timeline: RoomTimeline(selectedAt: selectedAt)
+                    )
+                ]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .pending)
+
+    store.toggleOpen(roomId: "101")
+    let openedRoom = store.room(id: "101")
+
+    #expect(openedRoom?.status(in: .simpleCycle) == .open)
+    #expect(openedRoom?.statusChangedAt != selectedAt)
+
+    let openedStatusAt = try #require(openedRoom?.statusChangedAt)
+    store.toggleOpen(roomId: "101")
+    let readyRoom = store.room(id: "101")
+
+    #expect(readyRoom?.status(in: .simpleCycle) == .ready)
+    #expect(readyRoom?.completedTasks == Set(RoomTask.allCases))
+    #expect(readyRoom?.statusChangedAt != openedStatusAt)
+    #expect(store.counts.completed == 1)
+    #expect(store.history.prefix(2).allSatisfy { $0.kind == .roomStatusChanged })
+}
+
+@Test
+func margaritavilleReadyRoomIgnoresNormalAdvanceUntilExplicitReset() {
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    store.toggleOpen(roomId: "101")
+    store.toggleOpen(roomId: "101")
+    let readyHistoryCount = store.history.count
+
+    store.toggleOpen(roomId: "101")
+
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .ready)
+    #expect(store.room(id: "101")?.completedTasks == Set(RoomTask.allCases))
+    #expect(store.history.count == readyHistoryCount)
+
+    store.resetSimpleCycle(roomId: "101")
+
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .pending)
+    #expect(store.room(id: "101")?.completedTasks.isEmpty == true)
+    #expect(store.history.first?.kind == .roomStatusChanged)
+}
+
+@Test
+func margaritavilleRoomDayCategoryIsStoredWithHistory() {
+    let categoryTime = Date(timeIntervalSince1970: 1_802_506_400)
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    store.setDayCategory(.dueOut, time: categoryTime, roomId: "101")
+
+    let room = store.room(id: "101")
+    #expect(room?.dayCategory == .dueOut)
+    #expect(room?.dayCategoryTime == categoryTime)
+    #expect(room?.dayCategoryUpdatedAt != nil)
+    #expect(store.history.first?.kind == .roomDayCategoryChanged)
+}
+
+@Test
+func margaritavilleDueOutTimePresetsUseExpectedHours() {
+    let calendar = Calendar(identifier: .gregorian)
+    let base = calendar.date(from: DateComponents(year: 2026, month: 6, day: 11, hour: 9))!
+
+    let hours = RoomDayCategoryTimePreset.allCases.map { preset in
+        calendar.component(.hour, from: preset.dateToday(now: base, calendar: calendar))
+    }
+
+    #expect(hours == [12, 14, 17])
+}
+
+@Test
+func roomDayCategoryCountsIgnoreUncategorizedRooms() {
+    let rooms = [
+        RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false, dayCategory: .dueOut),
+        RoomCell(id: "102", opened: false, completedTasks: [], isVIP: false, dayCategory: .dueOut),
+        RoomCell(id: "103", opened: false, completedTasks: [], isVIP: false, dayCategory: .pickUp),
+        RoomCell(id: "104", opened: false, completedTasks: [], isVIP: false)
+    ]
+
+    let counts = RoomDayCategoryCounts(rooms: rooms)
+
+    #expect(counts[.dueOut] == 2)
+    #expect(counts[.pickUp] == 1)
+    #expect(counts[.stayover] == 0)
+}
+
+@Test
+func dayCategoryIsIgnoredForTaskHotel() {
+    let store = WorkSessionStore.preview()
+
+    store.setDayCategory(.dueOut, roomId: "303")
+
+    #expect(store.room(id: "303")?.dayCategory == nil)
+    #expect(!store.history.contains { $0.kind == .roomDayCategoryChanged })
+}
+
+@Test
+func vipAndScheduleMutationsRecordFieldTimestamps() {
+    let store = WorkSessionStore.preview()
+
+    store.toggleVIP(roomId: "401")
+    store.setSchedule(Date(timeIntervalSinceNow: 900), roomId: "401")
+
+    let room = store.room(id: "401")
+    #expect(room?.isVIP == true)
+    #expect(room?.vipUpdatedAt != nil)
+    #expect(room?.scheduledTime != nil)
+    #expect(room?.scheduledUpdatedAt != nil)
+}
+
+@Test
+func roomScheduleSelectionUsesQuarterHourAndPeriod() {
+    let calendar = Calendar(identifier: .gregorian)
+    let date = calendar.date(from: DateComponents(year: 2026, month: 6, day: 6, hour: 13, minute: 31))!
+
+    let selection = RoomScheduleSelection(date: date, calendar: calendar)
+
+    #expect(selection.hour == 1)
+    #expect(selection.minute == 30)
+    #expect(selection.period == .pm)
+    #expect(selection.displayLabel == "1:30 PM")
+}
+
+@Test
+func readyCountTracksCompletedRooms() {
+    let store = WorkSessionStore.preview()
+
+    #expect(store.counts.completed == 3)
+}
+
+@Test
+func catalogMatchesKnownTerritories() {
+    let a2 = RoomCatalog.territory(id: "A2")
+    let b5 = RoomCatalog.territory(id: "B5")
+
+    #expect(a2?.rooms.contains("210A") == true)
+    #expect(a2?.rooms.contains("210B") == true)
+    #expect(b5?.rooms.first == "511")
+    #expect(b5?.rooms.last == "529")
+}
+
+@Test
+func margaritavilleCatalogPreservesRealRoomLists() {
+    let profile = HotelProfile.margaritaville
+    let a1 = RoomCatalog.territory(id: "A1", in: profile)
+    let b2 = RoomCatalog.territory(id: "B2", in: profile)
+    let b3 = RoomCatalog.territory(id: "B3", in: profile)
+
+    #expect(profile.catalog.count == 6)
+    #expect(a1?.rooms.first == "101")
+    #expect(a1?.rooms.last == "129")
+    #expect(a1?.rooms.count == 27)
+    #expect(a1?.rooms.contains("113") == false)
+    #expect(a1?.rooms.contains("121") == false)
+    #expect(b2?.rooms.first == "239")
+    #expect(b2?.rooms.last == "270")
+    #expect(b2?.rooms.count == 31)
+    #expect(b2?.rooms.contains("261") == false)
+    #expect(b3?.rooms.first == "330")
+    #expect(b3?.rooms.last == "370")
+    #expect(b3?.rooms.count == 40)
+    #expect(b3?.rooms.contains("350") == false)
+}
+
+@Test
+func margaritavilleCatalogOverridesAddAndRemoveRooms() {
+    let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
+
+    #expect(store.addCatalogRoom("113") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("113") == true)
+    #expect(store.addCatalogRoom("113") == .duplicate)
+
+    #expect(store.removeCatalogRoom("113") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("113") == false)
+
+    #expect(store.removeCatalogRoom("101") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("101") == false)
+    #expect(store.addCatalogRoom("101") == .changed)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("101") == true)
+}
+
+@Test
+func margaritavilleCatalogDeletionBlocksActiveRooms() {
+    let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
+    store.toggleCartSelection(1)
+    store.toggleRoomSelection(cartNumber: 1, room: "101")
+
+    #expect(store.removeCatalogRoom("101") == .blockedActiveRoom)
+    #expect(store.effectiveCatalog.first { $0.id == "A1" }?.rooms.contains("101") == true)
+}
+
+@Test
+func roomSelectionPreventsCrossCartDuplicates() {
+    var selection = WorkSessionSelectionState()
+    selection.toggleCart(1)
+    selection.toggleCart(2)
+
+    #expect(selection.toggleRoom(cartNumber: 1, room: "518") == .changed)
+    #expect(selection.toggleRoom(cartNumber: 2, room: "518") == .blocked)
+    #expect(selection.rooms(forCart: 1).contains("518"))
+    #expect(!selection.rooms(forCart: 2).contains("518"))
+}
+
+@Test
+func selectionMutationsRecordSyncMetadata() {
+    let cartAt = Date(timeIntervalSince1970: 1_802_000_000)
+    let roomAddAt = Date(timeIntervalSince1970: 1_802_000_100)
+    let roomRemoveAt = Date(timeIntervalSince1970: 1_802_000_200)
+    let lockAt = Date(timeIntervalSince1970: 1_802_000_300)
+    var selection = WorkSessionSelectionState()
+
+    selection.toggleCart(7, changedAt: cartAt)
+    selection.toggleRoom(cartNumber: 7, room: "303", changedAt: roomAddAt)
+    selection.toggleRoom(cartNumber: 7, room: "303", changedAt: roomRemoveAt)
+    selection.toggleRoom(cartNumber: 7, room: "304", changedAt: roomAddAt)
+    selection.lockWorkday(changedAt: lockAt)
+
+    #expect(selection.cartBindingUpdatedAt[7] == cartAt)
+    #expect(!selection.rooms(forCart: 7).contains("303"))
+    #expect(selection.roomSelectionUpdatedAt[7]?["303"] == roomRemoveAt)
+    #expect(selection.roomSelectionUpdatedAt[7]?["304"] == roomAddAt)
+    #expect(selection.workdayLocked == true)
+    #expect(selection.workdayLockUpdatedAt == lockAt)
+}
+
+@Test
+func storeSelectionRebuildsCartsWhilePreservingRoomState() {
+    let store = WorkSessionStore(carts: [])
+    store.toggleCartSelection(7)
+    store.toggleRoomSelection(cartNumber: 7, room: "303")
+    store.toggleOpen(roomId: "303")
+    store.toggleTask(.stripped, roomId: "303")
+
+    store.toggleRoomSelection(cartNumber: 7, room: "304")
+
+    let room303 = store.room(id: "303")
+    #expect(room303?.opened == true)
+    #expect(room303?.completedTasks == [.stripped])
+    #expect(store.room(id: "304")?.status == .pending)
+}
+
+@Test
+func cartSelectionKeepsRoomsAcrossTerritorySwitches() {
+    let store = WorkSessionStore(carts: [])
+    let a4 = RoomCatalog.territory(id: "A4")!
+    let a5 = RoomCatalog.territory(id: "A5")!
+
+    store.toggleCartSelection(8)
+    store.setCartBinding(cartNumber: 8, territory: a4)
+    store.toggleRoomSelection(cartNumber: 8, room: "401")
+    store.setCartBinding(cartNumber: 8, territory: a5)
+    store.toggleRoomSelection(cartNumber: 8, room: "501")
+
+    #expect(store.selectedRooms(forCart: 8) == Set(["401", "501"]))
+    #expect(store.carts.first { $0.id == 8 }?.building == "A4/A5")
+    #expect(store.carts.first { $0.id == 8 }?.rooms.map(\.id) == ["401", "501"])
+}
+
+@Test
+func margaritavilleCartSelectionKeepsRoomsAcrossTerritorySwitches() {
+    let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
+    let a3 = RoomCatalog.territory(id: "A3", in: .margaritaville)!
+    let b3 = RoomCatalog.territory(id: "B3", in: .margaritaville)!
+
+    store.toggleCartSelection(5)
+    store.setCartBinding(cartNumber: 5, territory: a3)
+    store.toggleRoomSelection(cartNumber: 5, room: "314")
+    store.setDayCategory(.dueOut, roomId: "314")
+    store.setCartBinding(cartNumber: 5, territory: b3)
+    store.toggleRoomSelection(cartNumber: 5, room: "330")
+    store.setDayCategory(.stayover, roomId: "330")
+
+    #expect(store.selectedRooms(forCart: 5) == Set(["314", "330"]))
+    #expect(store.carts.first { $0.id == 5 }?.building == "A3/B3")
+    #expect(store.room(id: "314")?.dayCategory == .dueOut)
+    #expect(store.room(id: "330")?.dayCategory == .stayover)
+}
+
+@Test
+func lockedWorkdayIgnoresSelectionEdits() {
+    var selection = WorkSessionSelectionState()
+    selection.toggleCart(7)
+    selection.toggleRoom(cartNumber: 7, room: "303")
+
+    #expect(selection.lockWorkday() == .changed)
+    #expect(selection.toggleRoom(cartNumber: 7, room: "304") == .ignored)
+    #expect(!selection.rooms(forCart: 7).contains("304"))
+}
+
+@Test
+func roomMutationsRecordVisualHistorySnapshots() {
+    let store = WorkSessionStore.preview()
+
+    store.toggleOpen(roomId: "401")
+
+    let entry = store.history.first
+    #expect(entry?.kind == .roomOpened)
+    #expect(entry?.roomID == "401")
+    #expect(entry?.snapshot.carts.flatMap(\.rooms).first { $0.id == "401" }?.opened == true)
+    #expect(entry?.snapshot.carts.flatMap(\.rooms).first { $0.id == "401" }?.openedUpdatedAt != nil)
+}
+
+@Test
+func ignoredRoomMutationDoesNotRecordHistory() {
+    let store = WorkSessionStore.preview()
+    let beforeCount = store.history.count
+
+    store.toggleTask(.stripped, roomId: "401")
+
+    #expect(store.history.count == beforeCount)
+}
+
+@Test
+func roomAndCartMediaRemovalClearsAttachmentsAndRecordsHistory() {
+    let store = WorkSessionStore.preview()
+    let roomAttachment = MediaAttachment(
+        id: UUID(),
+        kind: .audio,
+        relativePath: "Media/room.m4a",
+        createdAt: Date(),
+        transcript: "Room voice"
+    )
+    let cartAttachment = MediaAttachment(
+        id: UUID(),
+        kind: .photo,
+        relativePath: "Media/cart.jpg",
+        createdAt: Date()
+    )
+
+    store.addRoomMedia(roomAttachment, roomId: "303")
+    store.addCartMedia(cartAttachment, cartId: 7)
+    store.removeRoomMedia(roomAttachment, roomId: "303")
+    store.removeCartMedia(cartAttachment, cartId: 7)
+
+    #expect(store.room(id: "303")?.mediaAttachments == nil)
+    #expect(store.room(id: "303")?.voiceTranscript == nil)
+    #expect(store.room(id: "303")?.voiceTranscriptUpdatedAt == nil)
+    #expect(store.cart(id: 7)?.mediaAttachments == nil)
+    #expect(store.history.prefix(2).allSatisfy { $0.title.contains("удалено") })
+}
+
+@Test
+func cartConsumableQuantityAndCompletionRecordHistory() {
+    let store = WorkSessionStore.preview()
+
+    store.updateCartConsumableQuantity(itemID: "bath_towel", quantity: 4, cartId: 7)
+    store.toggleCartConsumableCompletion(itemID: "bath_towel", cartId: 7)
+
+    let item = store.cart(id: 7)?.consumables?.first { $0.id == "bath_towel" }
+    #expect(item?.quantity == 4)
+    #expect(item?.completedAt != nil)
+    #expect(store.history.first?.kind == .cartConsumablesChanged)
+}
+
+@Test
+func cartCustomConsumableIsStoredWithHistory() {
+    let store = WorkSessionStore.preview()
+
+    store.addCartConsumable(title: "Extra towels", quantity: 2, cartId: 7)
+
+    let item = store.cart(id: 7)?.consumables?.first { $0.title == "Extra towels" }
+    #expect(item?.quantity == 2)
+    #expect(item?.id.hasPrefix("custom_") == true)
+    #expect(store.history.first?.kind == .cartConsumablesChanged)
+}

@@ -45,15 +45,15 @@ be added behind that boundary after the domain model and input flow are stable.
      CloudKit can process related changes in its own order.
    - Current AI visual preset drafts are stored as lightweight JSON in a
      separate SwiftData store configured for private CloudKit sync through
-     `iCloud.com.alex.oceankey.swift`.
+     `iCloud.com.alex.margaritaville.swift`.
    - The preset store must report its real storage mode. If CloudKit store
      creation fails, UI must show local fallback instead of implying that
      Apple sync is active.
    - As of 2026-06-10, physical-device signing is blocked because the local
      provisioning profile `iOS Team Provisioning Profile:
-     com.alex.oceankey.swift` contains neither `aps-environment` nor
+     com.alex.margaritaville.swift` contains neither `aps-environment` nor
      `com.apple.developer.icloud-*` entitlements and does not support the
-     `iCloud.com.alex.oceankey.swift` container.
+     `iCloud.com.alex.margaritaville.swift` container.
    - Build 104 keeps real CloudKit entitlements limited to simulator/future
      validation so physical iPhone installs keep working with Alex's Personal
      Team profile. AI/live-wallpaper preset protection is therefore a manual
@@ -66,8 +66,8 @@ be added behind that boundary after the domain model and input flow are stable.
      while installed iPhone builds go directly to local fallback instead of
      probing CloudKit and risking a startup trap.
    - To unblock real iPhone sync, enable iCloud/CloudKit and Push Notifications
-     for App ID `com.alex.oceankey.swift`, attach/create container
-     `iCloud.com.alex.oceankey.swift`, regenerate/download the development
+     for App ID `com.alex.margaritaville.swift`, attach/create container
+     `iCloud.com.alex.margaritaville.swift`, regenerate/download the development
      provisioning profile, then run the device build again with
      `-allowProvisioningUpdates`.
    - `SwiftDataWorkSessionRepository.SyncMode` is now the explicit boundary for

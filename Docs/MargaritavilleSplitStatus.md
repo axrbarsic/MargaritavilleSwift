@@ -1,30 +1,32 @@
 # Margaritaville Split Status
 
-Date: 2026-06-11
+Date: 2026-06-12
 
 ## Current State
 
 - Main OceanKeySwift is restored separately in `/Users/alex/Developer/OceanKeySwift`.
 - Margaritaville has its own worktree in `/Users/alex/Developer/MargaritavilleSwift`.
 - Margaritaville bundle id is `com.alex.margaritaville.swift`.
+- The local Xcode target, scheme, and test module are `MargaritavilleSwift`.
 - The app boots directly into Margaritaville and does not show the hotel picker.
 - The summary header keeps the OceanKey structure: settings button, center stats, edit-entry button.
 
 ## Verified
 
 - `xcodegen generate` succeeds.
-- Simulator unit tests pass with `xcodebuild test`.
-- XcodeBuildMCP simulator build/install/launch succeeds for `com.alex.margaritaville.swift`.
+- Simulator unit tests pass with `xcodebuild test` on scheme `MargaritavilleSwift`.
+- Generic iOS device build succeeds for permanent bundle id `com.alex.margaritaville.swift`.
+- `Tools/install_on_iphone.sh` installs and launches build `2` on Alex's iPhone 16 Pro Max.
+- Simulator launch shows the live Matrix wallpaper behind the first screen instead of a black override.
 
 ## Current External Blockers
 
-- Physical iPhone currently reports `unavailable` through `xcrun devicectl list devices`.
-- Device build for the new bundle id fails before app compilation with:
-  - `No Accounts: Add a new account in Accounts settings.`
-  - `No profiles for 'com.alex.margaritaville.swift' were found`
-- Local provisioning profiles exist for old OceanKey/RoomManager identifiers, but not for `com.alex.margaritaville.swift`.
-- Retrying with `-allowProvisioningDeviceRegistration` still fails with `No Accounts`.
-- Do not use an old OceanKey bundle id as a shortcut; that would break the separate-app goal.
+- No current blocker for basic debug install with the permanent bundle id.
+- iCloud/CloudKit/Push capability activation is still blocked until the
+  `com.alex.margaritaville.swift` provisioning profile includes those
+  entitlements and the `iCloud.com.alex.margaritaville.swift` container.
+- Do not use an old OceanKey bundle id as a shortcut; that would break the
+  separate-app goal.
 
 ## Verified Signing Fallback
 
@@ -34,7 +36,7 @@ Date: 2026-06-11
 ```sh
 xcodebuild build \
   -project MargaritavilleSwift.xcodeproj \
-  -scheme OceanKeySwift \
+  -scheme MargaritavilleSwift \
   -configuration Debug \
   -destination 'generic/platform=iOS' \
   -derivedDataPath .build/DerivedDataDeviceFallback \
@@ -50,7 +52,7 @@ xcodebuild build \
 
 ## Next Action
 
-When Xcode can see the Apple account and iPhone is available, run:
+For the next physical install, run:
 
 ```sh
 Tools/install_on_iphone.sh

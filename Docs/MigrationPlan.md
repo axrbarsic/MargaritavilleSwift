@@ -1,10 +1,10 @@
-# OceanKey Native iOS Migration Plan
+# Margaritaville Native iOS Migration Plan
 
 ## Decision
 
-OceanKeySwift is a separate native iOS rewrite track for OceanKey. The Flutter
-application remains the working fallback until the native app reaches practical
-feature parity.
+MargaritavilleSwift is a separate native iOS app split from OceanKeySwift. The
+main OceanKeySwift app remains in `/Users/alex/Developer/OceanKeySwift` and must
+not be used as the installed Margaritaville target.
 
 Android and Web are frozen for now. New work should optimize for iPhone first:
 SwiftUI, native iOS performance tools, Apple platform storage, and real-device
@@ -12,9 +12,10 @@ verification.
 
 ## Current Baseline
 
-- Project path: `/Users/alex/Developer/OceanKeySwift`
-- App name: `OceanKey Swift`
-- Bundle identifier: `com.alex.oceankey.swift`
+- Project path: `/Users/alex/Developer/MargaritavilleSwift`
+- App name: `Margaritaville`
+- Xcode target/scheme/module: `MargaritavilleSwift`
+- Bundle identifier: `com.alex.margaritaville.swift`
 - Minimum iOS: 17.0
 - UI foundation: SwiftUI
 - State foundation: Observation
@@ -134,7 +135,7 @@ verification.
 - Installed-device SwiftData migration is guarded for older setup selection
   records: missing selected/deselected flags are treated as active legacy rows.
 - A native iCloud/CloudKit entitlement draft exists for container
-  `iCloud.com.alex.oceankey.swift`, but activation is currently blocked by the
+  `iCloud.com.alex.margaritaville.swift`, but activation is currently blocked by the
   installed Apple Development provisioning profile, which does not yet include
   iCloud/Push capabilities.
 - DeepSeek visual preset drafts are stored as lightweight JSON payloads in a
@@ -142,11 +143,14 @@ verification.
   now reports whether that preset store is truly Apple-synced or only running in
   local fallback.
 - Physical iPhone builds that include the real CloudKit entitlements are blocked
-  until the `com.alex.oceankey.swift` provisioning profile is regenerated with
+  until the `com.alex.margaritaville.swift` provisioning profile is regenerated with
   iCloud/CloudKit, Push Notifications, and the
-  `iCloud.com.alex.oceankey.swift` container.
-- Physical iPhone install is active through the local Apple Development profile
-  for `com.alex.oceankey.swift`
+  `iCloud.com.alex.margaritaville.swift` container.
+- Physical iPhone debug build/install is active for
+  `com.alex.margaritaville.swift` through the local Apple Development profile.
+  CloudKit/iCloud/Push capabilities remain blocked until the profile is
+  regenerated with those entitlements. Do not substitute an OceanKey bundle ID
+  as a shortcut.
 - Project generation: XcodeGen through `project.yml`
 - Migration rule: Flutter is a product and behavior reference, not an
   architecture template. Native Swift work should preserve the user-visible
@@ -226,7 +230,7 @@ available.
    - Test on real devices before considering visual effects done.
 
 7. Cutover
-   - Install OceanKeySwift side by side while Flutter remains production-safe.
+   - Install MargaritavilleSwift side by side while Flutter remains production-safe.
    - Move the production bundle identifier only after the native app is stable
      enough to replace the Flutter app.
 
@@ -241,5 +245,6 @@ Project-level execution details are captured in `AGENTS.md`.
 
 ## Signing Note
 
-The current Mac can build, install, test, and launch `com.alex.oceankey.swift`
-on Alex's physical iPhone through the local Apple Development signing setup.
+The current permanent bundle ID is `com.alex.margaritaville.swift`. If future
+Xcode CLI runs report missing accounts or missing provisioning profiles, treat
+that as a signing blocker and keep the app identity unchanged.

@@ -5,9 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEVICE_ID="${DEVICE_ID:-85E776B1-9069-5E68-BC3A-3BCAA4AAB870}"
 BUNDLE_ID="com.alex.margaritaville.swift"
 PROJECT_PATH="MargaritavilleSwift.xcodeproj"
-SCHEME="OceanKeySwift"
+SCHEME="MargaritavilleSwift"
 DERIVED_DATA=".build/DerivedDataDevice"
-APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphoneos/OceanKeySwift.app"
+APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphoneos/MargaritavilleSwift.app"
 
 cd "$ROOT_DIR"
 

@@ -8,17 +8,17 @@ settings:
   base:
     SWIFT_VERSION: "6.0"
     MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    CURRENT_PROJECT_VERSION: "2"
     DEVELOPMENT_TEAM: J6MW4855LU
     CODE_SIGN_STYLE: Automatic
 targets:
-  OceanKeySwift:
+  MargaritavilleSwift:
     type: application
     platform: iOS
     sources:
-      - OceanKeySwift
+      - MargaritavilleSwift
     resources:
-      - OceanKeySwift/Resources
+      - MargaritavilleSwift/Resources
     dependencies:
       - sdk: SpriteKit.framework
       - sdk: GameplayKit.framework
@@ -30,14 +30,14 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.alex.margaritaville.swift
-        "CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]": OceanKeySwift/OceanKeySwift.entitlements
+        "CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]": MargaritavilleSwift/MargaritavilleSwift.entitlements
         INFOPLIST_KEY_CFBundleDisplayName: Margaritaville
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         TARGETED_DEVICE_FAMILY: "1"
     info:
-      path: OceanKeySwift/Info.plist
+      path: MargaritavilleSwift/Info.plist
       properties:
         CFBundleDisplayName: Margaritaville
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -49,21 +49,21 @@ targets:
         UIBackgroundModes:
           - remote-notification
         UILaunchScreen: {}
-  OceanKeySwiftTests:
+  MargaritavilleSwiftTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - OceanKeySwiftTests
+      - MargaritavilleSwiftTests
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: OceanKeySwift
+      - target: MargaritavilleSwift
 schemes:
-  OceanKeySwift:
+  MargaritavilleSwift:
     build:
       targets:
-        OceanKeySwift: all
+        MargaritavilleSwift: all
     test:
       targets:
-        - OceanKeySwiftTests
+        - MargaritavilleSwiftTests

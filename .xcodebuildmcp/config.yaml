@@ -5,5 +5,5 @@ enabledWorkflows:
   - debugging
 sessionDefaults:
   projectPath: ./MargaritavilleSwift.xcodeproj
-  scheme: OceanKeySwift
+  scheme: MargaritavilleSwift
   simulatorName: iPhone 17 Pro Max

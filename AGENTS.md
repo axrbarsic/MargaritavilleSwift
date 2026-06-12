@@ -5,6 +5,7 @@
 - Always answer Alex in Russian unless he explicitly asks otherwise.
 - This worktree is the separate native iOS Margaritaville app split out of
   OceanKeySwift.
+- The local app target, scheme, and test module are `MargaritavilleSwift`.
 - The main Washington/OceanKey app lives in `/Users/alex/Developer/OceanKeySwift`
   and must remain separate from this worktree.
 - The Flutter reference app is `/Users/alex/Developer/OceanKeyFlutterRun`.
@@ -56,8 +57,8 @@ critical path automatically.
 
 ```sh
 xcodegen generate
-xcodebuild -project MargaritavilleSwift.xcodeproj -scheme OceanKeySwift -configuration Debug -destination 'generic/platform=iOS' -derivedDataPath .build/DerivedDataDevice -allowProvisioningUpdates build
-xcrun devicectl device install app --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB870 .build/DerivedDataDevice/Build/Products/Debug-iphoneos/OceanKeySwift.app
+xcodebuild -project MargaritavilleSwift.xcodeproj -scheme MargaritavilleSwift -configuration Debug -destination 'generic/platform=iOS' -derivedDataPath .build/DerivedDataDevice -allowProvisioningUpdates build
+xcrun devicectl device install app --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB870 .build/DerivedDataDevice/Build/Products/Debug-iphoneos/MargaritavilleSwift.app
 xcrun devicectl device process launch --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB870 --terminate-existing com.alex.margaritaville.swift
 ```
 
@@ -79,6 +80,12 @@ xcrun devicectl device process launch --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB
 - Local-first data is the source of truth. Cloud sync must not overwrite newer
   local edits with stale remote snapshots.
 - Media files are local-only by default unless Alex explicitly changes that.
+- For shared OceanKeySwift/MargaritavilleSwift foundation work, follow
+  `Docs/SharedFoundationPlan.md`: classify each new visual/effect/frontend
+  feature as `shared-foundation`, `shared-parameterized`, `app-specific`, or
+  `candidate`. Ask Alex before sharing `candidate` features. Never let shared
+  code depend on app bundle IDs, storage paths, hotel IDs, or target-specific
+  screens.
 
 ## Port The Idea, Not The Code (Flutter → Swift)
 

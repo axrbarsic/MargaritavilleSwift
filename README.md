@@ -32,7 +32,7 @@ paid Apple Developer Program account.
 xcodegen generate
 xcodebuild build \
   -project MargaritavilleSwift.xcodeproj \
-  -scheme OceanKeySwift \
+  -scheme MargaritavilleSwift \
   -configuration Debug \
   -destination 'generic/platform=iOS'
 ```
@@ -47,7 +47,7 @@ select your Apple ID team, and change the bundle identifier from
 xcodegen generate
 xcodebuild test \
   -project MargaritavilleSwift.xcodeproj \
-  -scheme OceanKeySwift \
+  -scheme MargaritavilleSwift \
   -configuration Debug \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max'
 ```

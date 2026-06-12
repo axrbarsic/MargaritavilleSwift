@@ -5,4 +5,4 @@ xcuserdata/
 *.moved-aside
 *.xcscmblueprint
 .DS_Store
-
+*.swp
