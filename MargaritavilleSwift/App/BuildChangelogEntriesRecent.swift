@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (5)",
+            date: "2026-06-13",
+            changes: [
+                "Removed the setup-screen room catalog regex hotspot that made rapid room selection stall the main thread.",
+                "Moved interaction sound playback work off the main thread and deferred feedback one UI turn so tap state changes can paint immediately.",
+                "Kept the full native haptic/audio feedback behavior without using the temporary diagnostics-only feedback bypass."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (4)",
             date: "2026-06-12",
             changes: [

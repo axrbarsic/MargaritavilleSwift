@@ -100,6 +100,8 @@ enum RoomCatalog {
         for profile: HotelProfile,
         overrides: [RoomCatalogOverride]
     ) -> [Territory] {
+        guard !overrides.isEmpty else { return profile.catalog }
+
         var roomSets = Dictionary(
             uniqueKeysWithValues: profile.catalog.map { territory in
                 (territory.id, Set(territory.rooms))
@@ -202,17 +204,32 @@ enum RoomCatalog {
     }
 
     private static func parseRoomID(_ value: RoomID) -> (number: Int, suffix: String)? {
-        let pattern = #"^(\d+)([A-Z]*)$"#
-        guard let regex = try? NSRegularExpression(pattern: pattern) else { return nil }
-        let range = NSRange(value.startIndex..<value.endIndex, in: value)
-        guard let match = regex.firstMatch(in: value, range: range),
-              match.numberOfRanges == 3,
-              let numberRange = Range(match.range(at: 1), in: value),
-              let number = Int(value[numberRange]),
-              let suffixRange = Range(match.range(at: 2), in: value)
-        else {
+        var number = 0
+        var suffixStart = value.startIndex
+        var sawDigit = false
+
+        while suffixStart < value.endIndex {
+            let scalar = value[suffixStart].unicodeScalars
+            guard scalar.count == 1, let ascii = scalar.first?.value else { return nil }
+            guard ascii >= 48, ascii <= 57 else { break }
+            sawDigit = true
+            number = number * 10 + Int(ascii - 48)
+            suffixStart = value.index(after: suffixStart)
+        }
+
+        guard sawDigit else { return nil }
+
+        var suffixIndex = suffixStart
+        while suffixIndex < value.endIndex {
+            let scalar = value[suffixIndex].unicodeScalars
+            guard scalar.count == 1, let ascii = scalar.first?.value else { return nil }
+            guard ascii >= 65, ascii <= 90 else { return nil }
+            suffixIndex = value.index(after: suffixIndex)
+        }
+
+        guard suffixIndex == value.endIndex else {
             return nil
         }
-        return (number, String(value[suffixRange]))
+        return (number, String(value[suffixStart...]))
     }
 }

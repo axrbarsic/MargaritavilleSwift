@@ -147,6 +147,10 @@ verification.
   pool, with audio-session refresh only after interruptions/resets or playback
   failure. Haptic generator preparation is scheduled after the interaction so
   feedback stays tactile without blocking visual state changes.
+- Room catalog ordering now uses a lightweight parser instead of compiling
+  regular expressions inside setup-screen room comparisons. Interaction feedback
+  dispatches audio work on a dedicated queue and defers haptics/audio one UI
+  turn, so taps can update visible state before feedback side effects run.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

@@ -32,16 +32,27 @@ struct InteractionFeedbackClient: Sendable {
         hapticsV2: Bool = false
     ) -> InteractionFeedbackClient {
         InteractionFeedbackClient(
-            tap: { service.tap(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
-            confirm: { service.confirm(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
-            longPress: { service.longPress(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
-            holdStart: { service.holdStart(hapticsV2: hapticsV2) },
-            holdWarning: { service.holdWarning(hapticsV2: hapticsV2) },
-            holdCommit: { service.holdCommit(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
-            select: { service.select(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
-            deselect: { service.deselect(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
-            invalid: { service.invalid(soundPackV2: soundPackV2, hapticsV2: hapticsV2) }
+            tap: deferred { service.tap(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            confirm: deferred { service.confirm(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            longPress: deferred { service.longPress(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            holdStart: deferred { service.holdStart(hapticsV2: hapticsV2) },
+            holdWarning: deferred { service.holdWarning(hapticsV2: hapticsV2) },
+            holdCommit: deferred { service.holdCommit(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            select: deferred { service.select(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            deselect: deferred { service.deselect(soundPackV2: soundPackV2, hapticsV2: hapticsV2) },
+            invalid: deferred { service.invalid(soundPackV2: soundPackV2, hapticsV2: hapticsV2) }
         )
+    }
+
+    private static func deferred(
+        _ action: @escaping @MainActor @Sendable () -> Void
+    ) -> @MainActor @Sendable () -> Void {
+        {
+            Task { @MainActor in
+                await Task.yield()
+                action()
+            }
+        }
     }
 }
 
@@ -152,6 +163,10 @@ final class InteractionFeedbackService {
 private final class InteractionSoundPlayer: @unchecked Sendable {
     private static let logger = Logger(subsystem: AppIdentity.loggerSubsystem, category: "InteractionSound")
 
+    private let queue = DispatchQueue(
+        label: "\(AppIdentity.loggerSubsystem).interaction-sound",
+        qos: .userInteractive
+    )
     private var selectPlayers: [AVAudioPlayer] = []
     private var deselectPlayers: [AVAudioPlayer] = []
     private var selectCursor = 0
@@ -174,10 +189,12 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
     }
 
     init() {
-        configureAudioSession()
+        queue.sync {
+            configureAudioSession()
+            selectPlayers = makePlayers(resource: "pressed")
+            deselectPlayers = makePlayers(resource: "click")
+        }
         observeAudioSessionChanges()
-        selectPlayers = makePlayers(resource: "pressed")
-        deselectPlayers = makePlayers(resource: "click")
     }
 
     deinit {
@@ -189,31 +206,31 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
     func playSelect(variant: SelectVariant = .plain) {
         switch variant {
         case .plain:
-            playSelect(volume: 0.20, rate: 1.0, pan: 0)
+            enqueueSelect(volume: 0.20, rate: 1.0, pan: 0)
         case .confirm:
-            playSelect(volume: 0.24, rate: 1.12, pan: 0.05)
+            enqueueSelect(volume: 0.24, rate: 1.12, pan: 0.05)
         case .deep:
-            playSelect(volume: 0.23, rate: 0.82, pan: -0.08)
+            enqueueSelect(volume: 0.23, rate: 0.82, pan: -0.08)
         case .commit:
-            playSelect(volume: 0.28, rate: 1.24, pan: 0.10)
+            enqueueSelect(volume: 0.28, rate: 1.24, pan: 0.10)
         case .select:
-            playSelect(volume: 0.22, rate: 1.06, pan: -0.04)
+            enqueueSelect(volume: 0.22, rate: 1.06, pan: -0.04)
         }
     }
 
     func playDeselect(variant: DeselectVariant = .plain) {
         switch variant {
         case .plain:
-            playDeselect(volume: 0.20, rate: 1.0, pan: 0)
+            enqueueDeselect(volume: 0.20, rate: 1.0, pan: 0)
         case .soft:
-            playDeselect(volume: 0.15, rate: 0.92, pan: -0.05)
+            enqueueDeselect(volume: 0.15, rate: 0.92, pan: -0.05)
         case .invalid:
-            playDeselect(volume: 0.23, rate: 0.72, pan: 0.08)
+            enqueueDeselect(volume: 0.23, rate: 0.72, pan: 0.08)
         }
     }
 
     func playTapAccent() {
-        playDeselect(volume: 0.11, rate: 1.36, pan: 0.03)
+        enqueueDeselect(volume: 0.11, rate: 1.36, pan: 0.03)
     }
 
     private func configureAudioSession() {
@@ -241,9 +258,12 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
             center.addObserver(
                 forName: name,
                 object: AVAudioSession.sharedInstance(),
-                queue: .main
+                queue: nil
             ) { [weak self] _ in
-                self?.audioSessionNeedsRefresh = true
+                guard let soundPlayer = self else { return }
+                soundPlayer.queue.async { [weak soundPlayer] in
+                    soundPlayer?.audioSessionNeedsRefresh = true
+                }
             }
         }
     }
@@ -280,6 +300,18 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
         play(player, volume: volume, rate: rate, pan: pan)
     }
 
+    private func enqueueSelect(volume: Float, rate: Float, pan: Float) {
+        queue.async { [weak self] in
+            self?.playSelect(volume: volume, rate: rate, pan: pan)
+        }
+    }
+
+    private func enqueueDeselect(volume: Float, rate: Float, pan: Float) {
+        queue.async { [weak self] in
+            self?.playDeselect(volume: volume, rate: rate, pan: pan)
+        }
+    }
+
     private func nextPlayer(players: [AVAudioPlayer], cursor: inout Int) -> AVAudioPlayer {
         if let available = players.first(where: { !$0.isPlaying }) {
             return available
@@ -293,7 +325,9 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
         if audioSessionNeedsRefresh {
             configureAudioSession()
         }
-        player.stop()
+        if player.isPlaying {
+            player.stop()
+        }
         player.currentTime = 0
         player.volume = volume
         player.rate = rate
