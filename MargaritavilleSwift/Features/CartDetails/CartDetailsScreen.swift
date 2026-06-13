@@ -6,12 +6,14 @@ struct CartDetailsScreen: View {
     @Bindable var appSettings: AppSettingsStore
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.interactionFeedback) private var feedback
     @State private var draftNote = ""
     @State private var draftVoiceTranscript = ""
     @State private var captureKind: MediaKind?
     @State private var selectedMedia: MediaAttachment?
     @State private var mediaPreviewPlaybackEnabled = true
     @State private var mediaError: String?
+    @State private var activeQuantityPicker: CartQuantityPickerState?
 
     var body: some View {
         ZStack {
@@ -29,6 +31,18 @@ struct CartDetailsScreen: View {
                 .padding(.bottom, 28)
             }
             .scrollIndicators(.hidden)
+
+            if let activeQuantityPicker {
+                QuantityRadialPickerOverlay(
+                    title: activeQuantityPicker.title,
+                    selectedQuantity: activeQuantityPicker.quantity,
+                    onQuantityChange: updateActiveQuantity,
+                    onCommit: commitActiveQuantity,
+                    onCancel: cancelActiveQuantity
+                )
+                .zIndex(4)
+                .transition(.opacity.combined(with: .scale(scale: 0.96)))
+            }
         }
         .onAppear(perform: loadDraft)
         .onChange(of: draftNote) { _, newValue in
@@ -118,7 +132,8 @@ struct CartDetailsScreen: View {
             CartConsumablesSection(
                 cartID: route.cartID,
                 workSession: workSession,
-                catalog: appSettings.cartConsumableCatalog
+                catalog: appSettings.cartConsumableCatalog,
+                onQuantityPickerRequested: openQuantityPicker
             )
         }
     }
@@ -232,6 +247,44 @@ struct CartDetailsScreen: View {
         selectedMedia = attachment
     }
 
+    private func openQuantityPicker(_ item: CartConsumableItem) {
+        withAnimation(.spring(response: 0.22, dampingFraction: 0.86)) {
+            activeQuantityPicker = CartQuantityPickerState(
+                itemID: item.id,
+                title: item.title,
+                quantity: max(1, min(item.quantity == 0 ? 1 : item.quantity, 10))
+            )
+        }
+    }
+
+    private func updateActiveQuantity(_ quantity: Int) {
+        let quantity = max(1, min(quantity, 10))
+        guard activeQuantityPicker?.quantity != quantity else { return }
+        activeQuantityPicker?.quantity = quantity
+        feedback.select()
+    }
+
+    private func commitActiveQuantity(_ quantity: Int) {
+        guard let picker = activeQuantityPicker else { return }
+        workSession.updateCartConsumableQuantity(
+            itemID: picker.itemID,
+            title: picker.title,
+            quantity: max(1, min(quantity, 10)),
+            cartId: route.cartID
+        )
+        feedback.holdCommit()
+        withAnimation(.spring(response: 0.20, dampingFraction: 0.88)) {
+            activeQuantityPicker = nil
+        }
+    }
+
+    private func cancelActiveQuantity() {
+        feedback.deselect()
+        withAnimation(.spring(response: 0.20, dampingFraction: 0.88)) {
+            activeQuantityPicker = nil
+        }
+    }
+
     private var updatedLabel: String? {
         guard let date = workSession.cart(id: route.cartID)?.noteUpdatedAt else { return nil }
         return date.formatted(
@@ -243,6 +296,14 @@ struct CartDetailsScreen: View {
                 .locale(Locale(identifier: "en_US_POSIX"))
         )
     }
+}
+
+private struct CartQuantityPickerState: Identifiable {
+    let itemID: CartConsumableItem.ID
+    let title: String
+    var quantity: Int
+
+    var id: CartConsumableItem.ID { itemID }
 }
 
 private struct CartDetailsPanel<Content: View>: View {

@@ -161,8 +161,9 @@ verification.
   stay per cart/work block, while catalog renames update the displayed title by
   stable item id.
 - Cart supply quantity entry should support fast one-handed work: plus/minus
-  remains available, and a hold-and-drag radial quantity picker commits 1...10
-  with native haptic/audio feedback.
+  remains available, and a large full-screen radial quantity picker commits
+  1...10 with native haptic/audio feedback. The picker owns its touch target
+  directly instead of depending on a small row-bound drag gesture.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.

@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (9)",
+            date: "2026-06-13",
+            changes: [
+                "Changed the cart supply radial quantity picker into a large full-screen control so the visible circle is also the active touch target.",
+                "Removed the old row-bound hold-and-drag gesture that could leave the picker feeling stuck after it appeared.",
+                "Added direct tap, drag-to-select, cancel, and commit behavior for one-handed quantity entry."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (8)",
             date: "2026-06-13",
             changes: [
