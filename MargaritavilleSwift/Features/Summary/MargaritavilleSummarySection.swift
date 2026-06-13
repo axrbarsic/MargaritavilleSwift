@@ -3,6 +3,7 @@ import SwiftUI
 struct MargaritavilleSummarySection: View {
     let section: MargaritavilleSummaryHousekeeperSection
     let housekeeper: Housekeeper?
+    let consumableTickerText: String?
     let housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode
     let statusPaletteSaturation: Double
     let onOpenCartDetails: (CartSection.ID, String) -> Void
@@ -37,7 +38,14 @@ struct MargaritavilleSummarySection: View {
                 gestureMode: housekeeperDetailsGestureMode,
                 action: { onOpenCartDetails(section.primaryCartID, section.locationLabel) }
             )
-            Spacer()
+
+            if let consumableTickerText, !consumableTickerText.isEmpty {
+                SummaryConsumableTicker(text: consumableTickerText)
+                    .frame(maxWidth: .infinity)
+            } else {
+                Spacer(minLength: 8)
+            }
+
             Text(section.locationLabel)
                 .foregroundStyle(.white)
                 .lineLimit(1)

@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (13)",
+            date: "2026-06-13",
+            changes: [
+                "Added a Margaritaville summary consumables report below the room grid with total needed supplies and a per-housekeeper breakdown.",
+                "Added a per-housekeeper running supply ticker between the name and work locations whenever that housekeeper has active uncompleted supplies.",
+                "Changed the top-right summary edit button to require a long press so accidental taps cannot reopen the setup screen."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (12)",
             date: "2026-06-13",
             changes: [

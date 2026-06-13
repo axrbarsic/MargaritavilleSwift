@@ -35,7 +35,8 @@ struct SummaryHeader: View {
             headerIconButton(
                 systemName: "square.grid.3x3",
                 accessibilityLabel: "Открыть выбор комнат",
-                action: openSelection
+                action: { feedback.tap() },
+                longPressAction: openSelection
             )
         }
         .padding(.horizontal, 18)
@@ -45,7 +46,8 @@ struct SummaryHeader: View {
     private func headerIconButton(
         systemName: String,
         accessibilityLabel: String,
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
+        longPressAction: (() -> Void)? = nil
     ) -> some View {
         Button(action: action) {
             Image(systemName: systemName)
@@ -56,6 +58,13 @@ struct SummaryHeader: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(longPressAction == nil ? "" : "Держите кнопку, чтобы открыть редактирование списка.")
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.55)
+                .onEnded { _ in
+                    longPressAction?()
+                }
+        )
     }
 
     private func openSelection() {

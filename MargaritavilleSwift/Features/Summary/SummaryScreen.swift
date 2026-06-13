@@ -108,6 +108,7 @@ struct SummaryScreen: View {
                     MargaritavilleSummarySection(
                         section: section,
                         housekeeper: housekeeper(id: section.housekeeperID),
+                        consumableTickerText: consumableTickerTextBySectionID[section.id],
                         housekeeperDetailsGestureMode: appSettings.housekeeperDetailsGestureMode,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         onOpenCartDetails: { cartID, subtitle in
@@ -122,6 +123,8 @@ struct SummaryScreen: View {
                         onSchedule: openSchedule
                     )
                 }
+
+                SummaryConsumablesTable(report: consumablesReport)
             }
         } else {
             LazyVStack(spacing: 18) {
@@ -157,6 +160,19 @@ struct SummaryScreen: View {
             hotelProfile: workSession.hotelProfile,
             statusFilter: activeSimpleCycleStatusFilter
         )
+    }
+
+    private var consumablesReport: SummaryConsumablesReport {
+        SummaryConsumablesAggregator.makeReport(
+            sections: margaritavilleSummarySections,
+            carts: workSession.carts,
+            housekeepers: appSettings.housekeepers,
+            catalog: appSettings.cartConsumableCatalog
+        )
+    }
+
+    private var consumableTickerTextBySectionID: [String: String] {
+        Dictionary(uniqueKeysWithValues: consumablesReport.housekeepers.map { ($0.id, $0.tickerText) })
     }
 
     private var summaryStatusChips: [SummaryHeader.StatusChip] {

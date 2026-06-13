@@ -171,6 +171,11 @@ verification.
   decrement, visible quantity, and increment. The removed radial picker should
   not be reintroduced without a separate redesign because row-level hold
   gestures caused sticky selection while moving between supply rows.
+- Margaritaville summary surfaces active cart supplies directly on the main
+  screen. Active means quantity is greater than zero and the supply row is not
+  marked completed. Each housekeeper header shows a running supply ticker when
+  that housekeeper needs attention, and the bottom of the summary shows a
+  readable total table plus a per-housekeeper breakdown.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.
@@ -180,6 +185,9 @@ verification.
 - Margaritaville summary progress must not be shown as a fraction. The header
   uses three separate counters: yellow total rooms, green ready/cleaned rooms,
   and red remaining rooms. Status filter chips remain separate controls.
+- The top-right Margaritaville summary edit-entry button is protected by a
+  long press. A normal tap may give feedback, but it must not reopen setup room
+  editing.
 - Interaction feedback now uses the stronger native feedback path: UIKit
   notification haptics are routed through the shared interaction service in
   addition to impact/selection feedback and bundled local sounds.
