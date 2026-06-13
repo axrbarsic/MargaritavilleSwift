@@ -41,7 +41,7 @@ struct WorkSetupScreen: View {
                             CartSetupCard(
                                 territory: effectiveTerritory(forCart: cartNumber),
                                 selectedRooms: workSession.selectedRooms(forCart: cartNumber),
-                                blockedRooms: blockedRooms(forCart: cartNumber),
+                                reservedRooms: reservedRooms(forCart: cartNumber),
                                 isFocused: selectedCartNumber == cartNumber,
                                 territories: workSession.effectiveCatalog,
                                 layout: workSession.hotelProfile.summaryLayout,
@@ -129,8 +129,23 @@ struct WorkSetupScreen: View {
             )
     }
 
-    private func blockedRooms(forCart cartNumber: Int) -> [RoomID: Int] {
-        workSession.blockedRooms(forCart: cartNumber, territory: effectiveTerritory(forCart: cartNumber))
+    private func reservedRooms(forCart cartNumber: Int) -> [RoomID: WorkSetupRoomReservation] {
+        let territory = effectiveTerritory(forCart: cartNumber)
+        var reservations: [RoomID: WorkSetupRoomReservation] = [:]
+
+        for room in territory.rooms {
+            guard let ownerCart = workSession.selection.roomOwnerCart(room), ownerCart != cartNumber else {
+                continue
+            }
+            let owner = housekeeper(forCart: ownerCart)
+            reservations[room] = WorkSetupRoomReservation(
+                cartNumber: ownerCart,
+                displayName: owner?.displayName ?? "Занято",
+                paletteColor: owner?.palette.color ?? OceanKeyTheme.secondaryText
+            )
+        }
+
+        return reservations
     }
 
     private func offTerritorySelectionGroups(

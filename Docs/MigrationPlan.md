@@ -138,6 +138,10 @@ verification.
 - Margaritaville setup cards are intentionally one-handed: no in-card cart
   number picker or assignment sheet, larger housekeeper chips, larger A/B and
   1/2/3 controls, and room buttons sized for fast on-the-go selection.
+- Margaritaville setup room buttons reserve rooms across housekeepers. If a
+  room is already assigned to another housekeeper, the next housekeeper sees it
+  greyed out, disabled, and labeled with the owning housekeeper instead of being
+  able to assign a duplicate.
 - Margaritaville scheduled status color is pink across summary tiles, filter
   chips, and schedule controls. Do not use the old purple scheduled color in
   the Margaritaville simple-cycle workflow.

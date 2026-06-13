@@ -3,7 +3,7 @@ import SwiftUI
 struct RoomPickButton: View {
     let room: RoomID
     let selected: Bool
-    let blockedByCart: Int?
+    let reservation: WorkSetupRoomReservation?
     let layout: HotelSummaryLayout
     let dayCategory: RoomDayCategory?
     let dayCategoryTime: Date?
@@ -15,15 +15,19 @@ struct RoomPickButton: View {
         Button(action: onTap) {
             ZStack {
                 roomNumber
-                if let blockedByCart {
-                    Text("T\(blockedByCart)")
-                        .font(.system(size: 10, weight: .black, design: .rounded))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.24))
-                        .clipShape(Capsule())
-                        .padding(6)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                if let reservation {
+                    VStack(spacing: 3) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 11, weight: .black))
+                        Text(reservation.displayName)
+                            .font(.system(size: 9, weight: .black, design: .rounded))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.55)
+                    }
+                    .foregroundStyle(.white.opacity(0.74))
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 }
                 if showsDayCategory, selected, let dayCategory {
                     categoryBadge(dayCategory)
@@ -43,7 +47,8 @@ struct RoomPickButton: View {
             }
         }
         .buttonStyle(.plain)
-        .disabled(blockedByCart != nil)
+        .disabled(reservation != nil)
+        .accessibilityHint(reservation == nil ? "" : "Комната уже закреплена за \(reservation?.displayName ?? "другой уборщицей").")
     }
 
     private var roomNumber: some View {
@@ -77,11 +82,11 @@ struct RoomPickButton: View {
     }
 
     private var foreground: Color {
-        blockedByCart == nil ? (selected ? OceanKeyTheme.roomForeground : .white) : OceanKeyTheme.secondaryText.opacity(0.42)
+        reservation == nil ? (selected ? OceanKeyTheme.roomForeground : .white) : .white.opacity(0.38)
     }
 
     private var background: Color {
-        if blockedByCart != nil { return .black.opacity(0.10) }
+        if reservation != nil { return Color.gray.opacity(0.22) }
         if selected, let dayCategory {
             return OceanKeyTheme.fill(for: dayCategory)
         }
@@ -89,7 +94,7 @@ struct RoomPickButton: View {
     }
 
     private var stroke: Color {
-        if blockedByCart != nil { return OceanKeyTheme.secondaryText.opacity(0.16) }
+        if let reservation { return reservation.paletteColor.opacity(0.45) }
         return selected ? .white.opacity(0.55) : OceanKeyTheme.accent.opacity(0.16)
     }
 

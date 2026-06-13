@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (14)",
+            date: "2026-06-13",
+            changes: [
+                "Marked rooms already assigned to another housekeeper as reserved on the Margaritaville setup screen.",
+                "Reserved setup rooms are disabled, greyed out, and show the owning housekeeper so the same room cannot be assigned twice by mistake."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (13)",
             date: "2026-06-13",
             changes: [

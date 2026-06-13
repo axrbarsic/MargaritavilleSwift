@@ -1,5 +1,11 @@
 import SwiftUI
 
+struct WorkSetupRoomReservation {
+    let cartNumber: Int
+    let displayName: String
+    let paletteColor: Color
+}
+
 struct WorkSetupHeader: View {
     let selectedCount: Int
     let canStart: Bool
@@ -113,7 +119,7 @@ struct HousekeeperWorkPicker: View {
 struct CartSetupCard: View {
     let territory: Territory
     let selectedRooms: Set<RoomID>
-    let blockedRooms: [RoomID: Int]
+    let reservedRooms: [RoomID: WorkSetupRoomReservation]
     let isFocused: Bool
     let territories: [Territory]
     let layout: HotelSummaryLayout
@@ -177,7 +183,7 @@ struct CartSetupCard: View {
                 RoomPickButton(
                     room: room,
                     selected: selectedRooms.contains(room),
-                    blockedByCart: blockedRooms[room],
+                    reservation: reservedRooms[room],
                     layout: layout,
                     dayCategory: nil,
                     dayCategoryTime: nil,
