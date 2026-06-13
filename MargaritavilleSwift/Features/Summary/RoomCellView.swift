@@ -110,10 +110,8 @@ struct RoomCellView: View {
                     )
             }
         }
-        .overlay(alignment: .topTrailing) {
+        .overlay(alignment: .bottomTrailing) {
             RoomMediaIndicator(room: room)
-                .padding(.top, 7)
-                .padding(.trailing, 10)
                 .allowsHitTesting(false)
         }
         .overlay {

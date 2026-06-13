@@ -138,6 +138,17 @@ verification.
 - Margaritaville setup cards are intentionally one-handed: no in-card cart
   number picker or assignment sheet, larger housekeeper chips, larger A/B and
   1/2/3 controls, and room buttons sized for fast on-the-go selection.
+- Margaritaville scheduled status color is pink across summary tiles, filter
+  chips, and schedule controls. Do not use the old purple scheduled color in
+  the Margaritaville simple-cycle workflow.
+- Margaritaville VIP summary tiles should not show a crown badge; the live
+  jelly visual treatment is the VIP indicator on the main screen.
+- Room media markers should use a lower-right corner flag, not a top-right
+  capsule badge, so photos/video/audio are discoverable without covering the
+  main room number.
+- On the Margaritaville setup screen, housekeeper chips are toggles: tapping an
+  unselected name creates a work block, and tapping a selected name removes that
+  block.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.

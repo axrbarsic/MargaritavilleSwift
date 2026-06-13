@@ -305,6 +305,21 @@ func cartHousekeeperAssignmentPersistsInSelectionState() {
 }
 
 @Test
+func togglingSelectedMargaritavilleWorkItemClearsHousekeeperAndRooms() {
+    let selectedAt = Date(timeIntervalSince1970: 1_805_000_100)
+    var selection = WorkSessionSelectionState()
+
+    selection.toggleCart(1, hotelProfile: .margaritaville, changedAt: selectedAt)
+    selection.setHousekeeper("ketty", cartNumber: 1, changedAt: selectedAt)
+    selection.toggleRoom(cartNumber: 1, room: "101", changedAt: selectedAt)
+
+    #expect(selection.toggleCart(1, hotelProfile: .margaritaville, changedAt: selectedAt) == .changed)
+    #expect(selection.selectedCartNumbers.isEmpty)
+    #expect(selection.housekeeperID(forCart: 1) == nil)
+    #expect(selection.rooms(forCart: 1).isEmpty)
+}
+
+@Test
 func margaritavilleCatalogOverridesAddAndRemoveRooms() {
     let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
 

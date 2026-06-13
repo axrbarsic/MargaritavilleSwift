@@ -161,7 +161,7 @@ struct SummaryScreen: View {
             SummaryHeader.StatusChip(
                 status: status,
                 count: rooms.filter { $0.status(in: .simpleCycle) == status }.count,
-                usesPurpleScheduled: true
+                usesPurpleScheduled: false
             )
         }
     }

@@ -42,6 +42,7 @@
 		48445FB3B0DF2857653B2BA4 /* MatrixRainSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1CA4620A505A25C40AE681 /* MatrixRainSpriteScene.swift */; };
 		49F46E8F7994A01F4AF2BC2B /* LocalWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DA05CC83B4745C23D5CF2B /* LocalWorkSessionRepository.swift */; };
 		4EE12E17FCBFCBB259E63B24 /* MargaritavilleSwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7EAF0AB7A383AE3A9106C /* MargaritavilleSwiftApp.swift */; };
+		51073EF8C7BC2919DD754DEA /* RoomMediaIndicatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E02D0413E3F9498F0A6F26 /* RoomMediaIndicatorTests.swift */; };
 		529436F3B9A6793FF8BCBBE1 /* SummaryActionMenuExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61FA926449ECE44FBCD523C /* SummaryActionMenuExpansion.swift */; };
 		54060BE12903DE7DC82BF05C /* PersistentWorkSessionMapper+Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A189BEF138C12C183D52C206 /* PersistentWorkSessionMapper+Catalog.swift */; };
 		5411E04FD741551E3928E8DC /* PersistentWorkSessionMapper+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728366083E24EDB59090D7B6 /* PersistentWorkSessionMapper+History.swift */; };
@@ -185,6 +186,7 @@
 		1494F03D3C659689B303BB03 /* ExperimentalAppearanceEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentalAppearanceEnvironment.swift; sourceTree = "<group>"; };
 		14DA05CC83B4745C23D5CF2B /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
 		1606F1A9957635785A6D928D /* RoomDayCategoryCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryCounts.swift; sourceTree = "<group>"; };
+		19E02D0413E3F9498F0A6F26 /* RoomMediaIndicatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMediaIndicatorTests.swift; sourceTree = "<group>"; };
 		1BB1098091146B6B73E6FE14 /* MargaritavilleSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummarySection.swift; sourceTree = "<group>"; };
 		1C1CA4620A505A25C40AE681 /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
 		1D48BFB5EDED5F96299AB21A /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 				4A54ACA4EA81D8F149015ABB /* AppSettingsStoreTests.swift */,
 				0022BF10DD8871C94DDD0577 /* MargaritavilleSummaryRoomGroupingTests.swift */,
 				AAF87AEBF917C954895FE0CF /* PerformanceTelemetryStoreTests.swift */,
+				19E02D0413E3F9498F0A6F26 /* RoomMediaIndicatorTests.swift */,
 				FC01B23315CBE02A4B6DEE0B /* RuntimeDiagnosticsTests.swift */,
 				D2B2C5D50144AFF4E83542F1 /* SummaryActionMenuExpansionTests.swift */,
 				A7F5D7EA34CBAC9995CB4DDE /* SummarySwipeCommitPolicyTests.swift */,
@@ -989,6 +992,7 @@
 				D8E801A984C3B0211D472853 /* AppleSyncEntitlementTests.swift in Sources */,
 				FE1C7BFCD6BD93E0E953B63B /* MargaritavilleSummaryRoomGroupingTests.swift in Sources */,
 				6F2C27BB68573CA9F2928146 /* PerformanceTelemetryStoreTests.swift in Sources */,
+				51073EF8C7BC2919DD754DEA /* RoomMediaIndicatorTests.swift in Sources */,
 				E966CBE9E6B5674FE32973A7 /* RuntimeDiagnosticsTests.swift in Sources */,
 				CD87168EDB426BC3C235F30A /* SummaryActionMenuExpansionTests.swift in Sources */,
 				451770AEE2D8C966487CED28 /* SummarySwipeCommitPolicyTests.swift in Sources */,
@@ -1083,7 +1087,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1150,7 +1154,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

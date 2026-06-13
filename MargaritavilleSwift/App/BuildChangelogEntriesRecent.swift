@@ -3,6 +3,17 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (7)",
+            date: "2026-06-13",
+            changes: [
+                "Restored Margaritaville scheduled rooms and status filter chips to the pink scheduled color instead of purple.",
+                "Increased Margaritaville summary room numbers and time labels while preserving the square tile layout.",
+                "Removed the crown badge from VIP summary tiles; VIP is now indicated by the live jelly visual effect only.",
+                "Moved room media indicators into a lower-right corner flag so media is visible without covering the room number.",
+                "Made selected housekeeper chips toggle off when tapped again from the setup screen."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (6)",
             date: "2026-06-13",
             changes: [

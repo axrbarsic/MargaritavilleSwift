@@ -12,7 +12,7 @@ enum OceanKeyTheme {
     static let open = Color(hex: 0xFF3B30)
     static let inProgress = Color(hex: 0x2F80FF)
     static let scheduled = Color(hex: 0xFF4DB8)
-    static let margaritavilleScheduled = Color(hex: 0x8E5BFF)
+    static let margaritavilleScheduled = Color(hex: 0xFF4DB8)
     static let roomForeground = Color(hex: 0x050505)
 
     static func fill(for status: RoomStatus, saturation: Double = 1) -> Color {

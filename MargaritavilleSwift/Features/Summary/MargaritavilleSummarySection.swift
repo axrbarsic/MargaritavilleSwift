@@ -128,40 +128,27 @@ private struct MargaritavilleRoomTile: View {
             feedback.confirm()
             onAdvance()
         } label: {
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 Text(room.id)
-                    .font(.system(size: 38, weight: .black, design: .rounded))
+                    .font(.system(size: 44, weight: .black, design: .rounded))
                     .monospacedDigit()
                     .lineLimit(1)
-                    .minimumScaleFactor(0.58)
+                    .minimumScaleFactor(0.50)
                 Text(timeLabel)
-                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .font(.system(size: 16, weight: .black, design: .rounded))
                     .monospacedDigit()
                     .lineLimit(1)
-                    .minimumScaleFactor(0.68)
+                    .minimumScaleFactor(0.62)
             }
             .foregroundStyle(OceanKeyTheme.roomForeground)
-            .padding(.horizontal, 7)
-            .padding(.vertical, 12)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fit)
             .background(fill)
-            .overlay(alignment: .topTrailing) {
+            .overlay(alignment: .bottomTrailing) {
                 RoomMediaIndicator(room: room)
-                    .padding(6)
                     .allowsHitTesting(false)
-            }
-            .overlay(alignment: .topLeading) {
-                if room.isVIP {
-                    Image(systemName: "crown.fill")
-                        .font(.system(size: 12, weight: .black))
-                        .foregroundStyle(.white)
-                        .frame(width: 25, height: 25)
-                        .background(OceanKeyTheme.pending.opacity(0.92), in: Circle())
-                        .shadow(color: .black.opacity(0.28), radius: 3, x: 0, y: 1)
-                        .padding(6)
-                        .allowsHitTesting(false)
-                }
             }
             .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
             .vipJellyUnifiedLayer(
@@ -188,7 +175,7 @@ private struct MargaritavilleRoomTile: View {
         let color = OceanKeyTheme.fill(
             for: room.status(in: .simpleCycle),
             saturation: statusPaletteSaturation,
-            usesPurpleScheduled: true
+            usesPurpleScheduled: false
         )
         if vipJellyActive {
             Rectangle().fill(color)

@@ -161,8 +161,7 @@ struct WorkSetupScreen: View {
 
     private func activateHousekeeper(_ housekeeper: Housekeeper) {
         if let cartNumber = cartNumber(forHousekeeperID: housekeeper.id) {
-            feedback.tap()
-            selectedCartNumber = cartNumber
+            removeWorkItem(cartNumber)
             return
         }
 
