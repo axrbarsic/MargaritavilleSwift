@@ -59,6 +59,12 @@ final class AppSettingsStore {
         }
     }
 
+    var housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode {
+        didSet {
+            userDefaults.set(housekeeperDetailsGestureMode.rawValue, forKey: Keys.housekeeperDetailsGestureMode)
+        }
+    }
+
     var personalCartMarkers: PersonalCartMarkers {
         didSet {
             Self.savePersonalCartMarkers(personalCartMarkers, userDefaults: userDefaults)
@@ -68,6 +74,12 @@ final class AppSettingsStore {
     var housekeepers: [Housekeeper] {
         didSet {
             Self.saveHousekeepers(housekeepers, userDefaults: userDefaults)
+        }
+    }
+
+    var cartConsumableCatalog: [CartConsumableCatalogItem] {
+        didSet {
+            Self.saveCartConsumableCatalog(cartConsumableCatalog, userDefaults: userDefaults)
         }
     }
 
@@ -245,6 +257,7 @@ final class AppSettingsStore {
         roomCellGeometry: RoomCellGeometry = .roomy,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
+        housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode = .tap,
         personalCartMarkers: PersonalCartMarkers = .default,
         statusPaletteSaturation: Double = 1,
         matrixSpeed: Double = MatrixRainConfiguration.default.speed,
@@ -268,12 +281,14 @@ final class AppSettingsStore {
         developerVIPJellySpeed: Double = 0.75,
         selectedHotelID: String? = nil,
         housekeepers: [Housekeeper] = MargaritavilleHousekeeperCatalog.defaultHousekeepers,
+        cartConsumableCatalog: [CartConsumableCatalogItem] = CartConsumableCatalog.defaultCatalog,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
         self.roomCellGeometry = roomCellGeometry
         self.roomTaskLongPress = roomTaskLongPress
         self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
+        self.housekeeperDetailsGestureMode = housekeeperDetailsGestureMode
         self.personalCartMarkers = personalCartMarkers.normalized()
         self.backgroundVideoRelativePath = backgroundVideoRelativePath
         self.tvStaticVariant = tvStaticVariant
@@ -297,6 +312,7 @@ final class AppSettingsStore {
         self.developerVIPJellyEnabled = developerVIPJellyEnabled
         self.selectedHotelID = selectedHotelID
         self.housekeepers = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
+        self.cartConsumableCatalog = CartConsumableCatalog.normalizedCatalog(cartConsumableCatalog)
         self.userDefaults = userDefaults
     }
 

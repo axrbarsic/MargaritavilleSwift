@@ -4,8 +4,10 @@ struct MargaritavilleSummarySection: View {
     @Binding var cart: CartSection
     let territories: [Territory]
     let housekeeper: Housekeeper?
+    let housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode
     let statusPaletteSaturation: Double
     let statusFilter: RoomStatus?
+    let onOpenCartDetails: (CartSection.ID) -> Void
     let onAdvance: (RoomCell.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onVIPToggle: (RoomCell.ID) -> Void
@@ -39,9 +41,12 @@ struct MargaritavilleSummarySection: View {
 
     private func groupHeader(_ group: MargaritavilleSummaryRoomGroup) -> some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(housekeeper?.displayName ?? "Уборщица")
-                .lineLimit(1)
-                .minimumScaleFactor(0.68)
+            HousekeeperSummaryNameButton(
+                title: housekeeper?.displayName ?? "Уборщица",
+                palette: housekeeper?.palette.color ?? OceanKeyTheme.accent,
+                gestureMode: housekeeperDetailsGestureMode,
+                action: { onOpenCartDetails(cart.id) }
+            )
             Spacer()
             Text(group.label)
         }
@@ -73,6 +78,76 @@ struct MargaritavilleSummarySection: View {
     private var filteredRooms: [RoomCell] {
         guard let statusFilter else { return cart.rooms }
         return cart.rooms.filter { $0.status(in: .simpleCycle) == statusFilter }
+    }
+}
+
+private struct HousekeeperSummaryNameButton: View {
+    let title: String
+    let palette: Color
+    let gestureMode: HousekeeperDetailsGestureMode
+    let action: () -> Void
+    @Environment(\.interactionFeedback) private var feedback
+    @State private var swipeOffset: CGFloat = 0
+
+    var body: some View {
+        Text(title)
+            .lineLimit(1)
+            .minimumScaleFactor(0.68)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(palette.opacity(0.18), in: Capsule())
+            .overlay {
+                Capsule()
+                    .stroke(palette.opacity(0.44), lineWidth: 1)
+            }
+            .offset(x: swipeOffset)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                guard gestureMode == .tap else {
+                    feedback.tap()
+                    return
+                }
+                feedback.confirm()
+                action()
+            }
+            .onLongPressGesture(minimumDuration: 0.38) {
+                guard gestureMode == .longPress else { return }
+                feedback.longPress()
+                action()
+            }
+            .gesture(
+                DragGesture(minimumDistance: 16)
+                    .onChanged { value in
+                        guard gestureMode == .swipeLeft else { return }
+                        swipeOffset = min(0, max(-36, value.translation.width))
+                    }
+                    .onEnded { value in
+                        guard gestureMode == .swipeLeft else {
+                            swipeOffset = 0
+                            return
+                        }
+                        if value.translation.width < -42 || value.predictedEndTranslation.width < -72 {
+                            feedback.confirm()
+                            withAnimation(.spring(response: 0.22, dampingFraction: 0.78)) {
+                                swipeOffset = -24
+                            }
+                            action()
+                        }
+                        withAnimation(.spring(response: 0.28, dampingFraction: 0.74)) {
+                            swipeOffset = 0
+                        }
+                    }
+            )
+            .accessibilityAddTraits(.isButton)
+            .accessibilityHint(accessibilityHint)
+    }
+
+    private var accessibilityHint: String {
+        switch gestureMode {
+        case .tap: "Открывает меню уборщицы по тапу."
+        case .longPress: "Открывает меню уборщицы по долгому нажатию."
+        case .swipeLeft: "Открывает меню уборщицы свайпом справа налево."
+        }
     }
 }
 

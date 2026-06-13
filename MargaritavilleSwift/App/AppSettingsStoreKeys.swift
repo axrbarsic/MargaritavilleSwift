@@ -6,6 +6,7 @@ extension AppSettingsStore {
         static let roomCellGeometry = "roomCellGeometry"
         static let roomTaskLongPress = "roomTaskLongPress"
         static let summaryActionMenuAllowsMultiple = "summaryActionMenuAllowsMultiple"
+        static let housekeeperDetailsGestureMode = "housekeeperDetailsGestureMode"
         static let personalCartMarkers = "personalCartMarkers"
         static let statusPaletteSaturation = "statusPaletteSaturation"
         static let matrixSpeed = "matrixSpeed"
@@ -31,5 +32,6 @@ extension AppSettingsStore {
         static let developerVIPJellyDefaultEnabledMigration = "developerVIPJellyDefaultEnabledMigration_v94"
         static let selectedHotelID = "selectedHotelID"
         static let housekeepers = "housekeepers"
+        static let cartConsumableCatalog = "cartConsumableCatalog"
     }
 }

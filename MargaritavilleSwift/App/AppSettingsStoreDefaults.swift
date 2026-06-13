@@ -6,6 +6,7 @@ extension AppSettingsStore {
         roomCellGeometry = .roomy
         roomTaskLongPress = true
         summaryActionMenuAllowsMultiple = false
+        housekeeperDetailsGestureMode = .tap
         personalCartMarkers = .default
         statusPaletteSaturation = 1
         matrixSpeed = MatrixRainConfiguration.default.speed
@@ -29,5 +30,6 @@ extension AppSettingsStore {
         developerVIPJellySpeed = 0.75
         selectedHotelID = nil
         housekeepers = MargaritavilleHousekeeperCatalog.defaultHousekeepers
+        cartConsumableCatalog = CartConsumableCatalog.defaultCatalog
     }
 }

@@ -203,6 +203,38 @@ func appSettingsPersistsEditableHousekeepers() throws {
 }
 
 @Test
+func appSettingsPersistsHousekeeperDetailsGestureMode() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.housekeeperDetailsGestureMode = .swipeLeft
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.housekeeperDetailsGestureMode == .swipeLeft)
+}
+
+@Test
+func appSettingsPersistsEditableCartConsumableCatalog() throws {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    let created = try #require(settings.addCartConsumableCatalogItem(named: "Coffee packs"))
+    settings.renameCartConsumableCatalogItem(id: created.id, title: "Coffee kit")
+    settings.removeCartConsumableCatalogItem(id: "washcloth")
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.cartConsumableCatalog.contains { $0.id == created.id && $0.title == "Coffee kit" })
+    #expect(!loaded.cartConsumableCatalog.contains { $0.id == "washcloth" })
+    #expect(loaded.cartConsumableCatalog.contains { $0.id == "bath_towel" })
+}
+
+@Test
 func appSettingsPersistsStatusPaletteSaturation() {
     let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!

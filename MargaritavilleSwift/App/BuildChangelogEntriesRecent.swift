@@ -3,6 +3,17 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (8)",
+            date: "2026-06-13",
+            changes: [
+                "Added configurable housekeeper-name actions on the Margaritaville summary screen: tap, long press, or right-to-left swipe can open the housekeeper cart menu.",
+                "Reused the native cart details flow for housekeeper menus, including voice notes, speech transcription, photo/video capture, and local media viewing.",
+                "Added editable cart supply catalog settings so supply names can be added, renamed, and deleted without losing selected cart quantities.",
+                "Added a quick hold-and-drag radial quantity picker for cart supplies and kept plus/minus controls for precise adjustments.",
+                "Changed setup-screen selected room buttons to use the assigned housekeeper palette; summary room tiles remain status-colored only."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (7)",
             date: "2026-06-13",
             changes: [

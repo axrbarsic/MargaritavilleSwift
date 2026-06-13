@@ -8,6 +8,9 @@ extension AppSettingsStore {
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
         let summaryActionMenuAllowsMultiple = userDefaults.object(forKey: Keys.summaryActionMenuAllowsMultiple) as? Bool ?? false
+        let housekeeperDetailsGestureMode = userDefaults.string(forKey: Keys.housekeeperDetailsGestureMode)
+            .flatMap(HousekeeperDetailsGestureMode.init(rawValue:))
+            ?? .tap
         let personalCartMarkers = Self.loadPersonalCartMarkers(userDefaults: userDefaults)
         let statusPaletteSaturation = userDefaults.object(forKey: Keys.statusPaletteSaturation) as? Double ?? 1
         let matrixSpeed = userDefaults.object(forKey: Keys.matrixSpeed) as? Double
@@ -40,11 +43,13 @@ extension AppSettingsStore {
         let developerVIPJellySpeed = userDefaults.object(forKey: Keys.developerVIPJellySpeed) as? Double ?? 0.75
         let selectedHotelID = userDefaults.string(forKey: Keys.selectedHotelID)
         let housekeepers = Self.loadHousekeepers(userDefaults: userDefaults)
+        let cartConsumableCatalog = Self.loadCartConsumableCatalog(userDefaults: userDefaults)
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
             roomTaskLongPress: roomTaskLongPress,
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,
+            housekeeperDetailsGestureMode: housekeeperDetailsGestureMode,
             personalCartMarkers: personalCartMarkers,
             statusPaletteSaturation: statusPaletteSaturation,
             matrixSpeed: matrixSpeed,
@@ -68,6 +73,7 @@ extension AppSettingsStore {
             developerVIPJellySpeed: developerVIPJellySpeed,
             selectedHotelID: selectedHotelID,
             housekeepers: housekeepers,
+            cartConsumableCatalog: cartConsumableCatalog,
             userDefaults: userDefaults
         )
     }
@@ -114,6 +120,21 @@ extension AppSettingsStore {
             MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
         ) else { return }
         userDefaults.set(data, forKey: Keys.housekeepers)
+    }
+
+    static func loadCartConsumableCatalog(userDefaults: UserDefaults) -> [CartConsumableCatalogItem] {
+        guard let data = userDefaults.data(forKey: Keys.cartConsumableCatalog),
+              let decoded = try? JSONDecoder().decode([CartConsumableCatalogItem].self, from: data)
+        else {
+            return CartConsumableCatalog.defaultCatalog
+        }
+        let normalized = CartConsumableCatalog.normalizedCatalog(decoded)
+        return normalized.isEmpty ? CartConsumableCatalog.defaultCatalog : normalized
+    }
+
+    static func saveCartConsumableCatalog(_ items: [CartConsumableCatalogItem], userDefaults: UserDefaults) {
+        guard let data = try? JSONEncoder().encode(CartConsumableCatalog.normalizedCatalog(items)) else { return }
+        userDefaults.set(data, forKey: Keys.cartConsumableCatalog)
     }
 
     static func normalizedMatrixSpeed(_ value: Double) -> Double {

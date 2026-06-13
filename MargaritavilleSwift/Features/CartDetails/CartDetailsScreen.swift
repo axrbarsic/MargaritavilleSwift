@@ -3,6 +3,7 @@ import SwiftUI
 struct CartDetailsScreen: View {
     let route: CartDetailsRoute
     @Bindable var workSession: WorkSessionStore
+    @Bindable var appSettings: AppSettingsStore
 
     @Environment(\.dismiss) private var dismiss
     @State private var draftNote = ""
@@ -64,11 +65,19 @@ struct CartDetailsScreen: View {
             .buttonStyle(.plain)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Тележка \(route.cartID)")
+                Text(route.title ?? "Тележка \(route.cartID)")
                     .font(.system(size: 36, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.74)
+
+                if let subtitle = route.subtitle {
+                    Text(subtitle)
+                        .font(.system(size: 16, weight: .black, design: .rounded))
+                        .foregroundStyle(OceanKeyTheme.secondaryText)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.74)
+                }
 
                 if let updatedLabel {
                     Text("Обновлено: \(updatedLabel)")
@@ -106,7 +115,11 @@ struct CartDetailsScreen: View {
 
     private var consumablesSection: some View {
         CartDetailsPanel(title: "Расходники") {
-            CartConsumablesSection(cartID: route.cartID, workSession: workSession)
+            CartConsumablesSection(
+                cartID: route.cartID,
+                workSession: workSession,
+                catalog: appSettings.cartConsumableCatalog
+            )
         }
     }
 
@@ -258,6 +271,10 @@ private struct CartDetailsPanel<Content: View>: View {
 }
 
 #Preview {
-    CartDetailsScreen(route: CartDetailsRoute(cartID: 7), workSession: .preview())
+    CartDetailsScreen(
+        route: CartDetailsRoute(cartID: 7),
+        workSession: .preview(),
+        appSettings: AppSettingsStore()
+    )
         .preferredColorScheme(.dark)
 }

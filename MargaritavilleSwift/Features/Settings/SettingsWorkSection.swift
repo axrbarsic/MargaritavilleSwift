@@ -20,10 +20,29 @@ struct SettingsWorkSection: View {
             )
 
             if activeHotel.id == HotelProfile.margaritaville.id {
+                VStack(alignment: .leading, spacing: 8) {
+                    SettingsInfoRow(
+                        title: "Меню уборщицы",
+                        value: appSettings.housekeeperDetailsGestureMode.settingsValue,
+                        systemName: "hand.tap.fill",
+                        subtitle: "Как открывать голос, медиа и расходники по имени на основном экране."
+                    )
+                    Picker("Меню уборщицы", selection: $appSettings.housekeeperDetailsGestureMode) {
+                        ForEach(HousekeeperDetailsGestureMode.allCases) { mode in
+                            Text(mode.title).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: appSettings.housekeeperDetailsGestureMode) { _, _ in
+                        feedback.confirm()
+                    }
+                }
+
                 HousekeeperCatalogEditorSection(
                     appSettings: appSettings,
                     workSession: workSession
                 )
+                CartConsumableCatalogEditorSection(appSettings: appSettings)
                 MargaritavilleCatalogEditorSection(workSession: workSession)
             }
 

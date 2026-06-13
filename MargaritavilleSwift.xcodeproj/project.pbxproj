@@ -41,6 +41,7 @@
 		45F414B1F7BEA5D43C2106BA /* KeychainSecretStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D3F39DAB28CD8F1C0ADAF /* KeychainSecretStore.swift */; };
 		48445FB3B0DF2857653B2BA4 /* MatrixRainSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1CA4620A505A25C40AE681 /* MatrixRainSpriteScene.swift */; };
 		49F46E8F7994A01F4AF2BC2B /* LocalWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DA05CC83B4745C23D5CF2B /* LocalWorkSessionRepository.swift */; };
+		4DE8F62C99818E24EC9B5F6C /* HousekeeperDetailsGestureMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7541150CAB0C6F6C42D43 /* HousekeeperDetailsGestureMode.swift */; };
 		4EE12E17FCBFCBB259E63B24 /* MargaritavilleSwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7EAF0AB7A383AE3A9106C /* MargaritavilleSwiftApp.swift */; };
 		51073EF8C7BC2919DD754DEA /* RoomMediaIndicatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E02D0413E3F9498F0A6F26 /* RoomMediaIndicatorTests.swift */; };
 		529436F3B9A6793FF8BCBBE1 /* SummaryActionMenuExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61FA926449ECE44FBCD523C /* SummaryActionMenuExpansion.swift */; };
@@ -61,6 +62,7 @@
 		69A8841E988B5E262E4F4B38 /* WorkSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02500AE4C2DC733E80B6D690 /* WorkSessionStoreTests.swift */; };
 		6E64F0A59FD3EE6013BB98BA /* VoiceTranscriptionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89917CE612922887A91E731A /* VoiceTranscriptionContracts.swift */; };
 		6F2C27BB68573CA9F2928146 /* PerformanceTelemetryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF87AEBF917C954895FE0CF /* PerformanceTelemetryStoreTests.swift */; };
+		6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */; };
 		7428A12339BD354F950324A1 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35D3835B7B9A121C869C2ED /* WorkSessionStore+Selection.swift */; };
 		74CD34FC39F093A3DE0C4861 /* WorkSessionStore+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1219DB5B1565EA2415741F /* WorkSessionStore+Consumables.swift */; };
 		770F0645064D6215E9630A0C /* AppSettingsStoreDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35755D643E8551F06BBB2CC7 /* AppSettingsStoreDefaults.swift */; };
@@ -86,6 +88,7 @@
 		947CFD926A15733AC0513601 /* WorkSetupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E71287F6A17D24D49088446 /* WorkSetupScreen.swift */; };
 		96431D362B72149E9FFB7932 /* BuildChangelogEntriesArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4FC0D2D5A5B8B44E36C668 /* BuildChangelogEntriesArchive.swift */; };
 		979CD20E7C20BFFF9286D055 /* MediaThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD4C0C2D99682017E86B01 /* MediaThumbnailView.swift */; };
+		97E38557C7F80F3DC044300D /* AppSettingsStore+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */; };
 		9B20D346245F6466A491660E /* AppStorageDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173D3F22AFB14E9E6B54E01 /* AppStorageDirectory.swift */; };
 		9C6C58ED482ED2B45EA44E36 /* PersistentWorkSessionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40C0C481DF98EE976B8212F /* PersistentWorkSessionModels.swift */; };
 		9C7FA9CAB65E9FE7042F4BAD /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD7D041F1C24E096F847BB53 /* SwiftData.framework */; };
@@ -94,6 +97,7 @@
 		A04AD1A78B21F0B1482DB51F /* pressed.wav in Resources */ = {isa = PBXBuildFile; fileRef = C4037F7F53F3633F64EEFCC5 /* pressed.wav */; };
 		A2C1CBB0272EE047A747E96C /* PerformanceTelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95992FEC952AB30262884AD3 /* PerformanceTelemetryStore.swift */; };
 		A34368415E8A43680F1591A2 /* WorkSessionSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46AAE0061939D159850DA0D /* WorkSessionSnapshot.swift */; };
+		A44D337073E3519DDC412D7B /* QuantityRadialPickerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD913D45D9FA6DBC04F5EF8 /* QuantityRadialPickerOverlay.swift */; };
 		A44D37E296285EE217F5D4D9 /* AppleCloudAccountProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863B6B3ABED99907FD811084 /* AppleCloudAccountProbe.swift */; };
 		A49095991B9A15010B447A30 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B9BF6660BF1B2A8F11AAC3 /* OceanKeyTheme.swift */; };
 		A4CD76B55EFC71F0C2CD60F3 /* SettingsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC83A87AC986DD2F264131CB /* SettingsCategory.swift */; };
@@ -219,6 +223,7 @@
 		4A54ACA4EA81D8F149015ABB /* AppSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreTests.swift; sourceTree = "<group>"; };
 		4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalogOverride.swift; sourceTree = "<group>"; };
 		4C1E7F40601F232AE595FD8F /* RoomDayCategoryTimePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryTimePreset.swift; sourceTree = "<group>"; };
+		4EB7541150CAB0C6F6C42D43 /* HousekeeperDetailsGestureMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousekeeperDetailsGestureMode.swift; sourceTree = "<group>"; };
 		500155013123DCA396D6B0A2 /* RoomScheduleSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSelection.swift; sourceTree = "<group>"; };
 		572F782765D50BE3F3214748 /* WorkSessionHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistoryScreen.swift; sourceTree = "<group>"; };
 		5A25BA24E124A1929ED1F4AB /* MargaritavilleSwift.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MargaritavilleSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -228,6 +233,7 @@
 		62DA7C551FAD4EAEA106D52B /* AppBackgroundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundMode.swift; sourceTree = "<group>"; };
 		63F7800BE448B225E72E51C0 /* WorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionRepository.swift; sourceTree = "<group>"; };
 		64AE4DF0581521747F2A5FF2 /* MatrixRainConfigurationEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfigurationEnvironment.swift; sourceTree = "<group>"; };
+		6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumableCatalogEditorSection.swift; sourceTree = "<group>"; };
 		66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumablesSection.swift; sourceTree = "<group>"; };
 		68371E9841837E338DD06D16 /* LoopingVideoBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoBackgroundView.swift; sourceTree = "<group>"; };
 		68AF2FD3A5B8FA58364A6984 /* RoomActionPuzzlePullOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomActionPuzzlePullOverlay.swift; sourceTree = "<group>"; };
@@ -243,6 +249,7 @@
 		728366083E24EDB59090D7B6 /* PersistentWorkSessionMapper+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistentWorkSessionMapper+History.swift"; sourceTree = "<group>"; };
 		72F62A96DC6CBE334A51427F /* MargaritavilleCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleCatalogEditorSection.swift; sourceTree = "<group>"; };
 		74A213E357A08B0F7BDDA6FF /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
+		752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettingsStore+Consumables.swift"; sourceTree = "<group>"; };
 		7BE897AD21156A1CC1B1C6B3 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7BF703659BD4E4ED1F6182C1 /* WorkSessionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistory.swift; sourceTree = "<group>"; };
 		7C9F8F44BA2FF35E45B91E90 /* RoomModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModels.swift; sourceTree = "<group>"; };
@@ -315,6 +322,7 @@
 		E4FA8E89CE6C63D0C66CC676 /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
 		E51B4FE60E28931C8EE6DCC4 /* MargaritavilleSwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MargaritavilleSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA7F7C9BEC062DDDD35BC976 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		ECD913D45D9FA6DBC04F5EF8 /* QuantityRadialPickerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityRadialPickerOverlay.swift; sourceTree = "<group>"; };
 		ED484B471D3B303634E238A3 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		ED941876C1AD586EF8BF8701 /* RoomScheduleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSheet.swift; sourceTree = "<group>"; };
 		F0C47F6F4785A18759A06AB7 /* WorkSessionStore+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+History.swift"; sourceTree = "<group>"; };
@@ -357,6 +365,7 @@
 				A35C7DAEF89C08E0166EA3C0 /* AppIdentity.swift */,
 				3C6C12767830A9F635B402DA /* AppRootView.swift */,
 				ED484B471D3B303634E238A3 /* AppSettingsStore.swift */,
+				752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */,
 				D83CA46C3A8C280C5339339B /* AppSettingsStore+Housekeepers.swift */,
 				35755D643E8551F06BBB2CC7 /* AppSettingsStoreDefaults.swift */,
 				AD79304522A9E5F575E98CB6 /* AppSettingsStoreKeys.swift */,
@@ -425,6 +434,7 @@
 				66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */,
 				865565ED53F967D3C426D546 /* CartDetailsRoute.swift */,
 				A5C3614E48874E7A22359F76 /* CartDetailsScreen.swift */,
+				ECD913D45D9FA6DBC04F5EF8 /* QuantityRadialPickerOverlay.swift */,
 			);
 			path = CartDetails;
 			sourceTree = "<group>";
@@ -555,6 +565,7 @@
 			isa = PBXGroup;
 			children = (
 				B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */,
+				6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */,
 				7E9C8E3CD4055FC66D8C98FC /* DeepSeekLabComponents.swift */,
 				992734E7923F47A3A78219CB /* DeepSeekLabSection.swift */,
 				3DD7A3C53C65D8A0389C6680 /* HousekeeperCatalogEditorSection.swift */,
@@ -627,6 +638,7 @@
 				86F173799160B8EB3595C9C2 /* CartConsumables.swift */,
 				34A0D43579667739D7C3B5C9 /* HotelProfile.swift */,
 				3824B81E67ADEE1DD80DD608 /* HousekeeperCatalog.swift */,
+				4EB7541150CAB0C6F6C42D43 /* HousekeeperDetailsGestureMode.swift */,
 				074267CA6B9705C13E77EB45 /* RoomCatalog.swift */,
 				4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */,
 				DA1E24318FCCCD616C3CC0E5 /* RoomDayCategory.swift */,
@@ -860,6 +872,7 @@
 				EBE82000A7EB5DE59F5D28A7 /* AppBuildInfo.swift in Sources */,
 				FE1A14DE53CDE509FEE9D338 /* AppIdentity.swift in Sources */,
 				A5F7EEA7935BDF9AA1ADB347 /* AppRootView.swift in Sources */,
+				97E38557C7F80F3DC044300D /* AppSettingsStore+Consumables.swift in Sources */,
 				5F46B307037409026E7AC032 /* AppSettingsStore+Housekeepers.swift in Sources */,
 				C66F3197C0E7AC3729D81D4B /* AppSettingsStore.swift in Sources */,
 				770F0645064D6215E9630A0C /* AppSettingsStoreDefaults.swift in Sources */,
@@ -877,6 +890,7 @@
 				22572ABFDC6A79E256B5E8B3 /* BuildChangelogEntriesRecent.swift in Sources */,
 				5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
+				6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */,
 				57770924232FA86DAEC38590 /* CartConsumables.swift in Sources */,
 				C167F43C5EE884A270222EF3 /* CartConsumablesSection.swift in Sources */,
 				365E0104677797C6B2C4872D /* CartDetailsRoute.swift in Sources */,
@@ -891,6 +905,7 @@
 				118A22F74FB47F99097EFF77 /* HotelProfile.swift in Sources */,
 				CCEB3EAFB175EB2191D64B36 /* HousekeeperCatalog.swift in Sources */,
 				65C422BC20A3F6A330E586B3 /* HousekeeperCatalogEditorSection.swift in Sources */,
+				4DE8F62C99818E24EC9B5F6C /* HousekeeperDetailsGestureMode.swift in Sources */,
 				C26D077B5C9D7269C281EA0D /* HousekeeperPalette+Color.swift in Sources */,
 				29CF268B7AF0DE257600A5E1 /* InteractionFeedbackService.swift in Sources */,
 				45F414B1F7BEA5D43C2106BA /* KeychainSecretStore.swift in Sources */,
@@ -918,6 +933,7 @@
 				9C6C58ED482ED2B45EA44E36 /* PersistentWorkSessionModels.swift in Sources */,
 				B47E3E0ADA3CCB9238176303 /* PersonalCartMarkerStrip.swift in Sources */,
 				81651456783FB1669E5E721B /* PersonalCartMarkers.swift in Sources */,
+				A44D337073E3519DDC412D7B /* QuantityRadialPickerOverlay.swift in Sources */,
 				3F91D414A684701980D9BBF6 /* RoomActionMenuLampTransition.swift in Sources */,
 				0D0F65C8BDB5D711C5F9FB53 /* RoomActionPuzzlePullOverlay.swift in Sources */,
 				02231F91390FC6C7831F82C7 /* RoomCatalog.swift in Sources */,
@@ -1087,7 +1103,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1154,7 +1170,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

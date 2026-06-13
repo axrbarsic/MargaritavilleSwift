@@ -182,6 +182,7 @@ struct CartSetupCard: View {
                     dayCategory: nil,
                     dayCategoryTime: nil,
                     showsDayCategory: false,
+                    selectionColor: housekeeper?.palette.color ?? OceanKeyTheme.accent,
                     onTap: { onRoomToggle(room) }
                 )
             }

@@ -564,6 +564,23 @@ func cartCustomConsumableIsStoredWithHistory() {
     #expect(store.history.first?.kind == .cartConsumablesChanged)
 }
 
+@Test
+func cartConsumableQuantityCanCreateItemFromEditableCatalog() {
+    let store = WorkSessionStore.preview()
+
+    store.updateCartConsumableQuantity(
+        itemID: "coffee-kit",
+        title: "Coffee kit",
+        quantity: 6,
+        cartId: 7
+    )
+
+    let item = store.cart(id: 7)?.consumables?.first { $0.id == "coffee-kit" }
+    #expect(item?.title == "Coffee kit")
+    #expect(item?.quantity == 6)
+    #expect(store.history.first?.kind == .cartConsumablesChanged)
+}
+
 private final class RecordingWorkSessionRepository: WorkSessionRepository, @unchecked Sendable {
     private let lock = NSLock()
     private var snapshots: [WorkSessionSnapshot] = []

@@ -52,7 +52,7 @@ struct SummaryScreen: View {
                 .preferredColorScheme(.dark)
         }
         .sheet(item: $cartDetailsRoute) { route in
-            CartDetailsScreen(route: route, workSession: workSession)
+            CartDetailsScreen(route: route, workSession: workSession, appSettings: appSettings)
                 .preferredColorScheme(.dark)
         }
         .sheet(item: $scheduleRoute) { route in
@@ -110,8 +110,12 @@ struct SummaryScreen: View {
                         cart: $cart,
                         territories: workSession.effectiveCatalog,
                         housekeeper: housekeeper(forCart: cart.id),
+                        housekeeperDetailsGestureMode: appSettings.housekeeperDetailsGestureMode,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         statusFilter: activeSimpleCycleStatusFilter,
+                        onOpenCartDetails: { cartID in
+                            openCartDetails(cartID: cartID)
+                        },
                         onAdvance: toggleOpen,
                         onOpenDetails: { roomID, mode in
                             roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
@@ -134,7 +138,7 @@ struct SummaryScreen: View {
                         expandedActionMenuRoomIDs: $expandedActionMenuRoomIDs,
                         onOpenCartDetails: { cartID in
                             expandedActionMenuRoomIDs.removeAll()
-                            cartDetailsRoute = CartDetailsRoute(cartID: cartID)
+                            openCartDetails(cartID: cartID)
                         },
                         onOpenDetails: { roomID, mode in
                             roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
@@ -195,6 +199,16 @@ struct SummaryScreen: View {
 
     private func closeActionMenus() {
         expandedActionMenuRoomIDs.removeAll()
+    }
+
+    private func openCartDetails(cartID: CartSection.ID) {
+        feedback.confirm()
+        expandedActionMenuRoomIDs.removeAll()
+        cartDetailsRoute = CartDetailsRoute(
+            cartID: cartID,
+            title: housekeeper(forCart: cartID)?.displayName,
+            subtitle: workSession.cart(id: cartID)?.building
+        )
     }
 
     private func advanceScheduledRooms(now: Date = Date()) {

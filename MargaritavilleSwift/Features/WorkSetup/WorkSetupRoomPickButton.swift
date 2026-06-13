@@ -8,6 +8,7 @@ struct RoomPickButton: View {
     let dayCategory: RoomDayCategory?
     let dayCategoryTime: Date?
     let showsDayCategory: Bool
+    let selectionColor: Color
     let onTap: () -> Void
 
     var body: some View {
@@ -84,7 +85,7 @@ struct RoomPickButton: View {
         if selected, let dayCategory {
             return OceanKeyTheme.fill(for: dayCategory)
         }
-        return selected ? OceanKeyTheme.accent : OceanKeyTheme.surface.opacity(0.72)
+        return selected ? selectionColor : OceanKeyTheme.surface.opacity(0.72)
     }
 
     private var stroke: Color {

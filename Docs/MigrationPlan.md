@@ -149,6 +149,20 @@ verification.
 - On the Margaritaville setup screen, housekeeper chips are toggles: tapping an
   unselected name creates a work block, and tapping a selected name removes that
   block.
+- Setup-screen selected room buttons use the assigned housekeeper palette so a
+  work block reads as one color family. This palette rule is setup-only:
+  Margaritaville summary room tiles must remain status-colored, not
+  housekeeper-colored.
+- Margaritaville summary housekeeper names open the existing cart details flow
+  for that hidden cart/work block. The trigger is configurable in Settings as a
+  tap, long press, or right-to-left swipe; the details flow owns cart voice
+  notes, speech transcription, photo/video media, and cart supplies.
+- Cart supply names are an editable app-level catalog in Settings. Quantities
+  stay per cart/work block, while catalog renames update the displayed title by
+  stable item id.
+- Cart supply quantity entry should support fast one-handed work: plus/minus
+  remains available, and a hold-and-drag radial quantity picker commits 1...10
+  with native haptic/audio feedback.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.

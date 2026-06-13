@@ -1,5 +1,10 @@
 import Foundation
 
+struct CartConsumableCatalogItem: Codable, Identifiable, Equatable, Sendable {
+    let id: String
+    var title: String
+}
+
 struct CartConsumableItem: Codable, Identifiable, Equatable, Sendable {
     let id: String
     var title: String
@@ -13,19 +18,89 @@ struct CartConsumableItem: Codable, Identifiable, Equatable, Sendable {
 }
 
 enum CartConsumableCatalog {
-    static let defaults: [CartConsumableItem] = [
-        CartConsumableItem(id: "bath_towel", title: "Полотенца банные", quantity: 0),
-        CartConsumableItem(id: "hand_towel", title: "Полотенца ручные", quantity: 0),
-        CartConsumableItem(id: "washcloth", title: "Салфетки", quantity: 0),
-        CartConsumableItem(id: "bath_mat", title: "Коврики", quantity: 0),
-        CartConsumableItem(id: "sheet", title: "Простыни", quantity: 0),
-        CartConsumableItem(id: "pillowcase", title: "Наволочки", quantity: 0)
+    static let defaultCatalog: [CartConsumableCatalogItem] = [
+        CartConsumableCatalogItem(id: "bath_towel", title: "Полотенца банные"),
+        CartConsumableCatalogItem(id: "hand_towel", title: "Полотенца ручные"),
+        CartConsumableCatalogItem(id: "washcloth", title: "Салфетки"),
+        CartConsumableCatalogItem(id: "bath_mat", title: "Коврики"),
+        CartConsumableCatalogItem(id: "sheet", title: "Простыни"),
+        CartConsumableCatalogItem(id: "pillowcase", title: "Наволочки")
     ]
 
-    static func merged(with storedItems: [CartConsumableItem]?) -> [CartConsumableItem] {
+    static let defaults: [CartConsumableItem] = defaultCatalog.map {
+        CartConsumableItem(id: $0.id, title: $0.title, quantity: 0)
+    }
+
+    static func normalizedCatalog(_ items: [CartConsumableCatalogItem]) -> [CartConsumableCatalogItem] {
+        var usedIDs: Set<String> = []
+        return items.compactMap { item in
+            let title = item.title.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !title.isEmpty else { return nil }
+            let preferredID = item.id.trimmingCharacters(in: .whitespacesAndNewlines)
+            let id = uniqueID(
+                preferredID: preferredID.isEmpty ? stableID(for: title) : preferredID,
+                usedIDs: &usedIDs
+            )
+            return CartConsumableCatalogItem(id: id, title: title)
+        }
+    }
+
+    static func makeItem(title: String, existing: [CartConsumableCatalogItem]) -> CartConsumableCatalogItem? {
+        let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !title.isEmpty else { return nil }
+        var usedIDs = Set(existing.map(\.id))
+        return CartConsumableCatalogItem(
+            id: uniqueID(preferredID: stableID(for: title), usedIDs: &usedIDs),
+            title: title
+        )
+    }
+
+    static func merged(
+        with storedItems: [CartConsumableItem]?,
+        catalog: [CartConsumableCatalogItem] = defaultCatalog
+    ) -> [CartConsumableItem] {
+        let normalizedCatalog = normalizedCatalog(catalog)
         let storedByID = Dictionary(uniqueKeysWithValues: (storedItems ?? []).map { ($0.id, $0) })
-        let defaultIDs = Set(defaults.map(\.id))
-        let customItems = (storedItems ?? []).filter { !defaultIDs.contains($0.id) }
-        return defaults.map { storedByID[$0.id] ?? $0 } + customItems
+        let catalogIDs = Set(normalizedCatalog.map(\.id))
+        let catalogItems = normalizedCatalog.map { catalogItem -> CartConsumableItem in
+            var stored = storedByID[catalogItem.id] ?? CartConsumableItem(
+                id: catalogItem.id,
+                title: catalogItem.title,
+                quantity: 0
+            )
+            stored.title = catalogItem.title
+            return stored
+        }
+        let activeLegacyItems = (storedItems ?? []).filter {
+            !catalogIDs.contains($0.id) && ($0.quantity > 0 || $0.completedAt != nil)
+        }
+        return catalogItems + activeLegacyItems
+    }
+
+    private static func stableID(for title: String) -> String {
+        let folded = title
+            .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "en_US_POSIX"))
+            .lowercased()
+        let scalars = folded.unicodeScalars.map { scalar -> Character in
+            CharacterSet.alphanumerics.contains(scalar) ? Character(scalar) : "-"
+        }
+        let collapsed = String(scalars)
+            .split(separator: "-")
+            .joined(separator: "-")
+        return collapsed.isEmpty ? "consumable" : collapsed
+    }
+
+    private static func uniqueID(preferredID: String, usedIDs: inout Set<String>) -> String {
+        if !usedIDs.contains(preferredID) {
+            usedIDs.insert(preferredID)
+            return preferredID
+        }
+        var suffix = 2
+        while usedIDs.contains("\(preferredID)-\(suffix)") {
+            suffix += 1
+        }
+        let id = "\(preferredID)-\(suffix)"
+        usedIDs.insert(id)
+        return id
     }
 }
