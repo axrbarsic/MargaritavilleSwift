@@ -97,7 +97,6 @@
 		A04AD1A78B21F0B1482DB51F /* pressed.wav in Resources */ = {isa = PBXBuildFile; fileRef = C4037F7F53F3633F64EEFCC5 /* pressed.wav */; };
 		A2C1CBB0272EE047A747E96C /* PerformanceTelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95992FEC952AB30262884AD3 /* PerformanceTelemetryStore.swift */; };
 		A34368415E8A43680F1591A2 /* WorkSessionSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46AAE0061939D159850DA0D /* WorkSessionSnapshot.swift */; };
-		A44D337073E3519DDC412D7B /* QuantityRadialPickerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD913D45D9FA6DBC04F5EF8 /* QuantityRadialPickerOverlay.swift */; };
 		A44D37E296285EE217F5D4D9 /* AppleCloudAccountProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863B6B3ABED99907FD811084 /* AppleCloudAccountProbe.swift */; };
 		A49095991B9A15010B447A30 /* OceanKeyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B9BF6660BF1B2A8F11AAC3 /* OceanKeyTheme.swift */; };
 		A4CD76B55EFC71F0C2CD60F3 /* SettingsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC83A87AC986DD2F264131CB /* SettingsCategory.swift */; };
@@ -322,7 +321,6 @@
 		E4FA8E89CE6C63D0C66CC676 /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
 		E51B4FE60E28931C8EE6DCC4 /* MargaritavilleSwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MargaritavilleSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA7F7C9BEC062DDDD35BC976 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		ECD913D45D9FA6DBC04F5EF8 /* QuantityRadialPickerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityRadialPickerOverlay.swift; sourceTree = "<group>"; };
 		ED484B471D3B303634E238A3 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		ED941876C1AD586EF8BF8701 /* RoomScheduleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSheet.swift; sourceTree = "<group>"; };
 		F0C47F6F4785A18759A06AB7 /* WorkSessionStore+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+History.swift"; sourceTree = "<group>"; };
@@ -434,7 +432,6 @@
 				66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */,
 				865565ED53F967D3C426D546 /* CartDetailsRoute.swift */,
 				A5C3614E48874E7A22359F76 /* CartDetailsScreen.swift */,
-				ECD913D45D9FA6DBC04F5EF8 /* QuantityRadialPickerOverlay.swift */,
 			);
 			path = CartDetails;
 			sourceTree = "<group>";
@@ -933,7 +930,6 @@
 				9C6C58ED482ED2B45EA44E36 /* PersistentWorkSessionModels.swift in Sources */,
 				B47E3E0ADA3CCB9238176303 /* PersonalCartMarkerStrip.swift in Sources */,
 				81651456783FB1669E5E721B /* PersonalCartMarkers.swift in Sources */,
-				A44D337073E3519DDC412D7B /* QuantityRadialPickerOverlay.swift in Sources */,
 				3F91D414A684701980D9BBF6 /* RoomActionMenuLampTransition.swift in Sources */,
 				0D0F65C8BDB5D711C5F9FB53 /* RoomActionPuzzlePullOverlay.swift in Sources */,
 				02231F91390FC6C7831F82C7 /* RoomCatalog.swift in Sources */,
@@ -1103,7 +1099,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1170,7 +1166,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (10)",
+            date: "2026-06-13",
+            changes: [
+                "Removed the cart supply radial quantity picker and returned supply quantities to the classic inline minus/count/plus controls.",
+                "Removed the hidden long-press gesture from supply rows so moving between different supply items cannot leave a previous item selected or stuck.",
+                "Kept supply completion and quantity controls independent for each row."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (9)",
             date: "2026-06-13",
             changes: [

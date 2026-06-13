@@ -160,10 +160,10 @@ verification.
 - Cart supply names are an editable app-level catalog in Settings. Quantities
   stay per cart/work block, while catalog renames update the displayed title by
   stable item id.
-- Cart supply quantity entry should support fast one-handed work: plus/minus
-  remains available, and a large full-screen radial quantity picker commits
-  1...10 with native haptic/audio feedback. The picker owns its touch target
-  directly instead of depending on a small row-bound drag gesture.
+- Cart supply quantity entry uses the classic inline controls only:
+  decrement, visible quantity, and increment. The removed radial picker should
+  not be reintroduced without a separate redesign because row-level hold
+  gestures caused sticky selection while moving between supply rows.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.

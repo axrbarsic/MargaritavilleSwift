@@ -4,7 +4,6 @@ struct CartConsumablesSection: View {
     let cartID: CartSection.ID
     @Bindable var workSession: WorkSessionStore
     let catalog: [CartConsumableCatalogItem]
-    let onQuantityPickerRequested: (CartConsumableItem) -> Void
     @Environment(\.interactionFeedback) private var feedback
 
     private var items: [CartConsumableItem] {
@@ -29,10 +28,6 @@ struct CartConsumablesSection: View {
                             title: item.title,
                             cartId: cartID
                         )
-                    },
-                    onQuickPickerRequested: {
-                        feedback.holdStart()
-                        onQuantityPickerRequested(item)
                     }
                 )
             }
@@ -62,7 +57,6 @@ private struct CartConsumableRow: View {
     let onDecrement: () -> Void
     let onIncrement: () -> Void
     let onToggleComplete: () -> Void
-    let onQuickPickerRequested: () -> Void
 
     var body: some View {
         HStack(spacing: 10) {
@@ -109,7 +103,6 @@ private struct CartConsumableRow: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .stroke(strokeColor, lineWidth: 1)
         }
-        .onLongPressGesture(minimumDuration: 0.18, perform: onQuickPickerRequested)
     }
 
     private var rowBackground: Color {
@@ -158,8 +151,7 @@ private struct CartConsumableRow: View {
     CartConsumablesSection(
         cartID: 7,
         workSession: .preview(),
-        catalog: CartConsumableCatalog.defaultCatalog,
-        onQuantityPickerRequested: { _ in }
+        catalog: CartConsumableCatalog.defaultCatalog
     )
         .padding()
         .background(OceanKeyTheme.background)
