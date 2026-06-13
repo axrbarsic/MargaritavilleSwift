@@ -153,6 +153,13 @@ verification.
   work block reads as one color family. This palette rule is setup-only:
   Margaritaville summary room tiles must remain status-colored, not
   housekeeper-colored.
+- Margaritaville summary housekeeper names use the assigned housekeeper palette
+  for the name pill/text, while the room tiles underneath remain strictly
+  status-colored.
+- Margaritaville summary groups rooms by housekeeper. If one housekeeper is
+  assigned rooms across multiple buildings/floors, the summary shows that
+  housekeeper once, keeps every assigned room in one grid, and lists all work
+  locations on the right side of the header.
 - Margaritaville summary housekeeper names open the existing cart details flow
   for that hidden cart/work block. The trigger is configurable in Settings as a
   tap, long press, or right-to-left swipe; the details flow owns cart voice
@@ -167,6 +174,9 @@ verification.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.
+- Margaritaville summary progress must not be shown as a fraction. The header
+  uses three separate counters: yellow total rooms, green ready/cleaned rooms,
+  and red remaining rooms. Status filter chips remain separate controls.
 - Interaction feedback now uses the stronger native feedback path: UIKit
   notification haptics are routed through the shared interaction service in
   addition to impact/selection feedback and bundled local sounds.

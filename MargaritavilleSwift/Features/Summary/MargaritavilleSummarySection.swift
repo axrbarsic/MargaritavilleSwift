@@ -1,13 +1,11 @@
 import SwiftUI
 
 struct MargaritavilleSummarySection: View {
-    @Binding var cart: CartSection
-    let territories: [Territory]
+    let section: MargaritavilleSummaryHousekeeperSection
     let housekeeper: Housekeeper?
     let housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode
     let statusPaletteSaturation: Double
-    let statusFilter: RoomStatus?
-    let onOpenCartDetails: (CartSection.ID) -> Void
+    let onOpenCartDetails: (CartSection.ID, String) -> Void
     let onAdvance: (RoomCell.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onVIPToggle: (RoomCell.ID) -> Void
@@ -21,37 +19,31 @@ struct MargaritavilleSummarySection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            ForEach(roomGroups) { group in
-                roomGroup(group)
+            groupHeader
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(section.rooms) { room in
+                    tile(for: room)
+                }
             }
         }
         .padding(.vertical, 8)
     }
 
-    private func roomGroup(_ group: MargaritavilleSummaryRoomGroup) -> some View {
-        VStack(alignment: .leading, spacing: 9) {
-            groupHeader(group)
-            LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(group.rooms) { room in
-                    tile(for: room)
-                }
-            }
-        }
-    }
-
-    private func groupHeader(_ group: MargaritavilleSummaryRoomGroup) -> some View {
+    private var groupHeader: some View {
         HStack(alignment: .firstTextBaseline) {
             HousekeeperSummaryNameButton(
                 title: housekeeper?.displayName ?? "Уборщица",
                 palette: housekeeper?.palette.color ?? OceanKeyTheme.accent,
                 gestureMode: housekeeperDetailsGestureMode,
-                action: { onOpenCartDetails(cart.id) }
+                action: { onOpenCartDetails(section.primaryCartID, section.locationLabel) }
             )
             Spacer()
-            Text(group.label)
+            Text(section.locationLabel)
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.58)
         }
         .font(.system(size: 22, weight: .black, design: .rounded))
-        .foregroundStyle(.white)
         .padding(.horizontal, 4)
     }
 
@@ -66,19 +58,6 @@ struct MargaritavilleSummarySection: View {
             onSchedule: { onSchedule(room.id) }
         )
     }
-
-    private var roomGroups: [MargaritavilleSummaryRoomGroup] {
-        MargaritavilleSummaryRoomGrouping.groups(
-            rooms: filteredRooms,
-            territories: territories,
-            fallbackLabel: cart.building
-        )
-    }
-
-    private var filteredRooms: [RoomCell] {
-        guard let statusFilter else { return cart.rooms }
-        return cart.rooms.filter { $0.status(in: .simpleCycle) == statusFilter }
-    }
 }
 
 private struct HousekeeperSummaryNameButton: View {
@@ -91,14 +70,18 @@ private struct HousekeeperSummaryNameButton: View {
 
     var body: some View {
         Text(title)
+            .font(.system(size: 25, weight: .black, design: .rounded))
             .lineLimit(1)
-            .minimumScaleFactor(0.68)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(palette.opacity(0.18), in: Capsule())
+            .minimumScaleFactor(0.62)
+            .foregroundStyle(palette)
+            .shadow(color: .black.opacity(0.92), radius: 1.6, x: 0, y: 1)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(.black.opacity(0.34), in: Capsule())
+            .background(palette.opacity(0.20), in: Capsule())
             .overlay {
                 Capsule()
-                    .stroke(palette.opacity(0.44), lineWidth: 1)
+                    .stroke(palette.opacity(0.72), lineWidth: 1.5)
             }
             .offset(x: swipeOffset)
             .contentShape(Rectangle())

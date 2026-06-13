@@ -29,7 +29,6 @@ struct SummaryScreen: View {
             VStack(spacing: 18) {
                 SummaryHeader(
                     counts: workSession.counts,
-                    progressLabel: summaryProgressLabel,
                     statusChips: summaryStatusChips,
                     activeStatusFilter: activeSimpleCycleStatusFilter,
                     onStatusFilterChanged: setSimpleCycleStatusFilter,
@@ -105,16 +104,14 @@ struct SummaryScreen: View {
     private var summarySections: some View {
         if workSession.hotelProfile.summaryLayout == .squareGrid4 {
             LazyVStack(spacing: 20) {
-                ForEach($workSession.carts) { $cart in
+                ForEach(margaritavilleSummarySections) { section in
                     MargaritavilleSummarySection(
-                        cart: $cart,
-                        territories: workSession.effectiveCatalog,
-                        housekeeper: housekeeper(forCart: cart.id),
+                        section: section,
+                        housekeeper: housekeeper(id: section.housekeeperID),
                         housekeeperDetailsGestureMode: appSettings.housekeeperDetailsGestureMode,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
-                        statusFilter: activeSimpleCycleStatusFilter,
-                        onOpenCartDetails: { cartID in
-                            openCartDetails(cartID: cartID)
+                        onOpenCartDetails: { cartID, subtitle in
+                            openCartDetails(cartID: cartID, subtitle: subtitle)
                         },
                         onAdvance: toggleOpen,
                         onOpenDetails: { roomID, mode in
@@ -153,9 +150,13 @@ struct SummaryScreen: View {
         }
     }
 
-    private var summaryProgressLabel: String? {
-        guard workSession.hotelProfile.workflowKind == .simpleCycle else { return nil }
-        return "\(workSession.counts.completed)/\(workSession.counts.total)"
+    private var margaritavilleSummarySections: [MargaritavilleSummaryHousekeeperSection] {
+        MargaritavilleSummaryRoomGrouping.housekeeperSections(
+            carts: workSession.carts,
+            selection: workSession.selection,
+            hotelProfile: workSession.hotelProfile,
+            statusFilter: activeSimpleCycleStatusFilter
+        )
     }
 
     private var summaryStatusChips: [SummaryHeader.StatusChip] {
@@ -201,13 +202,13 @@ struct SummaryScreen: View {
         expandedActionMenuRoomIDs.removeAll()
     }
 
-    private func openCartDetails(cartID: CartSection.ID) {
+    private func openCartDetails(cartID: CartSection.ID, subtitle: String? = nil) {
         feedback.confirm()
         expandedActionMenuRoomIDs.removeAll()
         cartDetailsRoute = CartDetailsRoute(
             cartID: cartID,
             title: housekeeper(forCart: cartID)?.displayName,
-            subtitle: workSession.cart(id: cartID)?.building
+            subtitle: subtitle ?? workSession.cart(id: cartID)?.building
         )
     }
 
@@ -220,6 +221,10 @@ struct SummaryScreen: View {
 
     private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {
         appSettings.housekeeper(id: workSession.housekeeperID(forCart: cartNumber))
+    }
+
+    private func housekeeper(id: HousekeeperID?) -> Housekeeper? {
+        appSettings.housekeeper(id: id)
     }
 }
 

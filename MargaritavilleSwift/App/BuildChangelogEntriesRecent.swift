@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (11)",
+            date: "2026-06-13",
+            changes: [
+                "Made Margaritaville summary housekeeper names larger for faster reading on the move.",
+                "Applied each housekeeper's assigned palette color to the summary name pill while keeping room tiles status-colored.",
+                "Replaced the summary progress fraction with separate total, completed, and remaining counters: yellow total, green ready, red remaining.",
+                "Merged Margaritaville summary rooms by housekeeper so one person working multiple buildings or floors appears once with all assigned locations listed."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (10)",
             date: "2026-06-13",
             changes: [

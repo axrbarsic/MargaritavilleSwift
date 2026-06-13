@@ -10,7 +10,6 @@ struct SummaryHeader: View {
     }
 
     let counts: SummaryCounts
-    var progressLabel: String?
     var statusChips: [StatusChip] = []
     var activeStatusFilter: RoomStatus? = nil
     var onStatusFilterChanged: ((RoomStatus?) -> Void)? = nil
@@ -66,29 +65,28 @@ struct SummaryHeader: View {
 
     @ViewBuilder
     private var centerStats: some View {
-        if let progressLabel, !statusChips.isEmpty {
-            HStack(spacing: 6) {
-                Text(progressLabel)
-                    .font(.system(size: 24, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
+        HStack(spacing: statusChips.isEmpty ? 12 : 7) {
+            progressCount("\(counts.total)", color: OceanKeyTheme.pending)
+            progressCount("\(counts.completed)", color: OceanKeyTheme.ready)
+            progressCount("\(counts.remaining)", color: Color(hex: 0xFF3B30))
+
+            if !statusChips.isEmpty {
                 ForEach(statusChips) { chip in
                     statusChipButton(chip)
                 }
             }
-            .lineLimit(1)
-            .minimumScaleFactor(0.58)
-        } else {
-            HStack(spacing: 12) {
-                Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
-                Text("\(counts.completed)").foregroundStyle(OceanKeyTheme.ready)
-                Text("\(counts.remaining)").foregroundStyle(Color(hex: 0xFF4A4A))
-            }
-            .font(.system(size: 22, weight: .black, design: .rounded))
-            .monospacedDigit()
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
         }
+        .lineLimit(1)
+        .minimumScaleFactor(0.58)
+    }
+
+    private func progressCount(_ value: String, color: Color) -> some View {
+        Text(value)
+            .font(.system(size: 25, weight: .black, design: .rounded))
+            .monospacedDigit()
+            .foregroundStyle(color)
+            .shadow(color: .black.opacity(0.82), radius: 1.4, x: 0, y: 1)
+            .frame(minWidth: 26)
     }
 
     private func statusChipButton(_ chip: StatusChip) -> some View {
