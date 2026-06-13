@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (12)",
+            date: "2026-06-13",
+            changes: [
+                "Restored safe horizontal margins on the Margaritaville summary grid so four large room tiles no longer press into or clip past the screen edges.",
+                "Kept the larger summary room numbers while constraining the grid columns to stable one-handed tile widths."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (11)",
             date: "2026-06-13",
             changes: [

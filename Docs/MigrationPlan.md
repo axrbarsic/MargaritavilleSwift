@@ -174,6 +174,9 @@ verification.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.
+- Margaritaville summary room grids must keep explicit horizontal breathing
+  room. Large square tiles should be constrained by the grid, not allowed to
+  push the first/last column into the screen edges.
 - Margaritaville summary progress must not be shown as a fraction. The header
   uses three separate counters: yellow total rooms, green ready/cleaned rooms,
   and red remaining rooms. Status filter chips remain separate controls.

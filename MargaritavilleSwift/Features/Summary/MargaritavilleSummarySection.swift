@@ -12,10 +12,9 @@ struct MargaritavilleSummarySection: View {
     let onReset: (RoomCell.ID) -> Void
     let onSchedule: (RoomCell.ID) -> Void
 
-    private let columns = Array(
-        repeating: GridItem(.flexible(), spacing: 8),
-        count: 4
-    )
+    private let columns = [
+        GridItem(.adaptive(minimum: 82, maximum: 98), spacing: 8)
+    ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -26,6 +25,7 @@ struct MargaritavilleSummarySection: View {
                 }
             }
         }
+        .padding(.horizontal, 8)
         .padding(.vertical, 8)
     }
 
@@ -44,7 +44,6 @@ struct MargaritavilleSummarySection: View {
                 .minimumScaleFactor(0.58)
         }
         .font(.system(size: 22, weight: .black, design: .rounded))
-        .padding(.horizontal, 4)
     }
 
     private func tile(for room: RoomCell) -> some View {
@@ -199,7 +198,7 @@ private struct MargaritavilleRoomTile: View {
                     .minimumScaleFactor(0.62)
             }
             .foregroundStyle(OceanKeyTheme.roomForeground)
-            .padding(.horizontal, 6)
+            .padding(.horizontal, 4)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fit)
