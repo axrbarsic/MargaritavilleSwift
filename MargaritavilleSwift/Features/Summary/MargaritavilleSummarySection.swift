@@ -3,6 +3,7 @@ import SwiftUI
 struct MargaritavilleSummarySection: View {
     @Binding var cart: CartSection
     let territories: [Territory]
+    let housekeeper: Housekeeper?
     let statusPaletteSaturation: Double
     let statusFilter: RoomStatus?
     let onAdvance: (RoomCell.ID) -> Void
@@ -38,12 +39,11 @@ struct MargaritavilleSummarySection: View {
 
     private func groupHeader(_ group: MargaritavilleSummaryRoomGroup) -> some View {
         HStack(alignment: .firstTextBaseline) {
-            Text("Тележка \(cart.id)")
+            Text(housekeeper?.displayName ?? "Уборщица")
+                .lineLimit(1)
+                .minimumScaleFactor(0.68)
             Spacer()
             Text(group.label)
-            Text("\(group.rooms.count)")
-                .monospacedDigit()
-                .foregroundStyle(OceanKeyTheme.secondaryText)
         }
         .font(.system(size: 22, weight: .black, design: .rounded))
         .foregroundStyle(.white)

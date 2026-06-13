@@ -11,7 +11,6 @@ struct WorkSetupScreen: View {
 
     @State private var selectedCartNumber = 1
     @State private var isSettingsPresented = false
-    @State private var housekeeperPickerRoute: WorkSetupHousekeeperPickerRoute?
 
     var body: some View {
         ZStack {
@@ -31,18 +30,15 @@ struct WorkSetupScreen: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        CartNumberPicker(
-                            selectedCarts: Set(workSession.selectedCartNumbers),
-                            focusedCart: $selectedCartNumber,
-                            housekeeper: { cartNumber in
-                                housekeeper(forCart: cartNumber)
-                            },
-                            onToggleCart: toggleCart
+                        HousekeeperWorkPicker(
+                            housekeepers: appSettings.housekeepers,
+                            selectedIDs: selectedHousekeeperIDs,
+                            focusedID: focusedHousekeeperID,
+                            onSelect: activateHousekeeper
                         )
 
                         ForEach(workSession.selectedCartNumbers, id: \.self) { cartNumber in
                             CartSetupCard(
-                                cartNumber: cartNumber,
                                 territory: effectiveTerritory(forCart: cartNumber),
                                 selectedRooms: workSession.selectedRooms(forCart: cartNumber),
                                 blockedRooms: blockedRooms(forCart: cartNumber),
@@ -55,10 +51,8 @@ struct WorkSetupScreen: View {
                                     currentTerritory: effectiveTerritory(forCart: cartNumber)
                                 ),
                                 onFocus: { selectedCartNumber = cartNumber },
-                                onHousekeeperTap: {
-                                    feedback.tap()
-                                    selectedCartNumber = cartNumber
-                                    housekeeperPickerRoute = WorkSetupHousekeeperPickerRoute(cartNumber: cartNumber)
+                                onRemove: {
+                                    removeWorkItem(cartNumber)
                                 },
                                 onTerritoryChanged: { territory in
                                     feedback.confirm()
@@ -93,40 +87,6 @@ struct WorkSetupScreen: View {
             )
                 .preferredColorScheme(.dark)
         }
-        .sheet(item: $housekeeperPickerRoute) { route in
-            WorkSetupHousekeeperPickerSheet(
-                cartNumber: route.cartNumber,
-                housekeepers: appSettings.housekeepers,
-                selectedID: workSession.housekeeperID(forCart: route.cartNumber),
-                onSelect: { housekeeperID in
-                    feedback.confirm()
-                    workSession.setCartHousekeeper(
-                        cartNumber: route.cartNumber,
-                        housekeeperID: housekeeperID
-                    )
-                    housekeeperPickerRoute = nil
-                },
-                onClear: {
-                    feedback.deselect()
-                    workSession.setCartHousekeeper(
-                        cartNumber: route.cartNumber,
-                        housekeeperID: nil
-                    )
-                    housekeeperPickerRoute = nil
-                }
-            )
-            .preferredColorScheme(.dark)
-        }
-    }
-
-    private func toggleCart(_ cartNumber: Int) {
-        if workSession.selectedCartNumbers.contains(cartNumber) {
-            feedback.deselect()
-        } else {
-            feedback.select()
-        }
-        selectedCartNumber = cartNumber
-        workSession.toggleCartSelection(cartNumber)
     }
 
     private func openSettings() {
@@ -189,6 +149,50 @@ struct WorkSetupScreen: View {
 
     private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {
         appSettings.housekeeper(id: workSession.housekeeperID(forCart: cartNumber))
+    }
+
+    private var selectedHousekeeperIDs: Set<HousekeeperID> {
+        Set(workSession.selectedCartNumbers.compactMap { workSession.housekeeperID(forCart: $0) })
+    }
+
+    private var focusedHousekeeperID: HousekeeperID? {
+        workSession.housekeeperID(forCart: selectedCartNumber)
+    }
+
+    private func activateHousekeeper(_ housekeeper: Housekeeper) {
+        if let cartNumber = cartNumber(forHousekeeperID: housekeeper.id) {
+            feedback.tap()
+            selectedCartNumber = cartNumber
+            return
+        }
+
+        guard let cartNumber = firstAvailableCartNumber else {
+            feedback.invalid()
+            return
+        }
+
+        feedback.select()
+        selectedCartNumber = cartNumber
+        workSession.toggleCartSelection(cartNumber)
+        workSession.setCartHousekeeper(cartNumber: cartNumber, housekeeperID: housekeeper.id)
+    }
+
+    private func removeWorkItem(_ cartNumber: Int) {
+        guard workSession.selectedCartNumbers.contains(cartNumber) else { return }
+        feedback.deselect()
+        workSession.toggleCartSelection(cartNumber)
+        selectedCartNumber = workSession.selectedCartNumbers.first ?? WorkSessionSelectionRules.cartRange.lowerBound
+    }
+
+    private func cartNumber(forHousekeeperID housekeeperID: HousekeeperID) -> Int? {
+        workSession.selectedCartNumbers.first { cartNumber in
+            workSession.housekeeperID(forCart: cartNumber) == housekeeperID
+        }
+    }
+
+    private var firstAvailableCartNumber: Int? {
+        let selected = Set(workSession.selectedCartNumbers)
+        return WorkSessionSelectionRules.cartRange.first { !selected.contains($0) }
     }
 }
 

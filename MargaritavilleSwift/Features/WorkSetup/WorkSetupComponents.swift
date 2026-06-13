@@ -56,47 +56,54 @@ struct WorkSetupHeader: View {
     }
 }
 
-struct CartNumberPicker: View {
-    let selectedCarts: Set<Int>
-    @Binding var focusedCart: Int
-    let housekeeper: (Int) -> Housekeeper?
-    let onToggleCart: (Int) -> Void
+struct HousekeeperWorkPicker: View {
+    let housekeepers: [Housekeeper]
+    let selectedIDs: Set<HousekeeperID>
+    let focusedID: HousekeeperID?
+    let onSelect: (Housekeeper) -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                ForEach(Array(WorkSessionSelectionRules.cartRange), id: \.self) { cartNumber in
-                    cartButton(cartNumber)
+                ForEach(housekeepers) { housekeeper in
+                    housekeeperButton(housekeeper)
                 }
             }
             .padding(.vertical, 2)
         }
     }
 
-    private func cartButton(_ cartNumber: Int) -> some View {
-        let isSelected = selectedCarts.contains(cartNumber)
-        let assignedHousekeeper = housekeeper(cartNumber)
+    private func housekeeperButton(_ housekeeper: Housekeeper) -> some View {
+        let isSelected = selectedIDs.contains(housekeeper.id)
+        let isFocused = focusedID == housekeeper.id
         return Button {
-            onToggleCart(cartNumber)
+            onSelect(housekeeper)
         } label: {
-            VStack(spacing: 2) {
-                Text("\(cartNumber)")
-                    .font(.system(size: 23, weight: .black, design: .rounded))
-                    .monospacedDigit()
-                if isSelected, let assignedHousekeeper {
-                    Text(assignedHousekeeper.displayName)
-                        .font(.system(size: 10, weight: .black, design: .rounded))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.62)
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(housekeeper.palette.color)
+                    .frame(width: 14, height: 14)
+                    .overlay {
+                        Circle()
+                            .stroke(.white.opacity(0.72), lineWidth: 1)
+                    }
+                Text(housekeeper.displayName)
+                    .font(.system(size: 22, weight: .black, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.68)
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 18, weight: .black))
                 }
             }
-            .frame(width: isSelected ? 74 : 56, height: 56)
+            .padding(.horizontal, 16)
+            .frame(height: 64)
             .foregroundStyle(isSelected ? OceanKeyTheme.roomForeground : .white)
-            .background(isSelected ? (assignedHousekeeper?.palette.color ?? OceanKeyTheme.accent) : OceanKeyTheme.surface.opacity(0.82))
-            .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .background(isSelected ? housekeeper.palette.color : OceanKeyTheme.surface.opacity(0.82))
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                    .stroke(focusedCart == cartNumber ? .white.opacity(0.78) : OceanKeyTheme.accent.opacity(0.20), lineWidth: 1.5)
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(isFocused ? .white.opacity(0.82) : housekeeper.palette.color.opacity(0.34), lineWidth: 1.5)
                 }
         }
         .buttonStyle(.plain)
@@ -104,7 +111,6 @@ struct CartNumberPicker: View {
 }
 
 struct CartSetupCard: View {
-    let cartNumber: Int
     let territory: Territory
     let selectedRooms: Set<RoomID>
     let blockedRooms: [RoomID: Int]
@@ -114,17 +120,13 @@ struct CartSetupCard: View {
     let housekeeper: Housekeeper?
     let offTerritorySelectionGroups: [WorkSetupTerritorySelectionGroup]
     let onFocus: () -> Void
-    let onHousekeeperTap: () -> Void
+    let onRemove: () -> Void
     let onTerritoryChanged: (Territory) -> Void
     let onRoomToggle: (RoomID) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 13) {
+        VStack(alignment: .leading, spacing: 14) {
             header
-            HousekeeperAssignmentButton(
-                housekeeper: housekeeper,
-                onTap: onHousekeeperTap
-            )
             TerritoryPicker(
                 territory: territory,
                 territories: territories,
@@ -145,10 +147,25 @@ struct CartSetupCard: View {
     }
 
     private var header: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text("Тележка \(cartNumber)")
+        HStack(alignment: .center, spacing: 10) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(housekeeper?.displayName ?? "Уборщица")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.68)
+                Text(territory.label)
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .foregroundStyle(OceanKeyTheme.secondaryText)
+            }
             Spacer()
-            Text(territory.label)
+            Button(action: onRemove) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 15, weight: .black))
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                    .background(OceanKeyTheme.surface.opacity(0.74))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .buttonStyle(.plain)
         }
         .font(.system(size: 24, weight: .black, design: .rounded))
         .foregroundStyle(.white)
@@ -180,7 +197,7 @@ struct CartSetupCard: View {
         case .fullWidthBars:
             [GridItem(.adaptive(minimum: 66), spacing: 8)]
         case .squareGrid4:
-            Array(repeating: GridItem(.flexible(minimum: 72), spacing: 10), count: 4)
+            Array(repeating: GridItem(.flexible(minimum: 74), spacing: 10), count: 4)
         }
     }
 
@@ -196,7 +213,7 @@ struct CartSetupCard: View {
 
 struct EmptySetupHint: View {
     var body: some View {
-        Text("Выбери одну или несколько тележек сверху.")
+        Text("Выбери уборщицу сверху.")
             .font(.system(size: 18, weight: .black, design: .rounded))
             .foregroundStyle(OceanKeyTheme.secondaryText)
             .frame(maxWidth: .infinity, minHeight: 140)

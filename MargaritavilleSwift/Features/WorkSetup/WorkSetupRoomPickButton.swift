@@ -33,10 +33,13 @@ struct RoomPickButton: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: fixedHeight)
-            .aspectRatio(layout == .squareGrid4 ? 1 : nil, contentMode: .fill)
             .foregroundStyle(foreground)
             .background(background)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(stroke, lineWidth: selected ? 1.4 : 1)
+            }
         }
         .buttonStyle(.plain)
         .disabled(blockedByCart != nil)
@@ -44,15 +47,15 @@ struct RoomPickButton: View {
 
     private var roomNumber: some View {
         Text(RoomCatalog.displayRoomID(room, compactLetteredLabels: true))
-            .font(.system(size: layout == .squareGrid4 ? 24 : 18, weight: .black, design: .rounded))
+            .font(.system(size: layout == .squareGrid4 ? 32 : 20, weight: .black, design: .rounded))
             .monospacedDigit()
             .lineLimit(1)
-            .minimumScaleFactor(0.74)
-            .padding(.horizontal, 4)
+            .minimumScaleFactor(0.62)
+            .padding(.horizontal, 5)
     }
 
     private var fixedHeight: CGFloat? {
-        layout == .squareGrid4 ? nil : 48
+        layout == .squareGrid4 ? 64 : 48
     }
 
     private func categoryBadge(_ dayCategory: RoomDayCategory) -> some View {
@@ -81,7 +84,12 @@ struct RoomPickButton: View {
         if selected, let dayCategory {
             return OceanKeyTheme.fill(for: dayCategory)
         }
-        return selected ? OceanKeyTheme.accent : .black.opacity(0.20)
+        return selected ? OceanKeyTheme.accent : OceanKeyTheme.surface.opacity(0.72)
+    }
+
+    private var stroke: Color {
+        if blockedByCart != nil { return OceanKeyTheme.secondaryText.opacity(0.16) }
+        return selected ? .white.opacity(0.55) : OceanKeyTheme.accent.opacity(0.16)
     }
 
     private static let timeFormatter: DateFormatter = {

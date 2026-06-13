@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (6)",
+            date: "2026-06-13",
+            changes: [
+                "Changed Margaritaville setup to start from housekeeper names instead of visible cart numbers.",
+                "Removed cart-number labels from Margaritaville setup cards and summary sections; cart IDs now stay internal.",
+                "Simplified Margaritaville summary group headers to show the housekeeper and territory only, without the confusing room-count number beside A/B floor labels.",
+                "Redesigned the Margaritaville setup cards for one-handed use with larger housekeeper chips, building/floor controls, and room-number buttons."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (5)",
             date: "2026-06-13",
             changes: [

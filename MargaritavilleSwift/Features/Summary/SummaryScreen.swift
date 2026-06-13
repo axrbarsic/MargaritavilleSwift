@@ -109,6 +109,7 @@ struct SummaryScreen: View {
                     MargaritavilleSummarySection(
                         cart: $cart,
                         territories: workSession.effectiveCatalog,
+                        housekeeper: housekeeper(forCart: cart.id),
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         statusFilter: activeSimpleCycleStatusFilter,
                         onAdvance: toggleOpen,
@@ -201,6 +202,10 @@ struct SummaryScreen: View {
         for roomID in openedRoomIDs {
             scheduleNotifications.cancelRoom(roomID)
         }
+    }
+
+    private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {
+        appSettings.housekeeper(id: workSession.housekeeperID(forCart: cartNumber))
     }
 }
 

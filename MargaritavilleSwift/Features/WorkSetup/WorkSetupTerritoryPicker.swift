@@ -14,27 +14,20 @@ struct TerritoryPicker: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Секция")
-                .font(.system(size: 12, weight: .black, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-
+        VStack(alignment: .leading, spacing: 13) {
             HStack(spacing: 10) {
+                pickerLabel("Здание")
                 ForEach(buildings, id: \.self) { building in
                     pickerChip(
-                        "Секция \(building.label)",
+                        building.label,
                         selected: territory.building == building,
                         action: { update(building: building, floor: territory.floor) }
                     )
                 }
             }
 
-            Text("Этаж")
-                .font(.system(size: 12, weight: .black, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-                .padding(.top, 2)
-
             HStack(spacing: 10) {
+                pickerLabel("Этаж")
                 ForEach(floors, id: \.self) { floor in
                     pickerChip(
                         "\(floor)",
@@ -46,6 +39,15 @@ struct TerritoryPicker: View {
         }
     }
 
+    private func pickerLabel(_ title: String) -> some View {
+        Text(title)
+            .font(.system(size: 15, weight: .black, design: .rounded))
+            .foregroundStyle(OceanKeyTheme.secondaryText)
+            .lineLimit(1)
+            .minimumScaleFactor(0.72)
+            .frame(width: 70, alignment: .leading)
+    }
+
     private func update(building: Building, floor: Int) {
         if let next = territories.first(where: { $0.building == building && $0.floor == floor }) {
             onChanged(next)
@@ -55,16 +57,16 @@ struct TerritoryPicker: View {
     private func pickerChip(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: 19, weight: .black, design: .rounded))
+                .font(.system(size: 24, weight: .black, design: .rounded))
                 .lineLimit(1)
                 .minimumScaleFactor(0.74)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
+                .frame(height: 62)
                 .foregroundStyle(selected ? OceanKeyTheme.roomForeground : .white)
                 .background(selected ? OceanKeyTheme.accent : OceanKeyTheme.surface.opacity(0.58))
-                .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .stroke(selected ? .white.opacity(0.72) : OceanKeyTheme.accent.opacity(0.18), lineWidth: 1.2)
                 }
         }

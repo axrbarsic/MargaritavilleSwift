@@ -13,7 +13,9 @@ Simulator unless explicitly allowed.
 
 1. Main summary screen
    - Header count strip and left/right controls.
-   - Cart header: `Тележка N` on the left, territory/building on the right.
+   - Margaritaville setup/summary headers must use the assigned housekeeper as
+     the visible work unit. Cart numbers remain internal persistence IDs and
+     must not be shown as the primary label.
    - Room cell status colors, spacing, typography, S/L/B task controls.
    - Right swipe action menu, one open menu by default.
    - Room timeline chips and schedule badge.

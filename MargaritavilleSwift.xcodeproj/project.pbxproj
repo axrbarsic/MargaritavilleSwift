@@ -49,7 +49,6 @@
 		57770924232FA86DAEC38590 /* CartConsumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F173799160B8EB3595C9C2 /* CartConsumables.swift */; };
 		5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */; };
 		5B362AB2BEFA62BC0564A6F3 /* RoomScheduleSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED941876C1AD586EF8BF8701 /* RoomScheduleSheet.swift */; };
-		5DC0601925040F71D8AB25C3 /* WorkSetupHousekeeperPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C93D65917F3D20E508CC6ED /* WorkSetupHousekeeperPicker.swift */; };
 		5EB4819E24605BE4D2C6CBF0 /* SettingsBackgroundSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA56FD083D6393E29591EE87 /* SettingsBackgroundSection.swift */; };
 		5F46B307037409026E7AC032 /* AppSettingsStore+Housekeepers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CA46C3A8C280C5339339B /* AppSettingsStore+Housekeepers.swift */; };
 		6152C87ADB52CC454480CF9B /* WorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7800BE448B225E72E51C0 /* WorkSessionRepository.swift */; };
@@ -180,7 +179,6 @@
 		09564378AD3EA6BC5209586B /* AIVisualPresetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIVisualPresetStoreTests.swift; sourceTree = "<group>"; };
 		09FFF2E981558A4D75D6A1DB /* TVStaticNoiseBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVStaticNoiseBackgroundView.swift; sourceTree = "<group>"; };
 		0C545284E1F3A0F2AFCE5208 /* MargaritavillePresetBackupDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavillePresetBackupDocument.swift; sourceTree = "<group>"; };
-		0C93D65917F3D20E508CC6ED /* WorkSetupHousekeeperPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupHousekeeperPicker.swift; sourceTree = "<group>"; };
 		0F5D1474B882395BE293F19D /* VoiceTranscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionService.swift; sourceTree = "<group>"; };
 		0FA8009600BBC5EAFA5E2642 /* AppleSyncConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncConfiguration.swift; sourceTree = "<group>"; };
 		147C808E88696B5035D32889 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
@@ -380,7 +378,6 @@
 			children = (
 				F76EEEFE502C58ACD0739FDA /* RoomDayCategoryControls.swift */,
 				8B96EE57A187E2FCB22119A1 /* WorkSetupComponents.swift */,
-				0C93D65917F3D20E508CC6ED /* WorkSetupHousekeeperPicker.swift */,
 				6F4AA8395909F3304C7952B2 /* WorkSetupRoomPickButton.swift */,
 				3E71287F6A17D24D49088446 /* WorkSetupScreen.swift */,
 				FFE85CE8AB3F67AE52F07C5C /* WorkSetupTerritoryPicker.swift */,
@@ -976,7 +973,6 @@
 				379D17C85B0EBD7A5B7BC322 /* WorkSessionStore+SimpleCycle.swift in Sources */,
 				C78DA3701B2EDCACA9000557 /* WorkSessionStore.swift in Sources */,
 				F9EB724E474A47F7CB41CA2C /* WorkSetupComponents.swift in Sources */,
-				5DC0601925040F71D8AB25C3 /* WorkSetupHousekeeperPicker.swift in Sources */,
 				D386394F284524E81B532306 /* WorkSetupRoomPickButton.swift in Sources */,
 				947CFD926A15733AC0513601 /* WorkSetupScreen.swift in Sources */,
 				24A9653A75E6C4A6DAA18551 /* WorkSetupTerritoryPicker.swift in Sources */,
@@ -1087,7 +1083,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1154,7 +1150,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

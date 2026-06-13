@@ -130,6 +130,14 @@ verification.
   Margaritaville sheet photos. Names can be added, renamed, deleted, and given
   distinct color palettes; cart assignments persist with work-session selection
   data and are not hardcoded to cart numbers.
+- Margaritaville setup and summary now expose housekeeper identity as the
+  primary work unit. Cart numbers remain internal persistence keys only; the UI
+  starts from housekeeper names, setup cards show the assigned name, and summary
+  group headers show housekeeper plus A/B floor territory without extra room
+  counts beside the floor label.
+- Margaritaville setup cards are intentionally one-handed: no in-card cart
+  number picker or assignment sheet, larger housekeeper chips, larger A/B and
+  1/2/3 controls, and room buttons sized for fast on-the-go selection.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.
