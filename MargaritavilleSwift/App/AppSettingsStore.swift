@@ -65,6 +65,12 @@ final class AppSettingsStore {
         }
     }
 
+    var housekeepers: [Housekeeper] {
+        didSet {
+            Self.saveHousekeepers(housekeepers, userDefaults: userDefaults)
+        }
+    }
+
     var statusPaletteSaturation: Double {
         get { storedStatusPaletteSaturation }
         set {
@@ -261,6 +267,7 @@ final class AppSettingsStore {
         developerVIPJellyEnabled: Bool = true,
         developerVIPJellySpeed: Double = 0.75,
         selectedHotelID: String? = nil,
+        housekeepers: [Housekeeper] = MargaritavilleHousekeeperCatalog.defaultHousekeepers,
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
@@ -289,6 +296,7 @@ final class AppSettingsStore {
         self.developerVIPFlickerEnabled = developerVIPFlickerEnabled
         self.developerVIPJellyEnabled = developerVIPJellyEnabled
         self.selectedHotelID = selectedHotelID
+        self.housekeepers = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
         self.userDefaults = userDefaults
     }
 

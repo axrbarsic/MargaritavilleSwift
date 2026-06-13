@@ -4,6 +4,7 @@ struct MargaritavilleSummarySection: View {
     @Binding var cart: CartSection
     let territories: [Territory]
     let statusPaletteSaturation: Double
+    let statusFilter: RoomStatus?
     let onAdvance: (RoomCell.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onVIPToggle: (RoomCell.ID) -> Void
@@ -63,10 +64,15 @@ struct MargaritavilleSummarySection: View {
 
     private var roomGroups: [MargaritavilleSummaryRoomGroup] {
         MargaritavilleSummaryRoomGrouping.groups(
-            rooms: cart.rooms,
+            rooms: filteredRooms,
             territories: territories,
             fallbackLabel: cart.building
         )
+    }
+
+    private var filteredRooms: [RoomCell] {
+        guard let statusFilter else { return cart.rooms }
+        return cart.rooms.filter { $0.status(in: .simpleCycle) == statusFilter }
     }
 }
 
@@ -122,19 +128,21 @@ private struct MargaritavilleRoomTile: View {
             feedback.confirm()
             onAdvance()
         } label: {
-            VStack(spacing: 4) {
+            VStack(spacing: 8) {
                 Text(room.id)
-                    .font(.system(size: 28, weight: .black, design: .rounded))
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.55)
-                Text(timeLabel)
-                    .font(.system(size: 11, weight: .black, design: .rounded))
+                    .font(.system(size: 38, weight: .black, design: .rounded))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.58)
+                Text(timeLabel)
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.68)
             }
             .foregroundStyle(OceanKeyTheme.roomForeground)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 12)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fit)
             .background(fill)

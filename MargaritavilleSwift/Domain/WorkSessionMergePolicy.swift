@@ -27,6 +27,10 @@ enum WorkSessionMergePolicy {
             .union(remote.cartBindings.keys)
             .union(local.cartBindingUpdatedAt.keys)
             .union(remote.cartBindingUpdatedAt.keys)
+            .union(local.cartHousekeeperIDs.keys)
+            .union(remote.cartHousekeeperIDs.keys)
+            .union(local.cartHousekeeperUpdatedAt.keys)
+            .union(remote.cartHousekeeperUpdatedAt.keys)
 
         for cart in cartNumbers {
             let useRemote = shouldUseRemote(
@@ -45,6 +49,24 @@ enum WorkSessionMergePolicy {
                     result.cartBindings[cart] = binding
                 }
                 result.cartBindingUpdatedAt[cart] = local.cartBindingUpdatedAt[cart]
+            }
+
+            let useRemoteHousekeeper = shouldUseRemote(
+                localAt: local.cartHousekeeperUpdatedAt[cart],
+                remoteAt: remote.cartHousekeeperUpdatedAt[cart],
+                localExists: local.cartHousekeeperIDs[cart] != nil || local.cartHousekeeperUpdatedAt[cart] != nil,
+                remoteExists: remote.cartHousekeeperIDs[cart] != nil || remote.cartHousekeeperUpdatedAt[cart] != nil
+            )
+            if useRemoteHousekeeper {
+                if result.cartBindings[cart] != nil, let housekeeperID = remote.cartHousekeeperIDs[cart] {
+                    result.cartHousekeeperIDs[cart] = housekeeperID
+                }
+                result.cartHousekeeperUpdatedAt[cart] = remote.cartHousekeeperUpdatedAt[cart]
+            } else {
+                if result.cartBindings[cart] != nil, let housekeeperID = local.cartHousekeeperIDs[cart] {
+                    result.cartHousekeeperIDs[cart] = housekeeperID
+                }
+                result.cartHousekeeperUpdatedAt[cart] = local.cartHousekeeperUpdatedAt[cart]
             }
         }
 

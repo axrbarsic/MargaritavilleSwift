@@ -66,6 +66,8 @@ final class PersistentCatalogOverride {
 final class PersistentCartBinding {
     var cartNumber: Int = 0
     var territoryID: String = ""
+    var housekeeperID: String?
+    var housekeeperUpdatedAt: Date?
     var isSelected: Bool?
     var updatedAt: Date?
     var session: PersistentWorkSession?
@@ -73,11 +75,15 @@ final class PersistentCartBinding {
     init(
         cartNumber: Int,
         territoryID: String,
+        housekeeperID: String? = nil,
+        housekeeperUpdatedAt: Date? = nil,
         isSelected: Bool? = true,
         updatedAt: Date? = nil
     ) {
         self.cartNumber = cartNumber
         self.territoryID = territoryID
+        self.housekeeperID = housekeeperID
+        self.housekeeperUpdatedAt = housekeeperUpdatedAt
         self.isSelected = isSelected
         self.updatedAt = updatedAt
     }

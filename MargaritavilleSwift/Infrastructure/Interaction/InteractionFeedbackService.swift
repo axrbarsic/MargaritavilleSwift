@@ -52,6 +52,7 @@ final class InteractionFeedbackService {
     private let light = UIImpactFeedbackGenerator(style: .light)
     private let medium = UIImpactFeedbackGenerator(style: .medium)
     private let heavy = UIImpactFeedbackGenerator(style: .heavy)
+    private let notification = UINotificationFeedbackGenerator()
 
     func tap(soundPackV2: Bool = false, hapticsV2: Bool = false) {
         light.impactOccurred(intensity: hapticsV2 ? 0.42 : 0.55)
@@ -63,6 +64,9 @@ final class InteractionFeedbackService {
 
     func confirm(soundPackV2: Bool = false, hapticsV2: Bool = false) {
         medium.impactOccurred(intensity: hapticsV2 ? 0.96 : 0.82)
+        if hapticsV2 {
+            notification.notificationOccurred(.success)
+        }
         sounds.playSelect(variant: soundPackV2 ? .confirm : .plain)
         prepare()
     }
@@ -86,11 +90,17 @@ final class InteractionFeedbackService {
 
     func holdWarning(hapticsV2: Bool = false) {
         light.impactOccurred(intensity: hapticsV2 ? 0.95 : 0.7)
+        if hapticsV2 {
+            notification.notificationOccurred(.warning)
+        }
         prepare()
     }
 
     func holdCommit(soundPackV2: Bool = false, hapticsV2: Bool = false) {
         heavy.impactOccurred(intensity: hapticsV2 ? 1.0 : 0.92)
+        if hapticsV2 {
+            notification.notificationOccurred(.success)
+        }
         sounds.playSelect(variant: soundPackV2 ? .commit : .plain)
         prepare()
     }
@@ -109,6 +119,9 @@ final class InteractionFeedbackService {
 
     func invalid(soundPackV2: Bool = false, hapticsV2: Bool = false) {
         light.impactOccurred(intensity: hapticsV2 ? 0.18 : 0.3)
+        if hapticsV2 {
+            notification.notificationOccurred(.error)
+        }
         sounds.playDeselect(variant: soundPackV2 ? .invalid : .plain)
         prepare()
     }
@@ -118,6 +131,7 @@ final class InteractionFeedbackService {
         light.prepare()
         medium.prepare()
         heavy.prepare()
+        notification.prepare()
     }
 }
 

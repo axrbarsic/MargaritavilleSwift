@@ -28,5 +28,6 @@ extension AppSettingsStore {
         developerVIPJellyEnabled = true
         developerVIPJellySpeed = 0.75
         selectedHotelID = nil
+        housekeepers = MargaritavilleHousekeeperCatalog.defaultHousekeepers
     }
 }

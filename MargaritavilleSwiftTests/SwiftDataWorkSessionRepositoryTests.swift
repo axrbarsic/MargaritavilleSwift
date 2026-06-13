@@ -170,6 +170,8 @@ private func makeMargaritavilleTestSnapshot() -> WorkSessionSnapshot {
         schemaVersion: 1,
         selection: WorkSessionSelectionState(
             cartBindings: [1: WorkSessionCartBinding(cartNumber: 1, territoryID: "A1")],
+            cartHousekeeperIDs: [1: "ketty"],
+            cartHousekeeperUpdatedAt: [1: selectedAt],
             cartRoomSelections: [1: ["101"]],
             workdayLocked: true,
             workdayLockUpdatedAt: selectedAt
@@ -315,6 +317,13 @@ private func makePersistentTestSnapshot() -> WorkSessionSnapshot {
                 7: WorkSessionCartBinding(cartNumber: 7, territoryID: "A3")
             ],
             cartBindingUpdatedAt: [
+                7: selectionAt,
+                9: removedSelectionAt
+            ],
+            cartHousekeeperIDs: [
+                7: "rosalie"
+            ],
+            cartHousekeeperUpdatedAt: [
                 7: selectionAt,
                 9: removedSelectionAt
             ],

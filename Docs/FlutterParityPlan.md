@@ -244,3 +244,16 @@ Simulator unless explicitly allowed.
 - Margaritaville summary now splits a single cart's rooms into separate
   building/floor grid islands, matching the reference requirement for visible
   grouped sections.
+- Margaritaville setup now starts with cart and housekeeper identity, then
+  section/floor/room input. The first screen intentionally no longer shows
+  Due Out/Stayover/Departed/time chips because those are not part of entering
+  the daily room list.
+- Settings now has an editable Margaritaville housekeeper catalog seeded from
+  the sheet photos, including per-name color palettes and removal that clears
+  affected cart assignments.
+- Margaritaville summary status chips are larger and can filter the visible
+  square tiles by status color. Tile room numbers and bottom time labels were
+  enlarged for quick reading on iPhone.
+- Native tactile feedback is stronger and centralized: confirmation, warning,
+  invalid, selection, and hold interactions go through the shared iOS haptic
+  service rather than ad hoc view code.

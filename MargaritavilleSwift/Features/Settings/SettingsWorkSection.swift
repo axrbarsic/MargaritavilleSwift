@@ -20,6 +20,10 @@ struct SettingsWorkSection: View {
             )
 
             if activeHotel.id == HotelProfile.margaritaville.id {
+                HousekeeperCatalogEditorSection(
+                    appSettings: appSettings,
+                    workSession: workSession
+                )
                 MargaritavilleCatalogEditorSection(workSession: workSession)
             }
 

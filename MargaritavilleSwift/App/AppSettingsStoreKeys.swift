@@ -30,5 +30,6 @@ extension AppSettingsStore {
         static let developerVIPJellySpeed = "developerVIPBreathingSpeed"
         static let developerVIPJellyDefaultEnabledMigration = "developerVIPJellyDefaultEnabledMigration_v94"
         static let selectedHotelID = "selectedHotelID"
+        static let housekeepers = "housekeepers"
     }
 }

@@ -39,15 +39,23 @@ enum PersistentWorkSessionMapper {
     private static func selection(from session: PersistentWorkSession) -> WorkSessionSelectionState {
         var bindings: [Int: WorkSessionCartBinding] = [:]
         var bindingUpdatedAt: [Int: Date] = [:]
+        var housekeeperIDs: [Int: HousekeeperID] = [:]
+        var housekeeperUpdatedAt: [Int: Date] = [:]
         for binding in session.cartBindings ?? [] {
             if let updatedAt = binding.updatedAt {
                 bindingUpdatedAt[binding.cartNumber] = updatedAt
+            }
+            if let housekeeperUpdated = binding.housekeeperUpdatedAt {
+                housekeeperUpdatedAt[binding.cartNumber] = housekeeperUpdated
             }
             if binding.isSelected != false, !binding.territoryID.isEmpty {
                 bindings[binding.cartNumber] = WorkSessionCartBinding(
                     cartNumber: binding.cartNumber,
                     territoryID: binding.territoryID
                 )
+                if let housekeeperID = MargaritavilleHousekeeperCatalog.normalizedID(binding.housekeeperID) {
+                    housekeeperIDs[binding.cartNumber] = housekeeperID
+                }
             }
         }
         var groupedRooms: [Int: Set<RoomID>] = [:]
@@ -65,6 +73,8 @@ enum PersistentWorkSessionMapper {
         return WorkSessionSelectionState(
             cartBindings: bindings,
             cartBindingUpdatedAt: bindingUpdatedAt,
+            cartHousekeeperIDs: housekeeperIDs,
+            cartHousekeeperUpdatedAt: housekeeperUpdatedAt,
             cartRoomSelections: groupedRooms,
             roomSelectionUpdatedAt: roomUpdatedAt,
             workdayLocked: session.workdayLocked,
@@ -153,12 +163,17 @@ enum PersistentWorkSessionMapper {
         context: ModelContext
     ) {
         (session.cartBindings ?? []).forEach { context.delete($0) }
-        let cartNumbers = Set(selection.cartBindings.keys).union(selection.cartBindingUpdatedAt.keys)
+        let cartNumbers = Set(selection.cartBindings.keys)
+            .union(selection.cartBindingUpdatedAt.keys)
+            .union(selection.cartHousekeeperIDs.keys)
+            .union(selection.cartHousekeeperUpdatedAt.keys)
         session.cartBindings = cartNumbers.sorted().compactMap { cartNumber in
             if let binding = selection.cartBindings[cartNumber] {
                 let record = PersistentCartBinding(
                     cartNumber: cartNumber,
                     territoryID: binding.territoryID,
+                    housekeeperID: selection.cartHousekeeperIDs[cartNumber],
+                    housekeeperUpdatedAt: selection.cartHousekeeperUpdatedAt[cartNumber],
                     isSelected: true,
                     updatedAt: selection.cartBindingUpdatedAt[cartNumber]
                 )
@@ -168,6 +183,8 @@ enum PersistentWorkSessionMapper {
             let record = PersistentCartBinding(
                 cartNumber: cartNumber,
                 territoryID: "",
+                housekeeperID: nil,
+                housekeeperUpdatedAt: selection.cartHousekeeperUpdatedAt[cartNumber],
                 isSelected: false,
                 updatedAt: selection.cartBindingUpdatedAt[cartNumber]
             )

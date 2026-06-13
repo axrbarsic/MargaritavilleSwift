@@ -12,6 +12,8 @@ struct SummaryHeader: View {
     let counts: SummaryCounts
     var progressLabel: String?
     var statusChips: [StatusChip] = []
+    var activeStatusFilter: RoomStatus? = nil
+    var onStatusFilterChanged: ((RoomStatus?) -> Void)? = nil
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
     @Environment(\.interactionFeedback) private var feedback
@@ -67,24 +69,15 @@ struct SummaryHeader: View {
         if let progressLabel, !statusChips.isEmpty {
             HStack(spacing: 6) {
                 Text(progressLabel)
-                    .font(.system(size: 18, weight: .black, design: .rounded))
+                    .font(.system(size: 24, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 ForEach(statusChips) { chip in
-                    Text("\(chip.count)")
-                        .font(.system(size: 14, weight: .black, design: .rounded))
-                        .monospacedDigit()
-                        .foregroundStyle(.black)
-                        .frame(minWidth: 24, minHeight: 22)
-                        .background(OceanKeyTheme.fill(
-                            for: chip.status,
-                            usesPurpleScheduled: chip.usesPurpleScheduled
-                        ))
-                        .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                    statusChipButton(chip)
                 }
             }
             .lineLimit(1)
-            .minimumScaleFactor(0.62)
+            .minimumScaleFactor(0.58)
         } else {
             HStack(spacing: 12) {
                 Text("\(counts.total)").foregroundStyle(OceanKeyTheme.pending)
@@ -96,6 +89,32 @@ struct SummaryHeader: View {
             .lineLimit(1)
             .minimumScaleFactor(0.7)
         }
+    }
+
+    private func statusChipButton(_ chip: StatusChip) -> some View {
+        let isActive = activeStatusFilter == chip.status
+        let fill = OceanKeyTheme.fill(
+            for: chip.status,
+            usesPurpleScheduled: chip.usesPurpleScheduled
+        )
+        return Button {
+            feedback.tap()
+            onStatusFilterChanged?(isActive ? nil : chip.status)
+        } label: {
+            Text("\(chip.count)")
+                .font(.system(size: 20, weight: .black, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(.black)
+                .frame(minWidth: 38, minHeight: 34)
+                .background(fill.opacity(activeStatusFilter == nil || isActive ? 1 : 0.48))
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .stroke(isActive ? .white.opacity(0.9) : .clear, lineWidth: 2)
+                }
+        }
+        .buttonStyle(.plain)
+        .disabled(onStatusFilterChanged == nil)
     }
 
 }

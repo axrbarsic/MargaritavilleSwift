@@ -13,6 +13,10 @@ extension WorkSessionStore {
         selection.rooms(forCart: cartNumber)
     }
 
+    func housekeeperID(forCart cartNumber: Int) -> HousekeeperID? {
+        selection.housekeeperID(forCart: cartNumber)
+    }
+
     func blockedRooms(forCart cartNumber: Int, territory: Territory) -> [RoomID: Int] {
         selection.blockedRooms(forCart: cartNumber, territory: territory)
     }
@@ -36,6 +40,35 @@ extension WorkSessionStore {
         reconcileCartsAfterSelectionChange(
             result,
             title: "Тележка \(cartNumber): зона \(territory.id)",
+            happenedAt: changedAt
+        )
+        return result
+    }
+
+    @discardableResult
+    func setCartHousekeeper(
+        cartNumber: Int,
+        housekeeperID: HousekeeperID?
+    ) -> WorkSessionSelectionCommandResult {
+        let changedAt = Date()
+        let result = selection.setHousekeeper(housekeeperID, cartNumber: cartNumber, changedAt: changedAt)
+        reconcileCartsAfterSelectionChange(
+            result,
+            title: "Тележка \(cartNumber): уборщица изменена",
+            happenedAt: changedAt
+        )
+        return result
+    }
+
+    @discardableResult
+    func removeHousekeeperAssignments(
+        housekeeperID: HousekeeperID
+    ) -> WorkSessionSelectionCommandResult {
+        let changedAt = Date()
+        let result = selection.removeHousekeeperAssignments(housekeeperID: housekeeperID, changedAt: changedAt)
+        reconcileCartsAfterSelectionChange(
+            result,
+            title: "Уборщица удалена из назначений",
             happenedAt: changedAt
         )
         return result

@@ -59,11 +59,12 @@ struct WorkSetupHeader: View {
 struct CartNumberPicker: View {
     let selectedCarts: Set<Int>
     @Binding var focusedCart: Int
+    let housekeeper: (Int) -> Housekeeper?
     let onToggleCart: (Int) -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 9) {
+            HStack(spacing: 10) {
                 ForEach(Array(WorkSessionSelectionRules.cartRange), id: \.self) { cartNumber in
                     cartButton(cartNumber)
                 }
@@ -73,19 +74,29 @@ struct CartNumberPicker: View {
     }
 
     private func cartButton(_ cartNumber: Int) -> some View {
-        Button {
+        let isSelected = selectedCarts.contains(cartNumber)
+        let assignedHousekeeper = housekeeper(cartNumber)
+        return Button {
             onToggleCart(cartNumber)
         } label: {
-            Text("\(cartNumber)")
-                .font(.system(size: 18, weight: .black, design: .rounded))
-                .monospacedDigit()
-                .frame(width: 48, height: 48)
-                .foregroundStyle(selectedCarts.contains(cartNumber) ? OceanKeyTheme.roomForeground : .white)
-                .background(selectedCarts.contains(cartNumber) ? OceanKeyTheme.accent : OceanKeyTheme.surface.opacity(0.82))
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(focusedCart == cartNumber ? .white.opacity(0.74) : OceanKeyTheme.accent.opacity(0.20), lineWidth: 1.5)
+            VStack(spacing: 2) {
+                Text("\(cartNumber)")
+                    .font(.system(size: 23, weight: .black, design: .rounded))
+                    .monospacedDigit()
+                if isSelected, let assignedHousekeeper {
+                    Text(assignedHousekeeper.displayName)
+                        .font(.system(size: 10, weight: .black, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.62)
+                }
+            }
+            .frame(width: isSelected ? 74 : 56, height: 56)
+            .foregroundStyle(isSelected ? OceanKeyTheme.roomForeground : .white)
+            .background(isSelected ? (assignedHousekeeper?.palette.color ?? OceanKeyTheme.accent) : OceanKeyTheme.surface.opacity(0.82))
+            .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .stroke(focusedCart == cartNumber ? .white.opacity(0.78) : OceanKeyTheme.accent.opacity(0.20), lineWidth: 1.5)
                 }
         }
         .buttonStyle(.plain)
@@ -100,41 +111,26 @@ struct CartSetupCard: View {
     let isFocused: Bool
     let territories: [Territory]
     let layout: HotelSummaryLayout
-    let dayCategoriesEnabled: Bool
-    let activeDayCategory: RoomDayCategory
-    let dayCategoryFilter: RoomDayCategory?
-    let dayCategoryTimePreset: RoomDayCategoryTimePreset?
-    let dayCategoryCounts: RoomDayCategoryCounts
+    let housekeeper: Housekeeper?
     let offTerritorySelectionGroups: [WorkSetupTerritorySelectionGroup]
-    let roomCategory: (RoomID) -> RoomDayCategory?
-    let roomCategoryTime: (RoomID) -> Date?
-    let onActiveDayCategoryChanged: (RoomDayCategory) -> Void
-    let onDayCategoryFilterChanged: (RoomDayCategory?) -> Void
-    let onDayCategoryTimePresetChanged: (RoomDayCategoryTimePreset?) -> Void
     let onFocus: () -> Void
+    let onHousekeeperTap: () -> Void
     let onTerritoryChanged: (Territory) -> Void
     let onRoomToggle: (RoomID) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 13) {
             header
+            HousekeeperAssignmentButton(
+                housekeeper: housekeeper,
+                onTap: onHousekeeperTap
+            )
             TerritoryPicker(
                 territory: territory,
                 territories: territories,
                 onChanged: onTerritoryChanged
             )
             WorkSetupTerritorySelectionSummary(groups: offTerritorySelectionGroups)
-            if dayCategoriesEnabled {
-                RoomDayCategoryControls(
-                    activeCategory: activeDayCategory,
-                    filter: dayCategoryFilter,
-                    activeTimePreset: dayCategoryTimePreset,
-                    categoryCounts: dayCategoryCounts,
-                    onActiveChanged: onActiveDayCategoryChanged,
-                    onFilterChanged: onDayCategoryFilterChanged,
-                    onTimePresetChanged: onDayCategoryTimePresetChanged
-                )
-            }
             roomGrid
         }
         .padding(14)
@@ -166,9 +162,9 @@ struct CartSetupCard: View {
                     selected: selectedRooms.contains(room),
                     blockedByCart: blockedRooms[room],
                     layout: layout,
-                    dayCategory: roomCategory(room),
-                    dayCategoryTime: roomCategoryTime(room),
-                    showsDayCategory: dayCategoriesEnabled,
+                    dayCategory: nil,
+                    dayCategoryTime: nil,
+                    showsDayCategory: false,
                     onTap: { onRoomToggle(room) }
                 )
             }
@@ -176,10 +172,7 @@ struct CartSetupCard: View {
     }
 
     private var visibleRooms: [RoomID] {
-        guard let dayCategoryFilter else { return territory.rooms }
-        return territory.rooms.filter { room in
-            selectedRooms.contains(room) && roomCategory(room) == dayCategoryFilter
-        }
+        territory.rooms
     }
 
     private var roomGridColumns: [GridItem] {

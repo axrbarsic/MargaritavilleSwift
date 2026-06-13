@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (3)",
+            date: "2026-06-12",
+            changes: [
+                "Rebuilt Margaritaville setup around cart, housekeeper, section, floor, and room selection, removing day-category/time clutter from the first screen.",
+                "Added editable housekeeper names and individual color palettes in Settings, with assignments persisted per cart.",
+                "Made summary status chips tappable filters and enlarged square room numbers/times for on-the-move readability.",
+                "Strengthened native iPhone haptic feedback for confirmations, warnings, invalid actions, and hold commits."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (2)",
             date: "2026-06-12",
             changes: [

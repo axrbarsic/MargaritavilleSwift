@@ -48,7 +48,7 @@ struct AppRootView: View {
         .environment(\.experimentalVIPJellySpeed, appSettings.developerVIPJellySpeed)
         .environment(
             \.interactionFeedback,
-            .live(interactionFeedbackService)
+            .live(interactionFeedbackService, soundPackV2: true, hapticsV2: true)
         )
         .preferredColorScheme(.dark)
     }

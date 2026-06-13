@@ -16,6 +16,7 @@ struct SummaryScreen: View {
     @State private var cartDetailsRoute: CartDetailsRoute?
     @State private var scheduleRoute: RoomScheduleRoute?
     @State private var isSettingsPresented = false
+    @State private var activeSimpleCycleStatusFilter: RoomStatus?
 
     var body: some View {
         ZStack {
@@ -30,6 +31,8 @@ struct SummaryScreen: View {
                     counts: workSession.counts,
                     progressLabel: summaryProgressLabel,
                     statusChips: summaryStatusChips,
+                    activeStatusFilter: activeSimpleCycleStatusFilter,
+                    onStatusFilterChanged: setSimpleCycleStatusFilter,
                     onOpenSettings: openSettings,
                     onOpenSelection: openSelection
                 )
@@ -107,6 +110,7 @@ struct SummaryScreen: View {
                         cart: $cart,
                         territories: workSession.effectiveCatalog,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
+                        statusFilter: activeSimpleCycleStatusFilter,
                         onAdvance: toggleOpen,
                         onOpenDetails: { roomID, mode in
                             roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
@@ -159,6 +163,10 @@ struct SummaryScreen: View {
                 usesPurpleScheduled: true
             )
         }
+    }
+
+    private func setSimpleCycleStatusFilter(_ status: RoomStatus?) {
+        activeSimpleCycleStatusFilter = status
     }
 
     private func openSchedule(roomID: RoomCell.ID) {

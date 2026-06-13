@@ -182,6 +182,27 @@ func appSettingsPersistsSelectedHotel() {
 }
 
 @Test
+func appSettingsPersistsEditableHousekeepers() throws {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.addHousekeeper(named: "Alexandra")
+    let created = try #require(settings.housekeepers.first { $0.displayName == "Alexandra" })
+    settings.renameHousekeeper(id: created.id, displayName: "Alex")
+    settings.setHousekeeperPalette(id: created.id, palette: .ruby)
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+    let housekeeper = try #require(loaded.housekeeper(id: created.id))
+
+    #expect(housekeeper.displayName == "Alex")
+    #expect(housekeeper.palette == .ruby)
+    #expect(loaded.housekeepers.contains { $0.displayName == "Ketty" })
+    #expect(loaded.housekeepers.contains { $0.displayName == "Omelene PM" })
+}
+
+@Test
 func appSettingsPersistsStatusPaletteSaturation() {
     let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
@@ -281,6 +302,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.developerVIPFlickerSpeed == 1.6)
     #expect(loaded.developerVIPJellyEnabled)
     #expect(loaded.developerVIPJellySpeed == 0.75)
+    #expect(loaded.housekeepers == MargaritavilleHousekeeperCatalog.defaultHousekeepers)
 }
 
 @Test

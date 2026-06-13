@@ -279,6 +279,32 @@ func margaritavilleCatalogPreservesRealRoomLists() {
 }
 
 @Test
+func margaritavilleHousekeeperCatalogIncludesNamesFromSheets() {
+    let names = Set(MargaritavilleHousekeeperCatalog.defaultHousekeepers.map(\.displayName))
+
+    #expect(names.contains("Ketty"))
+    #expect(names.contains("Rosalie"))
+    #expect(names.contains("Nadia M (DC)"))
+    #expect(names.contains("Omelene PM"))
+    #expect(!names.contains("Lauren FLOOR"))
+    #expect(!names.contains("Judson/Alex"))
+}
+
+@Test
+func cartHousekeeperAssignmentPersistsInSelectionState() {
+    let assignedAt = Date(timeIntervalSince1970: 1_805_000_000)
+    var selection = WorkSessionSelectionState()
+
+    selection.toggleCart(1, hotelProfile: .margaritaville, changedAt: assignedAt)
+    #expect(selection.setHousekeeper("ketty", cartNumber: 1, changedAt: assignedAt) == .changed)
+
+    #expect(selection.housekeeperID(forCart: 1) == "ketty")
+    #expect(selection.cartHousekeeperUpdatedAt[1] == assignedAt)
+    #expect(selection.removeHousekeeperAssignments(housekeeperID: "ketty", changedAt: assignedAt) == .changed)
+    #expect(selection.housekeeperID(forCart: 1) == nil)
+}
+
+@Test
 func margaritavilleCatalogOverridesAddAndRemoveRooms() {
     let store = WorkSessionStore(carts: [], hotelProfile: .margaritaville)
 

@@ -39,6 +39,7 @@ extension AppSettingsStore {
         let developerVIPJellyEnabled = Self.migratedDeveloperVIPJellyEnabled(userDefaults: userDefaults)
         let developerVIPJellySpeed = userDefaults.object(forKey: Keys.developerVIPJellySpeed) as? Double ?? 0.75
         let selectedHotelID = userDefaults.string(forKey: Keys.selectedHotelID)
+        let housekeepers = Self.loadHousekeepers(userDefaults: userDefaults)
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
@@ -66,6 +67,7 @@ extension AppSettingsStore {
             developerVIPJellyEnabled: developerVIPJellyEnabled,
             developerVIPJellySpeed: developerVIPJellySpeed,
             selectedHotelID: selectedHotelID,
+            housekeepers: housekeepers,
             userDefaults: userDefaults
         )
     }
@@ -95,6 +97,23 @@ extension AppSettingsStore {
     static func savePersonalCartMarkers(_ markers: PersonalCartMarkers, userDefaults: UserDefaults) {
         guard let data = try? JSONEncoder().encode(markers.normalized()) else { return }
         userDefaults.set(data, forKey: Keys.personalCartMarkers)
+    }
+
+    static func loadHousekeepers(userDefaults: UserDefaults) -> [Housekeeper] {
+        guard let data = userDefaults.data(forKey: Keys.housekeepers),
+              let decoded = try? JSONDecoder().decode([Housekeeper].self, from: data)
+        else {
+            return MargaritavilleHousekeeperCatalog.defaultHousekeepers
+        }
+        let normalized = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(decoded)
+        return normalized.isEmpty ? MargaritavilleHousekeeperCatalog.defaultHousekeepers : normalized
+    }
+
+    static func saveHousekeepers(_ housekeepers: [Housekeeper], userDefaults: UserDefaults) {
+        guard let data = try? JSONEncoder().encode(
+            MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
+        ) else { return }
+        userDefaults.set(data, forKey: Keys.housekeepers)
     }
 
     static func normalizedMatrixSpeed(_ value: Double) -> Double {

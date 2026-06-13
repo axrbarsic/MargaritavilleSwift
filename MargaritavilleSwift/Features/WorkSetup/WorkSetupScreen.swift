@@ -11,9 +11,7 @@ struct WorkSetupScreen: View {
 
     @State private var selectedCartNumber = 1
     @State private var isSettingsPresented = false
-    @State private var activeDayCategory: RoomDayCategory = .dueOut
-    @State private var dayCategoryFilter: RoomDayCategory?
-    @State private var dayCategoryTimePreset: RoomDayCategoryTimePreset?
+    @State private var housekeeperPickerRoute: WorkSetupHousekeeperPickerRoute?
 
     var body: some View {
         ZStack {
@@ -36,6 +34,9 @@ struct WorkSetupScreen: View {
                         CartNumberPicker(
                             selectedCarts: Set(workSession.selectedCartNumbers),
                             focusedCart: $selectedCartNumber,
+                            housekeeper: { cartNumber in
+                                housekeeper(forCart: cartNumber)
+                            },
                             onToggleCart: toggleCart
                         )
 
@@ -48,21 +49,17 @@ struct WorkSetupScreen: View {
                                 isFocused: selectedCartNumber == cartNumber,
                                 territories: workSession.effectiveCatalog,
                                 layout: workSession.hotelProfile.summaryLayout,
-                                dayCategoriesEnabled: workSession.hotelProfile.dayCategoriesEnabled,
-                                activeDayCategory: activeDayCategory,
-                                dayCategoryFilter: dayCategoryFilter,
-                                dayCategoryTimePreset: dayCategoryTimePreset,
-                                dayCategoryCounts: dayCategoryCounts,
+                                housekeeper: housekeeper(forCart: cartNumber),
                                 offTerritorySelectionGroups: offTerritorySelectionGroups(
                                     forCart: cartNumber,
                                     currentTerritory: effectiveTerritory(forCart: cartNumber)
                                 ),
-                                roomCategory: { roomID in workSession.room(id: roomID)?.dayCategory },
-                                roomCategoryTime: { roomID in workSession.room(id: roomID)?.dayCategoryTime },
-                                onActiveDayCategoryChanged: setActiveDayCategory,
-                                onDayCategoryFilterChanged: { dayCategoryFilter = $0 },
-                                onDayCategoryTimePresetChanged: { dayCategoryTimePreset = $0 },
                                 onFocus: { selectedCartNumber = cartNumber },
+                                onHousekeeperTap: {
+                                    feedback.tap()
+                                    selectedCartNumber = cartNumber
+                                    housekeeperPickerRoute = WorkSetupHousekeeperPickerRoute(cartNumber: cartNumber)
+                                },
                                 onTerritoryChanged: { territory in
                                     feedback.confirm()
                                     selectedCartNumber = cartNumber
@@ -96,12 +93,29 @@ struct WorkSetupScreen: View {
             )
                 .preferredColorScheme(.dark)
         }
-    }
-
-    private func setActiveDayCategory(_ category: RoomDayCategory) {
-        activeDayCategory = category
-        if category != .dueOut {
-            dayCategoryTimePreset = nil
+        .sheet(item: $housekeeperPickerRoute) { route in
+            WorkSetupHousekeeperPickerSheet(
+                cartNumber: route.cartNumber,
+                housekeepers: appSettings.housekeepers,
+                selectedID: workSession.housekeeperID(forCart: route.cartNumber),
+                onSelect: { housekeeperID in
+                    feedback.confirm()
+                    workSession.setCartHousekeeper(
+                        cartNumber: route.cartNumber,
+                        housekeeperID: housekeeperID
+                    )
+                    housekeeperPickerRoute = nil
+                },
+                onClear: {
+                    feedback.deselect()
+                    workSession.setCartHousekeeper(
+                        cartNumber: route.cartNumber,
+                        housekeeperID: nil
+                    )
+                    housekeeperPickerRoute = nil
+                }
+            )
+            .preferredColorScheme(.dark)
         }
     }
 
@@ -113,10 +127,6 @@ struct WorkSetupScreen: View {
         }
         selectedCartNumber = cartNumber
         workSession.toggleCartSelection(cartNumber)
-    }
-
-    private var dayCategoryCounts: RoomDayCategoryCounts {
-        RoomDayCategoryCounts(rooms: workSession.carts.flatMap(\.rooms))
     }
 
     private func openSettings() {
@@ -138,32 +148,8 @@ struct WorkSetupScreen: View {
     }
 
     private func toggleRoom(cartNumber: Int, room: RoomID) {
-        if workSession.hotelProfile.dayCategoriesEnabled {
-            toggleMargaritavilleRoom(cartNumber: cartNumber, room: room)
-            return
-        }
         playRoomSelectionFeedback(cartNumber: cartNumber, room: room)
         workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
-    }
-
-    private func toggleMargaritavilleRoom(cartNumber: Int, room: RoomID) {
-        let selectedRooms = workSession.selectedRooms(forCart: cartNumber)
-        let existingCategory = workSession.room(id: room)?.dayCategory
-        if selectedRooms.contains(room), existingCategory == activeDayCategory {
-            feedback.deselect()
-            workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
-            return
-        }
-
-        if !selectedRooms.contains(room) {
-            feedback.select()
-            let result = workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
-            guard result == .changed else { return }
-        } else {
-            feedback.confirm()
-        }
-        let selectedTime = activeDayCategory == .dueOut ? dayCategoryTimePreset?.dateToday() : nil
-        workSession.setDayCategory(activeDayCategory, time: selectedTime, roomId: room)
     }
 
     private func effectiveTerritory(forCart cartNumber: Int) -> Territory {
@@ -199,6 +185,10 @@ struct WorkSetupScreen: View {
             guard !rooms.isEmpty else { return nil }
             return WorkSetupTerritorySelectionGroup(territory: territory, rooms: rooms)
         }
+    }
+
+    private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {
+        appSettings.housekeeper(id: workSession.housekeeperID(forCart: cartNumber))
     }
 }
 

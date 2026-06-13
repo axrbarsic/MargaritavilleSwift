@@ -122,6 +122,20 @@ verification.
 - Margaritaville summary now groups rooms inside each cart by the room's
   building/floor territory, so one cart spanning A3 and B3 renders as separate
   square-grid islands instead of one mixed A3/B3 block.
+- Margaritaville setup now uses a clean cart -> housekeeper -> section -> floor
+  -> room flow. Day-category/time controls were removed from the setup screen
+  so the first screen is only for inputting the work list, while room
+  status/category behavior stays on the summary/action side.
+- Housekeeper names are a persisted native settings catalog seeded from the
+  Margaritaville sheet photos. Names can be added, renamed, deleted, and given
+  distinct color palettes; cart assignments persist with work-session selection
+  data and are not hardcoded to cart numbers.
+- Margaritaville summary status chips are now tappable filters, and square
+  summary tiles use larger room numbers and time labels for better real-device
+  readability while preserving the 4-column layout.
+- Interaction feedback now uses the stronger native feedback path: UIKit
+  notification haptics are routed through the shared interaction service in
+  addition to impact/selection feedback and bundled local sounds.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

@@ -110,6 +110,12 @@ private func mergeTestSnapshot(
             cartBindingUpdatedAt: [
                 7: cartBindingAt
             ],
+            cartHousekeeperIDs: [
+                7: "ketty"
+            ],
+            cartHousekeeperUpdatedAt: [
+                7: cartBindingAt
+            ],
             cartRoomSelections: [
                 7: selectedRooms
             ],
