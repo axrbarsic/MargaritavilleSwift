@@ -136,6 +136,17 @@ verification.
 - Interaction feedback now uses the stronger native feedback path: UIKit
   notification haptics are routed through the shared interaction service in
   addition to impact/selection feedback and bundled local sounds.
+- Work-session persistence is intentionally debounced after normal room/status
+  taps so rapid on-the-move input does not serialize full SwiftData snapshots
+  inside the tap frame. Pending saves are flushed when the app leaves active
+  state or when workday lock/unlock must be durable immediately.
+- Work-session history snapshots now keep the affected cart for ordinary
+  room/selection events instead of copying the full workday into every history
+  entry. Workday lock/unlock can still capture the full visible state.
+- Interaction sounds are played through a small preloaded native AVAudioPlayer
+  pool, with audio-session refresh only after interruptions/resets or playback
+  failure. Haptic generator preparation is scheduled after the interaction so
+  feedback stays tactile without blocking visual state changes.
 - Sync metadata: room VIP state and scheduled room time now carry field-level
   update timestamps in domain data and SwiftData persistence, so future
   CloudKit conflict resolution can merge individual fields.

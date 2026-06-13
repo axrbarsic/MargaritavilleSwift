@@ -257,3 +257,8 @@ Simulator unless explicitly allowed.
 - Native tactile feedback is stronger and centralized: confirmation, warning,
   invalid, selection, and hold interactions go through the shared iOS haptic
   service rather than ad hoc view code.
+- Native tap responsiveness now protects the live wallpaper frame loop:
+  persistence is debounced after rapid room/status input, history snapshots are
+  scoped to the affected cart, and pending writes flush on backgrounding.
+- Interaction audio now uses a preloaded player pool so quick repeated taps do
+  not restart one shared sound player and make feedback appear to disappear.

@@ -6,6 +6,7 @@ final class WorkSessionStore {
     @ObservationIgnored let repository: WorkSessionRepository?
     @ObservationIgnored let hotelProfile: HotelProfile
     @ObservationIgnored var lastPersistenceError: Error?
+    @ObservationIgnored var pendingPersistenceWorkItem: DispatchWorkItem?
 
     var carts: [CartSection]
     var selection: WorkSessionSelectionState

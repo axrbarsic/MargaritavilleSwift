@@ -28,7 +28,8 @@ extension WorkSessionStore {
         reconcileCartsAfterSelectionChange(
             result,
             title: "Тележка \(cartNumber): выбор изменен",
-            happenedAt: changedAt
+            happenedAt: changedAt,
+            cartID: cartNumber
         )
         return result
     }
@@ -40,7 +41,8 @@ extension WorkSessionStore {
         reconcileCartsAfterSelectionChange(
             result,
             title: "Тележка \(cartNumber): зона \(territory.id)",
-            happenedAt: changedAt
+            happenedAt: changedAt,
+            cartID: cartNumber
         )
         return result
     }
@@ -55,7 +57,8 @@ extension WorkSessionStore {
         reconcileCartsAfterSelectionChange(
             result,
             title: "Тележка \(cartNumber): уборщица изменена",
-            happenedAt: changedAt
+            happenedAt: changedAt,
+            cartID: cartNumber
         )
         return result
     }
@@ -81,7 +84,8 @@ extension WorkSessionStore {
         reconcileCartsAfterSelectionChange(
             result,
             title: "\(room): выбор комнаты изменен",
-            happenedAt: changedAt
+            happenedAt: changedAt,
+            cartID: cartNumber
         )
         return result
     }
@@ -92,7 +96,7 @@ extension WorkSessionStore {
         let result = selection.lockWorkday(changedAt: changedAt)
         if result == .changed {
             appendHistory(kind: .workdayLocked, title: "Рабочий день зафиксирован", happenedAt: changedAt)
-            persist()
+            persist(immediately: true)
         }
         return result
     }
@@ -103,7 +107,7 @@ extension WorkSessionStore {
         let result = selection.unlockWorkdayForEditing(changedAt: changedAt)
         if result == .changed {
             appendHistory(kind: .workdayUnlocked, title: "Рабочий день открыт для редактирования", happenedAt: changedAt)
-            persist()
+            persist(immediately: true)
         }
         return result
     }
@@ -134,7 +138,8 @@ extension WorkSessionStore {
     private func reconcileCartsAfterSelectionChange(
         _ result: WorkSessionSelectionCommandResult,
         title: String,
-        happenedAt: Date
+        happenedAt: Date,
+        cartID: CartSection.ID? = nil
     ) {
         guard result == .changed else { return }
         carts = WorkSessionBuilder.makeCarts(
@@ -142,7 +147,7 @@ extension WorkSessionStore {
             preserving: carts.flatMap(\.rooms),
             hotelProfile: hotelProfile
         )
-        appendHistory(kind: .selectionChanged, title: title, happenedAt: happenedAt)
+        appendHistory(kind: .selectionChanged, title: title, cartID: cartID, happenedAt: happenedAt)
         persist()
     }
 }

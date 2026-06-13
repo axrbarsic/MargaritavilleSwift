@@ -440,6 +440,49 @@ func roomMutationsRecordVisualHistorySnapshots() {
     #expect(entry?.roomID == "401")
     #expect(entry?.snapshot.carts.flatMap(\.rooms).first { $0.id == "401" }?.opened == true)
     #expect(entry?.snapshot.carts.flatMap(\.rooms).first { $0.id == "401" }?.openedUpdatedAt != nil)
+    #expect(entry?.snapshot.carts.map(\.id) == [8])
+}
+
+@Test
+func workSessionPersistenceDebouncesRapidSelectionChanges() async throws {
+    let repository = RecordingWorkSessionRepository()
+    let store = WorkSessionStore(
+        carts: [],
+        hotelProfile: .margaritaville,
+        repository: repository
+    )
+
+    store.toggleCartSelection(1)
+    store.toggleRoomSelection(cartNumber: 1, room: "101")
+    store.toggleRoomSelection(cartNumber: 1, room: "102")
+
+    #expect(repository.saveCount == 0)
+
+    try await Task.sleep(nanoseconds: 500_000_000)
+
+    #expect(repository.saveCount == 1)
+    let snapshot = try #require(repository.latestSnapshot)
+    #expect(snapshot.selection.rooms(forCart: 1) == Set(["101", "102"]))
+}
+
+@Test
+func workSessionFlushWritesPendingPersistenceImmediately() throws {
+    let repository = RecordingWorkSessionRepository()
+    let store = WorkSessionStore(
+        carts: [],
+        hotelProfile: .margaritaville,
+        repository: repository
+    )
+
+    store.toggleCartSelection(1)
+
+    #expect(repository.saveCount == 0)
+
+    store.flushPendingPersistence()
+
+    #expect(repository.saveCount == 1)
+    let snapshot = try #require(repository.latestSnapshot)
+    #expect(snapshot.selection.selectedCartNumbers == [1])
 }
 
 @Test
@@ -504,4 +547,31 @@ func cartCustomConsumableIsStoredWithHistory() {
     #expect(item?.quantity == 2)
     #expect(item?.id.hasPrefix("custom_") == true)
     #expect(store.history.first?.kind == .cartConsumablesChanged)
+}
+
+private final class RecordingWorkSessionRepository: WorkSessionRepository, @unchecked Sendable {
+    private let lock = NSLock()
+    private var snapshots: [WorkSessionSnapshot] = []
+
+    var saveCount: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return snapshots.count
+    }
+
+    var latestSnapshot: WorkSessionSnapshot? {
+        lock.lock()
+        defer { lock.unlock() }
+        return snapshots.last
+    }
+
+    func loadSnapshot() throws -> WorkSessionSnapshot? {
+        latestSnapshot
+    }
+
+    func save(snapshot: WorkSessionSnapshot) {
+        lock.lock()
+        snapshots.append(snapshot)
+        lock.unlock()
+    }
 }

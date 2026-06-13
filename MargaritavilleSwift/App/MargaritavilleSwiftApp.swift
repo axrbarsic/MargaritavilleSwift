@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct MargaritavilleSwiftApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     @State private var workSession: WorkSessionStore
     @State private var appSettings: AppSettingsStore
     @State private var activeHotel: HotelProfile
@@ -83,6 +84,10 @@ struct MargaritavilleSwiftApp: App {
                     Task {
                         await refreshAppleSyncStatusIfNeeded(force: true)
                     }
+                }
+                .onChange(of: scenePhase) { _, phase in
+                    guard phase != .active else { return }
+                    workSession.flushPendingPersistence()
                 }
         }
     }

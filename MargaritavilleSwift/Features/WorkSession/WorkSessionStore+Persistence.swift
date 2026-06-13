@@ -12,6 +12,7 @@ struct WorkSessionLoadFailure: LocalizedError, Sendable {
 
 extension WorkSessionStore {
     func apply(snapshot: WorkSessionSnapshot) {
+        cancelPendingPersistence()
         selection = snapshot.selection
         catalogOverrides = snapshot.catalogOverrides
         carts = snapshot.carts
@@ -21,17 +22,50 @@ extension WorkSessionStore {
     }
 
     func recordLoadFailure(_ failure: WorkSessionLoadFailure) {
+        cancelPendingPersistence()
         hasLoadedInitialSnapshot = true
         lastPersistenceError = failure
     }
 
     func finishInitialLoadWithoutSnapshot() {
+        cancelPendingPersistence()
         hasLoadedInitialSnapshot = true
         lastPersistenceError = nil
     }
 
-    func persist() {
+    func persist(immediately: Bool = false) {
         guard let repository else { return }
+        guard !immediately else {
+            cancelPendingPersistence()
+            saveCurrentSnapshot(to: repository)
+            return
+        }
+
+        pendingPersistenceWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.pendingPersistenceWorkItem = nil
+            self.saveCurrentSnapshot(to: repository)
+        }
+        pendingPersistenceWorkItem = workItem
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + Self.persistenceDebounceInterval,
+            execute: workItem
+        )
+    }
+
+    func flushPendingPersistence() {
+        guard let repository, pendingPersistenceWorkItem != nil else { return }
+        cancelPendingPersistence()
+        saveCurrentSnapshot(to: repository)
+    }
+
+    private func cancelPendingPersistence() {
+        pendingPersistenceWorkItem?.cancel()
+        pendingPersistenceWorkItem = nil
+    }
+
+    private func saveCurrentSnapshot(to repository: WorkSessionRepository) {
         repository.save(snapshot: WorkSessionSnapshot(
             selection: selection,
             catalogOverrides: catalogOverrides,
@@ -39,6 +73,10 @@ extension WorkSessionStore {
             history: history
         ))
         lastPersistenceError = nil
+    }
+
+    private static var persistenceDebounceInterval: TimeInterval {
+        0.28
     }
 
     static func bootstrapping(

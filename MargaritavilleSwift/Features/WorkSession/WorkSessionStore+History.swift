@@ -9,7 +9,7 @@ extension WorkSessionStore {
         happenedAt: Date = Date()
     ) {
         let snapshot = WorkSessionHistorySnapshot(
-            carts: carts,
+            carts: historySnapshotCarts(roomID: roomID, cartID: cartID, kind: kind),
             counts: counts
         )
         let entry = WorkSessionHistoryEntry(
@@ -21,5 +21,26 @@ extension WorkSessionStore {
             snapshot: snapshot
         )
         history.insert(entry, at: 0)
+    }
+
+    private func historySnapshotCarts(
+        roomID: RoomID?,
+        cartID: CartSection.ID?,
+        kind: WorkSessionHistoryKind
+    ) -> [CartSection] {
+        if let cartID {
+            return carts.filter { $0.id == cartID }
+        }
+        if let roomID {
+            return carts.filter { cart in
+                cart.rooms.contains { $0.id == roomID }
+            }
+        }
+        switch kind {
+        case .workdayLocked, .workdayUnlocked:
+            return carts
+        default:
+            return []
+        }
     }
 }

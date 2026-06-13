@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (4)",
+            date: "2026-06-12",
+            changes: [
+                "Reduced tap-frame work by debouncing work-session persistence after rapid room/status changes and flushing pending saves when the app leaves active state.",
+                "Changed history snapshots to keep only the affected cart for normal room/selection events instead of copying the full workday on every tap.",
+                "Reworked interaction sounds through a small preloaded AVAudioPlayer pool so fast taps do not cut off or lose feedback sounds.",
+                "Moved haptic generator preparation out of the synchronous tap path while keeping strong native iPhone feedback."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (3)",
             date: "2026-06-12",
             changes: [
