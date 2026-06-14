@@ -20,7 +20,6 @@
 		124B8CE7419E4EFD526F3A09 /* AppBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */; };
 		152633EAB66EDB9582DBB29A /* RoomMediaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B225CEBE6C5329B0A1792 /* RoomMediaIndicator.swift */; };
 		156AE991A57FFFB7CA3B8EDA /* RoomDetailsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147C808E88696B5035D32889 /* RoomDetailsMode.swift */; };
-		168D118D0B17FB7FF4BC43F2 /* .BackgroundVideoFileStore.swift.swp in Resources */ = {isa = PBXBuildFile; fileRef = BFD86070A88214374664A227 /* .BackgroundVideoFileStore.swift.swp */; };
 		1AD8AA70BA6B54B44203022D /* SummaryConsumablesAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5617191F7FEC4F524E819 /* SummaryConsumablesAggregatorTests.swift */; };
 		1B0A26C51E7AAF7E7DD75C94 /* BackgroundVideoFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48BFB5EDED5F96299AB21A /* BackgroundVideoFileStore.swift */; };
 		22572ABFDC6A79E256B5E8B3 /* BuildChangelogEntriesRecent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4ABFACA0309F88F727C2BD /* BuildChangelogEntriesRecent.swift */; };
@@ -298,7 +297,6 @@
 		BA57673DBF855A06723F9AF4 /* RoomActionMenuLampTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomActionMenuLampTransition.swift; sourceTree = "<group>"; };
 		BB404746FF5A9F4CEC4B06B6 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		BD7D041F1C24E096F847BB53 /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
-		BFD86070A88214374664A227 /* .BackgroundVideoFileStore.swift.swp */ = {isa = PBXFileReference; path = .BackgroundVideoFileStore.swift.swp; sourceTree = "<group>"; };
 		C0B1DAFE30DED4D8FDD5BBF4 /* SwiftDataWorkSessionRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataWorkSessionRepositoryTests.swift; sourceTree = "<group>"; };
 		C253030D4EA92886847226FE /* VoiceNoteBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteBubble.swift; sourceTree = "<group>"; };
 		C32C5954A7CEDB001BCDE841 /* AppleSyncEntitlementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncEntitlementTests.swift; sourceTree = "<group>"; };
@@ -464,7 +462,6 @@
 		545E6D7091F39C5576C0F7B9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				BFD86070A88214374664A227 /* .BackgroundVideoFileStore.swift.swp */,
 				7E65B6AD09658C4286ABC041 /* AIVisualPresetStore.swift */,
 				2173D3F22AFB14E9E6B54E01 /* AppStorageDirectory.swift */,
 				1D48BFB5EDED5F96299AB21A /* BackgroundVideoFileStore.swift */,
@@ -857,7 +854,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				168D118D0B17FB7FF4BC43F2 /* .BackgroundVideoFileStore.swift.swp in Resources */,
 				E522CC4C1973B7D9F9EE01B8 /* click.wav in Resources */,
 				A04AD1A78B21F0B1482DB51F /* pressed.wav in Resources */,
 			);

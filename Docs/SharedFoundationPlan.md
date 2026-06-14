@@ -1,6 +1,6 @@
 # Shared Foundation Plan
 
-Date: 2026-06-12
+Date: 2026-06-13
 
 ## Goal
 
@@ -40,6 +40,23 @@ MargaritavilleSwift app shell
 Use local Swift Package Manager packages as the sharing boundary first. This is
 the native Xcode/Swift path for reusable modules, works locally before any
 remote repo split, and can later be moved to a private Git repo if needed.
+
+## Decision Rubric
+
+Classify a feature as shared only when the answer is "yes" to all durable
+questions:
+
+1. Can it run without knowing the app bundle ID, display name, hotel ID, storage
+   directory, CloudKit container, or signing profile?
+2. Can both apps describe their differences through value contracts or policies
+   instead of `if app == ...` branches inside shared code?
+3. Does sharing reduce duplication without forcing both apps into the same
+   screen flow, room layout, workflow state machine, or copy?
+4. Can it be tested with at least one OceanKey-shaped case and one
+   Margaritaville-shaped case?
+
+If any answer is "no", keep it in the app shell or expose a smaller shared
+contract first.
 
 ## Portability Classes
 
@@ -130,6 +147,7 @@ without forcing both apps to have the same cell geometry.
 
 ## References
 
+- Shared foundation audit: `Docs/SharedFoundationAudit.md`
 - Apple local packages:
   https://developer.apple.com/documentation/xcode/organizing-your-code-with-local-packages
 - Swift Package Manager:
