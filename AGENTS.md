@@ -83,9 +83,11 @@ xcrun devicectl device process launch --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB
 - For shared OceanKeySwift/MargaritavilleSwift foundation work, follow
   `Docs/SharedFoundationPlan.md`: classify each new visual/effect/frontend
   feature as `shared-foundation`, `shared-parameterized`, `app-specific`, or
-  `candidate`. Ask Alex before sharing `candidate` features. Never let shared
-  code depend on app bundle IDs, storage paths, hotel IDs, or target-specific
-  screens.
+  `candidate`. Ask Alex before sharing `candidate` features or when a boundary
+  choice could affect future reuse, persistence, sync, app identity, screen
+  routing, or workflow rules. Do not ask for obvious one-sided cases. Never let
+  shared code depend on app bundle IDs, storage paths, hotel IDs, or
+  target-specific screens.
 
 ## Port The Idea, Not The Code (Flutter → Swift)
 

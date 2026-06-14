@@ -169,3 +169,9 @@ module to be `MargaritavilleSwift`.
 When Alex asks for a new visual/effect/frontend feature, the agent must state
 which portability class it chose. If the class is `candidate`, ask whether the
 feature is shared or app-only before implementation.
+
+Ask Alex before implementation when a feature could plausibly belong to either
+one app or the shared foundation and the choice affects future reuse,
+persistence, sync, app identity, screen flow, or workflow rules. Do not ask for
+obvious cases: clearly generic platform services can be shared through the
+package boundary, and clearly hotel-specific behavior stays in the app shell.

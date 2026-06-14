@@ -31,6 +31,12 @@ both apps tomorrow.
 - If the answer is unclear, it is `candidate` and must not be moved until both
   apps have used the pattern at least once.
 
+The agent should ask Alex only at real boundary decisions. A question is required
+when the implementation could reasonably be either shared or app-only and that
+decision affects future reuse, persistence, sync, app identity, screen routing,
+or hotel workflow policy. A question is not required for obvious one-sided
+cases.
+
 ## Current Shared-Foundation Candidates
 
 These modules are good first extraction candidates because they are already
