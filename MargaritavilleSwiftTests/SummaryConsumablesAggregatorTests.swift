@@ -48,8 +48,11 @@ func summaryConsumablesAggregateTotalsAndHousekeepers() {
     #expect(report.totals.map(\.quantity) == [7, 2, 1])
     #expect(report.housekeepers[0].displayName == "Fabiola")
     #expect(report.housekeepers[0].tickerText == "Полотенца банные 7  •  Простыни 1")
+    #expect(report.housekeepers[0].items.first { $0.id == "bath_towel" }?.sourceCartIDs == [1, 2])
+    #expect(report.housekeepers[0].items.first { $0.id == "sheet" }?.sourceCartIDs == [1])
     #expect(report.housekeepers[1].displayName == "Gurline")
     #expect(report.housekeepers[1].tickerText == "Полотенца ручные 2")
+    #expect(report.housekeepers[1].items.first { $0.id == "hand_towel" }?.sourceCartIDs == [3])
 }
 
 @Test
@@ -84,6 +87,44 @@ func summaryConsumablesIgnoreCompletedOrZeroQuantityItems() {
     #expect(report.totals.map(\.id) == ["sheet"])
     #expect(report.totals.map(\.quantity) == [2])
     #expect(report.housekeepers[0].tickerText == "Простыни 2")
+}
+
+@Test
+func summaryConsumablesFollowEditableGlobalCatalog() {
+    let sections = [
+        MargaritavilleSummaryHousekeeperSection(
+            id: "housekeeper-fabiola",
+            cartIDs: [1],
+            housekeeperID: "fabiola",
+            locationLabel: "A1",
+            rooms: []
+        )
+    ]
+    let carts = [
+        testCart(id: 1, building: "A1", consumables: [
+            CartConsumableItem(id: "bath_towel", title: "Old bath towel", quantity: 4),
+            CartConsumableItem(id: "washcloth", title: "Салфетки", quantity: 8),
+            CartConsumableItem(id: "coffee-kit", title: "Coffee kit", quantity: 2)
+        ])
+    ]
+    let catalog = [
+        CartConsumableCatalogItem(id: "bath_towel", title: "Полотенца большие"),
+        CartConsumableCatalogItem(id: "coffee-kit", title: "Кофе-набор")
+    ]
+
+    let report = SummaryConsumablesAggregator.makeReport(
+        sections: sections,
+        carts: carts,
+        housekeepers: [
+            Housekeeper(id: "fabiola", displayName: "Fabiola", palette: .orchid)
+        ],
+        catalog: catalog
+    )
+
+    #expect(report.totals.map(\.id) == ["bath_towel", "coffee-kit"])
+    #expect(report.totals.map(\.title) == ["Полотенца большие", "Кофе-набор"])
+    #expect(report.totals.map(\.quantity) == [4, 2])
+    #expect(report.housekeepers[0].tickerText == "Полотенца большие 4  •  Кофе-набор 2")
 }
 
 private func testCart(

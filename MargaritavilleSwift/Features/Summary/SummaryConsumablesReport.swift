@@ -5,6 +5,7 @@ struct SummaryConsumableLine: Equatable, Identifiable, Sendable {
     let title: String
     let quantity: Int
     let sortOrder: Int
+    let sourceCartIDs: [CartSection.ID]
 }
 
 struct SummaryHousekeeperConsumables: Equatable, Identifiable, Sendable {
@@ -54,7 +55,8 @@ enum SummaryConsumablesAggregator {
                 totalCounts[item.id, default: ConsumableAccumulator(
                     title: item.title,
                     quantity: 0,
-                    sortOrder: item.sortOrder
+                    sortOrder: item.sortOrder,
+                    sourceCartIDs: []
                 )].quantity += item.quantity
             }
 
@@ -76,7 +78,8 @@ enum SummaryConsumablesAggregator {
                     id: id,
                     title: value.title,
                     quantity: value.quantity,
-                    sortOrder: value.sortOrder
+                    sortOrder: value.sortOrder,
+                    sourceCartIDs: []
                 )
             }
             .sorted(by: compareLines),
@@ -94,11 +97,17 @@ enum SummaryConsumablesAggregator {
         for cart in carts {
             for item in CartConsumableCatalog.merged(with: cart.consumables, catalog: catalog) {
                 guard item.quantity > 0, !item.isCompleted else { continue }
-                counts[item.id, default: ConsumableAccumulator(
+                var accumulator = counts[item.id, default: ConsumableAccumulator(
                     title: item.title,
                     quantity: 0,
-                    sortOrder: catalogOrder[item.id] ?? catalog.count + 100
-                )].quantity += item.quantity
+                    sortOrder: catalogOrder[item.id] ?? catalog.count + 100,
+                    sourceCartIDs: []
+                )]
+                accumulator.quantity += item.quantity
+                if !accumulator.sourceCartIDs.contains(cart.id) {
+                    accumulator.sourceCartIDs.append(cart.id)
+                }
+                counts[item.id] = accumulator
             }
         }
 
@@ -107,7 +116,8 @@ enum SummaryConsumablesAggregator {
                 id: id,
                 title: value.title,
                 quantity: value.quantity,
-                sortOrder: value.sortOrder
+                sortOrder: value.sortOrder,
+                sourceCartIDs: value.sourceCartIDs
             )
         }
         .sorted(by: compareLines)
@@ -125,4 +135,5 @@ private struct ConsumableAccumulator {
     let title: String
     var quantity: Int
     let sortOrder: Int
+    var sourceCartIDs: [CartSection.ID]
 }

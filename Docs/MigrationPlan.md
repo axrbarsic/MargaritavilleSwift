@@ -171,10 +171,12 @@ verification.
 - Cart supply names are an editable app-level catalog in Settings. Quantities
   stay per cart/work block, while catalog renames update the displayed title by
   stable item id.
-- Cart supply quantity entry uses the classic inline controls only:
-  decrement, visible quantity, and increment. The removed radial picker should
-  not be reintroduced without a separate redesign because row-level hold
-  gestures caused sticky selection while moving between supply rows.
+- Margaritaville cart supply quantity entry now follows the OceanKey
+  equalizer-style slider idea: a 0-to-10 horizontal bar control with live
+  quantity preview during drag. Do not reintroduce the removed radial picker
+  without a separate redesign because row-level hold gestures caused sticky
+  selection while moving between supply rows. This is a visual/interaction idea
+  port only; Margaritaville keeps its own housekeeper/work-block data model.
 - Margaritaville summary surfaces active cart supplies directly on the main
   screen. Active means quantity is greater than zero and the supply row is not
   marked completed. Each housekeeper header shows a running supply ticker when

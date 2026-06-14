@@ -15,11 +15,8 @@ struct CartConsumablesSection: View {
             ForEach(items) { item in
                 CartConsumableRow(
                     item: item,
-                    onDecrement: {
-                        setQuantity(item.id, item.quantity - 1)
-                    },
-                    onIncrement: {
-                        setQuantity(item.id, item.quantity + 1)
+                    onQuantityChange: { quantity in
+                        setQuantity(item.id, quantity)
                     },
                     onToggleComplete: {
                         feedback.confirm()
@@ -39,7 +36,7 @@ struct CartConsumablesSection: View {
         _ quantity: Int,
         feedback playsFeedback: Bool = true
     ) {
-        let quantity = min(max(0, quantity), 99)
+        let quantity = CartConsumableQuantitySlider.clamped(quantity)
         workSession.updateCartConsumableQuantity(
             itemID: itemID,
             title: items.first { $0.id == itemID }?.title,
@@ -54,46 +51,52 @@ struct CartConsumablesSection: View {
 
 private struct CartConsumableRow: View {
     let item: CartConsumableItem
-    let onDecrement: () -> Void
-    let onIncrement: () -> Void
+    let onQuantityChange: (Int) -> Void
     let onToggleComplete: () -> Void
+    @State private var previewQuantity: Int?
+
+    private var visibleQuantity: Int {
+        previewQuantity ?? item.quantity
+    }
 
     var body: some View {
-        HStack(spacing: 10) {
-            Button(action: onToggleComplete) {
-                Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 24, weight: .black))
-                    .frame(width: 38, height: 44)
-                    .foregroundStyle(item.isCompleted ? OceanKeyTheme.accent : OceanKeyTheme.secondaryText)
-            }
-            .buttonStyle(.plain)
+        VStack(alignment: .leading, spacing: 9) {
+            HStack(spacing: 10) {
+                Button(action: onToggleComplete) {
+                    Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                        .font(.system(size: 24, weight: .black))
+                        .frame(width: 38, height: 40)
+                        .foregroundStyle(item.isCompleted ? OceanKeyTheme.accent : OceanKeyTheme.secondaryText)
+                }
+                .buttonStyle(.plain)
 
-            VStack(alignment: .leading, spacing: 3) {
-                Text(item.title)
-                    .font(.system(size: 17, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.76)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(item.title)
+                        .font(.system(size: 17, weight: .black, design: .rounded))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.76)
 
-                Text(subtitle)
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.82))
-                    .lineLimit(1)
-            }
+                    Text(subtitle)
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.82))
+                        .lineLimit(1)
+                }
 
-            Spacer(minLength: 8)
+                Spacer(minLength: 8)
 
-            HStack(spacing: 6) {
-                quantityButton(systemName: "minus", action: onDecrement)
-
-                Text("\(item.quantity)")
+                Text("\(visibleQuantity)")
                     .font(.system(size: 24, weight: .black, design: .rounded))
                     .monospacedDigit()
-                    .frame(width: 42)
-                    .foregroundStyle(.white)
-
-                quantityButton(systemName: "plus", action: onIncrement)
+                    .frame(minWidth: 42, alignment: .trailing)
+                    .foregroundStyle(OceanKeyTheme.accent)
             }
+
+            CartConsumableQuantitySlider(
+                quantity: item.quantity,
+                onQuantityPreview: { previewQuantity = $0 },
+                onQuantityChange: onQuantityChange
+            )
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 9)
@@ -103,6 +106,7 @@ private struct CartConsumableRow: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .stroke(strokeColor, lineWidth: 1)
         }
+        .onChange(of: item.quantity) { _, _ in previewQuantity = nil }
     }
 
     private var rowBackground: Color {
@@ -121,20 +125,6 @@ private struct CartConsumableRow: View {
             return "Обновлено \(timeLabel(updatedAt))"
         }
         return "Не задано"
-    }
-
-    private func quantityButton(systemName: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 16, weight: .black))
-                .frame(width: 36, height: 36)
-                .foregroundStyle(OceanKeyTheme.roomForeground)
-                .background(OceanKeyTheme.accent)
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .disabled(systemName == "minus" && item.quantity == 0)
-        .opacity(systemName == "minus" && item.quantity == 0 ? 0.35 : 1)
     }
 
     private func timeLabel(_ date: Date) -> String {

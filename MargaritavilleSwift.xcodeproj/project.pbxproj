@@ -32,6 +32,7 @@
 		2AB3809693EAB36DBFCB3895 /* BuildChangelogEntriesMid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D995BBCF2F29ECE128B4A14 /* BuildChangelogEntriesMid.swift */; };
 		2BC9B4BF0A6B899CDA1EC71E /* RoomDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253281145546E2E8265AB304 /* RoomDetailsScreen.swift */; };
 		2C03F73F599E142BE0F76082 /* DeepSeekClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8C3FCDA479404117857CF0 /* DeepSeekClient.swift */; };
+		3441312F9ABC1A51B2265DC3 /* CartConsumableQuantitySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB0F213229469891AE9C7 /* CartConsumableQuantitySlider.swift */; };
 		365E0104677797C6B2C4872D /* CartDetailsRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865565ED53F967D3C426D546 /* CartDetailsRoute.swift */; };
 		379D17C85B0EBD7A5B7BC322 /* WorkSessionStore+SimpleCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95639B910F5BD49944085B73 /* WorkSessionStore+SimpleCycle.swift */; };
 		389B9EE5FEA4DBCC068830B7 /* HoldActionTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A516DF182C6E2DA6691E748B /* HoldActionTarget.swift */; };
@@ -269,6 +270,7 @@
 		95992FEC952AB30262884AD3 /* PerformanceTelemetryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTelemetryStore.swift; sourceTree = "<group>"; };
 		992734E7923F47A3A78219CB /* DeepSeekLabSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekLabSection.swift; sourceTree = "<group>"; };
 		A0B9BF6660BF1B2A8F11AAC3 /* OceanKeyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyTheme.swift; sourceTree = "<group>"; };
+		A16FB0F213229469891AE9C7 /* CartConsumableQuantitySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumableQuantitySlider.swift; sourceTree = "<group>"; };
 		A189BEF138C12C183D52C206 /* PersistentWorkSessionMapper+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistentWorkSessionMapper+Catalog.swift"; sourceTree = "<group>"; };
 		A35C7DAEF89C08E0166EA3C0 /* AppIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIdentity.swift; sourceTree = "<group>"; };
 		A40C0C481DF98EE976B8212F /* PersistentWorkSessionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentWorkSessionModels.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		4835F1F5C175B23BB4E8E9E3 /* CartDetails */ = {
 			isa = PBXGroup;
 			children = (
+				A16FB0F213229469891AE9C7 /* CartConsumableQuantitySlider.swift */,
 				66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */,
 				865565ED53F967D3C426D546 /* CartDetailsRoute.swift */,
 				A5C3614E48874E7A22359F76 /* CartDetailsScreen.swift */,
@@ -893,6 +896,7 @@
 				5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
 				6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */,
+				3441312F9ABC1A51B2265DC3 /* CartConsumableQuantitySlider.swift in Sources */,
 				57770924232FA86DAEC38590 /* CartConsumables.swift in Sources */,
 				C167F43C5EE884A270222EF3 /* CartConsumablesSection.swift in Sources */,
 				365E0104677797C6B2C4872D /* CartDetailsRoute.swift in Sources */,
@@ -1107,7 +1111,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1174,7 +1178,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (15)",
+            date: "2026-06-14",
+            changes: [
+                "Ported the OceanKey equalizer-style consumable quantity control into Margaritaville.",
+                "Cart details now use the same 0-to-10 bar slider instead of plus/minus quantity buttons.",
+                "The main summary consumables breakdown now lets each housekeeper supply row be adjusted with the equalizer slider while totals stay aggregated above.",
+                "Editable supply names now behave as a global persisted catalog: additions, renames, and deletions apply across every cart."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (14)",
             date: "2026-06-13",
             changes: [

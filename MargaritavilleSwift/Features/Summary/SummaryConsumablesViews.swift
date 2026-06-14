@@ -2,28 +2,44 @@ import SwiftUI
 
 struct SummaryConsumablesTable: View {
     let report: SummaryConsumablesReport
+    let onQuantityChange: ([CartSection.ID], CartConsumableItem.ID, String, Int) -> Void
+    @Environment(\.interactionFeedback) private var feedback
 
     var body: some View {
         if !report.isEmpty {
-            VStack(alignment: .leading, spacing: 14) {
-                Text("Расходники")
+            VStack(alignment: .leading, spacing: 12) {
+                Label("Расходники на склад", systemImage: "shippingbox.and.arrow.backward.fill")
                     .font(.system(size: 25, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
 
-                SummaryConsumablesPanel(title: "Всего на тележки") {
+                SummaryConsumablesPanel(title: "Всего взять", systemImage: "sum") {
                     ForEach(report.totals) { item in
                         SummaryConsumableTotalRow(item: item)
                     }
                 }
 
-                SummaryConsumablesPanel(title: "По уборщицам") {
+                SummaryConsumablesPanel(title: "По уборщицам", systemImage: "list.bullet.rectangle.fill") {
                     ForEach(report.housekeepers) { housekeeper in
-                        SummaryConsumableHousekeeperRow(housekeeper: housekeeper)
+                        SummaryConsumableHousekeeperRow(
+                            housekeeper: housekeeper,
+                            onQuantityChange: { item, quantity in
+                                feedback.confirm()
+                                onQuantityChange(item.sourceCartIDs, item.id, item.title, quantity)
+                            }
+                        )
                     }
                 }
             }
-            .padding(.horizontal, 8)
-            .padding(.top, 10)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 14)
+            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(OceanKeyTheme.pending.opacity(0.26), lineWidth: 1)
+            }
+            .accessibilityElement(children: .contain)
         }
     }
 }
@@ -91,18 +107,22 @@ struct SummaryConsumableTicker: View {
 
 private struct SummaryConsumablesPanel<Content: View>: View {
     let title: String
+    let systemImage: String
     let content: Content
 
-    init(title: String, @ViewBuilder content: () -> Content) {
+    init(title: String, systemImage: String, @ViewBuilder content: () -> Content) {
         self.title = title
+        self.systemImage = systemImage
         self.content = content()
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.system(size: 18, weight: .black, design: .rounded))
+            Label(title, systemImage: systemImage)
+                .font(.system(size: 13, weight: .black, design: .rounded))
                 .foregroundStyle(OceanKeyTheme.secondaryText)
+                .textCase(.uppercase)
+                .lineLimit(1)
 
             VStack(spacing: 7) {
                 content
@@ -145,9 +165,10 @@ private struct SummaryConsumableTotalRow: View {
 
 private struct SummaryConsumableHousekeeperRow: View {
     let housekeeper: SummaryHousekeeperConsumables
+    let onQuantityChange: (SummaryConsumableLine, Int) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
+        VStack(alignment: .leading, spacing: 9) {
             HStack(spacing: 8) {
                 Text(housekeeper.displayName)
                     .font(.system(size: 18, weight: .black, design: .rounded))
@@ -164,7 +185,12 @@ private struct SummaryConsumableHousekeeperRow: View {
                     .minimumScaleFactor(0.62)
             }
 
-            FlexibleConsumableTags(items: housekeeper.items)
+            ForEach(housekeeper.items) { item in
+                SummaryConsumableNeedRow(
+                    item: item,
+                    onQuantityChange: { quantity in onQuantityChange(item, quantity) }
+                )
+            }
         }
         .padding(.horizontal, 9)
         .padding(.vertical, 9)
@@ -180,45 +206,42 @@ private struct SummaryConsumableHousekeeperRow: View {
     }
 }
 
-private struct FlexibleConsumableTags: View {
-    let items: [SummaryConsumableLine]
-
-    var body: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 6) {
-                ForEach(items) { item in
-                    SummaryConsumableTag(item: item)
-                }
-            }
-
-            VStack(alignment: .leading, spacing: 6) {
-                ForEach(items) { item in
-                    SummaryConsumableTag(item: item)
-                }
-            }
-        }
-    }
-}
-
-private struct SummaryConsumableTag: View {
+private struct SummaryConsumableNeedRow: View {
     let item: SummaryConsumableLine
+    let onQuantityChange: (Int) -> Void
+    @State private var previewQuantity: Int?
+
+    private var visibleQuantity: Int {
+        previewQuantity ?? item.quantity
+    }
 
     var body: some View {
-        HStack(spacing: 5) {
-            Text(item.title)
-                .lineLimit(1)
-                .minimumScaleFactor(0.76)
-            Text("\(item.quantity)")
-                .monospacedDigit()
-                .foregroundStyle(.black)
-                .padding(.horizontal, 7)
-                .padding(.vertical, 2)
-                .background(OceanKeyTheme.pending, in: Capsule())
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text(item.title)
+                    .font(.system(size: 15, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.66)
+
+                Spacer(minLength: 8)
+
+                Text("\(visibleQuantity)")
+                    .font(.system(size: 22, weight: .black, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(OceanKeyTheme.accent)
+                    .frame(minWidth: 34, alignment: .trailing)
+            }
+
+            CartConsumableQuantitySlider(
+                quantity: item.quantity,
+                onQuantityPreview: { previewQuantity = $0 },
+                onQuantityChange: onQuantityChange
+            )
         }
-        .font(.system(size: 13, weight: .black, design: .rounded))
-        .foregroundStyle(.white)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 5)
-        .background(.black.opacity(0.32), in: Capsule())
+        .padding(.horizontal, 10)
+        .padding(.vertical, 9)
+        .background(.black.opacity(0.24), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .onChange(of: item.quantity) { _, _ in previewQuantity = nil }
     }
 }

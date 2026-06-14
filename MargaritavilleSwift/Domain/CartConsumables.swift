@@ -61,7 +61,6 @@ enum CartConsumableCatalog {
     ) -> [CartConsumableItem] {
         let normalizedCatalog = normalizedCatalog(catalog)
         let storedByID = Dictionary(uniqueKeysWithValues: (storedItems ?? []).map { ($0.id, $0) })
-        let catalogIDs = Set(normalizedCatalog.map(\.id))
         let catalogItems = normalizedCatalog.map { catalogItem -> CartConsumableItem in
             var stored = storedByID[catalogItem.id] ?? CartConsumableItem(
                 id: catalogItem.id,
@@ -71,10 +70,7 @@ enum CartConsumableCatalog {
             stored.title = catalogItem.title
             return stored
         }
-        let activeLegacyItems = (storedItems ?? []).filter {
-            !catalogIDs.contains($0.id) && ($0.quantity > 0 || $0.completedAt != nil)
-        }
-        return catalogItems + activeLegacyItems
+        return catalogItems
     }
 
     private static func stableID(for title: String) -> String {
