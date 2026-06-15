@@ -9,7 +9,8 @@ struct CartConsumableQuantitySlider: View {
     let onZeroCommitPendingChange: (Bool) -> Void
 
     @State private var draftQuantity: Int?
-    @State private var isSliderArmed = false
+    @State private var editorSelection = 0
+    @State private var isEditorPresented = false
     @State private var isPendingZeroCommit = false
     @State private var pendingZeroCommitTask: Task<Void, Never>?
     @Environment(\.interactionFeedback) private var feedback
@@ -43,45 +44,47 @@ struct CartConsumableQuantitySlider: View {
             )
 
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(.black.opacity(0.36))
+                passiveTrack(width: width, handleCenter: handleCenter, horizontalInset: horizontalInset)
 
-                ruler(width: width)
-                    .padding(.horizontal, horizontalInset)
-                    .padding(.vertical, 9)
-
-                Capsule()
-                    .fill(MatrixConsumableStyle.green)
-                    .frame(width: max(handleCenter - horizontalInset, 0), height: 9)
-                    .offset(x: horizontalInset, y: 1)
-                    .shadow(color: MatrixConsumableStyle.green.opacity(0.36), radius: 6)
-
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(MatrixConsumableStyle.green)
-                    .overlay {
-                        Text("\(visibleQuantity)")
-                            .font(.system(size: 15, weight: .black, design: .rounded))
-                            .monospacedDigit()
-                            .foregroundStyle(.black)
-                    }
-                    .frame(width: handleWidth, height: 58)
-                    .shadow(
-                        color: MatrixConsumableStyle.green.opacity(0.46),
-                        radius: 8,
-                        x: 0,
-                        y: 0
-                    )
-                    .offset(x: handleOffset)
+                Button {
+                    openEditor()
+                } label: {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(MatrixConsumableStyle.green)
+                        .overlay {
+                            Text("\(visibleQuantity)")
+                                .font(.system(size: 15, weight: .black, design: .rounded))
+                                .monospacedDigit()
+                                .foregroundStyle(.black)
+                        }
+                        .frame(width: handleWidth, height: 58)
+                        .shadow(
+                            color: MatrixConsumableStyle.green.opacity(0.46),
+                            radius: 8,
+                            x: 0,
+                            y: 0
+                        )
+                }
+                .buttonStyle(.plain)
+                .offset(x: handleOffset)
+                .accessibilityLabel("Изменить количество")
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .stroke(
-                        MatrixConsumableStyle.green.opacity(isSliderArmed || isPendingZeroCommit ? 1.0 : 0.92),
-                        lineWidth: isSliderArmed || isPendingZeroCommit ? 2.2 : 1.4
+                        MatrixConsumableStyle.green.opacity(isPendingZeroCommit ? 1.0 : 0.92),
+                        lineWidth: isPendingZeroCommit ? 2.2 : 1.4
                     )
             }
-            .contentShape(Rectangle())
-            .gesture(armedDragGesture(width: width))
+            .sheet(isPresented: $isEditorPresented) {
+                CartConsumableQuantityEditorSheet(
+                    selection: editorSelection,
+                    maximum: Self.maximum,
+                    onSelect: selectQuantity
+                )
+                .presentationDetents([.height(360)])
+                .presentationDragIndicator(.visible)
+            }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Количество")
             .accessibilityValue("\(visibleQuantity)")
@@ -106,46 +109,34 @@ struct CartConsumableQuantitySlider: View {
         .frame(height: 76)
     }
 
-    private func armedDragGesture(width: CGFloat) -> some Gesture {
-        LongPressGesture(minimumDuration: 0.26, maximumDistance: 12)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
-            .onChanged { value in
-                switch value {
-                case .first(true):
-                    armSliderIfNeeded()
-                case .second(true, let drag?):
-                    armSliderIfNeeded()
-                    preview(detent(for: drag.location.x, width: width))
-                default:
-                    break
-                }
-            }
-            .onEnded { value in
-                switch value {
-                case .second(true, let drag?):
-                    commit(detent(for: drag.location.x, width: width))
-                default:
-                    isSliderArmed = false
-                }
-            }
+    private func passiveTrack(width: CGFloat, handleCenter: CGFloat, horizontalInset: CGFloat) -> some View {
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(.black.opacity(0.36))
+
+            CartConsumableQuantityRuler(quantity: visibleQuantity, maximum: Self.maximum)
+                .padding(.horizontal, horizontalInset)
+                .padding(.vertical, 9)
+
+            Capsule()
+                .fill(MatrixConsumableStyle.green)
+                .frame(width: max(handleCenter - horizontalInset, 0), height: 9)
+                .offset(x: horizontalInset, y: 1)
+                .shadow(color: MatrixConsumableStyle.green.opacity(0.36), radius: 6)
+        }
+        .allowsHitTesting(false)
     }
 
-    private func armSliderIfNeeded() {
-        guard !isSliderArmed else { return }
-        isSliderArmed = true
+    private func openEditor() {
         cancelPendingZeroCommit(clearPreview: true)
-        feedback.holdStart()
+        editorSelection = visibleQuantity
+        isEditorPresented = true
+        feedback.tap()
     }
 
-    private func preview(_ quantity: Int) {
-        guard draftQuantity != quantity else { return }
-        draftQuantity = quantity
-        onQuantityPreview(quantity)
-    }
-
-    private func commit(_ quantity: Int) {
+    private func selectQuantity(_ quantity: Int) {
+        isEditorPresented = false
         let quantity = Self.clamped(quantity)
-        isSliderArmed = false
 
         if quantity == 0, Self.clamped(self.quantity) != 0 {
             beginPendingZeroCommit()
@@ -192,33 +183,6 @@ struct CartConsumableQuantitySlider: View {
             draftQuantity = nil
             onQuantityPreview(nil)
         }
-    }
-
-    private func ruler(width: CGFloat) -> some View {
-        ZStack(alignment: .bottomLeading) {
-            HStack(alignment: .bottom, spacing: 0) {
-                ForEach(0...Self.maximum, id: \.self) { index in
-                    VStack(spacing: 7) {
-                        Rectangle()
-                            .fill(MatrixConsumableStyle.green.opacity(index <= visibleQuantity ? 0.94 : 0.42))
-                            .frame(width: index % 5 == 0 ? 2 : 1, height: index % 5 == 0 ? 34 : 26)
-
-                        Text("\(index)")
-                            .font(.system(size: 13, weight: .black, design: .rounded))
-                            .monospacedDigit()
-                            .foregroundStyle(MatrixConsumableStyle.green)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-            }
-        }
-        .frame(width: max(width - 36, 1), alignment: .leading)
-    }
-
-    private func detent(for x: CGFloat, width: CGFloat) -> Int {
-        let inset: CGFloat = 18
-        let progress = min(max((x - inset) / max(width - inset * 2, 1), 0), 1)
-        return Self.clamped(Int((progress * CGFloat(Self.maximum)).rounded()))
     }
 
     static func clamped(_ quantity: Int) -> Int {

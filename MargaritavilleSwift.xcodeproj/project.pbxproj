@@ -126,6 +126,7 @@
 		B851DD8FE85AB4C1FE79F336 /* DeepSeekModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BDB7B2E2231A8706EC007C /* DeepSeekModels.swift */; };
 		B8DCB761C2A5C4905FD1E616 /* VIPJellyEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD993F5D122A09028FEDE5EE /* VIPJellyEffects.swift */; };
 		BA597DC5700A27AACC313C22 /* PersistentAIVisualPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50C6C89DEFAEA30480095D0 /* PersistentAIVisualPreset.swift */; };
+		BCE9CA2BACD576D6534113D5 /* CartConsumableQuantityEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A93A6427C3A970986AE2F0 /* CartConsumableQuantityEditorSheet.swift */; };
 		BD0CEBFEF8659B3BF733D7A0 /* SettingsCategorySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA91C16BE0BBB911F2F72E /* SettingsCategorySelector.swift */; };
 		C1124C1B7153C116C0012804 /* WorkSessionStore+Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B512B523DF50D934102856F7 /* WorkSessionStore+Catalog.swift */; };
 		C167F43C5EE884A270222EF3 /* CartConsumablesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */; };
@@ -148,6 +149,7 @@
 		DE0127E5A1E843104D7488D6 /* VoiceNoteBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = C253030D4EA92886847226FE /* VoiceNoteBubble.swift */; };
 		E1BE86B2D6306ABECD0C0C23 /* AppleSyncStatusEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B499D07E2E53A1051A4A16B /* AppleSyncStatusEnvironment.swift */; };
 		E23835D16917BF2447E61E1A /* AppSettingsStoreLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3A52C2D0194E4284467824 /* AppSettingsStoreLoading.swift */; };
+		E3A77C88833383EC9FA8E68D /* CartConsumableQuantityRuler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B839BB4AD8E1C10BF55B20F /* CartConsumableQuantityRuler.swift */; };
 		E4125D708C5A5359E278629B /* WorkSessionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF703659BD4E4ED1F6182C1 /* WorkSessionHistory.swift */; };
 		E522CC4C1973B7D9F9EE01B8 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5CB7A732CA2C1250A664F900 /* click.wav */; };
 		E69996BC5EF84C5734DB98FE /* RoomDayCategoryCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1606F1A9957635785A6D928D /* RoomDayCategoryCounts.swift */; };
@@ -219,6 +221,7 @@
 		394987606D239084C515CA07 /* CartSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSummarySection.swift; sourceTree = "<group>"; };
 		3957305DB54B9B479B51BB38 /* WorkSetupTerritorySelectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupTerritorySelectionSummary.swift; sourceTree = "<group>"; };
 		396D37051D44389A26C276BB /* WorkSessionSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionSelection.swift; sourceTree = "<group>"; };
+		3B839BB4AD8E1C10BF55B20F /* CartConsumableQuantityRuler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumableQuantityRuler.swift; sourceTree = "<group>"; };
 		3C6C12767830A9F635B402DA /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		3DD7A3C53C65D8A0389C6680 /* HousekeeperCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousekeeperCatalogEditorSection.swift; sourceTree = "<group>"; };
 		3E38EBEBF641353B871AF16E /* RoomCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCellView.swift; sourceTree = "<group>"; };
@@ -305,6 +308,7 @@
 		C253030D4EA92886847226FE /* VoiceNoteBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteBubble.swift; sourceTree = "<group>"; };
 		C32C5954A7CEDB001BCDE841 /* AppleSyncEntitlementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncEntitlementTests.swift; sourceTree = "<group>"; };
 		C35D3835B7B9A121C869C2ED /* WorkSessionStore+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Selection.swift"; sourceTree = "<group>"; };
+		C3A93A6427C3A970986AE2F0 /* CartConsumableQuantityEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumableQuantityEditorSheet.swift; sourceTree = "<group>"; };
 		C4037F7F53F3633F64EEFCC5 /* pressed.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pressed.wav; sourceTree = "<group>"; };
 		C5C9FEF950BB64C810793ED3 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		C61FA926449ECE44FBCD523C /* SummaryActionMenuExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansion.swift; sourceTree = "<group>"; };
@@ -437,6 +441,8 @@
 		4835F1F5C175B23BB4E8E9E3 /* CartDetails */ = {
 			isa = PBXGroup;
 			children = (
+				C3A93A6427C3A970986AE2F0 /* CartConsumableQuantityEditorSheet.swift */,
+				3B839BB4AD8E1C10BF55B20F /* CartConsumableQuantityRuler.swift */,
 				A16FB0F213229469891AE9C7 /* CartConsumableQuantitySlider.swift */,
 				66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */,
 				865565ED53F967D3C426D546 /* CartDetailsRoute.swift */,
@@ -899,6 +905,8 @@
 				5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
 				6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */,
+				BCE9CA2BACD576D6534113D5 /* CartConsumableQuantityEditorSheet.swift in Sources */,
+				E3A77C88833383EC9FA8E68D /* CartConsumableQuantityRuler.swift in Sources */,
 				3441312F9ABC1A51B2265DC3 /* CartConsumableQuantitySlider.swift in Sources */,
 				57770924232FA86DAEC38590 /* CartConsumables.swift in Sources */,
 				C167F43C5EE884A270222EF3 /* CartConsumablesSection.swift in Sources */,
@@ -1115,7 +1123,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1182,7 +1190,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
