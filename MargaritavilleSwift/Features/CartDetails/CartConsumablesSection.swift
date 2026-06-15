@@ -69,13 +69,17 @@ private struct CartConsumableRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 10) {
-                Button(action: onToggleComplete) {
+                HoldActionTarget(
+                    enabled: true,
+                    useLongPress: true,
+                    semanticLabel: "\(item.title) выполнено",
+                    onActivate: onToggleComplete
+                ) {
                     Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                         .font(.system(size: 28, weight: .black))
                         .frame(width: 42, height: 42)
                         .foregroundStyle(MatrixConsumableStyle.green)
                 }
-                .buttonStyle(.plain)
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(item.title)

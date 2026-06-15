@@ -257,7 +257,7 @@ final class AppSettingsStore {
         roomCellGeometry: RoomCellGeometry = .roomy,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
-        housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode = .tap,
+        housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode = .longPress,
         personalCartMarkers: PersonalCartMarkers = .default,
         statusPaletteSaturation: Double = 1,
         matrixSpeed: Double = MatrixRainConfiguration.default.speed,

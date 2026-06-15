@@ -16,38 +16,42 @@ struct SummaryHeader: View {
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
     @Environment(\.interactionFeedback) private var feedback
+    @State private var selectionPuzzleProgress: CGFloat = 0
 
     var body: some View {
-        HStack(spacing: 12) {
-            headerIconButton(
-                systemName: "line.3.horizontal",
-                accessibilityLabel: "Открыть настройки",
-                action: onOpenSettings
-            )
+        GeometryReader { proxy in
+            HStack(spacing: 8) {
+                headerIconButton(
+                    systemName: "line.3.horizontal",
+                    accessibilityLabel: "Открыть настройки",
+                    action: onOpenSettings
+                )
+                .opacity(CGFloat(1) - min(selectionPuzzleProgress * CGFloat(1.65), CGFloat(1)))
 
-            Spacer(minLength: 8)
+                Spacer(minLength: 8)
 
-            centerStats
-                .frame(maxWidth: .infinity)
+                centerStats
+                    .frame(maxWidth: .infinity)
 
-            Spacer(minLength: 8)
-
-            headerIconButton(
-                systemName: "square.grid.3x3",
-                accessibilityLabel: "Открыть выбор комнат",
-                action: { feedback.tap() },
-                longPressAction: openSelection
-            )
+                Spacer(minLength: 94)
+            }
+            .padding(.leading, 18)
+            .padding(.trailing, 10)
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .overlay {
+                SummarySelectionPuzzleHandle(
+                    progress: $selectionPuzzleProgress,
+                    onComplete: openSelection
+                )
+            }
         }
-        .padding(.horizontal, 18)
         .frame(height: 48)
     }
 
     private func headerIconButton(
         systemName: String,
         accessibilityLabel: String,
-        action: @escaping () -> Void,
-        longPressAction: (() -> Void)? = nil
+        action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
             Image(systemName: systemName)
@@ -58,13 +62,7 @@ struct SummaryHeader: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(longPressAction == nil ? "" : "Держите кнопку, чтобы открыть редактирование списка.")
-        .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.55)
-                .onEnded { _ in
-                    longPressAction?()
-                }
-        )
+        .accessibilityHint("")
     }
 
     private func openSelection() {

@@ -202,6 +202,20 @@ verification.
 - The top-right Margaritaville summary edit-entry button is protected by a
   long press. A normal tap may give feedback, but it must not reopen setup room
   editing.
+- Margaritaville now uses the OceanKey-style setup-unlock puzzle pull in the
+  summary header: drag the right-side puzzle handle left into the settings
+  socket to return to the setup screen. This replaces simple tap/long-press
+  entry so accidental pocket touches cannot reopen room editing.
+- Margaritaville work actions are deliberate by default: summary room status
+  changes, setup room/housekeeper/territory changes, starting the workday, and
+  cart supply completion require long press, while navigation and status
+  filters stay quick.
+- Margaritaville room media/VIP/schedule actions no longer share the room
+  long-press path. A deliberate horizontal swipe on a square room tile opens the
+  action dialog, keeping status changes and room tools separate.
+- Matrix consumable rulers accept quantity swipes only after a clearly
+  horizontal gesture begins; vertical motion is left to the scroll view, and
+  zero still waits for the red 5-second warning before committing.
 - Interaction feedback now uses the stronger native feedback path: UIKit
   notification haptics are routed through the shared interaction service in
   addition to impact/selection feedback and bundled local sounds.

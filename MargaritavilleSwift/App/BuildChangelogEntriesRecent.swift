@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (19)",
+            date: "2026-06-15",
+            changes: [
+                "Adapted the OceanKey puzzle-pull header handle for Margaritaville so returning to the setup screen requires a deliberate right-to-left pull instead of a simple tap.",
+                "Changed Margaritaville room status changes, setup selection controls, and cart supply completion checks to deliberate long-press actions to reduce accidental input.",
+                "Moved the Margaritaville room media/VIP/schedule menu off the long-press path and onto a deliberate horizontal room swipe so it no longer conflicts with long-press status changes.",
+                "Restored safe horizontal swiping on Matrix consumable rulers while preserving vertical scroll and the 5-second zero warning."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (18)",
             date: "2026-06-15",
             changes: [

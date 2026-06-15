@@ -55,7 +55,12 @@ struct TerritoryPicker: View {
     }
 
     private func pickerChip(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+        HoldActionTarget(
+            enabled: true,
+            useLongPress: true,
+            semanticLabel: title,
+            onActivate: action
+        ) {
             Text(title)
                 .font(.system(size: 24, weight: .black, design: .rounded))
                 .lineLimit(1)
@@ -70,6 +75,5 @@ struct TerritoryPicker: View {
                         .stroke(selected ? .white.opacity(0.72) : OceanKeyTheme.accent.opacity(0.18), lineWidth: 1.2)
                 }
         }
-        .buttonStyle(.plain)
     }
 }

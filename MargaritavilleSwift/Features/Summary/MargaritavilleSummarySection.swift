@@ -101,7 +101,6 @@ private struct HousekeeperSummaryNameButton: View {
                 action()
             }
             .onLongPressGesture(minimumDuration: 0.38) {
-                guard gestureMode == .longPress else { return }
                 feedback.longPress()
                 action()
             }
@@ -134,9 +133,9 @@ private struct HousekeeperSummaryNameButton: View {
 
     private var accessibilityHint: String {
         switch gestureMode {
-        case .tap: "Открывает меню уборщицы по тапу."
+        case .tap: "Открывает меню уборщицы по тапу или долгому нажатию."
         case .longPress: "Открывает меню уборщицы по долгому нажатию."
-        case .swipeLeft: "Открывает меню уборщицы свайпом справа налево."
+        case .swipeLeft: "Открывает меню уборщицы свайпом справа налево или долгим нажатием."
         }
     }
 }
@@ -152,27 +151,19 @@ private struct MargaritavilleRoomTile: View {
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.experimentalVIPJellyEnabled) private var experimentalVIPJellyEnabled
     @Environment(\.experimentalVIPJellySpeed) private var experimentalVIPJellySpeed
+    @State private var isActionDialogPresented = false
+    @State private var actionSwipeArmed = false
+    @State private var actionSwipeFeedbackStarted = false
 
     var body: some View {
         tileBody
-            .contextMenu {
-                Button("Голос/медиа", systemImage: "mic.and.signal.meter.fill") {
-                    feedback.tap()
-                    onOpenDetails(.voice)
-                }
-                Button(room.isVIP ? "VIP выключить" : "VIP включить", systemImage: room.isVIP ? "crown.fill" : "diamond.fill") {
-                    feedback.confirm()
-                    onVIPToggle()
-                }
-                Button("Назначить время", systemImage: "clock.fill") {
-                    feedback.tap()
-                    onSchedule()
-                }
+            .simultaneousGesture(actionMenuSwipeGesture)
+            .confirmationDialog("Комната \(room.id)", isPresented: $isActionDialogPresented, titleVisibility: .visible) {
+                Button("Голос/медиа", systemImage: "mic.and.signal.meter.fill", action: openVoiceDetails)
+                Button(room.isVIP ? "VIP выключить" : "VIP включить", systemImage: room.isVIP ? "diamond.fill" : "diamond", action: toggleVIP)
+                Button("Назначить время", systemImage: "clock.fill", action: scheduleRoom)
                 if room.status(in: .simpleCycle) == .ready {
-                    Button("Вернуть в жёлтый", systemImage: "arrow.counterclockwise") {
-                        feedback.deselect()
-                        onReset()
-                    }
+                    Button("Вернуть в жёлтый", systemImage: "arrow.counterclockwise", action: resetRoom)
                 }
             }
     }
@@ -189,10 +180,12 @@ private struct MargaritavilleRoomTile: View {
     }
 
     private func tileBodyContent(vipJellyTime: TimeInterval?) -> some View {
-        Button {
-            feedback.confirm()
-            onAdvance()
-        } label: {
+        HoldActionTarget(
+            enabled: true,
+            useLongPress: true,
+            semanticLabel: "Комната \(room.id)",
+            onActivate: onAdvance
+        ) {
             VStack(spacing: 6) {
                 Text(room.id)
                     .font(.system(size: 44, weight: .black, design: .rounded))
@@ -232,7 +225,6 @@ private struct MargaritavilleRoomTile: View {
                 isMenuExpanded: false
             )
         }
-        .buttonStyle(.plain)
     }
 
     @ViewBuilder
@@ -261,6 +253,72 @@ private struct MargaritavilleRoomTile: View {
 
     private var tileCornerRadius: CGFloat {
         16
+    }
+
+    private var actionMenuSwipeGesture: some Gesture {
+        DragGesture(minimumDistance: 24, coordinateSpace: .local)
+            .onChanged { value in
+                updateActionSwipe(value)
+            }
+            .onEnded { value in
+                finishActionSwipe(value)
+            }
+    }
+
+    private func updateActionSwipe(_ value: DragGesture.Value) {
+        let horizontal = abs(value.translation.width)
+        let vertical = abs(value.translation.height)
+        guard vertical <= 12 || horizontal > vertical * 2.4 else {
+            resetActionSwipe()
+            return
+        }
+        guard horizontal >= 36, horizontal > vertical * 2.4 else { return }
+        if !actionSwipeFeedbackStarted {
+            actionSwipeFeedbackStarted = true
+            feedback.holdStart()
+        }
+        let nextArmed = horizontal >= 82
+        if nextArmed, !actionSwipeArmed {
+            feedback.holdCommit()
+        } else if !nextArmed, horizontal >= 64, !actionSwipeArmed {
+            feedback.holdWarning()
+        }
+        actionSwipeArmed = nextArmed
+    }
+
+    private func finishActionSwipe(_ value: DragGesture.Value) {
+        defer { resetActionSwipe() }
+        let horizontal = abs(value.translation.width)
+        let predicted = abs(value.predictedEndTranslation.width)
+        let vertical = abs(value.translation.height)
+        guard actionSwipeArmed || (horizontal >= 72 && predicted >= 96 && horizontal > vertical * 2.2) else { return }
+        feedback.confirm()
+        isActionDialogPresented = true
+    }
+
+    private func resetActionSwipe() {
+        actionSwipeArmed = false
+        actionSwipeFeedbackStarted = false
+    }
+
+    private func openVoiceDetails() {
+        feedback.tap()
+        onOpenDetails(.voice)
+    }
+
+    private func toggleVIP() {
+        feedback.confirm()
+        onVIPToggle()
+    }
+
+    private func scheduleRoom() {
+        feedback.tap()
+        onSchedule()
+    }
+
+    private func resetRoom() {
+        feedback.deselect()
+        onReset()
     }
 
     private var timeLabel: String {

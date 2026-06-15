@@ -48,7 +48,12 @@ struct WorkSetupHeader: View {
     }
 
     private var startButton: some View {
-        Button(action: onStart) {
+        HoldActionTarget(
+            enabled: canStart,
+            useLongPress: true,
+            semanticLabel: "Начать смену",
+            onActivate: onStart
+        ) {
             Text("Начать")
                 .font(.system(size: 17, weight: .black, design: .rounded))
                 .foregroundStyle(canStart ? OceanKeyTheme.roomForeground : OceanKeyTheme.secondaryText.opacity(0.45))
@@ -57,8 +62,6 @@ struct WorkSetupHeader: View {
                 .background(canStart ? OceanKeyTheme.accent : OceanKeyTheme.surface.opacity(0.65))
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
-        .buttonStyle(.plain)
-        .disabled(!canStart)
     }
 }
 
@@ -82,9 +85,12 @@ struct HousekeeperWorkPicker: View {
     private func housekeeperButton(_ housekeeper: Housekeeper) -> some View {
         let isSelected = selectedIDs.contains(housekeeper.id)
         let isFocused = focusedID == housekeeper.id
-        return Button {
-            onSelect(housekeeper)
-        } label: {
+        return HoldActionTarget(
+            enabled: true,
+            useLongPress: true,
+            semanticLabel: housekeeper.displayName,
+            onActivate: { onSelect(housekeeper) }
+        ) {
             HStack(spacing: 8) {
                 Circle()
                     .fill(housekeeper.palette.color)
@@ -112,7 +118,6 @@ struct HousekeeperWorkPicker: View {
                     .stroke(isFocused ? .white.opacity(0.82) : housekeeper.palette.color.opacity(0.34), lineWidth: 1.5)
                 }
         }
-        .buttonStyle(.plain)
     }
 }
 
@@ -163,7 +168,12 @@ struct CartSetupCard: View {
                     .foregroundStyle(OceanKeyTheme.secondaryText)
             }
             Spacer()
-            Button(action: onRemove) {
+            HoldActionTarget(
+                enabled: true,
+                useLongPress: true,
+                semanticLabel: "Убрать уборщицу из смены",
+                onActivate: onRemove
+            ) {
                 Image(systemName: "xmark")
                     .font(.system(size: 15, weight: .black))
                     .frame(width: 40, height: 40)
@@ -171,7 +181,6 @@ struct CartSetupCard: View {
                     .background(OceanKeyTheme.surface.opacity(0.74))
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
-            .buttonStyle(.plain)
         }
         .font(.system(size: 24, weight: .black, design: .rounded))
         .foregroundStyle(.white)

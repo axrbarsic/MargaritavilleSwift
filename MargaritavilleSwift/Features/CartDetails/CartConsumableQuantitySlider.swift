@@ -46,9 +46,21 @@ struct CartConsumableQuantitySlider: View {
             ZStack(alignment: .leading) {
                 passiveTrack(width: width, handleCenter: handleCenter, horizontalInset: horizontalInset)
 
-                Button {
-                    openEditor()
-                } label: {
+                CartConsumableQuantityPanSurface(
+                    maximum: Self.maximum,
+                    onBegin: beginSwipeEdit,
+                    onChange: previewQuantity,
+                    onCommit: selectQuantity,
+                    onCancel: cancelSwipeEdit
+                )
+                .frame(width: width, height: 76)
+
+                HoldActionTarget(
+                    enabled: true,
+                    useLongPress: true,
+                    semanticLabel: "Изменить количество",
+                    onActivate: openEditor
+                ) {
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
                         .fill(MatrixConsumableStyle.green)
                         .overlay {
@@ -65,9 +77,9 @@ struct CartConsumableQuantitySlider: View {
                             y: 0
                         )
                 }
-                .buttonStyle(.plain)
                 .offset(x: handleOffset)
                 .accessibilityLabel("Изменить количество")
+                .accessibilityHint("Держите ручку, чтобы открыть точный выбор.")
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -131,7 +143,23 @@ struct CartConsumableQuantitySlider: View {
         cancelPendingZeroCommit(clearPreview: true)
         editorSelection = visibleQuantity
         isEditorPresented = true
-        feedback.tap()
+    }
+
+    private func beginSwipeEdit() {
+        cancelPendingZeroCommit(clearPreview: true)
+        feedback.holdStart()
+    }
+
+    private func previewQuantity(_ quantity: Int) {
+        let quantity = Self.clamped(quantity)
+        guard draftQuantity != quantity else { return }
+        draftQuantity = quantity
+        onQuantityPreview(quantity)
+        feedback.holdStart()
+    }
+
+    private func cancelSwipeEdit() {
+        cancelPendingZeroCommit(clearPreview: true)
     }
 
     private func selectQuantity(_ quantity: Int) {

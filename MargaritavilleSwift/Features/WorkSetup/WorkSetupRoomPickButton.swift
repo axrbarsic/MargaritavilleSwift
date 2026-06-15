@@ -12,7 +12,12 @@ struct RoomPickButton: View {
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
+        HoldActionTarget(
+            enabled: reservation == nil,
+            useLongPress: true,
+            semanticLabel: "Комната \(room)",
+            onActivate: onTap
+        ) {
             ZStack {
                 roomNumber
                 if let reservation {
@@ -46,8 +51,6 @@ struct RoomPickButton: View {
                     .stroke(stroke, lineWidth: selected ? 1.4 : 1)
             }
         }
-        .buttonStyle(.plain)
-        .disabled(reservation != nil)
         .accessibilityHint(reservation == nil ? "" : "Комната уже закреплена за \(reservation?.displayName ?? "другой уборщицей").")
     }
 

@@ -6,7 +6,7 @@ extension AppSettingsStore {
         roomCellGeometry = .roomy
         roomTaskLongPress = true
         summaryActionMenuAllowsMultiple = false
-        housekeeperDetailsGestureMode = .tap
+        housekeeperDetailsGestureMode = .longPress
         personalCartMarkers = .default
         statusPaletteSaturation = 1
         matrixSpeed = MatrixRainConfiguration.default.speed
