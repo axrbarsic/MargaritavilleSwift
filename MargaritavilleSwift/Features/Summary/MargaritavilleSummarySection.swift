@@ -4,7 +4,6 @@ struct MargaritavilleSummarySection: View {
     let section: MargaritavilleSummaryHousekeeperSection
     let housekeeper: Housekeeper?
     let consumableTickerText: String?
-    let housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode
     let statusPaletteSaturation: Double
     let onOpenCartDetails: (CartSection.ID, String) -> Void
     let onAdvance: (RoomCell.ID) -> Void
@@ -35,7 +34,6 @@ struct MargaritavilleSummarySection: View {
             HousekeeperSummaryNameButton(
                 title: housekeeper?.displayName ?? "Уборщица",
                 palette: housekeeper?.palette.color ?? OceanKeyTheme.accent,
-                gestureMode: housekeeperDetailsGestureMode,
                 action: { onOpenCartDetails(section.primaryCartID, section.locationLabel) }
             )
 
@@ -70,10 +68,8 @@ struct MargaritavilleSummarySection: View {
 private struct HousekeeperSummaryNameButton: View {
     let title: String
     let palette: Color
-    let gestureMode: HousekeeperDetailsGestureMode
     let action: () -> Void
     @Environment(\.interactionFeedback) private var feedback
-    @State private var swipeOffset: CGFloat = 0
 
     var body: some View {
         Text(title)
@@ -90,53 +86,13 @@ private struct HousekeeperSummaryNameButton: View {
                 Capsule()
                     .stroke(palette.opacity(0.72), lineWidth: 1.5)
             }
-            .offset(x: swipeOffset)
             .contentShape(Rectangle())
-            .onTapGesture {
-                guard gestureMode == .tap else {
-                    feedback.tap()
-                    return
-                }
-                feedback.confirm()
-                action()
-            }
             .onLongPressGesture(minimumDuration: 0.38) {
                 feedback.longPress()
                 action()
             }
-            .gesture(
-                DragGesture(minimumDistance: 16)
-                    .onChanged { value in
-                        guard gestureMode == .swipeLeft else { return }
-                        swipeOffset = min(0, max(-36, value.translation.width))
-                    }
-                    .onEnded { value in
-                        guard gestureMode == .swipeLeft else {
-                            swipeOffset = 0
-                            return
-                        }
-                        if value.translation.width < -42 || value.predictedEndTranslation.width < -72 {
-                            feedback.confirm()
-                            withAnimation(.spring(response: 0.22, dampingFraction: 0.78)) {
-                                swipeOffset = -24
-                            }
-                            action()
-                        }
-                        withAnimation(.spring(response: 0.28, dampingFraction: 0.74)) {
-                            swipeOffset = 0
-                        }
-                    }
-            )
             .accessibilityAddTraits(.isButton)
-            .accessibilityHint(accessibilityHint)
-    }
-
-    private var accessibilityHint: String {
-        switch gestureMode {
-        case .tap: "Открывает меню уборщицы по тапу или долгому нажатию."
-        case .longPress: "Открывает меню уборщицы по долгому нажатию."
-        case .swipeLeft: "Открывает меню уборщицы свайпом справа налево или долгим нажатием."
-        }
+            .accessibilityHint("Открывает меню уборщицы по долгому нажатию.")
     }
 }
 

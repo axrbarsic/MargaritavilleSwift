@@ -173,9 +173,10 @@ verification.
   housekeeper once, keeps every assigned room in one grid, and lists all work
   locations on the right side of the header.
 - Margaritaville summary housekeeper names open the existing cart details flow
-  for that hidden cart/work block. The trigger is configurable in Settings as a
-  tap, long press, or right-to-left swipe; the details flow owns cart voice
-  notes, speech transcription, photo/video media, and cart supplies.
+  for that hidden cart/work block only by long press. Tap and swipe entry points
+  are intentionally not exposed, so accidental touches do not open the cart
+  menu; the details flow owns cart voice notes, speech transcription,
+  photo/video media, and cart supplies.
 - Cart supply names are an editable app-level catalog in Settings. Quantities
   stay per cart/work block, while catalog renames update the displayed title by
   stable item id.
@@ -188,8 +189,9 @@ verification.
 - Margaritaville summary surfaces active cart supplies directly on the main
   screen. Active means quantity is greater than zero and the supply row is not
   marked completed. Each housekeeper header shows a running supply ticker when
-  that housekeeper needs attention, and the bottom of the summary shows a
-  readable total table plus a per-housekeeper breakdown.
+  that housekeeper needs attention, and the bottom of the summary shows only a
+  readable total-needed table. Per-housekeeper supply editing stays inside the
+  housekeeper/cart details menu.
 - Margaritaville summary status chips are now tappable filters, and square
   summary tiles use larger room numbers and time labels for better real-device
   readability while preserving the 4-column layout.
@@ -213,9 +215,10 @@ verification.
 - Margaritaville room media/VIP/schedule actions no longer share the room
   long-press path. A deliberate horizontal swipe on a square room tile opens the
   action dialog, keeping status changes and room tools separate.
-- Matrix consumable rulers accept quantity swipes only after a clearly
-  horizontal gesture begins; vertical motion is left to the scroll view, and
-  zero still waits for the red 5-second warning before committing.
+- Matrix consumable rulers edit quantity by dragging horizontally across the
+  whole ruler. The visual handle is passive so it cannot steal the drag, vertical
+  motion is left to the scroll view, and zero still waits for the red 5-second
+  warning before committing.
 - Interaction feedback now uses the stronger native feedback path: UIKit
   notification haptics are routed through the shared interaction service in
   addition to impact/selection feedback and bundled local sounds.

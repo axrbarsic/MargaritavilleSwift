@@ -43,6 +43,7 @@ final class PanSurfaceView: UIView, UIGestureRecognizerDelegate {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         pan.delegate = self
         pan.cancelsTouchesInView = false
+        pan.maximumNumberOfTouches = 1
         addGestureRecognizer(pan)
     }
 
@@ -52,10 +53,11 @@ final class PanSurfaceView: UIView, UIGestureRecognizerDelegate {
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return true }
+        let translation = pan.translation(in: self)
         let velocity = pan.velocity(in: self)
-        let horizontal = abs(velocity.x)
-        let vertical = abs(velocity.y)
-        return horizontal > 36 && horizontal > vertical * 1.25
+        let horizontalIntent = max(abs(translation.x), abs(velocity.x) / 22)
+        let verticalIntent = max(abs(translation.y), abs(velocity.y) / 22)
+        return horizontalIntent >= 4 && horizontalIntent > verticalIntent * 1.05
     }
 
     func gestureRecognizer(

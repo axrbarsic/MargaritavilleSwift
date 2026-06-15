@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (20)",
+            date: "2026-06-15",
+            changes: [
+                "Removed the per-housekeeper consumable slider table from the main Margaritaville summary so the main screen keeps only the readable total-needed supply statistics.",
+                "Locked Margaritaville housekeeper menu entry to long press only and removed the visible tap/swipe setting from Settings.",
+                "Reworked the Matrix consumable ruler so the whole ruler owns horizontal quantity dragging, the visual handle no longer steals touches, vertical scroll stays available, and zero still waits for the red 5-second warning."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (19)",
             date: "2026-06-15",
             changes: [

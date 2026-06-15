@@ -9,8 +9,6 @@ struct CartConsumableQuantitySlider: View {
     let onZeroCommitPendingChange: (Bool) -> Void
 
     @State private var draftQuantity: Int?
-    @State private var editorSelection = 0
-    @State private var isEditorPresented = false
     @State private var isPendingZeroCommit = false
     @State private var pendingZeroCommitTask: Task<Void, Never>?
     @Environment(\.interactionFeedback) private var feedback
@@ -46,6 +44,24 @@ struct CartConsumableQuantitySlider: View {
             ZStack(alignment: .leading) {
                 passiveTrack(width: width, handleCenter: handleCenter, horizontalInset: horizontalInset)
 
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(MatrixConsumableStyle.green)
+                    .overlay {
+                        Text("\(visibleQuantity)")
+                            .font(.system(size: 15, weight: .black, design: .rounded))
+                            .monospacedDigit()
+                            .foregroundStyle(.black)
+                    }
+                    .frame(width: handleWidth, height: 58)
+                    .shadow(
+                        color: MatrixConsumableStyle.green.opacity(0.46),
+                        radius: 8,
+                        x: 0,
+                        y: 0
+                    )
+                    .allowsHitTesting(false)
+                .offset(x: handleOffset)
+
                 CartConsumableQuantityPanSurface(
                     maximum: Self.maximum,
                     onBegin: beginSwipeEdit,
@@ -54,32 +70,6 @@ struct CartConsumableQuantitySlider: View {
                     onCancel: cancelSwipeEdit
                 )
                 .frame(width: width, height: 76)
-
-                HoldActionTarget(
-                    enabled: true,
-                    useLongPress: true,
-                    semanticLabel: "Изменить количество",
-                    onActivate: openEditor
-                ) {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(MatrixConsumableStyle.green)
-                        .overlay {
-                            Text("\(visibleQuantity)")
-                                .font(.system(size: 15, weight: .black, design: .rounded))
-                                .monospacedDigit()
-                                .foregroundStyle(.black)
-                        }
-                        .frame(width: handleWidth, height: 58)
-                        .shadow(
-                            color: MatrixConsumableStyle.green.opacity(0.46),
-                            radius: 8,
-                            x: 0,
-                            y: 0
-                        )
-                }
-                .offset(x: handleOffset)
-                .accessibilityLabel("Изменить количество")
-                .accessibilityHint("Держите ручку, чтобы открыть точный выбор.")
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -88,18 +78,10 @@ struct CartConsumableQuantitySlider: View {
                         lineWidth: isPendingZeroCommit ? 2.2 : 1.4
                     )
             }
-            .sheet(isPresented: $isEditorPresented) {
-                CartConsumableQuantityEditorSheet(
-                    selection: editorSelection,
-                    maximum: Self.maximum,
-                    onSelect: selectQuantity
-                )
-                .presentationDetents([.height(360)])
-                .presentationDragIndicator(.visible)
-            }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Количество")
             .accessibilityValue("\(visibleQuantity)")
+            .accessibilityHint("Проведите по линейке влево или вправо, чтобы изменить количество.")
             .accessibilityAdjustableAction { direction in
                 cancelPendingZeroCommit(clearPreview: true)
                 switch direction {
@@ -139,12 +121,6 @@ struct CartConsumableQuantitySlider: View {
         .allowsHitTesting(false)
     }
 
-    private func openEditor() {
-        cancelPendingZeroCommit(clearPreview: true)
-        editorSelection = visibleQuantity
-        isEditorPresented = true
-    }
-
     private func beginSwipeEdit() {
         cancelPendingZeroCommit(clearPreview: true)
         feedback.holdStart()
@@ -163,7 +139,6 @@ struct CartConsumableQuantitySlider: View {
     }
 
     private func selectQuantity(_ quantity: Int) {
-        isEditorPresented = false
         let quantity = Self.clamped(quantity)
 
         if quantity == 0, Self.clamped(self.quantity) != 0 {

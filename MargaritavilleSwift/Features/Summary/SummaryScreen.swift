@@ -109,7 +109,6 @@ struct SummaryScreen: View {
                         section: section,
                         housekeeper: housekeeper(id: section.housekeeperID),
                         consumableTickerText: consumableTickerTextBySectionID[section.id],
-                        housekeeperDetailsGestureMode: appSettings.housekeeperDetailsGestureMode,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         onOpenCartDetails: { cartID, subtitle in
                             openCartDetails(cartID: cartID, subtitle: subtitle)
@@ -124,10 +123,7 @@ struct SummaryScreen: View {
                     )
                 }
 
-                SummaryConsumablesTable(
-                    report: consumablesReport,
-                    onQuantityChange: updateSummaryConsumableQuantity
-                )
+                SummaryConsumablesTable(report: consumablesReport)
             }
         } else {
             LazyVStack(spacing: 18) {
@@ -176,29 +172,6 @@ struct SummaryScreen: View {
 
     private var consumableTickerTextBySectionID: [String: String] {
         Dictionary(uniqueKeysWithValues: consumablesReport.housekeepers.map { ($0.id, $0.tickerText) })
-    }
-
-    private func updateSummaryConsumableQuantity(
-        cartIDs: [CartSection.ID],
-        itemID: CartConsumableItem.ID,
-        title: String,
-        quantity: Int
-    ) {
-        guard let primaryCartID = cartIDs.first else { return }
-        workSession.updateCartConsumableQuantity(
-            itemID: itemID,
-            title: title,
-            quantity: quantity,
-            cartId: primaryCartID
-        )
-        for cartID in cartIDs.dropFirst() {
-            workSession.updateCartConsumableQuantity(
-                itemID: itemID,
-                title: title,
-                quantity: 0,
-                cartId: cartID
-            )
-        }
     }
 
     private var summaryStatusChips: [SummaryHeader.StatusChip] {

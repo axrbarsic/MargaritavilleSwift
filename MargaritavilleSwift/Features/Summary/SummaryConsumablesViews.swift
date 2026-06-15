@@ -2,8 +2,6 @@ import SwiftUI
 
 struct SummaryConsumablesTable: View {
     let report: SummaryConsumablesReport
-    let onQuantityChange: ([CartSection.ID], CartConsumableItem.ID, String, Int) -> Void
-    @Environment(\.interactionFeedback) private var feedback
 
     var body: some View {
         if !report.isEmpty {
@@ -11,18 +9,6 @@ struct SummaryConsumablesTable: View {
                 SummaryConsumablesPanel(title: nil, systemImage: nil) {
                     ForEach(report.totals) { item in
                         SummaryConsumableTotalRow(item: item)
-                    }
-                }
-
-                SummaryConsumablesPanel(title: "По уборщицам", systemImage: "list.bullet.rectangle.fill") {
-                    ForEach(report.housekeepers) { housekeeper in
-                        SummaryConsumableHousekeeperRow(
-                            housekeeper: housekeeper,
-                            onQuantityChange: { item, quantity in
-                                feedback.confirm()
-                                onQuantityChange(item.sourceCartIDs, item.id, item.title, quantity)
-                            }
-                        )
                     }
                 }
             }
@@ -157,98 +143,5 @@ private struct SummaryConsumableTotalRow: View {
         }
         .padding(.horizontal, 2)
         .padding(.vertical, 4)
-    }
-}
-
-private struct SummaryConsumableHousekeeperRow: View {
-    let housekeeper: SummaryHousekeeperConsumables
-    let onQuantityChange: (SummaryConsumableLine, Int) -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                Text(housekeeper.displayName)
-                    .font(.system(size: 22, weight: .black, design: .rounded))
-                    .foregroundStyle(MatrixConsumableStyle.green)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-
-                Spacer(minLength: 8)
-
-                Text(housekeeper.locationLabel)
-                    .font(.system(size: 18, weight: .black, design: .rounded))
-                    .foregroundStyle(MatrixConsumableStyle.green)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.62)
-            }
-
-            ForEach(housekeeper.items) { item in
-                SummaryConsumableNeedRow(
-                    item: item,
-                    onQuantityChange: { quantity in onQuantityChange(item, quantity) }
-                )
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-        .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                .stroke(MatrixConsumableStyle.green.opacity(0.86), lineWidth: 1.1)
-        }
-    }
-}
-
-private struct SummaryConsumableNeedRow: View {
-    let item: SummaryConsumableLine
-    let onQuantityChange: (Int) -> Void
-    @State private var previewQuantity: Int?
-    @State private var pendingZeroCommit = false
-
-    private var visibleQuantity: Int {
-        previewQuantity ?? item.quantity
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text(item.title)
-                    .font(.system(size: 20, weight: .black, design: .rounded))
-                    .foregroundStyle(MatrixConsumableStyle.green)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.66)
-
-                Spacer(minLength: 8)
-
-                Text("\(visibleQuantity)")
-                    .font(.system(size: 28, weight: .black, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(MatrixConsumableStyle.green)
-                    .frame(minWidth: 42, alignment: .trailing)
-            }
-
-            CartConsumableQuantitySlider(
-                quantity: item.quantity,
-                onQuantityPreview: { previewQuantity = $0 },
-                onZeroCommitPendingChange: { pendingZeroCommit = $0 },
-                onQuantityChange: onQuantityChange
-            )
-
-            if pendingZeroCommit {
-                MatrixConsumableZeroWarning()
-                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-        .background(MatrixConsumableStyle.rowFill, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(MatrixConsumableStyle.green.opacity(0.84), lineWidth: 1)
-        }
-        .onChange(of: item.quantity) { _, _ in
-            previewQuantity = nil
-            pendingZeroCommit = false
-        }
     }
 }
