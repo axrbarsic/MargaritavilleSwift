@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (16)",
+            date: "2026-06-14",
+            changes: [
+                "Restyled the consumables summary and housekeeper supply controls into a flat Matrix HUD with black panels, neon green outlines, and large readable totals.",
+                "Reworked the 0-to-10 consumable slider into a Matrix ruler with tick marks, numeric stops, and a glowing drag handle.",
+                "Applied the same Matrix consumable style to cart detail supply rows so editing and summary views match visually."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (15)",
             date: "2026-06-14",
             changes: [

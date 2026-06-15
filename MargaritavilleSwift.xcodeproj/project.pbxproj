@@ -106,6 +106,7 @@
 		A5958B1BAD5E2E2596C7C13F /* WorkSessionSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396D37051D44389A26C276BB /* WorkSessionSelection.swift */; };
 		A5F7EEA7935BDF9AA1ADB347 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C12767830A9F635B402DA /* AppRootView.swift */; };
 		A613E76E0F4A00A2730FDA56 /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C47F6F4785A18759A06AB7 /* WorkSessionStore+History.swift */; };
+		A6BEA9E5743D3BF844C987C3 /* MatrixConsumableStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */; };
 		A6F7B66704ADCE2E5F241C2B /* CartDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3614E48874E7A22359F76 /* CartDetailsScreen.swift */; };
 		A7394992A07FED4FA3B092A6 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C9FEF950BB64C810793ED3 /* GameplayKit.framework */; };
 		AA0024805A82FF29FBC23365 /* RoomCatalogOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */; };
@@ -291,6 +292,7 @@
 		B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		B512B523DF50D934102856F7 /* WorkSessionStore+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Catalog.swift"; sourceTree = "<group>"; };
 		B57BE8EBF8D2A57831E5C299 /* SummarySwipeCommitPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySwipeCommitPolicy.swift; sourceTree = "<group>"; };
+		B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixConsumableStyle.swift; sourceTree = "<group>"; };
 		B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundView.swift; sourceTree = "<group>"; };
 		B83360CE4510D5320737420A /* SummaryConsumablesReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryConsumablesReport.swift; sourceTree = "<group>"; };
 		B96887E10E81F6FC1E3C9B8C /* AppBackgroundVideoEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundVideoEnvironment.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 			isa = PBXGroup;
 			children = (
 				20A5F9B4FBD32A51202CBE11 /* HousekeeperPalette+Color.swift */,
+				B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */,
 				A0B9BF6660BF1B2A8F11AAC3 /* OceanKeyTheme.swift */,
 				DFFCF5085184E5262783E0DD /* RoomCellGeometry.swift */,
 			);
@@ -923,6 +926,7 @@
 				DAEDF92F0638E096BFA5558F /* MargaritavilleSummaryRoomGrouping.swift in Sources */,
 				CA6918F5154C0EF6D640D2D4 /* MargaritavilleSummarySection.swift in Sources */,
 				4EE12E17FCBFCBB259E63B24 /* MargaritavilleSwiftApp.swift in Sources */,
+				A6BEA9E5743D3BF844C987C3 /* MatrixConsumableStyle.swift in Sources */,
 				7F81866E81AF243DD43D6E19 /* MatrixRainConfiguration.swift in Sources */,
 				B3C59A2B1E1768B35122F543 /* MatrixRainConfigurationEnvironment.swift in Sources */,
 				48445FB3B0DF2857653B2BA4 /* MatrixRainSpriteScene.swift in Sources */,
@@ -1111,7 +1115,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1178,7 +1182,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

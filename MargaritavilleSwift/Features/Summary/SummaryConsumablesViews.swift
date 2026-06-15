@@ -7,14 +7,8 @@ struct SummaryConsumablesTable: View {
 
     var body: some View {
         if !report.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                Label("Расходники на склад", systemImage: "shippingbox.and.arrow.backward.fill")
-                    .font(.system(size: 25, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-
-                SummaryConsumablesPanel(title: "Всего взять", systemImage: "sum") {
+            VStack(alignment: .leading, spacing: 14) {
+                SummaryConsumablesPanel(title: nil, systemImage: nil) {
                     ForEach(report.totals) { item in
                         SummaryConsumableTotalRow(item: item)
                     }
@@ -32,13 +26,8 @@ struct SummaryConsumablesTable: View {
                     }
                 }
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 14)
-            .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(OceanKeyTheme.pending.opacity(0.26), lineWidth: 1)
-            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 12)
             .accessibilityElement(children: .contain)
         }
     }
@@ -106,34 +95,39 @@ struct SummaryConsumableTicker: View {
 }
 
 private struct SummaryConsumablesPanel<Content: View>: View {
-    let title: String
-    let systemImage: String
+    let title: String?
+    let systemImage: String?
     let content: Content
 
-    init(title: String, systemImage: String, @ViewBuilder content: () -> Content) {
+    init(title: String?, systemImage: String?, @ViewBuilder content: () -> Content) {
         self.title = title
         self.systemImage = systemImage
         self.content = content()
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label(title, systemImage: systemImage)
-                .font(.system(size: 13, weight: .black, design: .rounded))
-                .foregroundStyle(OceanKeyTheme.secondaryText)
-                .textCase(.uppercase)
-                .lineLimit(1)
+        VStack(alignment: .leading, spacing: 12) {
+            if let title, let systemImage {
+                Label(title, systemImage: systemImage)
+                    .font(.system(size: 18, weight: .black, design: .rounded))
+                    .foregroundStyle(MatrixConsumableStyle.green)
+                    .textCase(.uppercase)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+            }
 
-            VStack(spacing: 7) {
+            VStack(spacing: 10) {
                 content
             }
         }
-        .padding(12)
-        .background(.black.opacity(0.34), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .padding(.horizontal, 16)
+        .padding(.vertical, title == nil ? 16 : 14)
+        .background(MatrixConsumableStyle.panelFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(OceanKeyTheme.accent.opacity(0.24), lineWidth: 1)
+                .stroke(MatrixConsumableStyle.green.opacity(0.95), lineWidth: 1.4)
         }
+        .shadow(color: MatrixConsumableStyle.green.opacity(0.10), radius: 10)
     }
 }
 
@@ -143,23 +137,26 @@ private struct SummaryConsumableTotalRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Text(item.title)
-                .font(.system(size: 17, weight: .black, design: .rounded))
-                .foregroundStyle(.white)
+                .font(.system(size: 24, weight: .black, design: .rounded))
+                .foregroundStyle(MatrixConsumableStyle.green)
                 .lineLimit(1)
-                .minimumScaleFactor(0.72)
+                .minimumScaleFactor(0.62)
 
             Spacer(minLength: 8)
 
             Text("\(item.quantity)")
-                .font(.system(size: 24, weight: .black, design: .rounded))
+                .font(.system(size: 28, weight: .black, design: .rounded))
                 .monospacedDigit()
-                .foregroundStyle(.black)
-                .frame(minWidth: 50, minHeight: 34)
-                .background(OceanKeyTheme.pending, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .foregroundStyle(MatrixConsumableStyle.green)
+                .frame(minWidth: 68, minHeight: 60)
+                .background(.black.opacity(0.20), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .stroke(MatrixConsumableStyle.green.opacity(0.95), lineWidth: 1.2)
+                }
         }
-        .padding(.horizontal, 9)
-        .padding(.vertical, 8)
-        .background(.white.opacity(0.055), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .padding(.horizontal, 2)
+        .padding(.vertical, 4)
     }
 }
 
@@ -168,19 +165,19 @@ private struct SummaryConsumableHousekeeperRow: View {
     let onQuantityChange: (SummaryConsumableLine, Int) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 9) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 Text(housekeeper.displayName)
-                    .font(.system(size: 18, weight: .black, design: .rounded))
-                    .foregroundStyle(palette)
+                    .font(.system(size: 22, weight: .black, design: .rounded))
+                    .foregroundStyle(MatrixConsumableStyle.green)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
 
                 Spacer(minLength: 8)
 
                 Text(housekeeper.locationLabel)
-                    .font(.system(size: 15, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 18, weight: .black, design: .rounded))
+                    .foregroundStyle(MatrixConsumableStyle.green)
                     .lineLimit(1)
                     .minimumScaleFactor(0.62)
             }
@@ -192,17 +189,13 @@ private struct SummaryConsumableHousekeeperRow: View {
                 )
             }
         }
-        .padding(.horizontal, 9)
-        .padding(.vertical, 9)
-        .background(palette.opacity(0.10), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(.black.opacity(0.22), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(palette.opacity(0.28), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 13, style: .continuous)
+                .stroke(MatrixConsumableStyle.green.opacity(0.86), lineWidth: 1.1)
         }
-    }
-
-    private var palette: Color {
-        housekeeper.palette?.color ?? OceanKeyTheme.accent
     }
 }
 
@@ -216,21 +209,21 @@ private struct SummaryConsumableNeedRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 Text(item.title)
-                    .font(.system(size: 15, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 20, weight: .black, design: .rounded))
+                    .foregroundStyle(MatrixConsumableStyle.green)
                     .lineLimit(1)
                     .minimumScaleFactor(0.66)
 
                 Spacer(minLength: 8)
 
                 Text("\(visibleQuantity)")
-                    .font(.system(size: 22, weight: .black, design: .rounded))
+                    .font(.system(size: 28, weight: .black, design: .rounded))
                     .monospacedDigit()
-                    .foregroundStyle(OceanKeyTheme.accent)
-                    .frame(minWidth: 34, alignment: .trailing)
+                    .foregroundStyle(MatrixConsumableStyle.green)
+                    .frame(minWidth: 42, alignment: .trailing)
             }
 
             CartConsumableQuantitySlider(
@@ -239,9 +232,13 @@ private struct SummaryConsumableNeedRow: View {
                 onQuantityChange: onQuantityChange
             )
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 9)
-        .background(.black.opacity(0.24), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(MatrixConsumableStyle.rowFill, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(MatrixConsumableStyle.green.opacity(0.84), lineWidth: 1)
+        }
         .onChange(of: item.quantity) { _, _ in previewQuantity = nil }
     }
 }

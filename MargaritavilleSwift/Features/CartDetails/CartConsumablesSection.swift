@@ -29,6 +29,12 @@ struct CartConsumablesSection: View {
                 )
             }
         }
+        .padding(12)
+        .background(MatrixConsumableStyle.panelFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(MatrixConsumableStyle.green.opacity(0.90), lineWidth: 1.2)
+        }
     }
 
     private func setQuantity(
@@ -60,36 +66,36 @@ private struct CartConsumableRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 9) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 10) {
                 Button(action: onToggleComplete) {
                     Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                        .font(.system(size: 24, weight: .black))
-                        .frame(width: 38, height: 40)
-                        .foregroundStyle(item.isCompleted ? OceanKeyTheme.accent : OceanKeyTheme.secondaryText)
+                        .font(.system(size: 28, weight: .black))
+                        .frame(width: 42, height: 42)
+                        .foregroundStyle(MatrixConsumableStyle.green)
                 }
                 .buttonStyle(.plain)
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(item.title)
-                        .font(.system(size: 17, weight: .black, design: .rounded))
-                        .foregroundStyle(.white)
+                        .font(.system(size: 20, weight: .black, design: .rounded))
+                        .foregroundStyle(MatrixConsumableStyle.green)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.76)
+                        .minimumScaleFactor(0.66)
 
                     Text(subtitle)
                         .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.82))
+                        .foregroundStyle(MatrixConsumableStyle.green.opacity(0.68))
                         .lineLimit(1)
                 }
 
                 Spacer(minLength: 8)
 
                 Text("\(visibleQuantity)")
-                    .font(.system(size: 24, weight: .black, design: .rounded))
+                    .font(.system(size: 30, weight: .black, design: .rounded))
                     .monospacedDigit()
-                    .frame(minWidth: 42, alignment: .trailing)
-                    .foregroundStyle(OceanKeyTheme.accent)
+                    .frame(minWidth: 46, alignment: .trailing)
+                    .foregroundStyle(MatrixConsumableStyle.green)
             }
 
             CartConsumableQuantitySlider(
@@ -98,23 +104,23 @@ private struct CartConsumableRow: View {
                 onQuantityChange: onQuantityChange
             )
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 9)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
         .background(rowBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(strokeColor, lineWidth: 1)
         }
         .onChange(of: item.quantity) { _, _ in previewQuantity = nil }
     }
 
     private var rowBackground: Color {
-        return item.isCompleted ? OceanKeyTheme.accent.opacity(0.12) : .black.opacity(0.24)
+        return item.isCompleted ? MatrixConsumableStyle.completedFill : MatrixConsumableStyle.rowFill
     }
 
     private var strokeColor: Color {
-        return item.isCompleted ? OceanKeyTheme.accent.opacity(0.36) : OceanKeyTheme.accent.opacity(0.14)
+        return MatrixConsumableStyle.green.opacity(item.isCompleted ? 0.98 : 0.82)
     }
 
     private var subtitle: String {

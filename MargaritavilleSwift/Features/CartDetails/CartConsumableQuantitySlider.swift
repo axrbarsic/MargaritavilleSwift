@@ -27,37 +27,49 @@ struct CartConsumableQuantitySlider: View {
     var body: some View {
         GeometryReader { proxy in
             let width = max(proxy.size.width, 1)
-            let handleWidth: CGFloat = 18
+            let horizontalInset: CGFloat = 18
+            let handleWidth: CGFloat = 26
+            let trackWidth = max(width - horizontalInset * 2, 1)
+            let handleCenter = horizontalInset + (CGFloat(visibleQuantity) / CGFloat(Self.maximum)) * trackWidth
             let handleOffset = min(
-                max((CGFloat(visibleQuantity) / CGFloat(Self.maximum)) * width - handleWidth / 2, 0),
+                max(handleCenter - handleWidth / 2, 0),
                 max(width - handleWidth, 0)
             )
 
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(.black.opacity(0.34))
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(.black.opacity(0.36))
 
-                equalizerBars
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 7)
+                ruler(width: width)
+                    .padding(.horizontal, horizontalInset)
+                    .padding(.vertical, 9)
 
-                RoundedRectangle(cornerRadius: 7, style: .continuous)
-                    .fill(visibleQuantity == 0 ? OceanKeyTheme.secondaryText.opacity(0.34) : OceanKeyTheme.accent)
-                    .frame(width: handleWidth, height: 30)
+                Capsule()
+                    .fill(MatrixConsumableStyle.green)
+                    .frame(width: max(handleCenter - horizontalInset, 0), height: 9)
+                    .offset(x: horizontalInset, y: 1)
+                    .shadow(color: MatrixConsumableStyle.green.opacity(0.36), radius: 6)
+
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(MatrixConsumableStyle.green)
+                    .overlay {
+                        Text("\(visibleQuantity)")
+                            .font(.system(size: 15, weight: .black, design: .rounded))
+                            .monospacedDigit()
+                            .foregroundStyle(.black)
+                    }
+                    .frame(width: handleWidth, height: 58)
                     .shadow(
-                        color: visibleQuantity == 0 ? .clear : OceanKeyTheme.accent.opacity(0.36),
-                        radius: 6,
+                        color: MatrixConsumableStyle.green.opacity(0.46),
+                        radius: 8,
                         x: 0,
                         y: 0
                     )
                     .offset(x: handleOffset)
             }
             .overlay {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(
-                        visibleQuantity == 0 ? OceanKeyTheme.secondaryText.opacity(0.18) : OceanKeyTheme.accent.opacity(0.42),
-                        lineWidth: 1
-                    )
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(MatrixConsumableStyle.green.opacity(0.92), lineWidth: 1.4)
             }
             .contentShape(Rectangle())
             .gesture(
@@ -96,29 +108,33 @@ struct CartConsumableQuantitySlider: View {
                 }
             }
         }
-        .frame(height: 40)
+        .frame(height: 76)
     }
 
-    private var equalizerBars: some View {
-        HStack(alignment: .bottom, spacing: 4) {
-            ForEach(1...Self.maximum, id: \.self) { index in
-                RoundedRectangle(cornerRadius: 3, style: .continuous)
-                    .fill(index <= visibleQuantity ? OceanKeyTheme.accent : OceanKeyTheme.secondaryText.opacity(0.2))
+    private func ruler(width: CGFloat) -> some View {
+        ZStack(alignment: .bottomLeading) {
+            HStack(alignment: .bottom, spacing: 0) {
+                ForEach(0...Self.maximum, id: \.self) { index in
+                    VStack(spacing: 7) {
+                        Rectangle()
+                            .fill(MatrixConsumableStyle.green.opacity(index <= visibleQuantity ? 0.94 : 0.42))
+                            .frame(width: index % 5 == 0 ? 2 : 1, height: index % 5 == 0 ? 34 : 26)
+
+                        Text("\(index)")
+                            .font(.system(size: 13, weight: .black, design: .rounded))
+                            .monospacedDigit()
+                            .foregroundStyle(MatrixConsumableStyle.green)
+                    }
                     .frame(maxWidth: .infinity)
-                    .frame(height: barHeight(for: index))
+                }
             }
         }
-    }
-
-    private func barHeight(for index: Int) -> CGFloat {
-        let minimum: CGFloat = 8
-        let maximum: CGFloat = 26
-        let progress = CGFloat(index - 1) / CGFloat(max(Self.maximum - 1, 1))
-        return minimum + (maximum - minimum) * progress
+        .frame(width: max(width - 36, 1), alignment: .leading)
     }
 
     private func detent(for x: CGFloat, width: CGFloat) -> Int {
-        let progress = min(max(x / max(width, 1), 0), 1)
+        let inset: CGFloat = 18
+        let progress = min(max((x - inset) / max(width - inset * 2, 1), 0), 1)
         return Self.clamped(Int((progress * CGFloat(Self.maximum)).rounded()))
     }
 
