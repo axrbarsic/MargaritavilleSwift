@@ -203,6 +203,7 @@ private struct SummaryConsumableNeedRow: View {
     let item: SummaryConsumableLine
     let onQuantityChange: (Int) -> Void
     @State private var previewQuantity: Int?
+    @State private var pendingZeroCommit = false
 
     private var visibleQuantity: Int {
         previewQuantity ?? item.quantity
@@ -229,8 +230,14 @@ private struct SummaryConsumableNeedRow: View {
             CartConsumableQuantitySlider(
                 quantity: item.quantity,
                 onQuantityPreview: { previewQuantity = $0 },
+                onZeroCommitPendingChange: { pendingZeroCommit = $0 },
                 onQuantityChange: onQuantityChange
             )
+
+            if pendingZeroCommit {
+                MatrixConsumableZeroWarning()
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
@@ -239,6 +246,9 @@ private struct SummaryConsumableNeedRow: View {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(MatrixConsumableStyle.green.opacity(0.84), lineWidth: 1)
         }
-        .onChange(of: item.quantity) { _, _ in previewQuantity = nil }
+        .onChange(of: item.quantity) { _, _ in
+            previewQuantity = nil
+            pendingZeroCommit = false
+        }
     }
 }

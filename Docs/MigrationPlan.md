@@ -62,6 +62,9 @@ verification.
 - Margaritaville consumables now use an app-specific flat Matrix HUD treatment
   for totals and per-housekeeper rows: black panels, neon-green outlines, large
   right-aligned counts, and a 0-to-10 ruler slider with numeric stops.
+- Matrix consumable sliders are armed by a deliberate long press before dragging
+  so vertical scrolling wins by default; setting a supply to zero shows a red
+  blinking 5-second warning before the zero is committed.
 - Room/cart multimodal notes share the native media foundation: voice
   recordings save as local playable audio bubbles with transcript text, and
   photo/video attachments use local-only metadata and vertical previews.

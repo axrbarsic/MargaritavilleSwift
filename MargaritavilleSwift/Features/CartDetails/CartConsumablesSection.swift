@@ -60,6 +60,7 @@ private struct CartConsumableRow: View {
     let onQuantityChange: (Int) -> Void
     let onToggleComplete: () -> Void
     @State private var previewQuantity: Int?
+    @State private var pendingZeroCommit = false
 
     private var visibleQuantity: Int {
         previewQuantity ?? item.quantity
@@ -101,8 +102,14 @@ private struct CartConsumableRow: View {
             CartConsumableQuantitySlider(
                 quantity: item.quantity,
                 onQuantityPreview: { previewQuantity = $0 },
+                onZeroCommitPendingChange: { pendingZeroCommit = $0 },
                 onQuantityChange: onQuantityChange
             )
+
+            if pendingZeroCommit {
+                MatrixConsumableZeroWarning()
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
@@ -112,7 +119,10 @@ private struct CartConsumableRow: View {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(strokeColor, lineWidth: 1)
         }
-        .onChange(of: item.quantity) { _, _ in previewQuantity = nil }
+        .onChange(of: item.quantity) { _, _ in
+            previewQuantity = nil
+            pendingZeroCommit = false
+        }
     }
 
     private var rowBackground: Color {

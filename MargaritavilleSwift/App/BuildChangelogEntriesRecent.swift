@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (17)",
+            date: "2026-06-14",
+            changes: [
+                "Changed Matrix consumable sliders to require a deliberate long press before dragging so vertical scrolling no longer fights the control.",
+                "Restored the red blinking 5-second warning before a supply quantity is committed to zero and hidden from active summary totals.",
+                "Cancelling the warning by holding the slider again keeps the previous quantity instead of deleting the supply immediately."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (16)",
             date: "2026-06-14",
             changes: [
