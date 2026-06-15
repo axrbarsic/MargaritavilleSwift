@@ -63,10 +63,9 @@ verification.
   for totals and per-housekeeper rows: black panels, neon-green outlines, large
   right-aligned counts, and a 0-to-10 ruler slider with numeric stops.
 - The wide Matrix consumable ruler must stay passive inside scrolling lists.
-  Quantity editing opens from the small ruler handle into a separate Matrix
-  bottom sheet, keeping scroll gestures and quantity changes physically
-  separated. Setting a supply to zero shows a red blinking 5-second warning
-  before the zero is committed.
+  Quantity editing uses explicit Matrix minus/plus buttons, keeping scroll
+  gestures and quantity changes physically separated. Setting a supply to zero
+  shows a red blinking 5-second warning before the zero is committed.
 - Room/cart multimodal notes share the native media foundation: voice
   recordings save as local playable audio bubbles with transcript text, and
   photo/video attachments use local-only metadata and vertical previews.
@@ -180,12 +179,12 @@ verification.
 - Cart supply names are an editable app-level catalog in Settings. Quantities
   stay per cart/work block, while catalog renames update the displayed title by
   stable item id.
-- Margaritaville cart supply quantity entry now follows the OceanKey
-  equalizer-style slider idea: a 0-to-10 horizontal bar control with live
-  quantity preview during drag. Do not reintroduce the removed radial picker
-  without a separate redesign because row-level hold gestures caused sticky
-  selection while moving between supply rows. This is a visual/interaction idea
-  port only; Margaritaville keeps its own housekeeper/work-block data model.
+- Margaritaville cart supply quantity entry keeps the OceanKey equalizer-style
+  visual idea as a passive 0-to-10 Matrix ruler. Editing is done through
+  explicit minus/plus buttons so vertical scrolling in the cart details screen
+  is never captured by a row-level drag recognizer. Do not reintroduce the
+  removed radial picker or ruler drag without a separate redesign because
+  row-level gestures caused sticky selection and scroll conflicts.
 - Margaritaville summary surfaces active cart supplies directly on the main
   screen. Active means quantity is greater than zero and the supply row is not
   marked completed. Each housekeeper header shows a running supply ticker when
@@ -215,10 +214,9 @@ verification.
 - Margaritaville room media/VIP/schedule actions no longer share the room
   long-press path. A deliberate horizontal swipe on a square room tile opens the
   action dialog, keeping status changes and room tools separate.
-- Matrix consumable rulers edit quantity by dragging horizontally across the
-  whole ruler. The visual handle is passive so it cannot steal the drag, vertical
-  motion is left to the scroll view, and zero still waits for the red 5-second
-  warning before committing.
+- Matrix consumable rulers are passive inside scrolling lists. Quantity changes
+  use explicit minus/plus buttons beside the ruler, and zero still waits for the
+  red 5-second warning before committing.
 - Interaction feedback now uses the stronger native feedback path: UIKit
   notification haptics are routed through the shared interaction service in
   addition to impact/selection feedback and bundled local sounds.

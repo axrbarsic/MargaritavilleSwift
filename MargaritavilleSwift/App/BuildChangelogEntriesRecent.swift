@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (21)",
+            date: "2026-06-15",
+            changes: [
+                "Removed the remaining drag/swipe recognizer from the cart consumable Matrix ruler so vertical scrolling cannot be interrupted by the quantity control.",
+                "Changed consumable quantity editing to explicit minus/plus Matrix buttons while keeping the 0-to-10 ruler as a passive level indicator.",
+                "Kept the red 5-second warning before a consumable quantity is committed to zero."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (20)",
             date: "2026-06-15",
             changes: [

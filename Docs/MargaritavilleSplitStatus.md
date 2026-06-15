@@ -16,9 +16,10 @@ Date: 2026-06-12
 - `xcodegen generate` succeeds.
 - Simulator unit tests pass with `xcodebuild test` on scheme `MargaritavilleSwift`.
 - Generic iOS device build succeeds for permanent bundle id `com.alex.margaritaville.swift`.
-- `Tools/install_on_iphone.sh` installs and launches build `20` on Alex's
-  iPhone 16 Pro Max with bundle id `com.alex.margaritaville.swift` and display
-  name `Margaritaville`.
+- `Tools/install_on_iphone.sh` installs build `21` on Alex's iPhone 16 Pro Max
+  with bundle id `com.alex.margaritaville.swift` and display name
+  `Margaritaville`. The latest launch attempt was blocked only because the
+  physical iPhone was locked; signing and installation succeeded.
 - Simulator launch shows the live Matrix wallpaper behind the first screen instead of a black override.
 
 ## Current External Blockers

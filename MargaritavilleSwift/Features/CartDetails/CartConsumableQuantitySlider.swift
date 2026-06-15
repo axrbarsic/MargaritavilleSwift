@@ -30,75 +30,82 @@ struct CartConsumableQuantitySlider: View {
     }
 
     var body: some View {
-        GeometryReader { proxy in
-            let width = max(proxy.size.width, 1)
-            let horizontalInset: CGFloat = 18
-            let handleWidth: CGFloat = 26
-            let trackWidth = max(width - horizontalInset * 2, 1)
-            let handleCenter = horizontalInset + (CGFloat(visibleQuantity) / CGFloat(Self.maximum)) * trackWidth
-            let handleOffset = min(
-                max(handleCenter - handleWidth / 2, 0),
-                max(width - handleWidth, 0)
+        HStack(spacing: 10) {
+            QuantityStepButton(
+                systemName: "minus",
+                isEnabled: visibleQuantity > 0,
+                action: decrement
             )
 
-            ZStack(alignment: .leading) {
-                passiveTrack(width: width, handleCenter: handleCenter, horizontalInset: horizontalInset)
-
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(MatrixConsumableStyle.green)
-                    .overlay {
-                        Text("\(visibleQuantity)")
-                            .font(.system(size: 15, weight: .black, design: .rounded))
-                            .monospacedDigit()
-                            .foregroundStyle(.black)
-                    }
-                    .frame(width: handleWidth, height: 58)
-                    .shadow(
-                        color: MatrixConsumableStyle.green.opacity(0.46),
-                        radius: 8,
-                        x: 0,
-                        y: 0
-                    )
-                    .allowsHitTesting(false)
-                .offset(x: handleOffset)
-
-                CartConsumableQuantityPanSurface(
-                    maximum: Self.maximum,
-                    onBegin: beginSwipeEdit,
-                    onChange: previewQuantity,
-                    onCommit: selectQuantity,
-                    onCancel: cancelSwipeEdit
+            GeometryReader { proxy in
+                let width = max(proxy.size.width, 1)
+                let horizontalInset: CGFloat = 18
+                let handleWidth: CGFloat = 26
+                let trackWidth = max(width - horizontalInset * 2, 1)
+                let handleCenter = horizontalInset + (CGFloat(visibleQuantity) / CGFloat(Self.maximum)) * trackWidth
+                let handleOffset = min(
+                    max(handleCenter - handleWidth / 2, 0),
+                    max(width - handleWidth, 0)
                 )
-                .frame(width: width, height: 76)
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(
-                        MatrixConsumableStyle.green.opacity(isPendingZeroCommit ? 1.0 : 0.92),
-                        lineWidth: isPendingZeroCommit ? 2.2 : 1.4
-                    )
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Количество")
-            .accessibilityValue("\(visibleQuantity)")
-            .accessibilityHint("Проведите по линейке влево или вправо, чтобы изменить количество.")
-            .accessibilityAdjustableAction { direction in
-                cancelPendingZeroCommit(clearPreview: true)
-                switch direction {
-                case .increment:
-                    onQuantityChange(Self.clamped(quantity + 1))
-                case .decrement:
-                    onQuantityChange(Self.clamped(quantity - 1))
-                @unknown default:
-                    break
+
+                ZStack(alignment: .leading) {
+                    passiveTrack(width: width, handleCenter: handleCenter, horizontalInset: horizontalInset)
+
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(MatrixConsumableStyle.green)
+                        .overlay {
+                            Text("\(visibleQuantity)")
+                                .font(.system(size: 15, weight: .black, design: .rounded))
+                                .monospacedDigit()
+                                .foregroundStyle(.black)
+                        }
+                        .frame(width: handleWidth, height: 58)
+                        .shadow(
+                            color: MatrixConsumableStyle.green.opacity(0.46),
+                            radius: 8,
+                            x: 0,
+                            y: 0
+                        )
+                        .allowsHitTesting(false)
+                        .offset(x: handleOffset)
                 }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(
+                            MatrixConsumableStyle.green.opacity(isPendingZeroCommit ? 1.0 : 0.92),
+                            lineWidth: isPendingZeroCommit ? 2.2 : 1.4
+                        )
+                }
+                .accessibilityHidden(true)
             }
-            .onChange(of: quantity) { _, _ in
-                cancelPendingZeroCommit(clearPreview: true)
+            .frame(height: 76)
+            .allowsHitTesting(false)
+
+            QuantityStepButton(
+                systemName: "plus",
+                isEnabled: visibleQuantity < Self.maximum,
+                action: increment
+            )
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Количество")
+        .accessibilityValue("\(visibleQuantity)")
+        .accessibilityHint("Используйте кнопки минус и плюс.")
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                increment()
+            case .decrement:
+                decrement()
+            @unknown default:
+                break
             }
-            .onDisappear {
-                cancelPendingZeroCommit(clearPreview: true)
-            }
+        }
+        .onChange(of: quantity) { _, _ in
+            cancelPendingZeroCommit(clearPreview: true)
+        }
+        .onDisappear {
+            cancelPendingZeroCommit(clearPreview: true)
         }
         .frame(height: 76)
     }
@@ -121,21 +128,12 @@ struct CartConsumableQuantitySlider: View {
         .allowsHitTesting(false)
     }
 
-    private func beginSwipeEdit() {
-        cancelPendingZeroCommit(clearPreview: true)
-        feedback.holdStart()
+    private func decrement() {
+        selectQuantity(visibleQuantity - 1)
     }
 
-    private func previewQuantity(_ quantity: Int) {
-        let quantity = Self.clamped(quantity)
-        guard draftQuantity != quantity else { return }
-        draftQuantity = quantity
-        onQuantityPreview(quantity)
-        feedback.holdStart()
-    }
-
-    private func cancelSwipeEdit() {
-        cancelPendingZeroCommit(clearPreview: true)
+    private func increment() {
+        selectQuantity(visibleQuantity + 1)
     }
 
     private func selectQuantity(_ quantity: Int) {
@@ -190,5 +188,39 @@ struct CartConsumableQuantitySlider: View {
 
     static func clamped(_ quantity: Int) -> Int {
         min(max(0, quantity), maximum)
+    }
+}
+
+private struct QuantityStepButton: View {
+    let systemName: String
+    let isEnabled: Bool
+    let action: () -> Void
+    @Environment(\.interactionFeedback) private var feedback
+
+    var body: some View {
+        Button {
+            guard isEnabled else {
+                feedback.tap()
+                return
+            }
+            feedback.confirm()
+            action()
+        } label: {
+            Image(systemName: systemName)
+                .font(.system(size: 22, weight: .black))
+                .foregroundStyle(isEnabled ? .black : MatrixConsumableStyle.green.opacity(0.42))
+                .frame(width: 52, height: 64)
+                .background(
+                    isEnabled ? MatrixConsumableStyle.green : .black.opacity(0.24),
+                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(MatrixConsumableStyle.green.opacity(isEnabled ? 0.95 : 0.44), lineWidth: 1.2)
+                }
+                .shadow(color: MatrixConsumableStyle.green.opacity(isEnabled ? 0.30 : 0.0), radius: 7)
+        }
+        .buttonStyle(.plain)
+        .disabled(!isEnabled)
     }
 }
