@@ -353,3 +353,20 @@ func appSettingsMigratesVIPJellyOnForExistingDevicesOnce() {
     let reloaded = AppSettingsStore.load(userDefaults: defaults)
     #expect(!reloaded.developerVIPJellyEnabled)
 }
+
+@Test
+func appSettingsPersistsIdleScreensaverSettings() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.idleScreensaverMode = .video
+    settings.idleScreensaverTimeout = 60
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.idleScreensaverMode == .video)
+    #expect(loaded.idleScreensaverTimeout == 60)
+}
+

@@ -3,6 +3,16 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (22)",
+            date: "2026-06-17",
+            changes: [
+                "Implemented automatic fullscreen screensaver (idle screensaver) with Matrix Rain or video loop.",
+                "Added non-blocking UserActivityTracker that listens for window-level touches without breaking SwiftUI gesture responder chain.",
+                "Introduced customizable screensaver type and timeout options (15s, 30s, 1m, 2m) in App Settings.",
+                "Designed an elegant fullscreen overlay with large neon-glowing digital clocks, current date, hotel logo, and soft tip text."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (21)",
             date: "2026-06-15",
             changes: [

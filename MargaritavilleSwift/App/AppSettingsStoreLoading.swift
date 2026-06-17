@@ -4,6 +4,9 @@ extension AppSettingsStore {
     static func load(userDefaults: UserDefaults = .standard) -> AppSettingsStore {
         let backgroundRawValue = userDefaults.string(forKey: Keys.appBackgroundMode)
         let appBackgroundMode = backgroundRawValue.flatMap(AppBackgroundMode.init(rawValue:)) ?? .matrixRain
+        let idleModeRaw = userDefaults.string(forKey: Keys.idleScreensaverMode)
+        let idleScreensaverMode = idleModeRaw.flatMap(IdleScreensaverMode.init(rawValue:)) ?? .matrixRain
+        let idleScreensaverTimeout = userDefaults.object(forKey: Keys.idleScreensaverTimeout) as? Int ?? 30
         let rawValue = userDefaults.string(forKey: Keys.roomCellGeometry)
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
@@ -46,6 +49,8 @@ extension AppSettingsStore {
         let cartConsumableCatalog = Self.loadCartConsumableCatalog(userDefaults: userDefaults)
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
+            idleScreensaverMode: idleScreensaverMode,
+            idleScreensaverTimeout: idleScreensaverTimeout,
             roomCellGeometry: geometry,
             roomTaskLongPress: roomTaskLongPress,
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,

@@ -35,6 +35,44 @@ struct SettingsBackgroundSection: View {
                 videoControls
             }
         }
+
+        SettingsPanel(
+            title: "Автозаставка при бездействии",
+            subtitle: "Полноэкранные часы и эффект при неактивности пользователя."
+        ) {
+            Picker("Эффект заставки", selection: $appSettings.idleScreensaverMode) {
+                ForEach(IdleScreensaverMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: appSettings.idleScreensaverMode) { _, _ in feedback.confirm() }
+
+            SettingsInfoRow(
+                title: "Режим",
+                value: appSettings.idleScreensaverMode.description,
+                systemName: "clock.fill",
+                subtitle: idleModeSubtitle
+            )
+
+            if appSettings.idleScreensaverMode != .off {
+                Picker("Время бездействия", selection: $appSettings.idleScreensaverTimeout) {
+                    Text("15 секунд").tag(15)
+                    Text("30 секунд").tag(30)
+                    Text("1 минута").tag(60)
+                    Text("2 минуты").tag(120)
+                }
+                .onChange(of: appSettings.idleScreensaverTimeout) { _, _ in feedback.confirm() }
+            }
+        }
+    }
+
+    private var idleModeSubtitle: String {
+        switch appSettings.idleScreensaverMode {
+        case .off: "Автозаставка отключена."
+        case .matrixRain: "Матричный дождь с неоновыми часами во весь экран."
+        case .video: "Локальная видеозаставка с неоновыми часами во весь экран."
+        }
     }
 
     private var matrixControls: some View {
