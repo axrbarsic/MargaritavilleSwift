@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct AppRootView: View {
-    @Environment(\.scenePhase) private var scenePhase
-    @State private var idleManager = AppIdleManager()
     @Bindable var workSession: WorkSessionStore
     @Bindable var appSettings: AppSettingsStore
     @Bindable var aiVisualPresetStore: AIVisualPresetStore
@@ -12,61 +10,27 @@ struct AppRootView: View {
     let onSelectHotel: (HotelProfile) -> Void
 
     var body: some View {
-        ZStack {
-            NavigationStack {
-                if !workSession.hasLoadedInitialSnapshot {
-                    StartupLoadingScreen()
-                } else if workSession.selection.workdayLocked {
-                    SummaryScreen(
-                        workSession: workSession,
-                        appSettings: appSettings,
-                        aiVisualPresetStore: aiVisualPresetStore,
-                        performanceTelemetry: performanceTelemetry,
-                        activeHotel: activeHotel,
-                        onSelectHotel: onSelectHotel
-                    )
-                } else {
-                    WorkSetupScreen(
-                        workSession: workSession,
-                        appSettings: appSettings,
-                        aiVisualPresetStore: aiVisualPresetStore,
-                        performanceTelemetry: performanceTelemetry,
-                        activeHotel: activeHotel,
-                        onSelectHotel: onSelectHotel
-                    )
-                }
-            }
-            .blur(radius: (idleManager.isIdle && appSettings.idleScreensaverMode != .off) ? 8 : 0)
-            .animation(.easeInOut(duration: 0.4), value: idleManager.isIdle)
-
-            if idleManager.isIdle && appSettings.idleScreensaverMode != .off {
-                ScreensaverOverlayView(
-                    mode: appSettings.idleScreensaverMode,
+        NavigationStack {
+            if !workSession.hasLoadedInitialSnapshot {
+                StartupLoadingScreen()
+            } else if workSession.selection.workdayLocked {
+                SummaryScreen(
+                    workSession: workSession,
                     appSettings: appSettings,
-                    onDismiss: {
-                        idleManager.resetActivity()
-                    }
+                    aiVisualPresetStore: aiVisualPresetStore,
+                    performanceTelemetry: performanceTelemetry,
+                    activeHotel: activeHotel,
+                    onSelectHotel: onSelectHotel
                 )
-                .transition(.opacity)
-                .zIndex(999)
-            }
-        }
-        .background(
-            UserActivityTracker {
-                idleManager.resetActivity()
-            }
-        )
-        .onAppear {
-            idleManager.startTracking(timeout: appSettings.idleScreensaverTimeout)
-        }
-        .onChange(of: appSettings.idleScreensaverTimeout) { _, newValue in
-            idleManager.updateTimeout(newValue)
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active {
-                idleManager.startTracking(timeout: appSettings.idleScreensaverTimeout)
             } else {
-                idleManager.stopTracking()
+                WorkSetupScreen(
+                    workSession: workSession,
+                    appSettings: appSettings,
+                    aiVisualPresetStore: aiVisualPresetStore,
+                    performanceTelemetry: performanceTelemetry,
+                    activeHotel: activeHotel,
+                    onSelectHotel: onSelectHotel
+                )
             }
         }
         .environment(\.appBackgroundMode, appSettings.appBackgroundMode)

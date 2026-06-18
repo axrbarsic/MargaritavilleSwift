@@ -41,18 +41,6 @@ final class AppSettingsStore {
         }
     }
 
-    var idleScreensaverMode: IdleScreensaverMode {
-        didSet {
-            userDefaults.set(idleScreensaverMode.rawValue, forKey: Keys.idleScreensaverMode)
-        }
-    }
-
-    var idleScreensaverTimeout: Int {
-        didSet {
-            userDefaults.set(idleScreensaverTimeout, forKey: Keys.idleScreensaverTimeout)
-        }
-    }
-
     var roomCellGeometry: RoomCellGeometry {
         didSet {
             userDefaults.set(roomCellGeometry.rawValue, forKey: Keys.roomCellGeometry)
@@ -266,8 +254,6 @@ final class AppSettingsStore {
 
     init(
         appBackgroundMode: AppBackgroundMode = .matrixRain,
-        idleScreensaverMode: IdleScreensaverMode = .matrixRain,
-        idleScreensaverTimeout: Int = 30,
         roomCellGeometry: RoomCellGeometry = .roomy,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
@@ -327,8 +313,6 @@ final class AppSettingsStore {
         self.selectedHotelID = selectedHotelID
         self.housekeepers = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
         self.cartConsumableCatalog = CartConsumableCatalog.normalizedCatalog(cartConsumableCatalog)
-        self.idleScreensaverMode = idleScreensaverMode
-        self.idleScreensaverTimeout = idleScreensaverTimeout
         self.userDefaults = userDefaults
     }
 

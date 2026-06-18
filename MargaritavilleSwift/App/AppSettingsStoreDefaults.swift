@@ -31,7 +31,5 @@ extension AppSettingsStore {
         selectedHotelID = nil
         housekeepers = MargaritavilleHousekeeperCatalog.defaultHousekeepers
         cartConsumableCatalog = CartConsumableCatalog.defaultCatalog
-        idleScreensaverMode = .matrixRain
-        idleScreensaverTimeout = 30
     }
 }

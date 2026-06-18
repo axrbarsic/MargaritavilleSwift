@@ -33,7 +33,5 @@ extension AppSettingsStore {
         static let selectedHotelID = "selectedHotelID"
         static let housekeepers = "housekeepers"
         static let cartConsumableCatalog = "cartConsumableCatalog"
-        static let idleScreensaverMode = "idleScreensaverMode"
-        static let idleScreensaverTimeout = "idleScreensaverTimeout"
     }
 }

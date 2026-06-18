@@ -65,7 +65,6 @@
 		69A8841E988B5E262E4F4B38 /* WorkSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02500AE4C2DC733E80B6D690 /* WorkSessionStoreTests.swift */; };
 		6E64F0A59FD3EE6013BB98BA /* VoiceTranscriptionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89917CE612922887A91E731A /* VoiceTranscriptionContracts.swift */; };
 		6F2C27BB68573CA9F2928146 /* PerformanceTelemetryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF87AEBF917C954895FE0CF /* PerformanceTelemetryStoreTests.swift */; };
-		6FB41D2EB63026040B663F27 /* AppIdleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A94859C37817CB68FBAC0C0 /* AppIdleManager.swift */; };
 		6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */; };
 		7428A12339BD354F950324A1 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35D3835B7B9A121C869C2ED /* WorkSessionStore+Selection.swift */; };
 		74CD34FC39F093A3DE0C4861 /* WorkSessionStore+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1219DB5B1565EA2415741F /* WorkSessionStore+Consumables.swift */; };
@@ -113,7 +112,6 @@
 		AA0024805A82FF29FBC23365 /* RoomCatalogOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */; };
 		AA49001001C7EF949271B8B4 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722D20ACC6304E5369C4044 /* SummaryScreen.swift */; };
 		AB447B52871E12298D13D20D /* PersistentWorkSessionMapper+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6E32EFCB10AB1DE30A1585 /* PersistentWorkSessionMapper+Consumables.swift */; };
-		AD38778E0A17899352BC3D96 /* ScreensaverOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EFF8539507770934D853FC /* ScreensaverOverlayView.swift */; };
 		AE44E35A20B1C36A63E01EC3 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA7F7C9BEC062DDDD35BC976 /* AVKit.framework */; };
 		B10F238E76E05CFC74FE5B67 /* SwiftDataWorkSessionRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1DAFE30DED4D8FDD5BBF4 /* SwiftDataWorkSessionRepositoryTests.swift */; };
 		B17AE67B2E6098580903BF20 /* VIPJellyContentWarp.metal in Sources */ = {isa = PBXBuildFile; fileRef = 373D877FD48E600E498E2AD1 /* VIPJellyContentWarp.metal */; };
@@ -154,7 +152,6 @@
 		E4125D708C5A5359E278629B /* WorkSessionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF703659BD4E4ED1F6182C1 /* WorkSessionHistory.swift */; };
 		E522CC4C1973B7D9F9EE01B8 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5CB7A732CA2C1250A664F900 /* click.wav */; };
 		E69996BC5EF84C5734DB98FE /* RoomDayCategoryCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1606F1A9957635785A6D928D /* RoomDayCategoryCounts.swift */; };
-		E93B8BC285DC0A7AD2202852 /* UserActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FCB7ECED2813AEA7795610 /* UserActivityTracker.swift */; };
 		E966CBE9E6B5674FE32973A7 /* RuntimeDiagnosticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC01B23315CBE02A4B6DEE0B /* RuntimeDiagnosticsTests.swift */; };
 		EB1A68927A3E5EE5B13FC6D7 /* MediaAttachmentGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BA6573942C4CE0299AE940 /* MediaAttachmentGrid.swift */; };
 		EBE82000A7EB5DE59F5D28A7 /* AppBuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6F829D189E6A8021ED967A /* AppBuildInfo.swift */; };
@@ -203,7 +200,6 @@
 		1D48BFB5EDED5F96299AB21A /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
 		20A5F9B4FBD32A51202CBE11 /* HousekeeperPalette+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HousekeeperPalette+Color.swift"; sourceTree = "<group>"; };
 		2173D3F22AFB14E9E6B54E01 /* AppStorageDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageDirectory.swift; sourceTree = "<group>"; };
-		23EFF8539507770934D853FC /* ScreensaverOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreensaverOverlayView.swift; sourceTree = "<group>"; };
 		253281145546E2E8265AB304 /* RoomDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsScreen.swift; sourceTree = "<group>"; };
 		260D3F39DAB28CD8F1C0ADAF /* KeychainSecretStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainSecretStore.swift; sourceTree = "<group>"; };
 		283E6FF48981145AB9012147 /* SummaryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryHeader.swift; sourceTree = "<group>"; };
@@ -267,7 +263,6 @@
 		7E9C8E3CD4055FC66D8C98FC /* DeepSeekLabComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekLabComponents.swift; sourceTree = "<group>"; };
 		7F659E723BC372F4647034FD /* SummaryRoomActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRoomActionMenu.swift; sourceTree = "<group>"; };
 		812538F225A1DC3137D7E2B1 /* MatrixRainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfiguration.swift; sourceTree = "<group>"; };
-		84FCB7ECED2813AEA7795610 /* UserActivityTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityTracker.swift; sourceTree = "<group>"; };
 		863B6B3ABED99907FD811084 /* AppleCloudAccountProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCloudAccountProbe.swift; sourceTree = "<group>"; };
 		865565ED53F967D3C426D546 /* CartDetailsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsRoute.swift; sourceTree = "<group>"; };
 		86F173799160B8EB3595C9C2 /* CartConsumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumables.swift; sourceTree = "<group>"; };
@@ -277,7 +272,6 @@
 		95639B910F5BD49944085B73 /* WorkSessionStore+SimpleCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+SimpleCycle.swift"; sourceTree = "<group>"; };
 		95992FEC952AB30262884AD3 /* PerformanceTelemetryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTelemetryStore.swift; sourceTree = "<group>"; };
 		992734E7923F47A3A78219CB /* DeepSeekLabSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekLabSection.swift; sourceTree = "<group>"; };
-		9A94859C37817CB68FBAC0C0 /* AppIdleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIdleManager.swift; sourceTree = "<group>"; };
 		A0B9BF6660BF1B2A8F11AAC3 /* OceanKeyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyTheme.swift; sourceTree = "<group>"; };
 		A16FB0F213229469891AE9C7 /* CartConsumableQuantitySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumableQuantitySlider.swift; sourceTree = "<group>"; };
 		A189BEF138C12C183D52C206 /* PersistentWorkSessionMapper+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistentWorkSessionMapper+Catalog.swift"; sourceTree = "<group>"; };
@@ -377,7 +371,6 @@
 				B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */,
 				CB6F829D189E6A8021ED967A /* AppBuildInfo.swift */,
 				A35C7DAEF89C08E0166EA3C0 /* AppIdentity.swift */,
-				9A94859C37817CB68FBAC0C0 /* AppIdleManager.swift */,
 				3C6C12767830A9F635B402DA /* AppRootView.swift */,
 				ED484B471D3B303634E238A3 /* AppSettingsStore.swift */,
 				752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */,
@@ -394,9 +387,7 @@
 				68371E9841837E338DD06D16 /* LoopingVideoBackgroundView.swift */,
 				B2B7EAF0AB7A383AE3A9106C /* MargaritavilleSwiftApp.swift */,
 				726BB319EA7A0D77D382269D /* PersonalCartMarkers.swift */,
-				23EFF8539507770934D853FC /* ScreensaverOverlayView.swift */,
 				09FFF2E981558A4D75D6A1DB /* TVStaticNoiseBackgroundView.swift */,
-				84FCB7ECED2813AEA7795610 /* UserActivityTracker.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -891,7 +882,6 @@
 				124B8CE7419E4EFD526F3A09 /* AppBackgroundView.swift in Sources */,
 				EBE82000A7EB5DE59F5D28A7 /* AppBuildInfo.swift in Sources */,
 				FE1A14DE53CDE509FEE9D338 /* AppIdentity.swift in Sources */,
-				6FB41D2EB63026040B663F27 /* AppIdleManager.swift in Sources */,
 				A5F7EEA7935BDF9AA1ADB347 /* AppRootView.swift in Sources */,
 				97E38557C7F80F3DC044300D /* AppSettingsStore+Consumables.swift in Sources */,
 				5F46B307037409026E7AC032 /* AppSettingsStore+Housekeepers.swift in Sources */,
@@ -976,7 +966,6 @@
 				5B362AB2BEFA62BC0564A6F3 /* RoomScheduleSheet.swift in Sources */,
 				B75B6357696CC195A0AB6890 /* RuntimeDiagnostics.swift in Sources */,
 				DA628C5CCCE100F4100F012E /* ScheduleNotificationService.swift in Sources */,
-				AD38778E0A17899352BC3D96 /* ScreensaverOverlayView.swift in Sources */,
 				5EB4819E24605BE4D2C6CBF0 /* SettingsBackgroundSection.swift in Sources */,
 				8810BE4B1E99E8ECCD3BBA21 /* SettingsBackgroundVideoPicker.swift in Sources */,
 				A4CD76B55EFC71F0C2CD60F3 /* SettingsCategory.swift in Sources */,
@@ -995,7 +984,6 @@
 				90611C42E9319C6664307F82 /* SummarySwipeCommitPolicy.swift in Sources */,
 				8BA510D92D5D30CEC1174046 /* SwiftDataWorkSessionRepository.swift in Sources */,
 				8286E4F0670A238E0099BEBE /* TVStaticNoiseBackgroundView.swift in Sources */,
-				E93B8BC285DC0A7AD2202852 /* UserActivityTracker.swift in Sources */,
 				B17AE67B2E6098580903BF20 /* VIPJellyContentWarp.metal in Sources */,
 				B8DCB761C2A5C4905FD1E616 /* VIPJellyEffects.swift in Sources */,
 				DE0127E5A1E843104D7488D6 /* VoiceNoteBubble.swift in Sources */,
@@ -1131,7 +1119,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1198,7 +1186,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
