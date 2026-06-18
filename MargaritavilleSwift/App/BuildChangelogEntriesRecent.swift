@@ -3,14 +3,6 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
-            version: "0.1.0 (23)",
-            date: "2026-06-17",
-            changes: [
-                "Replaced the Screensaver 'Off' segmented choice with an intuitive Toggle switch in Settings.",
-                "Settings now cleanly hides screensaver effect and timeout details when the toggle is turned off."
-            ]
-        ),
-        BuildChangelogEntry(
             version: "0.1.0 (22)",
             date: "2026-06-17",
             changes: [

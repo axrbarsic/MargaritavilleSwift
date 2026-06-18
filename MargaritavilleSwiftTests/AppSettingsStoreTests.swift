@@ -361,16 +361,12 @@ func appSettingsPersistsIdleScreensaverSettings() {
     defer { defaults.removePersistentDomain(forName: suiteName) }
 
     let settings = AppSettingsStore(userDefaults: defaults)
-    #expect(settings.idleScreensaverEnabled) // Default true
-
     settings.idleScreensaverMode = .video
     settings.idleScreensaverTimeout = 60
-    settings.idleScreensaverEnabled = false
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.idleScreensaverMode == .video)
     #expect(loaded.idleScreensaverTimeout == 60)
-    #expect(!loaded.idleScreensaverEnabled)
 }
 

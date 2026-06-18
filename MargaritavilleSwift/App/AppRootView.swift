@@ -36,10 +36,10 @@ struct AppRootView: View {
                     )
                 }
             }
-            .blur(radius: (idleManager.isIdle && appSettings.idleScreensaverEnabled) ? 8 : 0)
+            .blur(radius: (idleManager.isIdle && appSettings.idleScreensaverMode != .off) ? 8 : 0)
             .animation(.easeInOut(duration: 0.4), value: idleManager.isIdle)
 
-            if idleManager.isIdle && appSettings.idleScreensaverEnabled {
+            if idleManager.isIdle && appSettings.idleScreensaverMode != .off {
                 ScreensaverOverlayView(
                     mode: appSettings.idleScreensaverMode,
                     appSettings: appSettings,

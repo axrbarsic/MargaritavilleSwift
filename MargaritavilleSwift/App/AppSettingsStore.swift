@@ -53,12 +53,6 @@ final class AppSettingsStore {
         }
     }
 
-    var idleScreensaverEnabled: Bool {
-        didSet {
-            userDefaults.set(idleScreensaverEnabled, forKey: Keys.idleScreensaverEnabled)
-        }
-    }
-
     var roomCellGeometry: RoomCellGeometry {
         didSet {
             userDefaults.set(roomCellGeometry.rawValue, forKey: Keys.roomCellGeometry)
@@ -274,7 +268,6 @@ final class AppSettingsStore {
         appBackgroundMode: AppBackgroundMode = .matrixRain,
         idleScreensaverMode: IdleScreensaverMode = .matrixRain,
         idleScreensaverTimeout: Int = 30,
-        idleScreensaverEnabled: Bool = true,
         roomCellGeometry: RoomCellGeometry = .roomy,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
@@ -336,7 +329,6 @@ final class AppSettingsStore {
         self.cartConsumableCatalog = CartConsumableCatalog.normalizedCatalog(cartConsumableCatalog)
         self.idleScreensaverMode = idleScreensaverMode
         self.idleScreensaverTimeout = idleScreensaverTimeout
-        self.idleScreensaverEnabled = idleScreensaverEnabled
         self.userDefaults = userDefaults
     }
 
