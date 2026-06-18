@@ -7,6 +7,7 @@ extension AppSettingsStore {
         let idleModeRaw = userDefaults.string(forKey: Keys.idleScreensaverMode)
         let idleScreensaverMode = idleModeRaw.flatMap(IdleScreensaverMode.init(rawValue:)) ?? .matrixRain
         let idleScreensaverTimeout = userDefaults.object(forKey: Keys.idleScreensaverTimeout) as? Int ?? 30
+        let idleScreensaverEnabled = userDefaults.object(forKey: Keys.idleScreensaverEnabled) as? Bool ?? true
         let rawValue = userDefaults.string(forKey: Keys.roomCellGeometry)
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
@@ -51,6 +52,7 @@ extension AppSettingsStore {
             appBackgroundMode: appBackgroundMode,
             idleScreensaverMode: idleScreensaverMode,
             idleScreensaverTimeout: idleScreensaverTimeout,
+            idleScreensaverEnabled: idleScreensaverEnabled,
             roomCellGeometry: geometry,
             roomTaskLongPress: roomTaskLongPress,
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,

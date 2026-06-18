@@ -35,5 +35,6 @@ extension AppSettingsStore {
         static let cartConsumableCatalog = "cartConsumableCatalog"
         static let idleScreensaverMode = "idleScreensaverMode"
         static let idleScreensaverTimeout = "idleScreensaverTimeout"
+        static let idleScreensaverEnabled = "idleScreensaverEnabled"
     }
 }

@@ -40,22 +40,25 @@ struct SettingsBackgroundSection: View {
             title: "Автозаставка при бездействии",
             subtitle: "Полноэкранные часы и эффект при неактивности пользователя."
         ) {
-            Picker("Эффект заставки", selection: $appSettings.idleScreensaverMode) {
-                ForEach(IdleScreensaverMode.allCases) { mode in
-                    Text(mode.title).tag(mode)
+            Toggle("Включить автозаставку", isOn: $appSettings.idleScreensaverEnabled)
+                .onChange(of: appSettings.idleScreensaverEnabled) { _, _ in feedback.confirm() }
+
+            if appSettings.idleScreensaverEnabled {
+                Picker("Эффект заставки", selection: $appSettings.idleScreensaverMode) {
+                    ForEach(IdleScreensaverMode.allCases) { mode in
+                        Text(mode.title).tag(mode)
+                    }
                 }
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: appSettings.idleScreensaverMode) { _, _ in feedback.confirm() }
+                .pickerStyle(.segmented)
+                .onChange(of: appSettings.idleScreensaverMode) { _, _ in feedback.confirm() }
 
-            SettingsInfoRow(
-                title: "Режим",
-                value: appSettings.idleScreensaverMode.description,
-                systemName: "clock.fill",
-                subtitle: idleModeSubtitle
-            )
+                SettingsInfoRow(
+                    title: "Режим",
+                    value: appSettings.idleScreensaverMode.description,
+                    systemName: "clock.fill",
+                    subtitle: idleModeSubtitle
+                )
 
-            if appSettings.idleScreensaverMode != .off {
                 Picker("Время бездействия", selection: $appSettings.idleScreensaverTimeout) {
                     Text("15 секунд").tag(15)
                     Text("30 секунд").tag(30)
@@ -69,7 +72,6 @@ struct SettingsBackgroundSection: View {
 
     private var idleModeSubtitle: String {
         switch appSettings.idleScreensaverMode {
-        case .off: "Автозаставка отключена."
         case .matrixRain: "Матричный дождь с неоновыми часами во весь экран."
         case .video: "Локальная видеозаставка с неоновыми часами во весь экран."
         }

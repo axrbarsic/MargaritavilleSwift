@@ -33,5 +33,6 @@ extension AppSettingsStore {
         cartConsumableCatalog = CartConsumableCatalog.defaultCatalog
         idleScreensaverMode = .matrixRain
         idleScreensaverTimeout = 30
+        idleScreensaverEnabled = true
     }
 }

@@ -36,7 +36,6 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
 }
 
 enum IdleScreensaverMode: String, CaseIterable, Identifiable, Codable {
-    case off
     case matrixRain
     case video
 
@@ -44,8 +43,6 @@ enum IdleScreensaverMode: String, CaseIterable, Identifiable, Codable {
 
     var title: String {
         switch self {
-        case .off:
-            "Выкл"
         case .matrixRain:
             "Matrix"
         case .video:
@@ -55,8 +52,6 @@ enum IdleScreensaverMode: String, CaseIterable, Identifiable, Codable {
 
     var description: String {
         switch self {
-        case .off:
-            "Автозаставка отключена"
         case .matrixRain:
             "Матричный дождь при бездействии"
         case .video:
