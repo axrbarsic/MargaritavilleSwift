@@ -66,6 +66,7 @@
 		6E64F0A59FD3EE6013BB98BA /* VoiceTranscriptionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89917CE612922887A91E731A /* VoiceTranscriptionContracts.swift */; };
 		6F2C27BB68573CA9F2928146 /* PerformanceTelemetryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF87AEBF917C954895FE0CF /* PerformanceTelemetryStoreTests.swift */; };
 		6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */; };
+		7144B57BFAC3EF0D274D401C /* SummaryZeroScreenPuzzleHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DAE0FE8025FB13AC4BC7D8 /* SummaryZeroScreenPuzzleHandle.swift */; };
 		7428A12339BD354F950324A1 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35D3835B7B9A121C869C2ED /* WorkSessionStore+Selection.swift */; };
 		74CD34FC39F093A3DE0C4861 /* WorkSessionStore+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1219DB5B1565EA2415741F /* WorkSessionStore+Consumables.swift */; };
 		770F0645064D6215E9630A0C /* AppSettingsStoreDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35755D643E8551F06BBB2CC7 /* AppSettingsStoreDefaults.swift */; };
@@ -133,6 +134,7 @@
 		C3F8298388E810A68B8DEBA3 /* RoomScheduleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500155013123DCA396D6B0A2 /* RoomScheduleSelection.swift */; };
 		C66F3197C0E7AC3729D81D4B /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED484B471D3B303634E238A3 /* AppSettingsStore.swift */; };
 		C78DA3701B2EDCACA9000557 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EF295087355147852E6B91 /* WorkSessionStore.swift */; };
+		C7FA521BDB5329D260F2BD0E /* EmbeddedContainerInteractionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62A65034E003CB398AC8C39 /* EmbeddedContainerInteractionPolicy.swift */; };
 		CA6918F5154C0EF6D640D2D4 /* MargaritavilleSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB1098091146B6B73E6FE14 /* MargaritavilleSummarySection.swift */; };
 		CC2726E3236DD7F8BE90DB5E /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB404746FF5A9F4CEC4B06B6 /* PhotosUI.framework */; };
 		CCEB3EAFB175EB2191D64B36 /* HousekeeperCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3824B81E67ADEE1DD80DD608 /* HousekeeperCatalog.swift */; };
@@ -239,6 +241,7 @@
 		62DA7C551FAD4EAEA106D52B /* AppBackgroundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundMode.swift; sourceTree = "<group>"; };
 		63F7800BE448B225E72E51C0 /* WorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionRepository.swift; sourceTree = "<group>"; };
 		64AE4DF0581521747F2A5FF2 /* MatrixRainConfigurationEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfigurationEnvironment.swift; sourceTree = "<group>"; };
+		64DAE0FE8025FB13AC4BC7D8 /* SummaryZeroScreenPuzzleHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryZeroScreenPuzzleHandle.swift; sourceTree = "<group>"; };
 		6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumableCatalogEditorSection.swift; sourceTree = "<group>"; };
 		66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumablesSection.swift; sourceTree = "<group>"; };
 		68371E9841837E338DD06D16 /* LoopingVideoBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoBackgroundView.swift; sourceTree = "<group>"; };
@@ -294,6 +297,7 @@
 		B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		B512B523DF50D934102856F7 /* WorkSessionStore+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Catalog.swift"; sourceTree = "<group>"; };
 		B57BE8EBF8D2A57831E5C299 /* SummarySwipeCommitPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySwipeCommitPolicy.swift; sourceTree = "<group>"; };
+		B62A65034E003CB398AC8C39 /* EmbeddedContainerInteractionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedContainerInteractionPolicy.swift; sourceTree = "<group>"; };
 		B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixConsumableStyle.swift; sourceTree = "<group>"; };
 		B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundView.swift; sourceTree = "<group>"; };
 		B83360CE4510D5320737420A /* SummaryConsumablesReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryConsumablesReport.swift; sourceTree = "<group>"; };
@@ -556,6 +560,7 @@
 				D722D20ACC6304E5369C4044 /* SummaryScreen.swift */,
 				D4477CB88B9B03CE2915DB9C /* SummarySelectionPuzzleHandle.swift */,
 				B57BE8EBF8D2A57831E5C299 /* SummarySwipeCommitPolicy.swift */,
+				64DAE0FE8025FB13AC4BC7D8 /* SummaryZeroScreenPuzzleHandle.swift */,
 				DD993F5D122A09028FEDE5EE /* VIPJellyEffects.swift */,
 			);
 			path = Summary;
@@ -719,6 +724,7 @@
 		E1254DB211E0DA6318E009E9 /* Interaction */ = {
 			isa = PBXGroup;
 			children = (
+				B62A65034E003CB398AC8C39 /* EmbeddedContainerInteractionPolicy.swift */,
 				A516DF182C6E2DA6691E748B /* HoldActionTarget.swift */,
 				69C3220AB4C379C2C29B5C93 /* InteractionFeedbackService.swift */,
 			);
@@ -913,6 +919,7 @@
 				68FC9E5214D46FCCCBE78F6F /* DeepSeekLabComponents.swift in Sources */,
 				F70E89A335D855BD151E41C5 /* DeepSeekLabSection.swift in Sources */,
 				B851DD8FE85AB4C1FE79F336 /* DeepSeekModels.swift in Sources */,
+				C7FA521BDB5329D260F2BD0E /* EmbeddedContainerInteractionPolicy.swift in Sources */,
 				926C871FBCC94795F6C23DCE /* ExperimentalAppearanceEnvironment.swift in Sources */,
 				389B9EE5FEA4DBCC068830B7 /* HoldActionTarget.swift in Sources */,
 				118A22F74FB47F99097EFF77 /* HotelProfile.swift in Sources */,
@@ -982,6 +989,7 @@
 				AA49001001C7EF949271B8B4 /* SummaryScreen.swift in Sources */,
 				04CF7F1F305D831C60D45079 /* SummarySelectionPuzzleHandle.swift in Sources */,
 				90611C42E9319C6664307F82 /* SummarySwipeCommitPolicy.swift in Sources */,
+				7144B57BFAC3EF0D274D401C /* SummaryZeroScreenPuzzleHandle.swift in Sources */,
 				8BA510D92D5D30CEC1174046 /* SwiftDataWorkSessionRepository.swift in Sources */,
 				8286E4F0670A238E0099BEBE /* TVStaticNoiseBackgroundView.swift in Sources */,
 				B17AE67B2E6098580903BF20 /* VIPJellyContentWarp.metal in Sources */,

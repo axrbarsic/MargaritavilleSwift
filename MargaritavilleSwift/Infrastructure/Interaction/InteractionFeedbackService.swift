@@ -142,6 +142,10 @@ final class InteractionFeedbackService {
         schedulePrepare()
     }
 
+    func restoreAudioSession() {
+        sounds.restoreAudioSession()
+    }
+
     private func schedulePrepare() {
         guard prepareTask == nil else { return }
         prepareTask = Task { @MainActor [weak self] in
@@ -233,6 +237,15 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
         enqueueDeselect(volume: 0.11, rate: 1.36, pan: 0.03)
     }
 
+    func restoreAudioSession() {
+        queue.async { [weak self] in
+            guard let self else { return }
+            configureAudioSession()
+            selectPlayers.forEach { $0.prepareToPlay() }
+            deselectPlayers.forEach { $0.prepareToPlay() }
+        }
+    }
+
     private func configureAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(
@@ -273,7 +286,7 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
     }
 
     private func makePlayer(resource: String) -> AVAudioPlayer? {
-        guard let url = Bundle.main.url(forResource: resource, withExtension: "wav") else {
+        guard let url = Self.resourceURL(resource: resource) else {
             return nil
         }
         do {
@@ -286,6 +299,19 @@ private final class InteractionSoundPlayer: @unchecked Sendable {
             Self.logger.error("Failed to load interaction sound \(resource, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return nil
         }
+    }
+
+    private static func resourceURL(resource: String) -> URL? {
+        let bundles = [
+            Bundle(for: InteractionSoundPlayer.self),
+            Bundle.main
+        ]
+        for bundle in bundles {
+            if let url = bundle.url(forResource: resource, withExtension: "wav") {
+                return url
+            }
+        }
+        return nil
     }
 
     private func playSelect(volume: Float, rate: Float, pan: Float) {

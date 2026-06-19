@@ -11,6 +11,10 @@ struct WorkSetupHeader: View {
     let canStart: Bool
     let onOpenSettings: () -> Void
     let onStart: () -> Void
+    @Environment(\.settingsOpenRequiresLongPress) private var settingsOpenRequiresLongPress
+    @Environment(\.embeddedContainerReturnToZeroScreen) private var returnToZeroScreen
+    @Environment(\.interactionFeedback) private var feedback
+    @State private var zeroScreenReturnArmed = false
 
     var body: some View {
         HStack(spacing: 12) {
@@ -23,7 +27,12 @@ struct WorkSetupHeader: View {
     }
 
     private var settingsButton: some View {
-        Button(action: onOpenSettings) {
+        HoldActionTarget(
+            enabled: true,
+            useLongPress: settingsOpenRequiresLongPress,
+            semanticLabel: "Открыть настройки",
+            onActivate: onOpenSettings
+        ) {
             Image(systemName: "gearshape.fill")
                 .font(.system(size: 24, weight: .black))
                 .frame(width: 54, height: 54)
@@ -31,7 +40,27 @@ struct WorkSetupHeader: View {
                 .background(OceanKeyTheme.surface.opacity(0.82))
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
-        .buttonStyle(.plain)
+        .simultaneousGesture(zeroScreenReturnGesture)
+    }
+
+    private var zeroScreenReturnGesture: some Gesture {
+        DragGesture(minimumDistance: 18, coordinateSpace: .local)
+            .onChanged { value in
+                guard returnToZeroScreen != nil else { return }
+                let isArmed = value.translation.width > 210 && abs(value.translation.height) < 52
+                if isArmed, !zeroScreenReturnArmed {
+                    feedback.holdCommit()
+                } else if value.translation.width > 150, !zeroScreenReturnArmed {
+                    feedback.holdWarning()
+                }
+                zeroScreenReturnArmed = isArmed
+            }
+            .onEnded { _ in
+                defer { zeroScreenReturnArmed = false }
+                guard zeroScreenReturnArmed else { return }
+                feedback.confirm()
+                returnToZeroScreen?()
+            }
     }
 
     private var titleBlock: some View {

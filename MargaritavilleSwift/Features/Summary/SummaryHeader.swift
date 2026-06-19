@@ -16,7 +16,10 @@ struct SummaryHeader: View {
     let onOpenSettings: () -> Void
     let onOpenSelection: () -> Void
     @Environment(\.interactionFeedback) private var feedback
+    @Environment(\.settingsOpenRequiresLongPress) private var settingsOpenRequiresLongPress
+    @Environment(\.embeddedContainerReturnToZeroScreen) private var returnToZeroScreen
     @State private var selectionPuzzleProgress: CGFloat = 0
+    @State private var zeroScreenPuzzleProgress: CGFloat = 0
 
     var body: some View {
         GeometryReader { proxy in
@@ -26,7 +29,7 @@ struct SummaryHeader: View {
                     accessibilityLabel: "Открыть настройки",
                     action: onOpenSettings
                 )
-                .opacity(CGFloat(1) - min(selectionPuzzleProgress * CGFloat(1.65), CGFloat(1)))
+                .opacity(settingsButtonOpacity)
 
                 Spacer(minLength: 8)
 
@@ -44,8 +47,20 @@ struct SummaryHeader: View {
                     onComplete: openSelection
                 )
             }
+            .overlay {
+                if let returnToZeroScreen {
+                    SummaryZeroScreenPuzzleHandle(
+                        progress: $zeroScreenPuzzleProgress,
+                        onComplete: returnToZeroScreen
+                    )
+                }
+            }
         }
         .frame(height: 48)
+    }
+
+    private var settingsButtonOpacity: CGFloat {
+        CGFloat(1) - min(max(selectionPuzzleProgress, zeroScreenPuzzleProgress) * CGFloat(1.65), CGFloat(1))
     }
 
     private func headerIconButton(
@@ -53,14 +68,18 @@ struct SummaryHeader: View {
         accessibilityLabel: String,
         action: @escaping () -> Void
     ) -> some View {
-        Button(action: action) {
+        HoldActionTarget(
+            enabled: true,
+            useLongPress: settingsOpenRequiresLongPress,
+            semanticLabel: accessibilityLabel,
+            onActivate: action
+        ) {
             Image(systemName: systemName)
                 .font(.system(size: 23, weight: .black))
                 .frame(width: 48, height: 48)
                 .foregroundStyle(OceanKeyTheme.secondaryText)
                 .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)
         .accessibilityHint("")
     }
