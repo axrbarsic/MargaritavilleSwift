@@ -8,18 +8,66 @@ settings:
   base:
     SWIFT_VERSION: "6.0"
     MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: "21"
+    CURRENT_PROJECT_VERSION: "22"
     DEVELOPMENT_TEAM: J6MW4855LU
     CODE_SIGN_STYLE: Automatic
+packages:
+  HospitalityFoundation:
+    path: ../HospitalityLabSwift/Packages/HospitalityFoundation
+  MargaritavilleHostedRoot:
+    path: ../HospitalityLabSwift/Packages/MargaritavilleHostedRoot
+  MargaritavilleLabContainer:
+    path: ../HospitalityLabSwift/Packages/MargaritavilleLabContainer
 targets:
   MargaritavilleSwift:
     type: application
     platform: iOS
     sources:
-      - MargaritavilleSwift
+      - path: MargaritavilleSwift/StandaloneApp
+      - path: MargaritavilleSwift/StandaloneSupport
+      - path: MargaritavilleSwift/App/AppBackgroundMode.swift
+      - path: MargaritavilleSwift/App/AppIdentity.swift
+      - path: MargaritavilleSwift/App/AppSettingsStore+Consumables.swift
+      - path: MargaritavilleSwift/App/AppSettingsStore+Housekeepers.swift
+      - path: MargaritavilleSwift/App/AppSettingsStoreDefaults.swift
+      - path: MargaritavilleSwift/App/AppSettingsStoreKeys.swift
+      - path: MargaritavilleSwift/App/AppSettingsStoreLoading.swift
+      - path: MargaritavilleSwift/App/BuildChangelogEntriesArchive.swift
+      - path: MargaritavilleSwift/App/BuildChangelogEntriesLegacy.swift
+      - path: MargaritavilleSwift/App/BuildChangelogEntriesMid.swift
+      - path: MargaritavilleSwift/App/BuildChangelogEntriesRecent.swift
+      - path: MargaritavilleSwift/Data/MargaritavillePresetBackupDocument.swift
+      - path: MargaritavilleSwift/Domain/HousekeeperDetailsGestureMode.swift
+      - path: MargaritavilleSwift/Domain/RoomDayCategory.swift
+      - path: MargaritavilleSwift/Domain/RoomDayCategoryTimePreset.swift
+      - path: MargaritavilleSwift/Domain/RoomCatalogOverride.swift
+      - path: MargaritavilleSwift/Design/HousekeeperPalette+Color.swift
+      - path: MargaritavilleSwift/Features/CartDetails/CartConsumableQuantityRuler.swift
+      - path: MargaritavilleSwift/Features/CartDetails/CartConsumableQuantitySlider.swift
+      - path: MargaritavilleSwift/Features/Settings/CartConsumableCatalogEditorSection.swift
+      - path: MargaritavilleSwift/Features/Settings/HousekeeperCatalogEditorSection.swift
+      - path: MargaritavilleSwift/Features/Settings/MargaritavilleCatalogEditorSection.swift
+      - path: MargaritavilleSwift/Features/Settings/SettingsWorkSection.swift
+      - path: MargaritavilleSwift/Features/Media/MediaAttachmentGrid.swift
+      - path: MargaritavilleSwift/Features/Summary/MargaritavilleSummaryRoomGrouping.swift
+      - path: MargaritavilleSwift/Features/Summary/SummaryConsumablesReport.swift
+      - path: MargaritavilleSwift/Features/Summary/SummaryConsumablesViews.swift
+      - path: MargaritavilleSwift/Features/Summary/VIPJellyEffects.swift
+      - path: MargaritavilleSwift/Features/WorkSetup/WorkSetupRoomPickButton.swift
+      - path: MargaritavilleSwift/Features/WorkSetup/WorkSetupTerritorySelectionSummary.swift
+      - path: MargaritavilleSwift/Features/WorkSetup/WorkSetupTerritoryPicker.swift
+      - path: MargaritavilleSwift/Features/WorkSession/WorkSessionStore+Catalog.swift
+      - path: MargaritavilleSwift/Features/WorkSession/WorkSessionStore+Mutation.swift
+      - path: MargaritavilleSwift/Features/WorkSession/WorkSessionStore+NotesMedia.swift
+      - path: MargaritavilleSwift/Features/WorkSession/WorkSessionStore+SimpleCycle.swift
+      - path: ../HospitalityLabSwift/HospitalityLabSwift/Embedded/MargaritavilleEmbeddedApp
     resources:
       - MargaritavilleSwift/Resources
+      - ../HospitalityLabSwift/HospitalityLabSwift/Resources
     dependencies:
+      - package: HospitalityFoundation
+      - package: MargaritavilleHostedRoot
+      - package: MargaritavilleLabContainer
       - sdk: SpriteKit.framework
       - sdk: GameplayKit.framework
       - sdk: AVKit.framework
