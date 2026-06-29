@@ -3,6 +3,7 @@ import SwiftUI
 struct TerritoryPicker: View {
     let territory: Territory
     let territories: [Territory]
+    let selectionColor: Color
     let onChanged: (Territory) -> Void
 
     private var buildings: [Building] {
@@ -57,7 +58,7 @@ struct TerritoryPicker: View {
     private func pickerChip(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
         HoldActionTarget(
             enabled: true,
-            useLongPress: true,
+            useLongPress: false,
             semanticLabel: title,
             onActivate: action
         ) {
@@ -68,11 +69,11 @@ struct TerritoryPicker: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 62)
                 .foregroundStyle(selected ? OceanKeyTheme.roomForeground : .white)
-                .background(selected ? OceanKeyTheme.accent : OceanKeyTheme.surface.opacity(0.58))
+                .background(selected ? selectionColor : selectionColor.opacity(0.26))
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(selected ? .white.opacity(0.72) : OceanKeyTheme.accent.opacity(0.18), lineWidth: 1.2)
+                        .stroke(selected ? .white.opacity(0.72) : selectionColor.opacity(0.48), lineWidth: 1.2)
                 }
         }
     }

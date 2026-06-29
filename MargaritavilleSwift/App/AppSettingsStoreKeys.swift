@@ -4,10 +4,12 @@ extension AppSettingsStore {
     enum Keys {
         static let appBackgroundMode = "appBackgroundMode"
         static let roomCellGeometry = "roomCellGeometry"
+        static let transparentSurfacesEnabled = "transparentSurfacesEnabled"
         static let roomTaskLongPress = "roomTaskLongPress"
         static let summaryActionMenuAllowsMultiple = "summaryActionMenuAllowsMultiple"
         static let housekeeperDetailsGestureMode = "housekeeperDetailsGestureMode"
         static let personalCartMarkers = "personalCartMarkers"
+        static let interactionSoundAssignments = "interactionSoundAssignments"
         static let statusPaletteSaturation = "statusPaletteSaturation"
         static let matrixSpeed = "matrixSpeed"
         static let backgroundVideoRelativePath = "backgroundVideoRelativePath"

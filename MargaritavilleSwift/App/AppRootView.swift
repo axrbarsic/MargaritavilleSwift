@@ -46,10 +46,21 @@ struct AppRootView: View {
         .environment(\.experimentalCellSpringSpeed, appSettings.developerCellSpringSpeed)
         .environment(\.experimentalVIPJellyEnabled, appSettings.developerVIPJellyEnabled)
         .environment(\.experimentalVIPJellySpeed, appSettings.developerVIPJellySpeed)
+        .environment(\.interactionSoundAssignments, appSettings.interactionSoundAssignments)
         .environment(
             \.interactionFeedback,
-            .live(interactionFeedbackService, soundPackV2: true, hapticsV2: true)
+            .live(
+                interactionFeedbackService,
+                hapticsV2: true,
+                soundAssignments: appSettings.interactionSoundAssignments
+            )
         )
+        .onAppear {
+            AppSurfaceTransparency.apply(appSettings.transparentSurfacesEnabled)
+        }
+        .onChange(of: appSettings.transparentSurfacesEnabled) { _, isEnabled in
+            AppSurfaceTransparency.apply(isEnabled)
+        }
         .preferredColorScheme(.dark)
     }
 }

@@ -12,6 +12,9 @@ enum AppleSyncConfiguration {
     }
 
     static func canUsePrivateCloudKitAtRuntime() -> Bool {
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+            return false
+        }
         #if targetEnvironment(simulator)
         return true
         #else

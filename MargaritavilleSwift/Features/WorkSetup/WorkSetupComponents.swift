@@ -12,7 +12,7 @@ struct WorkSetupHeader: View {
     let onOpenSettings: () -> Void
     let onStart: () -> Void
     @Environment(\.settingsOpenRequiresLongPress) private var settingsOpenRequiresLongPress
-    @Environment(\.embeddedContainerReturnToZeroScreen) private var returnToZeroScreen
+    @Environment(\.zeroScreenReturnAction) private var returnToZeroScreen
     @Environment(\.interactionFeedback) private var feedback
     @State private var zeroScreenReturnArmed = false
 
@@ -79,7 +79,7 @@ struct WorkSetupHeader: View {
     private var startButton: some View {
         HoldActionTarget(
             enabled: canStart,
-            useLongPress: true,
+            useLongPress: false,
             semanticLabel: "Начать смену",
             onActivate: onStart
         ) {
@@ -116,7 +116,7 @@ struct HousekeeperWorkPicker: View {
         let isFocused = focusedID == housekeeper.id
         return HoldActionTarget(
             enabled: true,
-            useLongPress: true,
+            useLongPress: false,
             semanticLabel: housekeeper.displayName,
             onActivate: { onSelect(housekeeper) }
         ) {
@@ -170,6 +170,7 @@ struct CartSetupCard: View {
             TerritoryPicker(
                 territory: territory,
                 territories: territories,
+                selectionColor: housekeeper?.palette.color ?? OceanKeyTheme.accent,
                 onChanged: onTerritoryChanged
             )
             WorkSetupTerritorySelectionSummary(groups: offTerritorySelectionGroups)
@@ -199,7 +200,7 @@ struct CartSetupCard: View {
             Spacer()
             HoldActionTarget(
                 enabled: true,
-                useLongPress: true,
+                useLongPress: false,
                 semanticLabel: "Убрать уборщицу из смены",
                 onActivate: onRemove
             ) {

@@ -6,12 +6,14 @@ extension AppSettingsStore {
         let appBackgroundMode = backgroundRawValue.flatMap(AppBackgroundMode.init(rawValue:)) ?? .matrixRain
         let rawValue = userDefaults.string(forKey: Keys.roomCellGeometry)
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
+        let transparentSurfacesEnabled = userDefaults.object(forKey: Keys.transparentSurfacesEnabled) as? Bool ?? false
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
         let summaryActionMenuAllowsMultiple = userDefaults.object(forKey: Keys.summaryActionMenuAllowsMultiple) as? Bool ?? false
         let housekeeperDetailsGestureMode = userDefaults.string(forKey: Keys.housekeeperDetailsGestureMode)
             .flatMap(HousekeeperDetailsGestureMode.init(rawValue:))
             ?? .tap
         let personalCartMarkers = Self.loadPersonalCartMarkers(userDefaults: userDefaults)
+        let interactionSoundAssignments = Self.loadInteractionSoundAssignments(userDefaults: userDefaults)
         let statusPaletteSaturation = userDefaults.object(forKey: Keys.statusPaletteSaturation) as? Double ?? 1
         let matrixSpeed = userDefaults.object(forKey: Keys.matrixSpeed) as? Double
             ?? MatrixRainConfiguration.default.speed
@@ -47,10 +49,12 @@ extension AppSettingsStore {
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             roomCellGeometry: geometry,
+            transparentSurfacesEnabled: transparentSurfacesEnabled,
             roomTaskLongPress: roomTaskLongPress,
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,
             housekeeperDetailsGestureMode: housekeeperDetailsGestureMode,
             personalCartMarkers: personalCartMarkers,
+            interactionSoundAssignments: interactionSoundAssignments,
             statusPaletteSaturation: statusPaletteSaturation,
             matrixSpeed: matrixSpeed,
             backgroundVideoRelativePath: backgroundVideoRelativePath,
@@ -103,6 +107,23 @@ extension AppSettingsStore {
     static func savePersonalCartMarkers(_ markers: PersonalCartMarkers, userDefaults: UserDefaults) {
         guard let data = try? JSONEncoder().encode(markers.normalized()) else { return }
         userDefaults.set(data, forKey: Keys.personalCartMarkers)
+    }
+
+    private static func loadInteractionSoundAssignments(userDefaults: UserDefaults) -> InteractionSoundAssignments {
+        guard let data = userDefaults.data(forKey: Keys.interactionSoundAssignments),
+              let decoded = try? JSONDecoder().decode(InteractionSoundAssignments.self, from: data)
+        else {
+            return InteractionSoundAssignments()
+        }
+        return decoded
+    }
+
+    static func saveInteractionSoundAssignments(
+        _ assignments: InteractionSoundAssignments,
+        userDefaults: UserDefaults
+    ) {
+        guard let data = try? JSONEncoder().encode(assignments) else { return }
+        userDefaults.set(data, forKey: Keys.interactionSoundAssignments)
     }
 
     static func loadHousekeepers(userDefaults: UserDefaults) -> [Housekeeper] {

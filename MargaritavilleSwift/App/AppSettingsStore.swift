@@ -47,6 +47,13 @@ final class AppSettingsStore {
         }
     }
 
+    var transparentSurfacesEnabled: Bool {
+        didSet {
+            userDefaults.set(transparentSurfacesEnabled, forKey: Keys.transparentSurfacesEnabled)
+            AppSurfaceTransparency.apply(transparentSurfacesEnabled)
+        }
+    }
+
     var roomTaskLongPress: Bool {
         didSet {
             userDefaults.set(roomTaskLongPress, forKey: Keys.roomTaskLongPress)
@@ -68,6 +75,12 @@ final class AppSettingsStore {
     var personalCartMarkers: PersonalCartMarkers {
         didSet {
             Self.savePersonalCartMarkers(personalCartMarkers, userDefaults: userDefaults)
+        }
+    }
+
+    var interactionSoundAssignments: InteractionSoundAssignments {
+        didSet {
+            Self.saveInteractionSoundAssignments(interactionSoundAssignments, userDefaults: userDefaults)
         }
     }
 
@@ -255,10 +268,12 @@ final class AppSettingsStore {
     init(
         appBackgroundMode: AppBackgroundMode = .matrixRain,
         roomCellGeometry: RoomCellGeometry = .roomy,
+        transparentSurfacesEnabled: Bool = false,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
         housekeeperDetailsGestureMode: HousekeeperDetailsGestureMode = .longPress,
         personalCartMarkers: PersonalCartMarkers = .default,
+        interactionSoundAssignments: InteractionSoundAssignments = InteractionSoundAssignments(),
         statusPaletteSaturation: Double = 1,
         matrixSpeed: Double = MatrixRainConfiguration.default.speed,
         backgroundVideoRelativePath: String? = nil,
@@ -286,10 +301,12 @@ final class AppSettingsStore {
     ) {
         self.appBackgroundMode = appBackgroundMode
         self.roomCellGeometry = roomCellGeometry
+        self.transparentSurfacesEnabled = transparentSurfacesEnabled
         self.roomTaskLongPress = roomTaskLongPress
         self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
         self.housekeeperDetailsGestureMode = housekeeperDetailsGestureMode
         self.personalCartMarkers = personalCartMarkers.normalized()
+        self.interactionSoundAssignments = interactionSoundAssignments
         self.backgroundVideoRelativePath = backgroundVideoRelativePath
         self.tvStaticVariant = tvStaticVariant
         self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
@@ -314,6 +331,7 @@ final class AppSettingsStore {
         self.housekeepers = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
         self.cartConsumableCatalog = CartConsumableCatalog.normalizedCatalog(cartConsumableCatalog)
         self.userDefaults = userDefaults
+        AppSurfaceTransparency.apply(transparentSurfacesEnabled)
     }
 
 }

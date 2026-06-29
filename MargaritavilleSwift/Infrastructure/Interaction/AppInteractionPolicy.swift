@@ -4,7 +4,7 @@ private struct SettingsOpenRequiresLongPressKey: EnvironmentKey {
     static let defaultValue = false
 }
 
-private struct EmbeddedContainerReturnToZeroScreenKey: EnvironmentKey {
+private struct ZeroScreenReturnActionKey: EnvironmentKey {
     nonisolated(unsafe) static let defaultValue: (() -> Void)? = nil
 }
 
@@ -14,8 +14,8 @@ extension EnvironmentValues {
         set { self[SettingsOpenRequiresLongPressKey.self] = newValue }
     }
 
-    var embeddedContainerReturnToZeroScreen: (() -> Void)? {
-        get { self[EmbeddedContainerReturnToZeroScreenKey.self] }
-        set { self[EmbeddedContainerReturnToZeroScreenKey.self] = newValue }
+    var zeroScreenReturnAction: (() -> Void)? {
+        get { self[ZeroScreenReturnActionKey.self] }
+        set { self[ZeroScreenReturnActionKey.self] = newValue }
     }
 }

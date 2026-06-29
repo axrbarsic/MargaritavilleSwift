@@ -14,7 +14,7 @@ struct RoomPickButton: View {
     var body: some View {
         HoldActionTarget(
             enabled: reservation == nil,
-            useLongPress: true,
+            useLongPress: false,
             semanticLabel: "Комната \(room)",
             onActivate: onTap
         ) {

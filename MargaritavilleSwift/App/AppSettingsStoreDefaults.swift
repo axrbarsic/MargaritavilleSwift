@@ -4,10 +4,12 @@ extension AppSettingsStore {
     func resetToDefaults() {
         appBackgroundMode = .matrixRain
         roomCellGeometry = .roomy
+        transparentSurfacesEnabled = false
         roomTaskLongPress = true
         summaryActionMenuAllowsMultiple = false
         housekeeperDetailsGestureMode = .longPress
         personalCartMarkers = .default
+        interactionSoundAssignments = InteractionSoundAssignments()
         statusPaletteSaturation = 1
         matrixSpeed = MatrixRainConfiguration.default.speed
         backgroundVideoRelativePath = nil

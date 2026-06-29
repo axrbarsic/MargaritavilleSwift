@@ -3,7 +3,10 @@ import UIKit
 
 enum OceanKeyTheme {
     static let background = Color(red: 0.016, green: 0.031, blue: 0.020)
-    static let surface = Color(red: 0.008, green: 0.016, blue: 0.008)
+    static var surface: Color {
+        Color(red: 0.008, green: 0.016, blue: 0.008)
+            .opacity(AppSurfaceTransparency.isEnabled ? 0.18 : 1)
+    }
     static let accent = Color(red: 0.118, green: 1.000, blue: 0.353)
     static let mutedText = Color(red: 0.294, green: 0.702, blue: 0.396)
     static let secondaryText = Color(red: 0.608, green: 1.000, blue: 0.722)

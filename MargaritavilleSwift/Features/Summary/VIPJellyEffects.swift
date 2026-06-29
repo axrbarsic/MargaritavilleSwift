@@ -1,8 +1,8 @@
 import SwiftUI
 
 extension View {
-    /// Единый монолитный warp: сначала растеризуем ячейку вместе с контентом,
-    /// затем деформируем один слой. Контур и текст двигаются как один объект.
+    /// Animated VIP layer kept CPU-only for reliable device rendering.
+    /// The Metal layer effect can render transparent on some device/runtime combinations.
     @ViewBuilder
     func vipJellyUnifiedLayer(
         enabled: Bool,
@@ -12,25 +12,15 @@ extension View {
         cornerRadius: CGFloat
     ) -> some View {
         if enabled, let time {
+            let normalizedSpeed = min(max(speed, 0.2), 2.5)
+            let t = time * normalizedSpeed + seed * 11.0
             self
                 .compositingGroup()
-                .visualEffect { content, proxy in
-                    let amplitude = min(max(proxy.size.height * 0.24, 10), 20)
-                    return content.layerEffect(
-                        ShaderLibrary.vipJellyUnifiedLayer(
-                            .float(Float(time)),
-                            .float(Float(speed)),
-                            .float(Float(seed)),
-                            .float2(Float(proxy.size.width), Float(proxy.size.height)),
-                            .float(Float(amplitude)),
-                            .float(Float(cornerRadius))
-                        ),
-                        maxSampleOffset: CGSize(
-                            width: amplitude * 1.1,
-                            height: amplitude * 1.45
-                        )
-                    )
-                }
+                .scaleEffect(
+                    x: 1.0 + 0.012 * sin(t * 1.7),
+                    y: 1.0 + 0.018 * cos(t * 1.4)
+                )
+                .offset(x: 1.2 * sin(t * 1.1), y: 0.8 * cos(t * 1.3))
         } else {
             self
         }

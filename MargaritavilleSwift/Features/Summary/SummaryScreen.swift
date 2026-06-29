@@ -83,17 +83,20 @@ struct SummaryScreen: View {
     }
 
     private func openSettings() {
+        feedback.playEvent(.settingsOpen)
         isSettingsPresented = true
     }
 
     private func openSelection() {
-        feedback.confirm()
+        feedback.playEvent(.selectionOpen)
         workSession.unlockWorkdayForEditing()
     }
 
     private func toggleOpen(roomID: RoomCell.ID) {
+        let previousStatus = statusForSound(roomID: roomID)
         let hadSchedule = workSession.room(id: roomID)?.scheduledTime != nil
         workSession.toggleOpen(roomId: roomID)
+        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
         if hadSchedule, workSession.room(id: roomID)?.scheduledTime == nil {
             scheduleNotifications.cancelRoom(roomID)
         }
@@ -117,7 +120,7 @@ struct SummaryScreen: View {
                             roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
                         },
                         onVIPToggle: workSession.toggleVIP,
-                        onReset: workSession.resetSimpleCycle,
+                        onReset: resetSimpleCycle,
                         onSchedule: openSchedule
                     )
                 }
@@ -142,7 +145,7 @@ struct SummaryScreen: View {
                             roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
                         },
                         onOpenToggle: toggleOpen,
-                        onTaskToggle: workSession.toggleTask,
+                        onTaskToggle: toggleTask,
                         onVIPToggle: workSession.toggleVIP,
                         onScheduleToggle: openSchedule
                     )
@@ -197,18 +200,22 @@ struct SummaryScreen: View {
     }
 
     private func setSchedule(roomID: RoomCell.ID, dueAt: Date) {
+        let previousStatus = statusForSound(roomID: roomID)
         workSession.setSchedule(dueAt, roomId: roomID)
         expandedActionMenuRoomIDs.remove(roomID)
         if dueAt <= Date() {
             advanceScheduledRooms()
         } else {
+            playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
             scheduleNotifications.scheduleRoom(roomID, dueAt)
         }
     }
 
     private func clearSchedule(roomID: RoomCell.ID) {
+        let previousStatus = statusForSound(roomID: roomID)
         workSession.setSchedule(nil, roomId: roomID)
         expandedActionMenuRoomIDs.remove(roomID)
+        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
         scheduleNotifications.cancelRoom(roomID)
     }
 
@@ -229,8 +236,32 @@ struct SummaryScreen: View {
     private func advanceScheduledRooms(now: Date = Date()) {
         let openedRoomIDs = workSession.advanceScheduledRooms(now: now)
         for roomID in openedRoomIDs {
+            playRoomStatusChange(roomID: roomID, previousStatus: .scheduled)
             scheduleNotifications.cancelRoom(roomID)
         }
+    }
+
+    private func toggleTask(_ task: RoomTask, roomID: RoomCell.ID) {
+        let previousStatus = statusForSound(roomID: roomID)
+        workSession.toggleTask(task, roomId: roomID)
+        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+    }
+
+    private func resetSimpleCycle(roomID: RoomCell.ID) {
+        let previousStatus = statusForSound(roomID: roomID)
+        workSession.resetSimpleCycle(roomId: roomID)
+        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+    }
+
+    private func statusForSound(roomID: RoomCell.ID) -> RoomStatus? {
+        workSession.room(id: roomID)?.status(in: workSession.hotelProfile.workflowKind)
+    }
+
+    private func playRoomStatusChange(roomID: RoomCell.ID, previousStatus: RoomStatus?) {
+        guard let nextStatus = statusForSound(roomID: roomID),
+              nextStatus != previousStatus
+        else { return }
+        feedback.playEvent(nextStatus.interactionSoundEvent)
     }
 
     private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {
@@ -239,6 +270,18 @@ struct SummaryScreen: View {
 
     private func housekeeper(id: HousekeeperID?) -> Housekeeper? {
         appSettings.housekeeper(id: id)
+    }
+}
+
+private extension RoomStatus {
+    var interactionSoundEvent: InteractionSoundEvent {
+        switch self {
+        case .pending: .roomPending
+        case .open: .roomOpen
+        case .inProgress: .roomInProgress
+        case .ready: .roomReady
+        case .scheduled: .roomScheduled
+        }
     }
 }
 
