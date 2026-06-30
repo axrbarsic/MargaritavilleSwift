@@ -16,6 +16,16 @@ enum InteractionSoundAsset: String, CaseIterable, Codable, Identifiable, Sendabl
     case kenneySelect4
     case kenneyTick1
     case kenneyBong1
+    case uiClickBright
+    case uiClickSoft
+    case uiRolloverTick
+    case uiSwitchLight
+    case uiSwitchDeep
+    case uiConfirmPop
+    case uiConfirmGlass
+    case uiAlertSnap
+    case uiErrorLow
+    case uiMenuOpen
 
     var id: String { rawValue }
 
@@ -36,16 +46,32 @@ enum InteractionSoundAsset: String, CaseIterable, Codable, Identifiable, Sendabl
         case .kenneySelect4: "Глубокий выбор"
         case .kenneyTick1: "Тик шкалы"
         case .kenneyBong1: "Низкий бонг"
+        case .uiClickBright: "Яркий клик"
+        case .uiClickSoft: "Мягкий клик"
+        case .uiRolloverTick: "Короткий тик"
+        case .uiSwitchLight: "Лёгкий переключатель"
+        case .uiSwitchDeep: "Глубокий переключатель"
+        case .uiConfirmPop: "Сочный поп"
+        case .uiConfirmGlass: "Стеклянное подтверждение"
+        case .uiAlertSnap: "Резкий сигнал"
+        case .uiErrorLow: "Низкий отказ"
+        case .uiMenuOpen: "Открытие меню"
         }
     }
 
     static let settingsPalette: [InteractionSoundAsset] = [
         .none,
-        .legacyClick,
-        .legacyPressed,
-        .kenneySelect1,
-        .kenneyConfirmation4,
-        .kenneyTick1,
+        .uiClickBright,
+        .uiClickSoft,
+        .uiRolloverTick,
+        .uiSwitchLight,
+        .uiSwitchDeep,
+        .uiConfirmPop,
+        .uiConfirmGlass,
+        .kenneyConfirmation3,
+        .uiAlertSnap,
+        .uiErrorLow,
+        .uiMenuOpen,
         .kenneyBong1,
         .frontDeskBell
     ]
@@ -85,6 +111,26 @@ enum InteractionSoundAsset: String, CaseIterable, Codable, Identifiable, Sendabl
             "kenney_tick_001"
         case .kenneyBong1:
             "kenney_bong_001"
+        case .uiClickBright:
+            "xhotel_ui_click_bright"
+        case .uiClickSoft:
+            "xhotel_ui_click_soft"
+        case .uiRolloverTick:
+            "xhotel_ui_rollover_tick"
+        case .uiSwitchLight:
+            "xhotel_ui_switch_light"
+        case .uiSwitchDeep:
+            "xhotel_ui_switch_deep"
+        case .uiConfirmPop:
+            "xhotel_ui_confirm_pop"
+        case .uiConfirmGlass:
+            "xhotel_ui_confirm_glass"
+        case .uiAlertSnap:
+            "xhotel_ui_alert_snap"
+        case .uiErrorLow:
+            "xhotel_ui_error_low"
+        case .uiMenuOpen:
+            "xhotel_ui_menu_open"
         }
     }
 }
@@ -113,18 +159,13 @@ enum InteractionSoundEvent: String, CaseIterable, Codable, Identifiable, Sendabl
 
     static let settingsVisibleCases: [InteractionSoundEvent] = [
         .tap,
-        .confirm,
-        .actionMenuOpen,
-        .roomPending,
         .roomOpen,
-        .roomInProgress,
-        .roomReady,
-        .roomScheduled
+        .roomReady
     ]
 
     var title: String {
         switch self {
-        case .tap: "Тап по экрану"
+        case .tap: "Все остальные действия"
         case .confirm: "Подтверждение"
         case .longPress: "Долгое нажатие"
         case .holdStart: "Старт удержания"
@@ -138,9 +179,9 @@ enum InteractionSoundEvent: String, CaseIterable, Codable, Identifiable, Sendabl
         case .selectionOpen: "Первый экран"
         case .actionMenuOpen: "Меню комнаты"
         case .roomPending: "Жёлтая комната"
-        case .roomOpen: "Красная комната"
+        case .roomOpen: "Ячейка"
         case .roomInProgress: "Синяя комната"
-        case .roomReady: "Готово: зелёная"
+        case .roomReady: "Зелёная ячейка"
         case .roomScheduled: "Комната по времени"
         }
     }
@@ -148,19 +189,19 @@ enum InteractionSoundEvent: String, CaseIterable, Codable, Identifiable, Sendabl
     var settingsSubtitle: String {
         switch self {
         case .tap:
-            "Обычный короткий тап по интерфейсу."
+            "Любые действия, которые не касаются ячеек."
+        case .roomOpen:
+            "Любое взаимодействие с ячейкой, кроме финального зелёного статуса."
+        case .roomReady:
+            "Когда ячейка становится зелёной."
         case .confirm:
             "Сохранение, успешный выбор или подтверждение."
         case .actionMenuOpen:
             "Один звук, когда открывается меню комнаты."
         case .roomPending:
             "Когда комната возвращается в жёлтый статус."
-        case .roomOpen:
-            "Когда комната становится красной."
         case .roomInProgress:
             "Когда комната становится синей."
-        case .roomReady:
-            "Финальный звук полностью готовой зелёной комнаты."
         case .roomScheduled:
             "Когда комната уходит в расписанный статус."
         case .longPress, .holdStart, .holdWarning, .holdCommit, .select, .deselect, .invalid,
@@ -169,26 +210,38 @@ enum InteractionSoundEvent: String, CaseIterable, Codable, Identifiable, Sendabl
         }
     }
 
+    var soundAssignmentEvent: InteractionSoundEvent {
+        switch self {
+        case .roomReady:
+            .roomReady
+        case .actionMenuOpen, .roomPending, .roomOpen, .roomInProgress, .roomScheduled:
+            .roomOpen
+        case .tap, .confirm, .longPress, .holdStart, .holdWarning, .holdCommit,
+             .select, .deselect, .invalid, .detent, .settingsOpen, .selectionOpen:
+            .tap
+        }
+    }
+
     var defaultAsset: InteractionSoundAsset {
         switch self {
-        case .tap: .legacyClick
-        case .confirm: .legacyPressed
-        case .longPress: .legacyPressed
+        case .tap: .uiRolloverTick
+        case .confirm: .uiConfirmPop
+        case .longPress: .uiConfirmGlass
         case .holdStart: .none
-        case .holdWarning: .kenneyTick1
-        case .holdCommit: .legacyPressed
-        case .select: .legacyPressed
-        case .deselect: .legacyClick
-        case .invalid: .legacyClick
-        case .detent: .kenneyTick1
-        case .settingsOpen: .kenneySelect1
-        case .selectionOpen: .kenneyConfirmation1
-        case .actionMenuOpen: .kenneyConfirmation2
-        case .roomPending: .legacyClick
-        case .roomOpen: .kenneyConfirmation1
-        case .roomInProgress: .kenneySelect2
+        case .holdWarning: .uiRolloverTick
+        case .holdCommit: .uiConfirmPop
+        case .select: .uiSwitchLight
+        case .deselect: .uiClickBright
+        case .invalid: .uiErrorLow
+        case .detent: .uiRolloverTick
+        case .settingsOpen: .uiMenuOpen
+        case .selectionOpen: .uiConfirmGlass
+        case .actionMenuOpen: .uiMenuOpen
+        case .roomPending: .uiClickSoft
+        case .roomOpen: .uiConfirmGlass
+        case .roomInProgress: .uiSwitchDeep
         case .roomReady: .frontDeskBell
-        case .roomScheduled: .kenneyBong1
+        case .roomScheduled: .uiAlertSnap
         }
     }
 
@@ -218,19 +271,21 @@ struct InteractionSoundAssignments: Codable, Equatable, Sendable {
     }
 
     func asset(for event: InteractionSoundEvent) -> InteractionSoundAsset {
-        guard let raw = storage[event.rawValue],
+        let assignmentEvent = event.soundAssignmentEvent
+        guard let raw = storage[assignmentEvent.rawValue],
               let asset = InteractionSoundAsset(rawValue: raw)
         else {
-            return event.defaultAsset
+            return assignmentEvent.defaultAsset
         }
         return asset
     }
 
     mutating func set(_ asset: InteractionSoundAsset, for event: InteractionSoundEvent) {
-        if asset == event.defaultAsset {
-            storage.removeValue(forKey: event.rawValue)
+        let assignmentEvent = event.soundAssignmentEvent
+        if asset == assignmentEvent.defaultAsset {
+            storage.removeValue(forKey: assignmentEvent.rawValue)
         } else {
-            storage[event.rawValue] = asset.rawValue
+            storage[assignmentEvent.rawValue] = asset.rawValue
         }
     }
 }

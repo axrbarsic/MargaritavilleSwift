@@ -7,7 +7,7 @@ struct SettingsSoundSection: View {
     var body: some View {
         SettingsPanel(
             title: "Звуки",
-            subtitle: "Короткий список понятных действий. Внутренние фазы удержания больше не шумят в настройках."
+            subtitle: "Три назначения: общий интерфейс, ячейка и финальная зелёная ячейка."
         ) {
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(InteractionSoundEvent.settingsVisibleCases) { event in

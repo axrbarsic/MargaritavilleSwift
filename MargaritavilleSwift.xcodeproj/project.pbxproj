@@ -17,6 +17,7 @@
 		0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A213E357A08B0F7BDDA6FF /* CameraCaptureView.swift */; };
 		0D0F65C8BDB5D711C5F9FB53 /* RoomActionPuzzlePullOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68AF2FD3A5B8FA58364A6984 /* RoomActionPuzzlePullOverlay.swift */; };
 		0D9D2D1FCAE127D55E3E934A /* SummaryConsumablesViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1ED75A7D470FC87E6CB48A8 /* SummaryConsumablesViews.swift */; };
+		1168BA79947597F6ECADC777 /* xhotel_ui_confirm_pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 24F5A4F2F531773B27A42CA4 /* xhotel_ui_confirm_pop.wav */; };
 		118A22F74FB47F99097EFF77 /* HotelProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A0D43579667739D7C3B5C9 /* HotelProfile.swift */; };
 		124B8CE7419E4EFD526F3A09 /* AppBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */; };
 		152633EAB66EDB9582DBB29A /* RoomMediaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B225CEBE6C5329B0A1792 /* RoomMediaIndicator.swift */; };
@@ -42,6 +43,7 @@
 		389B9EE5FEA4DBCC068830B7 /* HoldActionTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A516DF182C6E2DA6691E748B /* HoldActionTarget.swift */; };
 		3BF8686AD98FA9363EB3C7A5 /* VoiceNoteViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA8E89CE6C63D0C66CC676 /* VoiceNoteViewModelTests.swift */; };
 		3F91D414A684701980D9BBF6 /* RoomActionMenuLampTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA57673DBF855A06723F9AF4 /* RoomActionMenuLampTransition.swift */; };
+		406C27A98516A0F06CA8EE07 /* xhotel_ui_click_bright.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4540DA0126A89D0BE159B580 /* xhotel_ui_click_bright.wav */; };
 		44A924056A88C8FCA7D56426 /* WorkSessionStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A6F5CAB3F17F3703EAF1B3 /* WorkSessionStore+Persistence.swift */; };
 		451770AEE2D8C966487CED28 /* SummarySwipeCommitPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F5D7EA34CBAC9995CB4DDE /* SummarySwipeCommitPolicyTests.swift */; };
 		45202B6A6675212ADED49E1E /* RoomDayCategoryTimePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E7F40601F232AE595FD8F /* RoomDayCategoryTimePreset.swift */; };
@@ -64,6 +66,7 @@
 		5F46B307037409026E7AC032 /* AppSettingsStore+Housekeepers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CA46C3A8C280C5339339B /* AppSettingsStore+Housekeepers.swift */; };
 		6152C87ADB52CC454480CF9B /* WorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7800BE448B225E72E51C0 /* WorkSessionRepository.swift */; };
 		621A70E81A145EF5DB753037 /* WorkSessionStore+NotesMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C21604E9DFCC4C38B0666B /* WorkSessionStore+NotesMedia.swift */; };
+		62414F09624C92EA9528A5D8 /* xhotel_ui_click_soft.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6B232399CC33B281DD99A0F9 /* xhotel_ui_click_soft.wav */; };
 		62D408573940C28D37350A1A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE897AD21156A1CC1B1C6B3 /* CloudKit.framework */; };
 		65C422BC20A3F6A330E586B3 /* HousekeeperCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD7A3C53C65D8A0389C6680 /* HousekeeperCatalogEditorSection.swift */; };
 		66B2E8E393EEC452346E87B3 /* SummaryRoomActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F659E723BC372F4647034FD /* SummaryRoomActionMenu.swift */; };
@@ -137,6 +140,7 @@
 		B51D8394827CA5FE11B571DE /* MediaViewerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EFC680EACBF955053C9436 /* MediaViewerScreen.swift */; };
 		B75B6357696CC195A0AB6890 /* RuntimeDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683076E2A08392B5B8F0643 /* RuntimeDiagnostics.swift */; };
 		B77FF38571F62CE71AD06E3D /* AppSettingsStoreKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD79304522A9E5F575E98CB6 /* AppSettingsStoreKeys.swift */; };
+		B7AE44DC546EC0A9A8A35C73 /* KenneyUIAudioLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 19CF5940382F338F613FB3C3 /* KenneyUIAudioLicense.txt */; };
 		B851DD8FE85AB4C1FE79F336 /* DeepSeekModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BDB7B2E2231A8706EC007C /* DeepSeekModels.swift */; };
 		B8DCB761C2A5C4905FD1E616 /* VIPJellyEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD993F5D122A09028FEDE5EE /* VIPJellyEffects.swift */; };
 		BA597DC5700A27AACC313C22 /* PersistentAIVisualPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50C6C89DEFAEA30480095D0 /* PersistentAIVisualPreset.swift */; };
@@ -145,8 +149,10 @@
 		C167F43C5EE884A270222EF3 /* CartConsumablesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BE4E4BEB250158F1B2FAE7 /* CartConsumablesSection.swift */; };
 		C26D077B5C9D7269C281EA0D /* HousekeeperPalette+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5F9B4FBD32A51202CBE11 /* HousekeeperPalette+Color.swift */; };
 		C3F8298388E810A68B8DEBA3 /* RoomScheduleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500155013123DCA396D6B0A2 /* RoomScheduleSelection.swift */; };
+		C4685BCC85C9AF80907B9CD7 /* xhotel_ui_switch_light.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0845AC8B0E2FAF221B45D903 /* xhotel_ui_switch_light.wav */; };
 		C66F3197C0E7AC3729D81D4B /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED484B471D3B303634E238A3 /* AppSettingsStore.swift */; };
 		C78DA3701B2EDCACA9000557 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EF295087355147852E6B91 /* WorkSessionStore.swift */; };
+		C9388CD0A1FD5B6075E50D53 /* xhotel_ui_menu_open.wav in Resources */ = {isa = PBXBuildFile; fileRef = 51746A870FE32EF3D2D30555 /* xhotel_ui_menu_open.wav */; };
 		CA6918F5154C0EF6D640D2D4 /* MargaritavilleSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB1098091146B6B73E6FE14 /* MargaritavilleSummarySection.swift */; };
 		CC2726E3236DD7F8BE90DB5E /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB404746FF5A9F4CEC4B06B6 /* PhotosUI.framework */; };
 		CCEB3EAFB175EB2191D64B36 /* HousekeeperCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3824B81E67ADEE1DD80DD608 /* HousekeeperCatalog.swift */; };
@@ -155,11 +161,13 @@
 		D28D6ECFFDE772EC3CF15BDC /* LocalMediaFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329EC1B9B7E93603A16CD951 /* LocalMediaFileStore.swift */; };
 		D313B79BBCBADF8C83C991F6 /* MargaritavilleCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F62A96DC6CBE334A51427F /* MargaritavilleCatalogEditorSection.swift */; };
 		D386394F284524E81B532306 /* WorkSetupRoomPickButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4AA8395909F3304C7952B2 /* WorkSetupRoomPickButton.swift */; };
+		D53AF4C1999905B51A63B6AC /* xhotel_ui_error_low.wav in Resources */ = {isa = PBXBuildFile; fileRef = AA577E57B34592E5FDB29254 /* xhotel_ui_error_low.wav */; };
 		D8BF9A21DF73842A1BE97CBA /* MargaritavillePresetBackupDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C545284E1F3A0F2AFCE5208 /* MargaritavillePresetBackupDocument.swift */; };
 		D8E801A984C3B0211D472853 /* AppleSyncEntitlementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32C5954A7CEDB001BCDE841 /* AppleSyncEntitlementTests.swift */; };
 		DA468561B996C384194CF43A /* kenney_confirmation_003.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11F564791DCE7D80B11F6A48 /* kenney_confirmation_003.wav */; };
 		DA628C5CCCE100F4100F012E /* ScheduleNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F919079E48729D0CB476DFE5 /* ScheduleNotificationService.swift */; };
 		DAEDF92F0638E096BFA5558F /* MargaritavilleSummaryRoomGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723C049411A0B1EEFE19190D /* MargaritavilleSummaryRoomGrouping.swift */; };
+		DDA6060556F87E4E100236F4 /* xhotel_ui_rollover_tick.wav in Resources */ = {isa = PBXBuildFile; fileRef = FD9DA3290A369B62716D6E97 /* xhotel_ui_rollover_tick.wav */; };
 		DE0127E5A1E843104D7488D6 /* VoiceNoteBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = C253030D4EA92886847226FE /* VoiceNoteBubble.swift */; };
 		E1BE86B2D6306ABECD0C0C23 /* AppleSyncStatusEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B499D07E2E53A1051A4A16B /* AppleSyncStatusEnvironment.swift */; };
 		E23835D16917BF2447E61E1A /* AppSettingsStoreLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3A52C2D0194E4284467824 /* AppSettingsStoreLoading.swift */; };
@@ -168,15 +176,18 @@
 		E522CC4C1973B7D9F9EE01B8 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5CB7A732CA2C1250A664F900 /* click.wav */; };
 		E69996BC5EF84C5734DB98FE /* RoomDayCategoryCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1606F1A9957635785A6D928D /* RoomDayCategoryCounts.swift */; };
 		E966CBE9E6B5674FE32973A7 /* RuntimeDiagnosticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC01B23315CBE02A4B6DEE0B /* RuntimeDiagnosticsTests.swift */; };
+		EAC5EA026A49494D5C980684 /* xhotel_ui_alert_snap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2440CD25F6E34A0B5F2A9EED /* xhotel_ui_alert_snap.wav */; };
 		EB1A68927A3E5EE5B13FC6D7 /* MediaAttachmentGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BA6573942C4CE0299AE940 /* MediaAttachmentGrid.swift */; };
 		EBE82000A7EB5DE59F5D28A7 /* AppBuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6F829D189E6A8021ED967A /* AppBuildInfo.swift */; };
 		EC464FBC0DF0B3C1F8334341 /* CartSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394987606D239084C515CA07 /* CartSummarySection.swift */; };
 		EE7A6C24A39A07EF707BFBC8 /* WorkSessionMergePolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89136820B51932AD330C482 /* WorkSessionMergePolicyTests.swift */; };
 		EF55F6DCA0EDBADDA8888279 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F15969B8595EEFE48B24D2 /* SettingsScreen.swift */; };
 		EF70FD663ADE99EDFA55BDE6 /* AppInteractionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD513FB574E7E77E72843F0 /* AppInteractionPolicy.swift */; };
+		F2A8512FE97921100FF39E0C /* xhotel_ui_switch_deep.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0057AD449366AFD493CEB06 /* xhotel_ui_switch_deep.wav */; };
 		F67D079FEA4B308E1E6A3F53 /* AppleSyncConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA8009600BBC5EAFA5E2642 /* AppleSyncConfiguration.swift */; };
 		F692A25029422D2E23430C96 /* InteractionSoundRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91543A13E13DF645E957659C /* InteractionSoundRouting.swift */; };
 		F70E89A335D855BD151E41C5 /* DeepSeekLabSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992734E7923F47A3A78219CB /* DeepSeekLabSection.swift */; };
+		F7DAAD0D187B1F05D3494DF3 /* xhotel_ui_confirm_glass.wav in Resources */ = {isa = PBXBuildFile; fileRef = D76F6B0655D80E6EF5A62FC6 /* xhotel_ui_confirm_glass.wav */; };
 		F9137329C3CCDCEF3AEEFCBD /* kenney_bong_001.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6AB3607B0687562DD6AF618D /* kenney_bong_001.wav */; };
 		F9EB724E474A47F7CB41CA2C /* WorkSetupComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96EE57A187E2FCB22119A1 /* WorkSetupComponents.swift */; };
 		FA960F253BD55E6B86E7AED9 /* AppBackgroundModeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98032ED871E3FBA99213BFF /* AppBackgroundModeEnvironment.swift */; };
@@ -203,6 +214,7 @@
 		0683076E2A08392B5B8F0643 /* RuntimeDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeDiagnostics.swift; sourceTree = "<group>"; };
 		074267CA6B9705C13E77EB45 /* RoomCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalog.swift; sourceTree = "<group>"; };
 		07A6F5CAB3F17F3703EAF1B3 /* WorkSessionStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Persistence.swift"; sourceTree = "<group>"; };
+		0845AC8B0E2FAF221B45D903 /* xhotel_ui_switch_light.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_switch_light.wav; sourceTree = "<group>"; };
 		089AB580C76AEF1DDB12ABCA /* AppSurfaceTransparency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSurfaceTransparency.swift; sourceTree = "<group>"; };
 		08BA6573942C4CE0299AE940 /* MediaAttachmentGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaAttachmentGrid.swift; sourceTree = "<group>"; };
 		09564378AD3EA6BC5209586B /* AIVisualPresetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIVisualPresetStoreTests.swift; sourceTree = "<group>"; };
@@ -216,12 +228,15 @@
 		1494F03D3C659689B303BB03 /* ExperimentalAppearanceEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentalAppearanceEnvironment.swift; sourceTree = "<group>"; };
 		14DA05CC83B4745C23D5CF2B /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
 		1606F1A9957635785A6D928D /* RoomDayCategoryCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryCounts.swift; sourceTree = "<group>"; };
+		19CF5940382F338F613FB3C3 /* KenneyUIAudioLicense.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = KenneyUIAudioLicense.txt; sourceTree = "<group>"; };
 		19E02D0413E3F9498F0A6F26 /* RoomMediaIndicatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMediaIndicatorTests.swift; sourceTree = "<group>"; };
 		1BB1098091146B6B73E6FE14 /* MargaritavilleSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummarySection.swift; sourceTree = "<group>"; };
 		1C1CA4620A505A25C40AE681 /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
 		1D48BFB5EDED5F96299AB21A /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
 		20A5F9B4FBD32A51202CBE11 /* HousekeeperPalette+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HousekeeperPalette+Color.swift"; sourceTree = "<group>"; };
 		2173D3F22AFB14E9E6B54E01 /* AppStorageDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageDirectory.swift; sourceTree = "<group>"; };
+		2440CD25F6E34A0B5F2A9EED /* xhotel_ui_alert_snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_alert_snap.wav; sourceTree = "<group>"; };
+		24F5A4F2F531773B27A42CA4 /* xhotel_ui_confirm_pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_confirm_pop.wav; sourceTree = "<group>"; };
 		253281145546E2E8265AB304 /* RoomDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsScreen.swift; sourceTree = "<group>"; };
 		260D3F39DAB28CD8F1C0ADAF /* KeychainSecretStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainSecretStore.swift; sourceTree = "<group>"; };
 		283E6FF48981145AB9012147 /* SummaryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryHeader.swift; sourceTree = "<group>"; };
@@ -252,12 +267,14 @@
 		3E71287F6A17D24D49088446 /* WorkSetupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupScreen.swift; sourceTree = "<group>"; };
 		4017AC014F696E3B792DE33C /* kenney_confirmation_001.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kenney_confirmation_001.wav; sourceTree = "<group>"; };
 		43AA91C16BE0BBB911F2F72E /* SettingsCategorySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCategorySelector.swift; sourceTree = "<group>"; };
+		4540DA0126A89D0BE159B580 /* xhotel_ui_click_bright.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_click_bright.wav; sourceTree = "<group>"; };
 		4A54ACA4EA81D8F149015ABB /* AppSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreTests.swift; sourceTree = "<group>"; };
 		4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalogOverride.swift; sourceTree = "<group>"; };
 		4C1E7F40601F232AE595FD8F /* RoomDayCategoryTimePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategoryTimePreset.swift; sourceTree = "<group>"; };
 		4E2D9309F59119A6AFDE7C3A /* kenney_tick_001.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kenney_tick_001.wav; sourceTree = "<group>"; };
 		4EB7541150CAB0C6F6C42D43 /* HousekeeperDetailsGestureMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousekeeperDetailsGestureMode.swift; sourceTree = "<group>"; };
 		500155013123DCA396D6B0A2 /* RoomScheduleSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSelection.swift; sourceTree = "<group>"; };
+		51746A870FE32EF3D2D30555 /* xhotel_ui_menu_open.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_menu_open.wav; sourceTree = "<group>"; };
 		572F782765D50BE3F3214748 /* WorkSessionHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistoryScreen.swift; sourceTree = "<group>"; };
 		5A25BA24E124A1929ED1F4AB /* MargaritavilleSwift.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MargaritavilleSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C3A52C2D0194E4284467824 /* AppSettingsStoreLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreLoading.swift; sourceTree = "<group>"; };
@@ -273,6 +290,7 @@
 		68AF2FD3A5B8FA58364A6984 /* RoomActionPuzzlePullOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomActionPuzzlePullOverlay.swift; sourceTree = "<group>"; };
 		69C3220AB4C379C2C29B5C93 /* InteractionFeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionFeedbackService.swift; sourceTree = "<group>"; };
 		6AB3607B0687562DD6AF618D /* kenney_bong_001.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kenney_bong_001.wav; sourceTree = "<group>"; };
+		6B232399CC33B281DD99A0F9 /* xhotel_ui_click_soft.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_click_soft.wav; sourceTree = "<group>"; };
 		6B499D07E2E53A1051A4A16B /* AppleSyncStatusEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncStatusEnvironment.swift; sourceTree = "<group>"; };
 		6C46E679DF2D1D6613364C79 /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
 		6CC445E841CB121E467D1230 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
@@ -317,11 +335,13 @@
 		A7F5D7EA34CBAC9995CB4DDE /* SummarySwipeCommitPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySwipeCommitPolicyTests.swift; sourceTree = "<group>"; };
 		A89136820B51932AD330C482 /* WorkSessionMergePolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionMergePolicyTests.swift; sourceTree = "<group>"; };
 		A8A453C2C332C9C8D148639E /* PersistentWorkSessionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentWorkSessionMapper.swift; sourceTree = "<group>"; };
+		AA577E57B34592E5FDB29254 /* xhotel_ui_error_low.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_error_low.wav; sourceTree = "<group>"; };
 		AAF87AEBF917C954895FE0CF /* PerformanceTelemetryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTelemetryStoreTests.swift; sourceTree = "<group>"; };
 		ACD513FB574E7E77E72843F0 /* AppInteractionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInteractionPolicy.swift; sourceTree = "<group>"; };
 		AD79304522A9E5F575E98CB6 /* AppSettingsStoreKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreKeys.swift; sourceTree = "<group>"; };
 		AE8C3FCDA479404117857CF0 /* DeepSeekClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekClient.swift; sourceTree = "<group>"; };
 		AFA60A575F7F7603D254DB36 /* InteractionSoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSoundPlayer.swift; sourceTree = "<group>"; };
+		B0057AD449366AFD493CEB06 /* xhotel_ui_switch_deep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_switch_deep.wav; sourceTree = "<group>"; };
 		B1ED75A7D470FC87E6CB48A8 /* SummaryConsumablesViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryConsumablesViews.swift; sourceTree = "<group>"; };
 		B27D766CA5098051EBC3DF59 /* SettingsWorkSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWorkSection.swift; sourceTree = "<group>"; };
 		B2B7EAF0AB7A383AE3A9106C /* MargaritavilleSwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSwiftApp.swift; sourceTree = "<group>"; };
@@ -356,6 +376,7 @@
 		D45B225CEBE6C5329B0A1792 /* RoomMediaIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMediaIndicator.swift; sourceTree = "<group>"; };
 		D6EFC680EACBF955053C9436 /* MediaViewerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewerScreen.swift; sourceTree = "<group>"; };
 		D722D20ACC6304E5369C4044 /* SummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
+		D76F6B0655D80E6EF5A62FC6 /* xhotel_ui_confirm_glass.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_confirm_glass.wav; sourceTree = "<group>"; };
 		D83CA46C3A8C280C5339339B /* AppSettingsStore+Housekeepers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettingsStore+Housekeepers.swift"; sourceTree = "<group>"; };
 		DA1E24318FCCCD616C3CC0E5 /* RoomDayCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategory.swift; sourceTree = "<group>"; };
 		DA4FC0D2D5A5B8B44E36C668 /* BuildChangelogEntriesArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogEntriesArchive.swift; sourceTree = "<group>"; };
@@ -379,6 +400,7 @@
 		FB1219DB5B1565EA2415741F /* WorkSessionStore+Consumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Consumables.swift"; sourceTree = "<group>"; };
 		FC01B23315CBE02A4B6DEE0B /* RuntimeDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeDiagnosticsTests.swift; sourceTree = "<group>"; };
 		FC83A87AC986DD2F264131CB /* SettingsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCategory.swift; sourceTree = "<group>"; };
+		FD9DA3290A369B62716D6E97 /* xhotel_ui_rollover_tick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_rollover_tick.wav; sourceTree = "<group>"; };
 		FFE85CE8AB3F67AE52F07C5C /* WorkSetupTerritoryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupTerritoryPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -492,6 +514,7 @@
 				5CB7A732CA2C1250A664F900 /* click.wav */,
 				C4037F7F53F3633F64EEFCC5 /* pressed.wav */,
 				B025B294A487902E2549C6CF /* SharedShortSFX */,
+				6AC68AC9EDA65F693CA462D1 /* XHotelShortSFX */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -543,6 +566,24 @@
 				2749A6CF88034C42B81D7B7E /* Frameworks */,
 				45D4DCC936AD72346C1D7BAF /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		6AC68AC9EDA65F693CA462D1 /* XHotelShortSFX */ = {
+			isa = PBXGroup;
+			children = (
+				19CF5940382F338F613FB3C3 /* KenneyUIAudioLicense.txt */,
+				2440CD25F6E34A0B5F2A9EED /* xhotel_ui_alert_snap.wav */,
+				4540DA0126A89D0BE159B580 /* xhotel_ui_click_bright.wav */,
+				6B232399CC33B281DD99A0F9 /* xhotel_ui_click_soft.wav */,
+				D76F6B0655D80E6EF5A62FC6 /* xhotel_ui_confirm_glass.wav */,
+				24F5A4F2F531773B27A42CA4 /* xhotel_ui_confirm_pop.wav */,
+				AA577E57B34592E5FDB29254 /* xhotel_ui_error_low.wav */,
+				51746A870FE32EF3D2D30555 /* xhotel_ui_menu_open.wav */,
+				FD9DA3290A369B62716D6E97 /* xhotel_ui_rollover_tick.wav */,
+				B0057AD449366AFD493CEB06 /* xhotel_ui_switch_deep.wav */,
+				0845AC8B0E2FAF221B45D903 /* xhotel_ui_switch_light.wav */,
+			);
+			path = XHotelShortSFX;
 			sourceTree = "<group>";
 		};
 		6CB0FCEC92F34555F3EEBE05 /* Effects */ = {
@@ -928,6 +969,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7AE44DC546EC0A9A8A35C73 /* KenneyUIAudioLicense.txt in Resources */,
 				80720739F5367629902B931B /* LICENSES.md in Resources */,
 				E522CC4C1973B7D9F9EE01B8 /* click.wav in Resources */,
 				2FAFD656A44E538DDA7FB316 /* front_desk_bell_real.wav in Resources */,
@@ -943,6 +985,16 @@
 				1D859304B3349B7C7D0DD0BF /* kenney_tick_001.wav in Resources */,
 				A04AD1A78B21F0B1482DB51F /* pressed.wav in Resources */,
 				9F7B2579125089F180898669 /* room_complete_hotel_bell.wav in Resources */,
+				EAC5EA026A49494D5C980684 /* xhotel_ui_alert_snap.wav in Resources */,
+				406C27A98516A0F06CA8EE07 /* xhotel_ui_click_bright.wav in Resources */,
+				62414F09624C92EA9528A5D8 /* xhotel_ui_click_soft.wav in Resources */,
+				F7DAAD0D187B1F05D3494DF3 /* xhotel_ui_confirm_glass.wav in Resources */,
+				1168BA79947597F6ECADC777 /* xhotel_ui_confirm_pop.wav in Resources */,
+				D53AF4C1999905B51A63B6AC /* xhotel_ui_error_low.wav in Resources */,
+				C9388CD0A1FD5B6075E50D53 /* xhotel_ui_menu_open.wav in Resources */,
+				DDA6060556F87E4E100236F4 /* xhotel_ui_rollover_tick.wav in Resources */,
+				F2A8512FE97921100FF39E0C /* xhotel_ui_switch_deep.wav in Resources */,
+				C4685BCC85C9AF80907B9CD7 /* xhotel_ui_switch_light.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

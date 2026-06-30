@@ -74,6 +74,7 @@ struct RoomCellView: View {
             HoldActionTarget(
                 enabled: true,
                 useLongPress: taskControlsUseLongPress,
+                feedbackProfile: .roomCell,
                 semanticLabel: "Room \(room.id)",
                 onActivate: activateOpenToggle
             ) {
@@ -174,6 +175,7 @@ struct RoomCellView: View {
         HoldActionTarget(
             enabled: room.opened,
             useLongPress: taskControlsUseLongPress,
+            feedbackProfile: .roomCell,
             semanticLabel: "Room \(room.id) task \(task.rawValue)",
             onActivate: { activateTask(task) }
         ) {
@@ -223,7 +225,7 @@ struct RoomCellView: View {
             swipeDirection = 1
             if !swipeFeedbackActive {
                 swipeFeedbackActive = true
-                feedback.holdStart()
+                feedback.holdStartHapticOnly()
             }
         }
 
@@ -233,9 +235,9 @@ struct RoomCellView: View {
         )
         let armed = swipeProgress >= 1
         if armed, !swipeArmed {
-            feedback.holdCommit()
+            feedback.holdCommitHapticOnly()
         } else if !armed, swipeProgress > 0.86, !swipeArmed {
-            feedback.holdWarning()
+            feedback.holdWarningHapticOnly()
         }
         swipeArmed = armed
     }
@@ -248,7 +250,11 @@ struct RoomCellView: View {
             cellWidth: actionMenuCellWidth
         )
         guard swipeDirection > 0, armed else { return }
-        feedback.confirm()
+        if isActionMenuExpanded {
+            feedback.deselect()
+        } else {
+            feedback.playEvent(.actionMenuOpen)
+        }
         onActionMenuToggle()
     }
 

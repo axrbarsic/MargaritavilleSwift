@@ -12,6 +12,7 @@ extension AppSettingsStore {
             existing: housekeepers
         ) else { return nil }
         housekeepers.append(housekeeper)
+        housekeepers = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(housekeepers)
         return housekeeper
     }
 
@@ -21,20 +22,22 @@ extension AppSettingsStore {
         guard !trimmed.isEmpty else { return }
         var next = housekeepers
         next[index].displayName = trimmed
-        housekeepers = next
+        housekeepers = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(next)
     }
 
     func setHousekeeperPalette(id: HousekeeperID, palette: HousekeeperPalette) {
         guard let index = housekeepers.firstIndex(where: { $0.id == id }) else { return }
         var next = housekeepers
         next[index].palette = palette
-        housekeepers = next
+        housekeepers = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(next)
     }
 
     func removeHousekeeper(id: HousekeeperID) {
         housekeepers.removeAll { $0.id == id }
         if housekeepers.isEmpty {
             housekeepers = MargaritavilleHousekeeperCatalog.defaultHousekeepers
+        } else {
+            housekeepers = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(housekeepers)
         }
     }
 }

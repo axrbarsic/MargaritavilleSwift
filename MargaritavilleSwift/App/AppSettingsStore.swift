@@ -328,7 +328,7 @@ final class AppSettingsStore {
         self.developerVIPFlickerEnabled = developerVIPFlickerEnabled
         self.developerVIPJellyEnabled = developerVIPJellyEnabled
         self.selectedHotelID = selectedHotelID
-        self.housekeepers = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
+        self.housekeepers = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(housekeepers)
         self.cartConsumableCatalog = CartConsumableCatalog.normalizedCatalog(cartConsumableCatalog)
         self.userDefaults = userDefaults
         AppSurfaceTransparency.apply(transparentSurfacesEnabled)

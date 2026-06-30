@@ -132,13 +132,13 @@ extension AppSettingsStore {
         else {
             return MargaritavilleHousekeeperCatalog.defaultHousekeepers
         }
-        let normalized = MargaritavilleHousekeeperCatalog.normalizedHousekeepers(decoded)
-        return normalized.isEmpty ? MargaritavilleHousekeeperCatalog.defaultHousekeepers : normalized
+        let canonical = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(decoded)
+        return canonical.isEmpty ? MargaritavilleHousekeeperCatalog.defaultHousekeepers : canonical
     }
 
     static func saveHousekeepers(_ housekeepers: [Housekeeper], userDefaults: UserDefaults) {
         guard let data = try? JSONEncoder().encode(
-            MargaritavilleHousekeeperCatalog.normalizedHousekeepers(housekeepers)
+            MargaritavilleHousekeeperCatalog.canonicalHousekeepers(housekeepers)
         ) else { return }
         userDefaults.set(data, forKey: Keys.housekeepers)
     }

@@ -8,6 +8,9 @@ struct InteractionFeedbackClient: Sendable {
     let holdStart: @MainActor @Sendable () -> Void
     let holdWarning: @MainActor @Sendable () -> Void
     let holdCommit: @MainActor @Sendable () -> Void
+    let holdStartHapticOnly: @MainActor @Sendable () -> Void
+    let holdWarningHapticOnly: @MainActor @Sendable () -> Void
+    let holdCommitHapticOnly: @MainActor @Sendable () -> Void
     let select: @MainActor @Sendable () -> Void
     let deselect: @MainActor @Sendable () -> Void
     let invalid: @MainActor @Sendable () -> Void
@@ -22,6 +25,9 @@ struct InteractionFeedbackClient: Sendable {
         holdStart: {},
         holdWarning: {},
         holdCommit: {},
+        holdStartHapticOnly: {},
+        holdWarningHapticOnly: {},
+        holdCommitHapticOnly: {},
         select: {},
         deselect: {},
         invalid: {},
@@ -42,6 +48,9 @@ struct InteractionFeedbackClient: Sendable {
             holdStart: deferred { service.holdStart(sound: soundAssignments.asset(for: .holdStart), hapticsV2: hapticsV2) },
             holdWarning: deferred { service.holdWarning(sound: soundAssignments.asset(for: .holdWarning), hapticsV2: hapticsV2) },
             holdCommit: deferred { service.holdCommit(sound: soundAssignments.asset(for: .holdCommit), hapticsV2: hapticsV2) },
+            holdStartHapticOnly: deferred { service.holdStartHapticOnly(hapticsV2: hapticsV2) },
+            holdWarningHapticOnly: deferred { service.holdWarningHapticOnly(hapticsV2: hapticsV2) },
+            holdCommitHapticOnly: deferred { service.holdCommitHapticOnly(hapticsV2: hapticsV2) },
             select: deferred { service.select(sound: soundAssignments.asset(for: .select), hapticsV2: hapticsV2) },
             deselect: deferred { service.deselect(sound: soundAssignments.asset(for: .deselect), hapticsV2: hapticsV2) },
             invalid: deferred { service.invalid(sound: soundAssignments.asset(for: .invalid), hapticsV2: hapticsV2) },
@@ -105,29 +114,35 @@ final class InteractionFeedbackService {
     }
 
     func holdStart(sound: InteractionSoundAsset = .none, hapticsV2: Bool = false) {
-        selection.selectionChanged()
-        if hapticsV2 {
-            light.impactOccurred(intensity: 0.25)
-        }
+        performHoldStartHaptic(hapticsV2: hapticsV2)
         playSound(sound, priority: InteractionSoundEvent.holdStart.playbackPriority)
         schedulePrepare()
     }
 
     func holdWarning(sound: InteractionSoundAsset = .kenneyTick1, hapticsV2: Bool = false) {
-        light.impactOccurred(intensity: hapticsV2 ? 0.95 : 0.7)
-        if hapticsV2 {
-            notification.notificationOccurred(.warning)
-        }
+        performHoldWarningHaptic(hapticsV2: hapticsV2)
         playSound(sound, priority: InteractionSoundEvent.holdWarning.playbackPriority)
         schedulePrepare()
     }
 
     func holdCommit(sound: InteractionSoundAsset = .legacyPressed, hapticsV2: Bool = false) {
-        heavy.impactOccurred(intensity: hapticsV2 ? 1.0 : 0.92)
-        if hapticsV2 {
-            notification.notificationOccurred(.success)
-        }
+        performHoldCommitHaptic(hapticsV2: hapticsV2)
         playSound(sound, priority: InteractionSoundEvent.holdCommit.playbackPriority)
+        schedulePrepare()
+    }
+
+    func holdStartHapticOnly(hapticsV2: Bool = false) {
+        performHoldStartHaptic(hapticsV2: hapticsV2)
+        schedulePrepare()
+    }
+
+    func holdWarningHapticOnly(hapticsV2: Bool = false) {
+        performHoldWarningHaptic(hapticsV2: hapticsV2)
+        schedulePrepare()
+    }
+
+    func holdCommitHapticOnly(hapticsV2: Bool = false) {
+        performHoldCommitHaptic(hapticsV2: hapticsV2)
         schedulePrepare()
     }
 
@@ -191,6 +206,27 @@ final class InteractionFeedbackService {
         medium.prepare()
         heavy.prepare()
         notification.prepare()
+    }
+
+    private func performHoldStartHaptic(hapticsV2: Bool) {
+        selection.selectionChanged()
+        if hapticsV2 {
+            light.impactOccurred(intensity: 0.25)
+        }
+    }
+
+    private func performHoldWarningHaptic(hapticsV2: Bool) {
+        light.impactOccurred(intensity: hapticsV2 ? 0.95 : 0.7)
+        if hapticsV2 {
+            notification.notificationOccurred(.warning)
+        }
+    }
+
+    private func performHoldCommitHaptic(hapticsV2: Bool) {
+        heavy.impactOccurred(intensity: hapticsV2 ? 1.0 : 0.92)
+        if hapticsV2 {
+            notification.notificationOccurred(.success)
+        }
     }
 
     private func queueSound(_ sound: InteractionSoundAsset, priority: Int) {

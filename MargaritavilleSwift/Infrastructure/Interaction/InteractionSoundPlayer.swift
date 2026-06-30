@@ -155,6 +155,9 @@ final class InteractionSoundPlayer: @unchecked Sendable {
             if let url = bundle.url(forResource: resource, withExtension: "wav") {
                 return url
             }
+            if let url = bundle.url(forResource: resource, withExtension: "wav", subdirectory: "Sounds/XHotelShortSFX") {
+                return url
+            }
             if let url = bundle.url(forResource: resource, withExtension: "wav", subdirectory: "Sounds/SharedShortSFX") {
                 return url
             }
