@@ -30,7 +30,7 @@ struct MargaritavilleStandaloneApp: App {
             ),
             runtimeBundleIdentifier: bundleIdentifier,
             applicationSupportRoot: "MargaritavilleSwift",
-            interactionPolicy: .standalone
+            interactionPolicy: .standaloneLongPressSettings
         )
     }
 }
