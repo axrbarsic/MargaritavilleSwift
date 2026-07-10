@@ -8,12 +8,15 @@ struct RoomCellView: View {
     @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
     @Environment(\.experimentalVIPJellyEnabled) private var experimentalVIPJellyEnabled
     @Environment(\.experimentalVIPJellySpeed) private var experimentalVIPJellySpeed
+    @Environment(\.experimentalVIPHDREnabled) private var experimentalVIPHDREnabled
+    @Environment(\.experimentalStatusHDRPulseEnabled) private var experimentalStatusHDRPulseEnabled
 
     @Binding var room: RoomCell
     let geometry: RoomCellGeometry
     let taskControlsUseLongPress: Bool
     let statusPaletteSaturation: Double
     let isActionMenuExpanded: Bool
+    let statusHDRPulseEvent: RoomStatusHDRPulseEvent?
     let onActionMenuToggle: () -> Void
     let onOpenMultimodalNote: () -> Void
     let onOpenToggle: () -> Void
@@ -28,6 +31,11 @@ struct RoomCellView: View {
     @State private var swipeProgress: CGFloat = 0
     @State private var tileWidth: CGFloat = 0
     @State private var physicsPulse = false
+    @State private var physicsPulseTask: Task<Void, Never>?
+    @State private var statusHDRPulseStatus: RoomStatus?
+    @State private var statusHDRPulseGeneration = 0
+    @State private var cellPulseStartedAt: Date?
+    @State private var cellPulseCleanupTask: Task<Void, Never>?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -40,7 +48,7 @@ struct RoomCellView: View {
                 SummaryRoomActionMenu(
                     room: room,
                     onMultimodalNote: onOpenMultimodalNote,
-                    onVIPToggle: onVIPToggle,
+                    onVIPToggle: activateVIPToggle,
                     onScheduleToggle: onScheduleToggle
                 )
                 .transition(.roomActionMenuLamp)
@@ -53,23 +61,33 @@ struct RoomCellView: View {
         .onChange(of: room.completedTasks) { _, _ in
             triggerPhysicsPulse()
         }
+        .task(id: statusHDRPulseEvent?.generation) {
+            guard let statusHDRPulseEvent else { return }
+            triggerStatusHDRPulse(for: statusHDRPulseEvent.status)
+        }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Room \(room.id)")
     }
 
     private var tileBody: some View {
         Group {
-            if vipJellyActive {
+            if vipJellyActive || cellPulseStartedAt != nil {
                 TimelineView(.animation(minimumInterval: 1.0 / 120.0)) { timeline in
-                    tileBodyContent(vipJellyTime: timeline.date.timeIntervalSinceReferenceDate)
+                    tileBodyContent(
+                        vipJellyTime: vipJellyActive ? timeline.date.timeIntervalSinceReferenceDate : nil,
+                        pulseHeat: RoomStatusHDRPulseTiming.heat(
+                            startedAt: cellPulseStartedAt,
+                            now: timeline.date
+                        )
+                    )
                 }
             } else {
-                tileBodyContent(vipJellyTime: nil)
+                tileBodyContent(vipJellyTime: nil, pulseHeat: 0)
             }
         }
     }
 
-    private func tileBodyContent(vipJellyTime: TimeInterval?) -> some View {
+    private func tileBodyContent(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
         HStack(spacing: geometry.taskSpacing) {
             HoldActionTarget(
                 enabled: true,
@@ -91,7 +109,9 @@ struct RoomCellView: View {
         .padding(.trailing, geometry.tileTrailingPadding)
         .frame(height: geometry.tileHeight)
         .foregroundStyle(OceanKeyTheme.roomForeground)
-        .background(cellFill)
+        .background {
+            cellFill(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+        }
         .overlay(alignment: .bottomTrailing) {
             if let scheduleLabel = room.scheduleLabel {
                 Text(scheduleLabel)
@@ -139,16 +159,11 @@ struct RoomCellView: View {
         )
         .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
         .scaleEffect(
-            x: experimentalCellPhysicsEnabled && physicsPulse ? 1 + 0.09 * experimentalCellSpringIntensity : 1,
-            y: experimentalCellPhysicsEnabled && physicsPulse ? 1 - 0.12 * experimentalCellSpringIntensity : 1
+            x: 1 + 0.09 * experimentalCellSpringIntensity * liveCellRubberPulseAmount(pulseHeat: pulseHeat),
+            y: 1 + 0.09 * experimentalCellSpringIntensity * liveCellRubberPulseAmount(pulseHeat: pulseHeat)
         )
-        .offset(y: experimentalCellPhysicsEnabled && physicsPulse ? -7 * experimentalCellSpringIntensity : 0)
+        .offset(y: -7 * experimentalCellSpringIntensity * liveCellRubberPulseAmount(pulseHeat: pulseHeat))
         .offset(x: swipeProgress * 10)
-        .rotation3DEffect(
-            .degrees(experimentalCellPhysicsEnabled && physicsPulse ? 7.5 * experimentalCellSpringIntensity : 0),
-            axis: (x: 0.0, y: 1.0, z: 0.0),
-            perspective: 0.72
-        )
         .background {
             GeometryReader { proxy in
                 Color.clear
@@ -161,7 +176,7 @@ struct RoomCellView: View {
             }
         }
         .animation(
-            experimentalCellPhysicsEnabled
+            liveCellRubberEnabled
                 ? .interpolatingSpring(
                     stiffness: 180 + 220 * experimentalCellSpringSpeed,
                     damping: max(5, 15 - 7 * experimentalCellSpringIntensity)
@@ -279,11 +294,18 @@ struct RoomCellView: View {
 
     private func triggerPhysicsPulse() {
         guard experimentalCellPhysicsEnabled else { return }
+        startRubberPulse()
+    }
+
+    private func startRubberPulse() {
+        physicsPulseTask?.cancel()
         physicsPulse = true
-        Task { @MainActor in
+        physicsPulseTask = Task { @MainActor in
             let duration = max(110, Int(280 / experimentalCellSpringSpeed))
             try? await Task.sleep(for: .milliseconds(duration))
+            guard !Task.isCancelled else { return }
             physicsPulse = false
+            physicsPulseTask = nil
         }
     }
 
@@ -307,15 +329,64 @@ struct RoomCellView: View {
         onTaskToggle(task)
     }
 
+    private func activateVIPToggle() {
+        triggerPhysicsPulse()
+        if experimentalStatusHDRPulseEnabled {
+            triggerStatusHDRPulse(for: room.status)
+        }
+        onVIPToggle()
+    }
+
     // VIP source must stay rectangular here. The shared jelly mask below creates
     // the animated silhouette; a pre-clip would kill the moving contour.
     @ViewBuilder
-    private var cellFill: some View {
+    private func cellFill(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
         let fill = OceanKeyTheme.fill(for: room.status, saturation: statusPaletteSaturation)
-        if vipJellyActive {
-            Rectangle().fill(fill)
-        } else {
-            tileShape.fill(fill)
+        let pulseStatus = statusHDRPulseStatus ?? room.status
+        ZStack {
+            if vipHDRActive {
+                Color.clear.vipHDRStatusFill(
+                    enabled: true,
+                    status: room.status,
+                    saturation: statusPaletteSaturation,
+                    usesPurpleScheduled: false,
+                    seed: vipJellySeed,
+                    cornerRadius: geometry.tileCornerRadius,
+                    isMenuExpanded: isActionMenuExpanded,
+                    usesExternalMask: vipJellyActive
+                )
+            } else if vipJellyActive {
+                Rectangle().fill(fill)
+            } else {
+                tileShape.fill(fill)
+            }
+
+            if statusHDRPulseStatus != nil {
+                tileShape
+                    .fill(
+                        OceanKeyTheme.fill(
+                            for: pulseStatus,
+                            saturation: max(statusPaletteSaturation, 1.5)
+                        )
+                    )
+                    .brightness(min(1, 0.55 * Double(RoomStatusHDRPulseTiming.brightnessMultiplier)))
+                    .saturation(1.45)
+                    .blendMode(.plusLighter)
+                    .opacity(Double(pulseHeat))
+
+                Color.clear.vipHDRStatusFill(
+                    enabled: true,
+                    intensity: RoomStatusHDRPulseTiming.brightnessMultiplier,
+                    status: pulseStatus,
+                    saturation: statusPaletteSaturation,
+                    usesPurpleScheduled: false,
+                    seed: vipJellySeed,
+                    cornerRadius: geometry.tileCornerRadius,
+                    isMenuExpanded: isActionMenuExpanded,
+                    usesExternalMask: vipJellyActive
+                )
+                .opacity(Double(pulseHeat))
+            }
         }
     }
 
@@ -336,6 +407,40 @@ struct RoomCellView: View {
 
     private var vipJellyActive: Bool {
         room.isVIP && experimentalVIPJellyEnabled
+    }
+
+    private var vipHDRActive: Bool {
+        room.isVIP && experimentalVIPHDREnabled
+    }
+
+    private func triggerStatusHDRPulse(for status: RoomStatus) {
+        guard experimentalStatusHDRPulseEnabled else { return }
+        startCellPulse(status: status)
+    }
+
+    private func startCellPulse(status: RoomStatus?) {
+        cellPulseCleanupTask?.cancel()
+        statusHDRPulseGeneration += 1
+        let generation = statusHDRPulseGeneration
+        statusHDRPulseStatus = status
+        cellPulseStartedAt = Date()
+        cellPulseCleanupTask = Task { @MainActor in
+            try? await Task.sleep(for: RoomStatusHDRPulseTiming.cleanupDelay)
+            guard !Task.isCancelled, generation == statusHDRPulseGeneration else { return }
+            cellPulseStartedAt = nil
+            statusHDRPulseStatus = nil
+            cellPulseCleanupTask = nil
+        }
+    }
+
+    private var liveCellRubberEnabled: Bool {
+        experimentalCellPhysicsEnabled || experimentalStatusHDRPulseEnabled
+    }
+
+    private func liveCellRubberPulseAmount(pulseHeat: CGFloat) -> CGFloat {
+        let physicsAmount: CGFloat = experimentalCellPhysicsEnabled && physicsPulse ? 1 : 0
+        let timedAmount = pulseHeat * RoomStatusHDRPulseTiming.rubberAmplitudeMultiplier
+        return max(physicsAmount, timedAmount)
     }
 
     private var vipJellySeed: Double {
@@ -367,6 +472,7 @@ private extension RoomCell {
         taskControlsUseLongPress: true,
         statusPaletteSaturation: 1,
         isActionMenuExpanded: true,
+        statusHDRPulseEvent: nil,
         onActionMenuToggle: {},
         onOpenMultimodalNote: {},
         onOpenToggle: {},

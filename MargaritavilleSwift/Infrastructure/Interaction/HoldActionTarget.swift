@@ -52,7 +52,6 @@ struct HoldActionTarget<Content: View>: View {
     @Environment(\.interactionFeedback) private var feedback
     @State private var startTask: Task<Void, Never>?
     @State private var warningTask: Task<Void, Never>?
-    @State private var commitTask: Task<Void, Never>?
     @State private var isPressing = false
     @State private var didCommit = false
 
@@ -106,7 +105,6 @@ struct HoldActionTarget<Content: View>: View {
             didCommit = false
             startTask?.cancel()
             warningTask?.cancel()
-            commitTask?.cancel()
             startTask = Task { @MainActor in
                 try? await Task.sleep(for: HoldActionTiming.holdStartDelay)
                 if !Task.isCancelled {
@@ -119,20 +117,12 @@ struct HoldActionTarget<Content: View>: View {
                     holdWarningFeedback()
                 }
             }
-            commitTask = Task { @MainActor in
-                try? await Task.sleep(for: .milliseconds(Int(HoldActionTiming.minimumPressDuration * 1000)))
-                if !Task.isCancelled {
-                    activateLongPress()
-                }
-            }
         } else {
             isPressing = false
             startTask?.cancel()
             startTask = nil
             warningTask?.cancel()
             warningTask = nil
-            commitTask?.cancel()
-            commitTask = nil
         }
     }
 
@@ -144,8 +134,6 @@ struct HoldActionTarget<Content: View>: View {
         startTask = nil
         warningTask?.cancel()
         warningTask = nil
-        commitTask?.cancel()
-        commitTask = nil
         holdCommitFeedback()
         onActivate()
     }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 private struct SettingsOpenRequiresLongPressKey: EnvironmentKey {
-    static let defaultValue = false
+    static let defaultValue = true
 }
 
 private struct ZeroScreenReturnActionKey: EnvironmentKey {

@@ -10,19 +10,35 @@ enum RoomCellGeometry: String, CaseIterable, Codable, Identifiable {
     var title: String {
         switch self {
         case .roomy:
-            "Крупные"
+            "Стандартные"
         case .compact:
-            "Компактные"
+            "Расширенные"
         }
     }
 
     var description: String {
         switch self {
         case .roomy:
-            "Первый Swift-тест"
+            "4 в ряд"
         case .compact:
-            "Плотный Flutter-parity"
+            "Зум удержанием"
         }
+    }
+
+    var margaritavilleGridColumnCount: Int {
+        4
+    }
+
+    var margaritavilleGridSpacing: CGFloat {
+        8
+    }
+
+    var margaritavilleTileHeight: CGFloat {
+        98
+    }
+
+    var margaritavilleHoldZoomEnabled: Bool {
+        self == .compact
     }
 
     var sectionSpacing: CGFloat {

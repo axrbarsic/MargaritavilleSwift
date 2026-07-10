@@ -30,3 +30,29 @@ func roomSwipeArmsAtThresholdOrWithAConfidentPredictedFinish() {
         cellWidth: 361
     ))
 }
+
+@Test
+func compactRoomSwipeThresholdFitsFourColumnMargaritavilleTiles() {
+    #expect(abs(SummarySwipeCommitPolicy.compactRoomActionMenuThreshold(cellWidth: 82) - 59.04) < 0.001)
+    #expect(abs(SummarySwipeCommitPolicy.compactRoomActionMenuThreshold(cellWidth: 98) - 70.56) < 0.001)
+    #expect(SummarySwipeCommitPolicy.compactRoomActionMenuThreshold(cellWidth: 140) == 84)
+}
+
+@Test
+func compactRoomSwipeArmsWithRightwardPredictedFinish() {
+    #expect(SummarySwipeCommitPolicy.compactRoomActionMenuArmed(
+        translation: 64,
+        predictedTranslation: 64,
+        cellWidth: 88
+    ))
+    #expect(SummarySwipeCommitPolicy.compactRoomActionMenuArmed(
+        translation: 48,
+        predictedTranslation: 84,
+        cellWidth: 88
+    ))
+    #expect(!SummarySwipeCommitPolicy.compactRoomActionMenuArmed(
+        translation: 42,
+        predictedTranslation: 48,
+        cellWidth: 88
+    ))
+}

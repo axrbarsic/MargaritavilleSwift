@@ -213,6 +213,18 @@ final class AppSettingsStore {
         }
     }
 
+    var developerVIPHDREnabled: Bool {
+        didSet {
+            userDefaults.set(developerVIPHDREnabled, forKey: Keys.developerVIPHDREnabled)
+        }
+    }
+
+    var developerStatusHDRPulseEnabled: Bool {
+        didSet {
+            userDefaults.set(developerStatusHDRPulseEnabled, forKey: Keys.developerStatusHDRPulseEnabled)
+        }
+    }
+
     var developerCellSpringIntensity: Double {
         get { storedDeveloperCellSpringIntensity }
         set {
@@ -294,6 +306,8 @@ final class AppSettingsStore {
         developerVIPFlickerSpeed: Double = 1.6,
         developerVIPJellyEnabled: Bool = true,
         developerVIPJellySpeed: Double = 0.75,
+        developerVIPHDREnabled: Bool = false,
+        developerStatusHDRPulseEnabled: Bool = false,
         selectedHotelID: String? = nil,
         housekeepers: [Housekeeper] = MargaritavilleHousekeeperCatalog.defaultHousekeepers,
         cartConsumableCatalog: [CartConsumableCatalogItem] = CartConsumableCatalog.defaultCatalog,
@@ -327,6 +341,8 @@ final class AppSettingsStore {
         self.deepSeekModelTier = deepSeekModelTier
         self.developerVIPFlickerEnabled = developerVIPFlickerEnabled
         self.developerVIPJellyEnabled = developerVIPJellyEnabled
+        self.developerVIPHDREnabled = developerVIPHDREnabled
+        self.developerStatusHDRPulseEnabled = developerStatusHDRPulseEnabled
         self.selectedHotelID = selectedHotelID
         self.housekeepers = MargaritavilleHousekeeperCatalog.canonicalHousekeepers(housekeepers)
         self.cartConsumableCatalog = CartConsumableCatalog.normalizedCatalog(cartConsumableCatalog)

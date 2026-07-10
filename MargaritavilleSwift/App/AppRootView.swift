@@ -46,6 +46,8 @@ struct AppRootView: View {
         .environment(\.experimentalCellSpringSpeed, appSettings.developerCellSpringSpeed)
         .environment(\.experimentalVIPJellyEnabled, appSettings.developerVIPJellyEnabled)
         .environment(\.experimentalVIPJellySpeed, appSettings.developerVIPJellySpeed)
+        .environment(\.experimentalVIPHDREnabled, appSettings.developerVIPHDREnabled)
+        .environment(\.experimentalStatusHDRPulseEnabled, appSettings.developerStatusHDRPulseEnabled)
         .environment(\.interactionSoundAssignments, appSettings.interactionSoundAssignments)
         .environment(
             \.interactionFeedback,

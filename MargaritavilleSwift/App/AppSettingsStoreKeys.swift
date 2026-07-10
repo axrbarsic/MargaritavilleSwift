@@ -32,6 +32,8 @@ extension AppSettingsStore {
         static let developerVIPJellyEnabled = "developerVIPBreathingEnabled"
         static let developerVIPJellySpeed = "developerVIPBreathingSpeed"
         static let developerVIPJellyDefaultEnabledMigration = "developerVIPJellyDefaultEnabledMigration_v94"
+        static let developerVIPHDREnabled = "developerVIPHDREnabled"
+        static let developerStatusHDRPulseEnabled = "developerStatusHDRPulseEnabled"
         static let selectedHotelID = "selectedHotelID"
         static let housekeepers = "housekeepers"
         static let cartConsumableCatalog = "cartConsumableCatalog"

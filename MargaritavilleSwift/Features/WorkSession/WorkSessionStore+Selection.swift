@@ -112,6 +112,39 @@ extension WorkSessionStore {
         return result
     }
 
+    @discardableResult
+    func assignAllRoomsForTesting(
+        housekeepers: [Housekeeper]
+    ) -> TestWorkAssignmentSummary? {
+        var generator = SystemRandomNumberGenerator()
+        let changedAt = Date()
+        guard let generated = TestWorkAssignmentGenerator.makeSelection(
+            territories: effectiveCatalog,
+            housekeeperIDs: housekeepers.map(\.id),
+            preservingLockFrom: selection,
+            changedAt: changedAt,
+            using: &generator
+        ) else {
+            return nil
+        }
+
+        let existingRooms = carts.flatMap(\.rooms)
+        selection = generated.selection
+        carts = WorkSessionBuilder.makeCarts(
+            from: selection,
+            preserving: existingRooms,
+            hotelProfile: hotelProfile,
+            now: changedAt
+        )
+        appendHistory(
+            kind: .selectionChanged,
+            title: "Тест: все номера случайно распределены",
+            happenedAt: changedAt
+        )
+        persist(immediately: true)
+        return generated.summary
+    }
+
     static func selectionState(from carts: [CartSection], hotelProfile: HotelProfile = .current) -> WorkSessionSelectionState {
         var state = WorkSessionSelectionState()
         for cart in carts {

@@ -2,7 +2,13 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DEVICE_ID="${DEVICE_ID:-85E776B1-9069-5E68-BC3A-3BCAA4AAB870}"
+DEVICE_ID="${DEVICE_ID:-81B4DF0D-A9BE-5131-93C8-8247618F9428}"
+# xcodebuild's own device identifier (ECID-based), distinct from devicectl's UUID
+# above. A generic 'generic/platform=iOS' destination never registers a specific
+# device with the developer portal, so a newly connected iPhone's UDID never
+# lands in the auto-managed provisioning profile. Targeting the device explicitly
+# here plus -allowProvisioningDeviceRegistration is what actually registers it.
+XCODE_DEVICE_ID="${XCODE_DEVICE_ID:-00008150-001418301E68C01C}"
 BUNDLE_ID="com.alex.margaritaville.swift"
 PROJECT_PATH="MargaritavilleSwift.xcodeproj"
 SCHEME="MargaritavilleSwift"
@@ -19,9 +25,10 @@ xcodebuild build \
   -project "$PROJECT_PATH" \
   -scheme "$SCHEME" \
   -configuration Debug \
-  -destination 'generic/platform=iOS' \
+  -destination "id=$XCODE_DEVICE_ID" \
   -derivedDataPath "$DERIVED_DATA" \
-  -allowProvisioningUpdates
+  -allowProvisioningUpdates \
+  -allowProvisioningDeviceRegistration
 
 echo "==> Built app metadata"
 /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP_PATH/Info.plist"

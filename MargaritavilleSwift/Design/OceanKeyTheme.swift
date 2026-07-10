@@ -33,6 +33,42 @@ enum OceanKeyTheme {
         return Color.status(hex: hex(for: status, usesPurpleScheduled: usesPurpleScheduled), saturationMultiplier: saturation)
     }
 
+    static func statusRGBComponents(
+        for status: RoomStatus,
+        saturation: Double = 1,
+        usesPurpleScheduled: Bool = false
+    ) -> (red: CGFloat, green: CGFloat, blue: CGFloat) {
+        let rawHex = saturation >= 1.5
+            ? vividHex(for: status, usesPurpleScheduled: usesPurpleScheduled)
+            : hex(for: status, usesPurpleScheduled: usesPurpleScheduled)
+        let red = CGFloat((rawHex >> 16) & 0xFF) / 255.0
+        let green = CGFloat((rawHex >> 8) & 0xFF) / 255.0
+        let blue = CGFloat(rawHex & 0xFF) / 255.0
+
+        guard saturation < 1.5 else {
+            return (red, green, blue)
+        }
+
+        let uiColor = UIColor(red: red, green: green, blue: blue, alpha: 1)
+        var hue: CGFloat = 0
+        var adjustedSaturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        guard uiColor.getHue(&hue, saturation: &adjustedSaturation, brightness: &brightness, alpha: &alpha) else {
+            return (red, green, blue)
+        }
+
+        let clampedSaturation = min(max(adjustedSaturation * CGFloat(saturation), 0), 1)
+        let adjusted = UIColor(hue: hue, saturation: clampedSaturation, brightness: brightness, alpha: alpha)
+        var outRed: CGFloat = 0
+        var outGreen: CGFloat = 0
+        var outBlue: CGFloat = 0
+        guard adjusted.getRed(&outRed, green: &outGreen, blue: &outBlue, alpha: &alpha) else {
+            return (red, green, blue)
+        }
+        return (outRed, outGreen, outBlue)
+    }
+
     static func fill(for dayCategory: RoomDayCategory) -> Color {
         Color(hex: hex(for: dayCategory))
     }

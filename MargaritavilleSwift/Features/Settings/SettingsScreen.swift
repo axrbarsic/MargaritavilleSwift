@@ -87,6 +87,10 @@ struct SettingsScreen: View {
             )
         case .developer:
             experimentalSection
+            SettingsTestDataSection(
+                workSession: workSession,
+                housekeepers: appSettings.housekeepers
+            )
             deepSeekLabSection
             developerSection
         }
@@ -152,6 +156,32 @@ struct SettingsScreen: View {
                     value: $appSettings.developerVIPJellySpeed
                 )
             }
+
+            Toggle(isOn: $appSettings.developerVIPHDREnabled) {
+                SettingsInfoRow(
+                    title: "VIP HDR-свет",
+                    value: appSettings.developerVIPHDREnabled ? "Вкл" : "Выкл",
+                    systemName: "sun.max.fill",
+                    subtitle: "VIP-ячейка просит EDR/HDR headroom и светится отдельно от общей яркости интерфейса."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerVIPHDREnabled) { _, _ in
+                feedback.confirm()
+            }
+
+            Toggle(isOn: $appSettings.developerStatusHDRPulseEnabled) {
+                SettingsInfoRow(
+                    title: "HDR-всплеск статуса",
+                    value: appSettings.developerStatusHDRPulseEnabled ? "Вкл" : "Выкл",
+                    systemName: "bolt.fill",
+                    subtitle: "После смены статуса ячейка разгорается и две секунды плавно остывает из максимальной HDR-яркости нового цвета."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerStatusHDRPulseEnabled) { _, _ in
+                feedback.confirm()
+            }
         }
     }
 
@@ -197,7 +227,7 @@ struct SettingsScreen: View {
                     title: "Ячейки",
                     value: appSettings.roomCellGeometry.description,
                     systemName: "rectangle.roundedtop.fill",
-                    subtitle: "Можно оставить просторный размер или вернуться ближе к компактному виду."
+                    subtitle: "Стандартный режим меняет статус удержанием, расширенный увеличивает комнату почти на весь экран."
                 )
 
                 Toggle(isOn: $appSettings.transparentSurfacesEnabled) {

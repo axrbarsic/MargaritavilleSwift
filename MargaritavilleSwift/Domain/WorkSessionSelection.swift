@@ -75,7 +75,7 @@ struct WorkSessionSelectionState: Codable, Equatable, Sendable {
 }
 
 enum WorkSessionSelectionRules {
-    static let cartRange = 1...10
+    static let cartRange = 1...100
 
     static let preferredTerritoryByCart: [Int: String] = [
         1: "B5",

@@ -4,22 +4,30 @@ struct MargaritavilleSummarySection: View {
     let section: MargaritavilleSummaryHousekeeperSection
     let housekeeper: Housekeeper?
     let consumableTickerText: String?
+    let geometry: RoomCellGeometry
+    let zoomedRoomID: RoomCell.ID?
+    let roomZoomNamespace: Namespace.ID
     let statusPaletteSaturation: Double
+    let statusHDRPulseEvents: [RoomCell.ID: RoomStatusHDRPulseEvent]
     let onOpenCartDetails: (CartSection.ID, String) -> Void
+    let onZoomRoom: (RoomCell) -> Void
     let onAdvance: (RoomCell.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onVIPToggle: (RoomCell.ID) -> Void
     let onReset: (RoomCell.ID) -> Void
     let onSchedule: (RoomCell.ID) -> Void
 
-    private let columns = [
-        GridItem(.adaptive(minimum: 82, maximum: 98), spacing: 8)
-    ]
+    private var columns: [GridItem] {
+        Array(
+            repeating: GridItem(.flexible(), spacing: geometry.margaritavilleGridSpacing),
+            count: geometry.margaritavilleGridColumnCount
+        )
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             groupHeader
-            LazyVGrid(columns: columns, spacing: 8) {
+            LazyVGrid(columns: columns, spacing: geometry.margaritavilleGridSpacing) {
                 ForEach(section.rooms) { room in
                     tile(for: room)
                 }
@@ -55,7 +63,12 @@ struct MargaritavilleSummarySection: View {
     private func tile(for room: RoomCell) -> some View {
         MargaritavilleRoomTile(
             room: room,
+            geometry: geometry,
+            isZoomed: zoomedRoomID == room.id,
+            zoomNamespace: roomZoomNamespace,
             statusPaletteSaturation: statusPaletteSaturation,
+            statusHDRPulseEvent: statusHDRPulseEvents[room.id],
+            onZoom: { onZoomRoom(room) },
             onAdvance: { onAdvance(room.id) },
             onOpenDetails: { mode in onOpenDetails(room.id, mode) },
             onVIPToggle: { onVIPToggle(room.id) },
@@ -87,7 +100,7 @@ private struct HousekeeperSummaryNameButton: View {
                     .stroke(palette.opacity(0.72), lineWidth: 1.5)
             }
             .contentShape(Rectangle())
-            .onLongPressGesture(minimumDuration: 0.38) {
+            .onLongPressGesture(minimumDuration: 0.58, maximumDistance: 7) {
                 feedback.longPress()
                 action()
             }
@@ -98,7 +111,12 @@ private struct HousekeeperSummaryNameButton: View {
 
 private struct MargaritavilleRoomTile: View {
     let room: RoomCell
+    let geometry: RoomCellGeometry
+    let isZoomed: Bool
+    let zoomNamespace: Namespace.ID
     let statusPaletteSaturation: Double
+    let statusHDRPulseEvent: RoomStatusHDRPulseEvent?
+    let onZoom: () -> Void
     let onAdvance: () -> Void
     let onOpenDetails: (RoomDetailsMode) -> Void
     let onVIPToggle: () -> Void
@@ -107,93 +125,207 @@ private struct MargaritavilleRoomTile: View {
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.experimentalVIPJellyEnabled) private var experimentalVIPJellyEnabled
     @Environment(\.experimentalVIPJellySpeed) private var experimentalVIPJellySpeed
+    @Environment(\.experimentalVIPHDREnabled) private var experimentalVIPHDREnabled
+    @Environment(\.experimentalStatusHDRPulseEnabled) private var experimentalStatusHDRPulseEnabled
+    @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
+    @Environment(\.experimentalCellSpringIntensity) private var experimentalCellSpringIntensity
+    @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
     @State private var isActionDialogPresented = false
     @State private var actionSwipeArmed = false
     @State private var actionSwipeFeedbackStarted = false
+    @State private var measuredTileWidth: CGFloat = 0
+    @State private var statusHDRPulseStatus: RoomStatus?
+    @State private var statusHDRPulseGeneration = 0
+    @State private var cellPulseStartedAt: Date?
+    @State private var cellPulseCleanupTask: Task<Void, Never>?
 
     var body: some View {
         tileBody
+            .opacity(isZoomed ? 0 : 1)
             .simultaneousGesture(actionMenuSwipeGesture)
             .confirmationDialog("Комната \(room.id)", isPresented: $isActionDialogPresented, titleVisibility: .visible) {
                 Button("Голос/медиа", systemImage: "mic.and.signal.meter.fill", action: openVoiceDetails)
                 Button(room.isVIP ? "VIP выключить" : "VIP включить", systemImage: room.isVIP ? "diamond.fill" : "diamond", action: toggleVIP)
                 Button("Назначить время", systemImage: "clock.fill", action: scheduleRoom)
-                if room.status(in: .simpleCycle) == .ready {
+                if canResetRoomToYellow {
                     Button("Вернуть в жёлтый", systemImage: "arrow.counterclockwise", action: resetRoom)
                 }
+            }
+            .onChange(of: room.status(in: .simpleCycle)) { _, newStatus in
+                if experimentalCellPhysicsEnabled, !experimentalStatusHDRPulseEnabled {
+                    startCellPulse(status: nil)
+                }
+            }
+            .task(id: statusHDRPulseEvent?.generation) {
+                guard let statusHDRPulseEvent else { return }
+                triggerStatusHDRPulse(for: statusHDRPulseEvent.status)
             }
     }
 
     @ViewBuilder
     private var tileBody: some View {
-        if vipJellyActive {
+        if vipJellyActive || cellPulseStartedAt != nil {
             TimelineView(.animation(minimumInterval: 1.0 / 120.0)) { timeline in
-                tileBodyContent(vipJellyTime: timeline.date.timeIntervalSinceReferenceDate)
+                tileBodyContent(
+                    vipJellyTime: vipJellyActive ? timeline.date.timeIntervalSinceReferenceDate : nil,
+                    pulseHeat: RoomStatusHDRPulseTiming.heat(
+                        startedAt: cellPulseStartedAt,
+                        now: timeline.date
+                    )
+                )
             }
         } else {
-            tileBodyContent(vipJellyTime: nil)
-        }
-    }
-
-    private func tileBodyContent(vipJellyTime: TimeInterval?) -> some View {
-        HoldActionTarget(
-            enabled: true,
-            useLongPress: true,
-            semanticLabel: "Комната \(room.id)",
-            onActivate: onAdvance
-        ) {
-            VStack(spacing: 6) {
-                Text(room.id)
-                    .font(.system(size: 44, weight: .black, design: .rounded))
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.50)
-                Text(timeLabel)
-                    .font(.system(size: 16, weight: .black, design: .rounded))
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.62)
-            }
-            .foregroundStyle(OceanKeyTheme.roomForeground)
-            .padding(.horizontal, 4)
-            .padding(.vertical, 10)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .aspectRatio(1, contentMode: .fit)
-            .background(fill)
-            .overlay(alignment: .bottomTrailing) {
-                RoomMediaIndicator(room: room)
-                    .allowsHitTesting(false)
-            }
-            .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
-            .vipJellyUnifiedLayer(
-                enabled: vipJellyActive,
-                time: vipJellyTime,
-                speed: experimentalVIPJellySpeed,
-                seed: vipJellySeed,
-                cornerRadius: tileCornerRadius
-            )
-            .vipJellyShapeMask(
-                enabled: vipJellyActive,
-                time: vipJellyTime,
-                speed: experimentalVIPJellySpeed,
-                seed: vipJellySeed,
-                cornerRadius: tileCornerRadius,
-                isMenuExpanded: false
-            )
+            tileBodyContent(vipJellyTime: nil, pulseHeat: 0)
         }
     }
 
     @ViewBuilder
-    private var fill: some View {
+    private func tileBodyContent(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
+        if geometry.margaritavilleHoldZoomEnabled {
+            roomTileContent(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+                .contentShape(Rectangle())
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("Комната \(room.id)")
+                .onLongPressGesture(
+                    minimumDuration: 0.52,
+                    maximumDistance: 8,
+                    perform: zoomRoom
+                )
+        } else {
+            HoldActionTarget(
+                enabled: true,
+                useLongPress: true,
+                feedbackProfile: .roomCell,
+                semanticLabel: "Комната \(room.id)",
+                onActivate: advanceRoomWithPulse
+            ) {
+                roomTileContent(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+            }
+        }
+    }
+
+    private func roomTileContent(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
+        VStack(spacing: 6) {
+            Text(room.id)
+                .font(.system(size: 44, weight: .black, design: .rounded))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.50)
+            Text(timeLabel)
+                .font(.system(size: 16, weight: .black, design: .rounded))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.62)
+        }
+        .foregroundStyle(OceanKeyTheme.roomForeground)
+        .padding(.horizontal, 4)
+        .padding(.vertical, 10)
+        .frame(
+            maxWidth: .infinity,
+            minHeight: geometry.margaritavilleTileHeight,
+            maxHeight: geometry.margaritavilleTileHeight
+        )
+        .background {
+            fill(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+        }
+        .overlay(alignment: .bottomTrailing) {
+            RoomMediaIndicator(room: room)
+                .allowsHitTesting(false)
+        }
+        .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
+        .vipJellyUnifiedLayer(
+            enabled: vipJellyActive,
+            time: vipJellyTime,
+            speed: experimentalVIPJellySpeed,
+            seed: vipJellySeed,
+            cornerRadius: tileCornerRadius
+        )
+        .vipJellyShapeMask(
+            enabled: vipJellyActive,
+            time: vipJellyTime,
+            speed: experimentalVIPJellySpeed,
+            seed: vipJellySeed,
+            cornerRadius: tileCornerRadius,
+            isMenuExpanded: false
+        )
+        .matchedGeometryEffect(id: room.id, in: zoomNamespace)
+        .scaleEffect(
+            x: 1 + 0.10 * experimentalCellSpringIntensity * pulseRubberAmount(pulseHeat),
+            y: 1 + 0.10 * experimentalCellSpringIntensity * pulseRubberAmount(pulseHeat)
+        )
+        .offset(y: -7.5 * experimentalCellSpringIntensity * pulseRubberAmount(pulseHeat))
+        .background {
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        measuredTileWidth = proxy.size.width
+                    }
+                    .onChange(of: proxy.size.width) { _, width in
+                        measuredTileWidth = width
+                    }
+            }
+        }
+    }
+
+    private func zoomRoom() {
+        feedback.holdCommitHapticOnly()
+        onZoom()
+    }
+
+    @ViewBuilder
+    private func fill(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
+        let status = room.status(in: .simpleCycle)
+        let pulseStatus = statusHDRPulseStatus ?? status
         let color = OceanKeyTheme.fill(
-            for: room.status(in: .simpleCycle),
+            for: status,
             saturation: statusPaletteSaturation,
             usesPurpleScheduled: false
         )
-        if vipJellyActive {
-            Rectangle().fill(color)
-        } else {
-            tileShape.fill(color)
+        ZStack {
+            if vipHDRActive {
+                Color.clear.vipHDRStatusFill(
+                    enabled: true,
+                    status: status,
+                    saturation: statusPaletteSaturation,
+                    usesPurpleScheduled: false,
+                    seed: vipJellySeed,
+                    cornerRadius: tileCornerRadius,
+                    isMenuExpanded: false,
+                    usesExternalMask: vipJellyActive
+                )
+            } else if vipJellyActive {
+                Rectangle().fill(color)
+            } else {
+                tileShape.fill(color)
+            }
+
+            if statusHDRPulseStatus != nil {
+                tileShape
+                    .fill(
+                        OceanKeyTheme.fill(
+                            for: pulseStatus,
+                            saturation: max(statusPaletteSaturation, 1.5),
+                            usesPurpleScheduled: false
+                        )
+                    )
+                    .brightness(min(1, 0.55 * Double(RoomStatusHDRPulseTiming.brightnessMultiplier)))
+                    .saturation(1.45)
+                    .blendMode(.plusLighter)
+                    .opacity(Double(pulseHeat))
+
+                Color.clear.vipHDRStatusFill(
+                    enabled: true,
+                    intensity: RoomStatusHDRPulseTiming.brightnessMultiplier,
+                    status: pulseStatus,
+                    saturation: statusPaletteSaturation,
+                    usesPurpleScheduled: false,
+                    seed: vipJellySeed,
+                    cornerRadius: tileCornerRadius,
+                    isMenuExpanded: false,
+                    usesExternalMask: vipJellyActive
+                )
+                .opacity(Double(pulseHeat))
+            }
         }
     }
 
@@ -212,7 +344,7 @@ private struct MargaritavilleRoomTile: View {
     }
 
     private var actionMenuSwipeGesture: some Gesture {
-        DragGesture(minimumDistance: 24, coordinateSpace: .local)
+        DragGesture(minimumDistance: 28, coordinateSpace: .local)
             .onChanged { value in
                 updateActionSwipe(value)
             }
@@ -222,39 +354,65 @@ private struct MargaritavilleRoomTile: View {
     }
 
     private func updateActionSwipe(_ value: DragGesture.Value) {
-        let horizontal = abs(value.translation.width)
-        let vertical = abs(value.translation.height)
-        guard vertical <= 12 || horizontal > vertical * 2.4 else {
+        let horizontal = value.translation.width
+        let absX = abs(horizontal)
+        let absY = abs(value.translation.height)
+        guard absY <= 10 || absX > absY * 2.8 else {
             resetActionSwipe()
             return
         }
-        guard horizontal >= 36, horizontal > vertical * 2.4 else { return }
-        if !actionSwipeFeedbackStarted {
-            actionSwipeFeedbackStarted = true
-            feedback.holdStart()
+        guard horizontal > 0, absX >= 38, absX > absY * 2.8 else {
+            if horizontal < -12 {
+                resetActionSwipe()
+            }
+            return
         }
-        let nextArmed = horizontal >= 82
+
+        let threshold = compactActionMenuThreshold
+        let nextArmed = horizontal >= threshold
+        if horizontal >= threshold * 0.86, !actionSwipeFeedbackStarted {
+            actionSwipeFeedbackStarted = true
+            feedback.holdStartHapticOnly()
+        }
         if nextArmed, !actionSwipeArmed {
-            feedback.holdCommit()
-        } else if !nextArmed, horizontal >= 64, !actionSwipeArmed {
-            feedback.holdWarning()
+            feedback.holdCommitHapticOnly()
+        } else if !nextArmed, horizontal >= threshold * 0.94, !actionSwipeArmed {
+            feedback.holdWarningHapticOnly()
         }
         actionSwipeArmed = nextArmed
     }
 
     private func finishActionSwipe(_ value: DragGesture.Value) {
         defer { resetActionSwipe() }
-        let horizontal = abs(value.translation.width)
-        let predicted = abs(value.predictedEndTranslation.width)
-        let vertical = abs(value.translation.height)
-        guard actionSwipeArmed || (horizontal >= 72 && predicted >= 96 && horizontal > vertical * 2.2) else { return }
-        feedback.confirm()
+        let horizontal = value.translation.width
+        let predicted = value.predictedEndTranslation.width
+        let absY = abs(value.translation.height)
+        guard horizontal > 0, horizontal > absY * 2.5 else { return }
+        let armed = actionSwipeArmed || SummarySwipeCommitPolicy.compactRoomActionMenuArmed(
+            translation: horizontal,
+            predictedTranslation: predicted,
+            cellWidth: compactActionMenuCellWidth
+        )
+        guard armed else { return }
+        feedback.playEvent(.actionMenuOpen)
         isActionDialogPresented = true
     }
 
     private func resetActionSwipe() {
         actionSwipeArmed = false
         actionSwipeFeedbackStarted = false
+    }
+
+    private var compactActionMenuThreshold: CGFloat {
+        SummarySwipeCommitPolicy.compactRoomActionMenuThreshold(cellWidth: compactActionMenuCellWidth)
+    }
+
+    private var compactActionMenuCellWidth: CGFloat {
+        measuredTileWidth > 0 ? measuredTileWidth : 88
+    }
+
+    private func advanceRoomWithPulse() {
+        onAdvance()
     }
 
     private func openVoiceDetails() {
@@ -264,7 +422,36 @@ private struct MargaritavilleRoomTile: View {
 
     private func toggleVIP() {
         feedback.confirm()
+        if experimentalStatusHDRPulseEnabled {
+            triggerStatusHDRPulse(for: room.status(in: .simpleCycle))
+        } else if experimentalCellPhysicsEnabled {
+            startCellPulse(status: nil)
+        }
         onVIPToggle()
+    }
+
+    private func triggerStatusHDRPulse(for status: RoomStatus) {
+        guard experimentalStatusHDRPulseEnabled else { return }
+        startCellPulse(status: status)
+    }
+
+    private func startCellPulse(status: RoomStatus?) {
+        cellPulseCleanupTask?.cancel()
+        statusHDRPulseGeneration += 1
+        let generation = statusHDRPulseGeneration
+        statusHDRPulseStatus = status
+        cellPulseStartedAt = Date()
+        cellPulseCleanupTask = Task { @MainActor in
+            try? await Task.sleep(for: RoomStatusHDRPulseTiming.cleanupDelay)
+            guard !Task.isCancelled, generation == statusHDRPulseGeneration else { return }
+            cellPulseStartedAt = nil
+            statusHDRPulseStatus = nil
+            cellPulseCleanupTask = nil
+        }
+    }
+
+    private func pulseRubberAmount(_ heat: CGFloat) -> CGFloat {
+        heat * RoomStatusHDRPulseTiming.rubberAmplitudeMultiplier
     }
 
     private func scheduleRoom() {
@@ -288,9 +475,23 @@ private struct MargaritavilleRoomTile: View {
         room.isVIP && experimentalVIPJellyEnabled
     }
 
+    private var vipHDRActive: Bool {
+        room.isVIP && experimentalVIPHDREnabled
+    }
+
     private var vipJellySeed: Double {
         Double(abs(room.id.hashValue % 10_000)) / 10_000
     }
+
+    private var canResetRoomToYellow: Bool {
+        switch room.status(in: .simpleCycle) {
+        case .pending:
+            false
+        case .open, .ready, .scheduled, .inProgress:
+            true
+        }
+    }
+
 }
 
 private let margaritavilleTimeFormatter: DateFormatter = {

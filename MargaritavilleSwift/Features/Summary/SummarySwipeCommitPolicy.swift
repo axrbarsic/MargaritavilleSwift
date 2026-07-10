@@ -16,4 +16,17 @@ enum SummarySwipeCommitPolicy {
         let committedTranslation = max(translation, predictedTranslation * 0.86)
         return committedTranslation >= roomActionMenuThreshold(cellWidth: cellWidth)
     }
+
+    static func compactRoomActionMenuThreshold(cellWidth: CGFloat) -> CGFloat {
+        min(max(cellWidth * 0.72, 58), 84)
+    }
+
+    static func compactRoomActionMenuArmed(
+        translation: CGFloat,
+        predictedTranslation: CGFloat,
+        cellWidth: CGFloat
+    ) -> Bool {
+        let committedTranslation = max(translation, predictedTranslation * 0.78)
+        return committedTranslation >= compactRoomActionMenuThreshold(cellWidth: cellWidth)
+    }
 }

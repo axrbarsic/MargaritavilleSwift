@@ -17,6 +17,10 @@ struct SummaryScreen: View {
     @State private var scheduleRoute: RoomScheduleRoute?
     @State private var isSettingsPresented = false
     @State private var activeSimpleCycleStatusFilter: RoomStatus?
+    @State private var zoomedRoom: RoomCell?
+    @State private var roomStatusHDRPulseGeneration = 0
+    @State private var roomStatusHDRPulseEvents: [RoomCell.ID: RoomStatusHDRPulseEvent] = [:]
+    @Namespace private var roomZoomNamespace
 
     var body: some View {
         ZStack {
@@ -45,6 +49,15 @@ struct SummaryScreen: View {
             }
             .padding(.top, 18)
 
+            if let zoomedRoom {
+                MargaritavilleRoomZoomOverlay(
+                    room: zoomedRoom,
+                    namespace: roomZoomNamespace,
+                    statusPaletteSaturation: appSettings.statusPaletteSaturation,
+                    onCollapse: collapseRoomZoom
+                )
+                .zIndex(20)
+            }
         }
         .sheet(item: $roomDetailsRoute, onDismiss: closeActionMenus) { route in
             RoomDetailsScreen(route: route, workSession: workSession)
@@ -96,7 +109,7 @@ struct SummaryScreen: View {
         let previousStatus = statusForSound(roomID: roomID)
         let hadSchedule = workSession.room(id: roomID)?.scheduledTime != nil
         workSession.toggleOpen(roomId: roomID)
-        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+        handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
         if hadSchedule, workSession.room(id: roomID)?.scheduledTime == nil {
             scheduleNotifications.cancelRoom(roomID)
         }
@@ -111,10 +124,15 @@ struct SummaryScreen: View {
                         section: section,
                         housekeeper: housekeeper(id: section.housekeeperID),
                         consumableTickerText: consumableTickerTextBySectionID[section.id],
+                        geometry: appSettings.roomCellGeometry,
+                        zoomedRoomID: zoomedRoom?.id,
+                        roomZoomNamespace: roomZoomNamespace,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
+                        statusHDRPulseEvents: roomStatusHDRPulseEvents,
                         onOpenCartDetails: { cartID, subtitle in
                             openCartDetails(cartID: cartID, subtitle: subtitle)
                         },
+                        onZoomRoom: zoomRoom,
                         onAdvance: toggleOpen,
                         onOpenDetails: { roomID, mode in
                             roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
@@ -137,6 +155,7 @@ struct SummaryScreen: View {
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         actionMenuAllowsMultiple: appSettings.summaryActionMenuAllowsMultiple,
                         expandedActionMenuRoomIDs: $expandedActionMenuRoomIDs,
+                        statusHDRPulseEvents: roomStatusHDRPulseEvents,
                         onOpenCartDetails: { cartID in
                             expandedActionMenuRoomIDs.removeAll()
                             openCartDetails(cartID: cartID)
@@ -192,6 +211,19 @@ struct SummaryScreen: View {
         activeSimpleCycleStatusFilter = status
     }
 
+    private func zoomRoom(_ room: RoomCell) {
+        guard appSettings.roomCellGeometry.margaritavilleHoldZoomEnabled else { return }
+        withAnimation(roomZoomAnimation) {
+            zoomedRoom = room
+        }
+    }
+
+    private func collapseRoomZoom() {
+        withAnimation(roomZoomAnimation) {
+            zoomedRoom = nil
+        }
+    }
+
     private func openSchedule(roomID: RoomCell.ID) {
         scheduleRoute = RoomScheduleRoute(
             roomID: roomID,
@@ -206,7 +238,7 @@ struct SummaryScreen: View {
         if dueAt <= Date() {
             advanceScheduledRooms()
         } else {
-            playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+            handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
             scheduleNotifications.scheduleRoom(roomID, dueAt)
         }
     }
@@ -215,7 +247,7 @@ struct SummaryScreen: View {
         let previousStatus = statusForSound(roomID: roomID)
         workSession.setSchedule(nil, roomId: roomID)
         expandedActionMenuRoomIDs.remove(roomID)
-        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+        handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
         scheduleNotifications.cancelRoom(roomID)
     }
 
@@ -236,7 +268,7 @@ struct SummaryScreen: View {
     private func advanceScheduledRooms(now: Date = Date()) {
         let openedRoomIDs = workSession.advanceScheduledRooms(now: now)
         for roomID in openedRoomIDs {
-            playRoomStatusChange(roomID: roomID, previousStatus: .scheduled)
+            handleRoomStatusChange(roomID: roomID, previousStatus: .scheduled)
             scheduleNotifications.cancelRoom(roomID)
         }
     }
@@ -244,24 +276,34 @@ struct SummaryScreen: View {
     private func toggleTask(_ task: RoomTask, roomID: RoomCell.ID) {
         let previousStatus = statusForSound(roomID: roomID)
         workSession.toggleTask(task, roomId: roomID)
-        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+        handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
     }
 
     private func resetSimpleCycle(roomID: RoomCell.ID) {
         let previousStatus = statusForSound(roomID: roomID)
         workSession.resetSimpleCycle(roomId: roomID)
-        playRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+        handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
     }
 
     private func statusForSound(roomID: RoomCell.ID) -> RoomStatus? {
         workSession.room(id: roomID)?.status(in: workSession.hotelProfile.workflowKind)
     }
 
-    private func playRoomStatusChange(roomID: RoomCell.ID, previousStatus: RoomStatus?) {
+    private func handleRoomStatusChange(roomID: RoomCell.ID, previousStatus: RoomStatus?) {
         guard let nextStatus = statusForSound(roomID: roomID),
               nextStatus != previousStatus
         else { return }
         feedback.playEvent(nextStatus.interactionSoundEvent)
+        recordStatusHDRPulse(roomID: roomID, status: nextStatus)
+    }
+
+    private func recordStatusHDRPulse(roomID: RoomCell.ID, status: RoomStatus) {
+        guard appSettings.developerStatusHDRPulseEnabled else { return }
+        roomStatusHDRPulseGeneration += 1
+        roomStatusHDRPulseEvents[roomID] = RoomStatusHDRPulseEvent(
+            generation: roomStatusHDRPulseGeneration,
+            status: status
+        )
     }
 
     private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {
@@ -284,6 +326,12 @@ private extension RoomStatus {
         }
     }
 }
+
+private let roomZoomAnimation = Animation.spring(
+    response: 0.42,
+    dampingFraction: 0.82,
+    blendDuration: 0.08
+)
 
 #Preview {
     SummaryScreen(

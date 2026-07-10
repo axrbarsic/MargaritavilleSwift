@@ -3,6 +3,23 @@ import Testing
 @testable import MargaritavilleSwift
 
 @Test
+func roomCellGeometryUsesMargaritavilleStandardAndExpandedContract() {
+    #expect(RoomCellGeometry.roomy.title == "Стандартные")
+    #expect(RoomCellGeometry.roomy.description == "4 в ряд")
+    #expect(RoomCellGeometry.roomy.margaritavilleGridColumnCount == 4)
+    #expect(RoomCellGeometry.roomy.margaritavilleGridSpacing == 8)
+    #expect(RoomCellGeometry.roomy.margaritavilleTileHeight == 98)
+    #expect(!RoomCellGeometry.roomy.margaritavilleHoldZoomEnabled)
+
+    #expect(RoomCellGeometry.compact.title == "Расширенные")
+    #expect(RoomCellGeometry.compact.description == "Зум удержанием")
+    #expect(RoomCellGeometry.compact.margaritavilleGridColumnCount == 4)
+    #expect(RoomCellGeometry.compact.margaritavilleGridSpacing == 8)
+    #expect(RoomCellGeometry.compact.margaritavilleTileHeight == 98)
+    #expect(RoomCellGeometry.compact.margaritavilleHoldZoomEnabled)
+}
+
+@Test
 func appSettingsPersistsMatrixSpeed() {
     let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
@@ -110,6 +127,8 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     settings.developerVIPFlickerSpeed = 2.35
     settings.developerVIPJellyEnabled = true
     settings.developerVIPJellySpeed = 1.45
+    settings.developerVIPHDREnabled = true
+    settings.developerStatusHDRPulseEnabled = true
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
@@ -120,6 +139,8 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     #expect(loaded.developerVIPFlickerSpeed == 2.35)
     #expect(loaded.developerVIPJellyEnabled)
     #expect(loaded.developerVIPJellySpeed == 1.45)
+    #expect(loaded.developerVIPHDREnabled)
+    #expect(loaded.developerStatusHDRPulseEnabled)
 }
 
 @Test

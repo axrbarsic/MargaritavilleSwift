@@ -43,6 +43,8 @@ extension AppSettingsStore {
         let developerVIPFlickerSpeed = userDefaults.object(forKey: Keys.developerVIPFlickerSpeed) as? Double ?? 1.6
         let developerVIPJellyEnabled = Self.migratedDeveloperVIPJellyEnabled(userDefaults: userDefaults)
         let developerVIPJellySpeed = userDefaults.object(forKey: Keys.developerVIPJellySpeed) as? Double ?? 0.75
+        let developerVIPHDREnabled = userDefaults.object(forKey: Keys.developerVIPHDREnabled) as? Bool ?? false
+        let developerStatusHDRPulseEnabled = userDefaults.object(forKey: Keys.developerStatusHDRPulseEnabled) as? Bool ?? false
         let selectedHotelID = userDefaults.string(forKey: Keys.selectedHotelID)
         let housekeepers = Self.loadHousekeepers(userDefaults: userDefaults)
         let cartConsumableCatalog = Self.loadCartConsumableCatalog(userDefaults: userDefaults)
@@ -75,6 +77,8 @@ extension AppSettingsStore {
             developerVIPFlickerSpeed: developerVIPFlickerSpeed,
             developerVIPJellyEnabled: developerVIPJellyEnabled,
             developerVIPJellySpeed: developerVIPJellySpeed,
+            developerVIPHDREnabled: developerVIPHDREnabled,
+            developerStatusHDRPulseEnabled: developerStatusHDRPulseEnabled,
             selectedHotelID: selectedHotelID,
             housekeepers: housekeepers,
             cartConsumableCatalog: cartConsumableCatalog,

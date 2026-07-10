@@ -3,6 +3,134 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (36)",
+            date: "2026-07-09",
+            changes: [
+                "Replaced state-driven HDR and rubber animations with one deterministic 120 Hz heat-and-cooling timeline so the two-second fade cannot be cut off by a SwiftUI rebuild.",
+                "Restored the full centered rubber pulse for VIP room cells and synchronized it with the same HDR brightness envelope.",
+                "Prevented scrolling over room cells from changing their status by requiring the system long-press recognizer to complete instead of using an independent timer."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (35)",
+            date: "2026-07-09",
+            changes: [
+                "Fixed the HDR flash layer being removed as soon as its target opacity became zero, which bypassed the cooling animation.",
+                "Kept the HDR and fallback glow layers mounted through the complete two-second fade, then removed them only after the tail finishes."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (34)",
+            date: "2026-07-09",
+            changes: [
+                "Extended the HDR flash cooling phase itself to a full two seconds instead of fitting the entire pulse into that window.",
+                "Replaced the symmetric fade with a white-hot-metal cooling curve that preserves a long dim tail and reaches zero without a visible cutoff.",
+                "Kept the 1.7x rubber deformation synchronized with the same longer cooling curve."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (33)",
+            date: "2026-07-09",
+            changes: [
+                "Doubled the one-shot HDR flash intensity and stretched its smooth heat-and-cool curve to about two seconds.",
+                "Synchronized the rubber pulse with the HDR curve and increased its deformation amplitude by 1.7x.",
+                "Kept the pulse centered and ProMotion-ready so both edges move evenly at the display's available refresh rate."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (32)",
+            date: "2026-07-09",
+            changes: [
+                "Smoothed the one-shot HDR status flash into a roughly 1.4-second rise, peak, and fade cycle.",
+                "Changed both Settings buttons to require a deliberate long press with haptic confirmation.",
+                "Added a one-tap developer tool that randomly distributes every hotel room across every housekeeper as evenly as possible.",
+                "Centered the rubber cell pulse so its left and right edges expand with equal strength."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (31)",
+            date: "2026-07-09",
+            changes: [
+                "Changed the HDR flash spring so the room cell inflates first, then settles back, instead of squashing first.",
+                "Kept the OceanKey-style rubber timing while reversing the initial scale direction."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (30)",
+            date: "2026-07-09",
+            changes: [
+                "Added the OceanKey-style live-cell rubber spring to the one-shot HDR status flash.",
+                "The HDR flash now squeezes and releases the room cell even when the separate Live Cells setting is off."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (29)",
+            date: "2026-07-09",
+            changes: [
+                "Moved one-shot HDR status pulses to an explicit room-status event emitted after the real status transition.",
+                "Made the flash hold briefly before fading so it cannot disappear in the same SwiftUI render cycle."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (28)",
+            date: "2026-07-09",
+            changes: [
+                "Fixed HDR status pulses so long-press room status changes start the one-shot flash immediately.",
+                "Added a visible same-color brightness fallback under the EDR layer so the pulse is noticeable even when the display grants little HDR headroom."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (27)",
+            date: "2026-07-09",
+            changes: [
+                "Added a Settings toggle for one-shot HDR status pulses after room status changes.",
+                "The pulse reuses the cell's new status color, jumps to EDR brightness, then fades out in about one second."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (26)",
+            date: "2026-07-09",
+            changes: [
+                "Changed VIP HDR from a white moving glare into a full-cell Extended Dynamic Range status fill.",
+                "VIP green, red, yellow, blue, and scheduled cells now boost their own status color instead of drawing a white highlight over the room number."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (25)",
+            date: "2026-07-09",
+            changes: [
+                "Added a Settings toggle for VIP HDR light so VIP room cells can request Extended Dynamic Range brightness separately from the rest of the interface.",
+                "Kept the existing VIP jelly deformation and layered the new HDR glow on top only for active VIP cells."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (24)",
+            date: "2026-07-02",
+            changes: [
+                "Made Margaritaville main-screen gestures more deliberate so vertical scrolling no longer triggers room or housekeeper feedback.",
+                "Restored the room swipe action menu for the four-column grid with a compact right-swipe threshold sized for small room tiles.",
+                "Kept the reset action available in the room menu whenever the room is no longer in the yellow pending state."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (23)",
+            date: "2026-07-02",
+            changes: [
+                "Restored the Expanded room-size mode to the same four-column room grid as Standard.",
+                "Changed Expanded mode so a long press opens a smooth full-screen room zoom instead of changing the grid width.",
+                "The zoomed room now stays open after the finger is released and collapses back with a long press on the enlarged card."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (22)",
+            date: "2026-07-01",
+            changes: [
+                "Renamed the Margaritaville room-size setting to Standard and Expanded.",
+                "Changed Expanded mode on the main Margaritaville summary from compact four-column tiles into two wider room cards per row.",
+                "Kept the expanded cards at the same visual height so the screen gains horizontal room without becoming a tall square grid."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (21)",
             date: "2026-06-15",
             changes: [

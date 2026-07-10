@@ -283,7 +283,7 @@ func margaritavilleHousekeeperCatalogIncludesNamesFromSheets() {
     let names = Set(MargaritavilleHousekeeperCatalog.defaultHousekeepers.map(\.displayName))
 
     #expect(names.contains("Ketty"))
-    #expect(names.contains("Rosalie"))
+    #expect(names.contains("Rosaire"))
     #expect(names.contains("Nadia M (DC)"))
     #expect(names.contains("Omelene PM"))
     #expect(!names.contains("Lauren FLOOR"))

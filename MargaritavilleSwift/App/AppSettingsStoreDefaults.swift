@@ -30,6 +30,8 @@ extension AppSettingsStore {
         developerVIPFlickerSpeed = 1.6
         developerVIPJellyEnabled = true
         developerVIPJellySpeed = 0.75
+        developerVIPHDREnabled = false
+        developerStatusHDRPulseEnabled = false
         selectedHotelID = nil
         housekeepers = MargaritavilleHousekeeperCatalog.defaultHousekeepers
         cartConsumableCatalog = CartConsumableCatalog.defaultCatalog

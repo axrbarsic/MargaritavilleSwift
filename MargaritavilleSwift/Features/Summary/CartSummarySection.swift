@@ -9,6 +9,7 @@ struct CartSummarySection: View {
     let statusPaletteSaturation: Double
     let actionMenuAllowsMultiple: Bool
     @Binding var expandedActionMenuRoomIDs: Set<RoomCell.ID>
+    let statusHDRPulseEvents: [RoomCell.ID: RoomStatusHDRPulseEvent]
     let onOpenCartDetails: (CartSection.ID) -> Void
     let onOpenDetails: (RoomCell.ID, RoomDetailsMode) -> Void
     let onOpenToggle: (RoomCell.ID) -> Void
@@ -41,6 +42,7 @@ struct CartSummarySection: View {
                     taskControlsUseLongPress: taskControlsUseLongPress,
                     statusPaletteSaturation: statusPaletteSaturation,
                     isActionMenuExpanded: expandedActionMenuRoomIDs.contains(room.id),
+                    statusHDRPulseEvent: statusHDRPulseEvents[room.id],
                     onActionMenuToggle: {
                         expandedActionMenuRoomIDs = SummaryActionMenuExpansion.toggled(
                             roomID: room.id,
@@ -77,6 +79,7 @@ struct CartSummarySection: View {
         statusPaletteSaturation: 1,
         actionMenuAllowsMultiple: false,
         expandedActionMenuRoomIDs: $expanded,
+        statusHDRPulseEvents: [:],
         onOpenCartDetails: { _ in },
         onOpenDetails: { _, _ in },
         onOpenToggle: { _ in },
