@@ -17,6 +17,37 @@ APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphoneos/MargaritavilleSwift.app"
 
 cd "$ROOT_DIR"
 
+device_state() {
+  xcrun devicectl list devices 2>/dev/null | grep -F "$DEVICE_ID" || true
+}
+
+ensure_device_available() {
+  local state
+  state="$(device_state)"
+  if [[ "$state" == *"available (paired)"* ]]; then
+    return
+  fi
+
+  echo "==> iPhone discovery is stale; restarting user CoreDevice services"
+  launchctl kickstart -k "user/$(id -u)/com.apple.CoreDevice.CoreDeviceService" || true
+  launchctl kickstart -k "user/$(id -u)/com.apple.CoreDevice.remotepairingd" || true
+
+  for _ in {1..12}; do
+    sleep 1
+    state="$(device_state)"
+    if [[ "$state" == *"available (paired)"* ]]; then
+      echo "==> iPhone is available"
+      return
+    fi
+  done
+
+  echo "ERROR: iPhone remains unavailable after refreshing CoreDevice discovery." >&2
+  echo "Last device state: ${state:-not listed}" >&2
+  exit 1
+}
+
+ensure_device_available
+
 echo "==> Generating Xcode project"
 xcodegen generate
 
