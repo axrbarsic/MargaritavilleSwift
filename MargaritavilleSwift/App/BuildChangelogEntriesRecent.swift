@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (37)",
+            date: "2026-07-09",
+            changes: [
+                "Prevented recycled top-row room cells from replaying old HDR and rubber events when a scroll returns to the top.",
+                "Bound each pulse to its original timestamp and remove completed events so view reappearance can only continue the remaining live animation."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (36)",
             date: "2026-07-09",
             changes: [

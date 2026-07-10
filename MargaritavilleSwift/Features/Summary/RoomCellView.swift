@@ -63,7 +63,13 @@ struct RoomCellView: View {
         }
         .task(id: statusHDRPulseEvent?.generation) {
             guard let statusHDRPulseEvent else { return }
-            triggerStatusHDRPulse(for: statusHDRPulseEvent.status)
+            let now = Date()
+            guard statusHDRPulseEvent.isActive(at: now) else { return }
+            triggerStatusHDRPulse(
+                for: statusHDRPulseEvent.status,
+                startedAt: statusHDRPulseEvent.startedAt,
+                now: now
+            )
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Room \(room.id)")
@@ -413,19 +419,32 @@ struct RoomCellView: View {
         room.isVIP && experimentalVIPHDREnabled
     }
 
-    private func triggerStatusHDRPulse(for status: RoomStatus) {
+    private func triggerStatusHDRPulse(
+        for status: RoomStatus,
+        startedAt: Date = Date(),
+        now: Date = Date()
+    ) {
         guard experimentalStatusHDRPulseEnabled else { return }
-        startCellPulse(status: status)
+        startCellPulse(status: status, startedAt: startedAt, now: now)
     }
 
-    private func startCellPulse(status: RoomStatus?) {
+    private func startCellPulse(
+        status: RoomStatus?,
+        startedAt: Date = Date(),
+        now: Date = Date()
+    ) {
+        guard RoomStatusHDRPulseTiming.isActive(startedAt: startedAt, now: now) else { return }
         cellPulseCleanupTask?.cancel()
         statusHDRPulseGeneration += 1
         let generation = statusHDRPulseGeneration
         statusHDRPulseStatus = status
-        cellPulseStartedAt = Date()
+        cellPulseStartedAt = startedAt
+        let remainingCleanupTime = RoomStatusHDRPulseTiming.remainingCleanupTime(
+            startedAt: startedAt,
+            now: now
+        )
         cellPulseCleanupTask = Task { @MainActor in
-            try? await Task.sleep(for: RoomStatusHDRPulseTiming.cleanupDelay)
+            try? await Task.sleep(for: .milliseconds(Int(ceil(remainingCleanupTime * 1_000))))
             guard !Task.isCancelled, generation == statusHDRPulseGeneration else { return }
             cellPulseStartedAt = nil
             statusHDRPulseStatus = nil

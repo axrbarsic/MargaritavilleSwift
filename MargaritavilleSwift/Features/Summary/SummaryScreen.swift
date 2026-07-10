@@ -300,10 +300,18 @@ struct SummaryScreen: View {
     private func recordStatusHDRPulse(roomID: RoomCell.ID, status: RoomStatus) {
         guard appSettings.developerStatusHDRPulseEnabled else { return }
         roomStatusHDRPulseGeneration += 1
-        roomStatusHDRPulseEvents[roomID] = RoomStatusHDRPulseEvent(
+        let event = RoomStatusHDRPulseEvent(
             generation: roomStatusHDRPulseGeneration,
-            status: status
+            status: status,
+            startedAt: Date()
         )
+        roomStatusHDRPulseEvents[roomID] = event
+
+        Task { @MainActor in
+            try? await Task.sleep(for: RoomStatusHDRPulseTiming.cleanupDelay)
+            guard roomStatusHDRPulseEvents[roomID]?.generation == event.generation else { return }
+            roomStatusHDRPulseEvents[roomID] = nil
+        }
     }
 
     private func housekeeper(forCart cartNumber: Int) -> Housekeeper? {

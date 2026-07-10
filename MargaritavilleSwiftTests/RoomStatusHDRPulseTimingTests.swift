@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import MargaritavilleSwift
 
@@ -26,4 +27,30 @@ func statusHDRPulseCoolingNeverRebounds() {
     for pair in zip(samples, samples.dropFirst()) {
         #expect(pair.1 <= pair.0)
     }
+}
+
+@Test
+func statusHDRPulseEventCannotReplayAfterItsOriginalTimelineExpires() {
+    let startedAt = Date(timeIntervalSinceReferenceDate: 1_000)
+    let event = RoomStatusHDRPulseEvent(
+        generation: 7,
+        status: .ready,
+        startedAt: startedAt
+    )
+
+    #expect(event.isActive(at: startedAt))
+    #expect(event.isActive(at: startedAt.addingTimeInterval(2.57)))
+    #expect(!event.isActive(at: startedAt.addingTimeInterval(2.58)))
+    #expect(!event.isActive(at: startedAt.addingTimeInterval(30)))
+}
+
+@Test
+func statusHDRPulseReappearanceKeepsOnlyTheOriginalCleanupRemainder() {
+    let startedAt = Date(timeIntervalSinceReferenceDate: 2_000)
+    let reappearedAt = startedAt.addingTimeInterval(2.5)
+
+    #expect(abs(RoomStatusHDRPulseTiming.remainingCleanupTime(
+        startedAt: startedAt,
+        now: reappearedAt
+    ) - 0.23) < 0.001)
 }
