@@ -13,6 +13,9 @@ final class WorkSessionStore {
     var catalogOverrides: [RoomCatalogOverride]
     var history: [WorkSessionHistoryEntry]
     var hasLoadedInitialSnapshot: Bool
+    /// Ошибка чтения сохранённой смены. Пока она есть, запись запрещена:
+    /// сохранение «снимок — истина» иначе стёрло бы непрочитанные данные.
+    var loadFailure: WorkSessionLoadFailure?
 
     init(
         carts: [CartSection],

@@ -19,6 +19,9 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     let syncMode: SyncMode
     let activeSyncMode: SyncMode
     let hotelID: String
+    /// Постоянную базу открыть не удалось, и работа идёт в памяти: всё
+    /// введённое пропадёт при перезапуске, поэтому загрузка сообщает ошибку.
+    let isInMemoryFallback: Bool
 
     init(
         hotelID: String = HotelProfile.current.id,
@@ -33,6 +36,7 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         if let container {
             self.container = container
             self.activeSyncMode = activeSyncMode ?? syncMode
+            self.isInMemoryFallback = false
         } else {
             let resolved = SwiftDataWorkSessionRepository.makeDefaultContainer(
                 requestedSyncMode: syncMode,
@@ -41,6 +45,7 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
             )
             self.container = resolved.container
             self.activeSyncMode = resolved.activeSyncMode
+            self.isInMemoryFallback = resolved.isInMemoryFallback
         }
         self.writer = SwiftDataWorkSessionWriter(container: self.container)
         self.legacyRepository = legacyRepository
@@ -66,6 +71,11 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
     }
 
     func loadSnapshot() throws -> WorkSessionSnapshot? {
+        guard !isInMemoryFallback else {
+            throw WorkSessionLoadFailure(
+                message: "Не удалось открыть сохранённую смену на устройстве. Данные не тронуты; попробуйте ещё раз."
+            )
+        }
         let context = ModelContext(container)
         if let snapshot = try loadSwiftDataSnapshot(in: context) {
             return snapshot
@@ -100,7 +110,8 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
         storeDirectory: URL?
     ) -> (
         container: ModelContainer,
-        activeSyncMode: SyncMode
+        activeSyncMode: SyncMode,
+        isInMemoryFallback: Bool
     ) {
         do {
             return (
@@ -110,7 +121,8 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
                     hotelID: hotelID,
                     storeDirectory: storeDirectory
                 ),
-                requestedSyncMode
+                requestedSyncMode,
+                false
             )
         } catch {
             logger.error("Requested SwiftData container failed: \(error.localizedDescription, privacy: .public)")
@@ -123,7 +135,7 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
                         storeDirectory: storeDirectory
                     )
                     logger.error("Falling back to persistent local SwiftData after CloudKit container failure.")
-                    return (container, .localOnly)
+                    return (container, .localOnly, false)
                 } catch {
                     logger.error("Persistent local SwiftData fallback failed: \(error.localizedDescription, privacy: .public)")
                 }
@@ -137,7 +149,8 @@ final class SwiftDataWorkSessionRepository: WorkSessionRepository, @unchecked Se
                         hotelID: hotelID,
                         storeDirectory: storeDirectory
                     ),
-                    .localOnly
+                    .localOnly,
+                    true
                 )
             } catch {
                 preconditionFailure("Unable to create any SwiftData work-session store: \(error.localizedDescription)")

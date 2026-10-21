@@ -8,6 +8,10 @@ struct WorkSessionLoadFailure: LocalizedError, Sendable {
     init(_ error: Error) {
         message = error.localizedDescription
     }
+
+    init(message: String) {
+        self.message = message
+    }
 }
 
 extension WorkSessionStore {
@@ -18,23 +22,26 @@ extension WorkSessionStore {
         carts = snapshot.carts
         history = snapshot.history
         hasLoadedInitialSnapshot = true
+        loadFailure = nil
         lastPersistenceError = nil
     }
 
     func recordLoadFailure(_ failure: WorkSessionLoadFailure) {
         cancelPendingPersistence()
         hasLoadedInitialSnapshot = true
+        loadFailure = failure
         lastPersistenceError = failure
     }
 
     func finishInitialLoadWithoutSnapshot() {
         cancelPendingPersistence()
         hasLoadedInitialSnapshot = true
+        loadFailure = nil
         lastPersistenceError = nil
     }
 
     func persist(immediately: Bool = false) {
-        guard let repository else { return }
+        guard let repository, loadFailure == nil else { return }
         guard !immediately else {
             cancelPendingPersistence()
             saveCurrentSnapshot(to: repository)
@@ -55,7 +62,7 @@ extension WorkSessionStore {
     }
 
     func flushPendingPersistence() {
-        guard let repository, pendingPersistenceWorkItem != nil else { return }
+        guard let repository, loadFailure == nil, pendingPersistenceWorkItem != nil else { return }
         cancelPendingPersistence()
         saveCurrentSnapshot(to: repository)
     }
@@ -126,6 +133,7 @@ extension WorkSessionStore {
                 hotelProfile: hotelProfile,
                 repository: repository
             )
+            store.loadFailure = WorkSessionLoadFailure(error)
             store.lastPersistenceError = error
             return store
         }

@@ -133,6 +133,7 @@ extension WorkSessionStore {
         carts = WorkSessionBuilder.makeCarts(
             from: selection,
             preserving: existingRooms,
+            preservingCartDetailsFrom: carts,
             hotelProfile: hotelProfile,
             now: changedAt
         )
@@ -178,6 +179,7 @@ extension WorkSessionStore {
         carts = WorkSessionBuilder.makeCarts(
             from: selection,
             preserving: carts.flatMap(\.rooms),
+            preservingCartDetailsFrom: carts,
             hotelProfile: hotelProfile
         )
         appendHistory(kind: .selectionChanged, title: title, cartID: cartID, happenedAt: happenedAt)

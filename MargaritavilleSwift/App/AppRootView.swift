@@ -8,11 +8,14 @@ struct AppRootView: View {
     let interactionFeedbackService: InteractionFeedbackService
     let activeHotel: HotelProfile
     let onSelectHotel: (HotelProfile) -> Void
+    let onRetryWorkSessionLoad: () -> Void
 
     var body: some View {
         NavigationStack {
             if !workSession.hasLoadedInitialSnapshot {
                 StartupLoadingScreen()
+            } else if let loadFailure = workSession.loadFailure {
+                WorkSessionLoadFailureScreen(failure: loadFailure, onRetry: onRetryWorkSessionLoad)
             } else if workSession.selection.workdayLocked {
                 SummaryScreen(
                     workSession: workSession,

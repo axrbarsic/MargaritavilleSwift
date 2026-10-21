@@ -304,10 +304,12 @@ enum WorkSessionBuilder {
     static func makeCarts(
         from selection: WorkSessionSelectionState,
         preserving existingRooms: [RoomCell] = [],
+        preservingCartDetailsFrom existingCarts: [CartSection] = [],
         hotelProfile: HotelProfile = .current,
         now: Date = Date()
     ) -> [CartSection] {
-        let existingByID = Dictionary(uniqueKeysWithValues: existingRooms.map { ($0.id, $0) })
+        let existingByID = Dictionary(existingRooms.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let existingCartsByID = Dictionary(existingCarts.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         return selection.selectedCartNumbers.compactMap { cartNumber in
             guard let territory = selection.territory(forCart: cartNumber, hotelProfile: hotelProfile) else { return nil }
             let rooms = selection
@@ -331,7 +333,18 @@ enum WorkSessionBuilder {
                 fallback: territory.label,
                 profile: hotelProfile
             )
-            return CartSection(id: cartNumber, building: buildingLabel, rooms: rooms)
+            // Пересборка меняет только состав комнат: заметка, медиа и расходники
+            // тележки принадлежат ей самой и не должны теряться при правке выбора.
+            let existing = existingCartsByID[cartNumber]
+            return CartSection(
+                id: cartNumber,
+                building: buildingLabel,
+                rooms: rooms,
+                note: existing?.note,
+                noteUpdatedAt: existing?.noteUpdatedAt,
+                mediaAttachments: existing?.mediaAttachments,
+                consumables: existing?.consumables
+            )
         }
     }
 }

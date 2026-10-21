@@ -75,7 +75,8 @@ struct MargaritavilleSwiftApp: App {
                 performanceTelemetry: performanceTelemetry,
                 interactionFeedbackService: interactionFeedback,
                 activeHotel: activeHotel,
-                onSelectHotel: selectHotel
+                onSelectHotel: selectHotel,
+                onRetryWorkSessionLoad: { selectHotel(activeHotel) }
             )
                 .environment(\.appleSyncStatus, appleSyncStatus)
                 .environment(\.scheduleNotifications, .live(scheduleNotifications))
