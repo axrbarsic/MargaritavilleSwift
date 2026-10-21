@@ -6,251 +6,251 @@ extension BuildChangelog {
             version: "0.2.0 (68)",
             date: "2026-06-08",
             changes: [
-                "Fixed room media badges so they depend only on actual local attachments and disappear after the last voice/photo/video item is deleted.",
-                "Redesigned the room media marker as a compact native icon badge instead of a dark text chip.",
-                "Cleaned the room swipe menu down to voice/media, VIP, and time; removed timeline chips from the expanded cell.",
-                "Made VIP and time actions close the expanded room menu automatically, while voice/media keeps it open until the detail sheet is dismissed.",
-                "Added puzzle-pull visuals to room and setup swipes, plus a Settings row showing whether Apple sync is active or the app is using local fallback.",
-                "Reduced video-wallpaper heat by applying slider changes directly, quantizing the grid overlay, and capping the per-frame matte blur budget when blur, green tint, and grid are all enabled."
+                "Исправлены значки мультимедиа комнаты, теперь они зависят только от реальных локальных вложений и исчезают после удаления последнего элемента голоса/фото/видео.",
+                "Медиа-маркер комнаты стал компактным системным значком вместо тёмной текстовой плашки.",
+                "В меню комнаты оставлены голос/медиа, VIP и время; элементы временной шкалы удалены из расширенной ячейки.",
+                "Действия VIP и времени автоматически закрывают расширенное меню, а голос/медиа оставляет его открытым до закрытия экрана деталей.",
+                "Добавлены визуальные эффекты в виде головоломок в комнату и при настройке, а также строка настроек, показывающая, активна ли синхронизация Apple или приложение использует локальный резервный вариант.",
+                "Нагрев от видеообоев снижен: изменения ползунка применяются напрямую, сетка квантуется, а размытие ограничивается при одновременном включении blur, зелёного оттенка и сетки."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (67)",
             date: "2026-06-08",
             changes: [
-                "Fixed real-device launch by creating the SwiftData Application Support store directory before CoreData/CloudKit opens default.store.",
-                "Kept the CloudKit path, but made persistent local fallback safer so startup diagnostics cannot immediately crash the app.",
-                "Defaulted the current physical-device build to local SwiftData until the Apple provisioning profile includes iCloud and Push capabilities."
+                "Исправлен запуск реального устройства путем создания каталога хранилища поддержки приложений SwiftData до того, как CoreData/CloudKit откроет default.store.",
+                "Сохранен путь CloudKit, но постоянный локальный резервный вариант стал более безопасным, поэтому диагностика запуска не может немедленно привести к сбою приложения.",
+                "Текущая сборка физического устройства по умолчанию использует локальный SwiftData до тех пор, пока профиль обеспечения Apple не будет включать возможности iCloud и Push."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (66)",
             date: "2026-06-08",
             changes: [
-                "Cleaned Settings down to controls that actually change the app: appearance, background, work menu behavior, live cells, VIP zebra, reset, and build changelog.",
-                "Removed Sync, Tools, migration notes, passive diagnostics rows, and old developer experiments from the Settings UI.",
-                "Deleted rejected or inactive visual experiment code paths so stale saved flags cannot resurrect unused effects."
+                "В настройках очищены элементы управления, которые фактически меняют приложение: внешний вид, фон, поведение рабочего меню, живые ячейки, VIP-зебра, сброс и журнал изменений сборки.",
+                "Из пользовательского интерфейса настроек удалены синхронизация, инструменты, заметки о миграции, строки пассивной диагностики и старые эксперименты разработчиков.",
+                "Удалены пути к коду отклоненных или неактивных визуальных экспериментов, поэтому устаревшие сохраненные флаги не могут воскресить неиспользуемые эффекты."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (65)",
             date: "2026-06-08",
             changes: [
-                "Enabled the native Apple-first sync path by bootstrapping SwiftData with the private CloudKit container iCloud.com.alex.margaritaville.swift.",
-                "Connected the iCloud entitlements file and remote-notification background mode to the signed app target.",
-                "Made the SwiftData schema CloudKit-compatible with defaulted fields and inverse relationships.",
-                "Added a runtime iCloud account/status check in Settings and a safe persistent local fallback if CloudKit is unavailable."
+                "Включен собственный путь синхронизации Apple, загрузив SwiftData с частным контейнером CloudKit iCloud.com.alex.margaritaville.swift.",
+                "К подписанному приложению подключены права iCloud и фоновый режим удалённых уведомлений.",
+                "Сделана схема SwiftData совместимой с CloudKit с полями по умолчанию и обратными связями.",
+                "Добавлена проверка учетной записи/статуса iCloud во время выполнения в настройках и безопасный постоянный локальный резервный вариант, если CloudKit недоступен."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (64)",
             date: "2026-06-08",
             changes: [
-                "Fixed the room left-to-right swipe menu so the commit point lands near the B task zone instead of the unreachable physical edge.",
-                "Changed the room swipe recognizer to run simultaneously with scrolling, reducing gesture conflicts while keeping the deliberate long pull.",
-                "Added regression tests for the room swipe commit policy."
+                "Исправлено меню, прокручиваемое слева направо, поэтому точка фиксации располагалась рядом с зоной задачи B, а не с недоступным физическим краем.",
+                "Изменен распознаватель смахивания по комнате, чтобы он работал одновременно с прокруткой, что уменьшило конфликты жестов, сохранив при этом намеренное длительное нажатие.",
+                "Добавлены регрессионные тесты для политики фиксации перелистывания комнаты."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (63)",
             date: "2026-06-08",
             changes: [
-                "Removed the experimental volume-cell look from the active app and hard-disabled its stale saved setting on load.",
-                "Added VIP zebra sharpness control so the moving stripes can be made crisper and less blurred.",
-                "Replaced the room media marker with a compact top-right icon badge instead of a dark text chip.",
-                "Expanded video wallpaper tuning with stronger green range, wider brightness range, and a lightweight scanline/grid overlay.",
-                "Tightened the room-cell and setup-unlock swipe thresholds to require a near-complete drag.",
-                "Added delete actions for room and cart voice/photo/video attachments, including local file cleanup."
+                "Удален экспериментальный вид ячейки тома из активного приложения и жестко отключено устаревшее сохранение настроек при загрузке.",
+                "Добавлен контроль резкости VIP-зебры, благодаря которому движущиеся полосы можно сделать более четкими и менее размытыми.",
+                "Маркер мультимедиа в комнате заменен компактным значком в правом верхнем углу вместо темного текстового чипа.",
+                "Настройки видеообоев расширены: усилен зелёный диапазон, увеличен диапазон яркости и облегчено наложение линий развёртки и сетки.",
+                "Увеличены пороговые значения для ячейки комнаты и настройки-разблокировки, чтобы требовалось почти полное перетаскивание.",
+                "Добавлены действия по удалению вложений голоса, фотографий и видео в комнате и корзине, включая очистку локальных файлов."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (62)",
             date: "2026-06-08",
             changes: [
-                "Fixed voice-note playback by activating a playback audio session before playing saved local m4a bubbles.",
-                "Brought cart details closer to room details: voice notes now save as playable audio bubbles, while photo/video media stays local.",
-                "Added room-cell media indicators for text, voice, photo, and video attachments.",
-                "Rebuilt photo/video viewing around AVPlayerLayer/UIKit containers and added looping silent video thumbnails.",
-                "Extended video wallpaper controls with brightness and green tint, plus a playback watchdog that revives stalled loops.",
-                "Cleaned Developer experiments down to live cells, volume cells, and VIP zebra controls; deprecated invisible SpriteKit overlays are no longer activated.",
-                "Added visible moving diagonal VIP zebra stripes and tightened room/unlock swipe thresholds."
+                "Исправлено воспроизведение голосовых заметок путем активации аудиосеанса воспроизведения перед воспроизведением сохраненных локальных пузырьков m4a.",
+                "Сведения о корзине стали ближе к сведениям о комнате: голосовые заметки теперь сохраняются в виде воспроизводимых звуковых пузырей, а фото/видео остаются локальными.",
+                "Добавлены индикаторы мультимедиа для ячеек комнаты для текстовых, голосовых, фото- и видео-вложений.",
+                "Перестроен просмотр фото/видео в контейнерах AVPlayerLayer/UIKit и добавлены зацикленные миниатюры беззвучного видео.",
+                "Расширенные элементы управления видеообоями с яркостью и зеленым оттенком, а также функция контроля воспроизведения, которая восстанавливает зависшие циклы.",
+                "Убраны эксперименты разработчика вплоть до живых ячеек, объемных ячеек и элементов управления VIP-зебра; устаревшие невидимые наложения SpriteKit больше не активируются.",
+                "Добавлены видимые движущиеся диагональные VIP-зебровые полосы и ужесточены пороги открытия/разблокировки комнаты."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (61)",
             date: "2026-06-07",
             changes: [
-                "Replaced the palette saturation slider with a fixed vivid palette switch matching the high-saturation screenshot style.",
-                "Simplified the room swipe menu to one multimodal voice/media entry, VIP, and schedule, and removed the duplicate schedule chip from the expanded menu.",
-                "Added a slow lamp-style expansion transition for the room swipe menu.",
-                "Changed room voice notes into local audio bubbles with transcript text, timestamp, and playback.",
-                "Hardened camera/video capture with availability checks and stable temporary video copying before saving."
+                "Ползунок насыщенности палитры заменен на фиксированный переключатель яркой палитры, соответствующий стилю скриншота с высокой насыщенностью.",
+                "Упрощено прокручиваемое меню комнаты до одной мультимодальной голосовой/медийной записи, VIP и расписания, а также удален дублирующий чип расписания из расширенного меню.",
+                "Добавлен медленный переход расширения в виде лампы для меню смахивания комнаты.",
+                "Голосовые заметки в комнате изменены на локальные звуковые пузырьки с текстом расшифровки, отметкой времени и воспроизведением.",
+                "Усиленный захват камеры/видео с проверкой доступности и стабильным временным копированием видео перед сохранением."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (60)",
             date: "2026-06-07",
             changes: [
-                "Removed the static green Metal Aurora background from the active app path so Matrix stays visible.",
-                "Made Game Feel visually clearer: VIP cells get a shared SpriteKit glow/particle layer, and cell physics uses a stronger event spring.",
-                "Changed room-cell and selection-unlock swipes to long pull-to-commit gestures with higher thresholds and staged haptic feedback."
+                "Удален статический зеленый фон Metal Aurora из пути активного приложения, чтобы Матрица оставалась видимой.",
+                "Игра стала визуально более понятной: VIP-ячейки получают общий слой свечения/частиц SpriteKit, а в клеточной физике используется более сильная пружина событий.",
+                "Смахивания по ячейке комнаты и разблокировке выбора заменены длинными жестами «оттягивание для подтверждения» с более высокими пороговыми значениями и поэтапной тактильной обратной связью."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (59)",
             date: "2026-06-07",
             changes: [
-                "Reduced Developer clutter by keeping grouped experimental presets instead of separate micro-switches.",
-                "Stopped hidden main-screen SpriteKit/background layers while Settings is open, so Developer scrolling does not compete with invisible effects underneath.",
-                "Disabled the unfinished Metal Aurora renderer from the active UI so Matrix cannot be covered by the static green experimental background.",
-                "Moved VIP animation off per-cell TimelineView into one shared overlay, with a more visible shared SpriteKit glow and particle pass for VIP cells.",
-                "Reworked swipe commit thresholds: room menus now require a long left-to-right pull across most of the cell, and the selection unlock handle requires a long right-to-left pull instead of long press."
+                "Уменьшен беспорядок для разработчиков за счет сохранения сгруппированных экспериментальных пресетов вместо отдельных микропереключателей.",
+                "Остановлены скрытые слои SpriteKit/фонового экрана на главном экране, когда настройки открыты, поэтому прокрутка разработчика не конкурирует с невидимыми эффектами внизу.",
+                "Отключен незавершенный рендерер Metal Aurora из активного пользовательского интерфейса, чтобы Матрицу нельзя было закрыть статическим зеленым экспериментальным фоном.",
+                "VIP-анимация перемещена из TimelineView для каждой ячейки в одно общее наложение, с более видимым общим свечением SpriteKit и проходом частиц для VIP-ячеек.",
+                "Переработаны пороги фиксации смахивания: меню комнаты теперь требует длительного перемещения слева направо по большей части ячейки, а ручка разблокировки выбора требует длительного нажатия справа налево вместо длительного нажатия."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (58)",
             date: "2026-06-07",
             changes: [
-                "Grouped the experimental switches into clearer Developer presets: Glass Lab, Game Feel Pack, Metal Aurora, and Assistant Object.",
-                "VIP Particles now uses one shared SKEmitterNode overlay for all visible VIP cells, and the old per-cell animated VIP stripe was removed from the hot scrolling path.",
-                "Settings now pauses the underlying main-screen background/effect layers while the sheet is open, and Metal Aurora no longer renders on top of Matrix/video at the same time.",
-                "Sound and haptic experiments stay behind developer switches and keep the ambient mixed audio session so they do not interrupt other playback."
+                "Экспериментальные переключатели сгруппированы в более понятные настройки разработчика: Glass Lab, Game Feel Pack, Metal Aurora и Assistant Object.",
+                "VIP Particles теперь использует одно общее наложение SKEmitterNode для всех видимых ячеек VIP, а старая анимированная полоса VIP для каждой ячейки была удалена из пути горячей прокрутки.",
+                "Настройки теперь приостанавливают базовые слои фона/эффектов главного экрана, пока лист открыт, а Metal Aurora больше не отображается одновременно поверх Matrix/видео.",
+                "Звуковые и тактильные эксперименты остаются за переключателями разработчика и поддерживают сеанс смешанного окружающего звука, чтобы они не прерывали другое воспроизведение."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (57)",
             date: "2026-06-07",
             changes: [
-                "Rebuilt video wallpaper matte blur again: the slider now drives a Core Image Gaussian blur inside AVVideoComposition, so the video frames themselves are blurred instead of only covered by a translucent material.",
-                "Kept the video background muted and looped through AVQueuePlayer while moving the heavy visual work into the video composition path.",
-                "Raised the matte tint response so blur changes are visually obvious when testing the slider on iPhone."
+                "Снова переработано матовое размытие обоев видео: ползунок теперь управляет размытием основного изображения по Гауссу внутри AVVideoComposition, поэтому сами видеокадры размыты, а не только покрыты полупрозрачным материалом.",
+                "Фоновое видео было отключено и пропущено через AVQueuePlayer, а тяжелая визуальная работа перемещена в путь композиции видео.",
+                "Увеличена чувствительность матового оттенка, чтобы изменения размытия были визуально очевидны при тестировании слайдера на iPhone."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (56)",
             date: "2026-06-07",
             changes: [
-                "Added the first native Metal-backed experimental background: Metal Aurora renders through MTKView and a fullscreen fragment shader.",
-                "Added a Developer switch for Metal Aurora so the shader path can be tested without changing the default Matrix or video wallpaper modes.",
-                "Extended the experimental settings model and tests so Liquid Glass, Glass VIP, and Metal Aurora persist and reset predictably."
+                "Добавлен первый экспериментальный фон на основе Metal: Metal Aurora рендерится через MTKView и полноэкранный фрагментный шейдер.",
+                "Добавлен переключатель «Разработчик» для Metal Aurora, позволяющий тестировать путь шейдера без изменения режима «Матрица» или видеообоев по умолчанию.",
+                "Расширена экспериментальная модель настроек и тесты, чтобы Liquid Glass, Glass VIP и Metal Aurora сохранялись и предсказуемо сбрасывались."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (55)",
             date: "2026-06-07",
             changes: [
-                "Rebuilt video wallpaper matte blur as a single native AVFoundation/UIKit composition with material blur and tint inside the player view.",
-                "Reworked Settings into the Flutter-style category structure: Appearance, Work, Sync, Tools, and Developer, while keeping the implementation native SwiftUI.",
-                "Added Developer experimental toggles for iOS 26 Liquid Glass settings surfaces and Glass VIP cells, with safe fallbacks on older iOS versions."
+                "Перестроено матовое размытие видеообоев в виде единой композиции AVFoundation/UIKit с размытием материала и оттенком внутри представления проигрывателя.",
+                "Настройки переработаны в структуру категорий в стиле Flutter: «Внешний вид», «Работа», «Синхронизация», «Инструменты» и «Разработчик», при этом сохранена собственная реализация SwiftUI.",
+                "Добавлены экспериментальные переключатели для разработчиков для поверхностей настроек Liquid Glass iOS 26 и VIP-ячеек Glass с безопасными запасными вариантами для старых версий iOS."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (54)",
             date: "2026-06-07",
             changes: [
-                "Added native video wallpaper support: pick a video in Settings, copy it into local app storage, and render it as a muted looping AVQueuePlayer background.",
-                "Added a video matte slider that applies a native blur/material layer over the looped video background.",
-                "Expanded cart consumables so each cart can add custom supply rows in addition to the default towel and linen catalog."
+                "Добавлена поддержка встроенных видеообоев: выберите видео в настройках, скопируйте его в локальное хранилище приложений и визуализируйте его как зацикленный фон AVQueuePlayer с приглушенным звуком.",
+                "Добавлен ползунок видеоподложки, который применяет собственный слой размытия/материала к зацикленному фону видео.",
+                "Расширены расходные материалы тележки, поэтому в каждую тележку можно добавлять собственные строки расходных материалов в дополнение к каталогу полотенец и белья по умолчанию."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (53)",
             date: "2026-06-07",
             changes: [
-                "Fixed Matrix direction after mapping Flutter's top-left canvas coordinates into SpriteKit's bottom-left scene coordinates.",
-                "Reworked native Matrix rendering to use cached SpriteKit glyph textures instead of thousands of live text nodes.",
-                "Reduced Matrix per-frame work to movement, visibility, and rare glyph swaps, keeping the visual contract while using a native SpriteKit runtime."
+                "Исправлено направление матрицы после сопоставления верхних левых координат холста Flutter с нижними левыми координатами сцены SpriteKit.",
+                "Переработан встроенный матричный рендеринг для использования кэшированных текстур глифов SpriteKit вместо тысяч живых текстовых узлов.",
+                "Покадровая работа Matrix уменьшена до движения, видимости и редких замен глифов, сохраняя визуальный контракт при использовании встроенной среды выполнения SpriteKit."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (52)",
             date: "2026-06-07",
             changes: [
-                "Rebuilt the native Matrix wallpaper around the Flutter Matrix visual contract: 80 random drops, the same glyph set, the same dark green background, the same head glow, and the same vignette.",
-                "Removed the incorrect Matrix color control and replaced it with the Flutter-style speed slider.",
-                "Matrix speed now uses the Flutter range and default: 0.08x to 3.0x, default 1.0x."
+                "Перестроены родные обои Matrix на основе визуального контракта Flutter Matrix: 80 случайных капель, тот же набор символов, тот же темно-зеленый фон, то же свечение головы и та же виньетка.",
+                "Удален неправильный элемент управления цветом Matrix и заменен ползунком скорости в стиле Flutter.",
+                "Скорость матрицы теперь использует диапазон Flutter и значение по умолчанию: от 0,08x до 3,0x, по умолчанию 1,0x."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (51)",
             date: "2026-06-07",
             changes: [
-                "Added an explicit app-background mode control in Settings: Off or Matrix.",
-                "All main Swift screens now use one AppBackgroundView so Matrix visibility is controlled consistently instead of being hardwired per screen.",
-                "Matrix controls stay visible but disabled when the background is off, making it clear how to enable the effect."
+                "Добавлен явный элемент управления фоновым режимом приложения в настройках: «Выкл.» или «Матрица».",
+                "Все основные экраны Swift теперь используют один AppBackgroundView, поэтому видимость Matrix контролируется последовательно, а не жестко привязана к каждому экрану.",
+                "Элементы управления Matrix остаются видимыми, но отключаются, когда фон выключен, что дает понять, как включить эффект."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (50)",
             date: "2026-06-07",
             changes: [
-                "Settings now uses native category navigation instead of one long mixed scroll.",
-                "Appearance, Work, Data, and Developer settings are separated into focused sections to keep the Swift rewrite ready for more Flutter settings parity.",
-                "Added dedicated SwiftUI category selector components so the Settings screen does not keep growing as one monolithic view."
+                "В настройках теперь используется собственная навигация по категориям вместо одной длинной смешанной прокрутки.",
+                "Настройки «Внешний вид», «Работа», «Данные» и «Разработчик» разделены на специализированные разделы, чтобы перезапись Swift была готова к большей четности настроек Flutter.",
+                "Добавлены специальные компоненты выбора категории SwiftUI, чтобы экран настроек не увеличивался в одно монолитное представление."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (49)",
             date: "2026-06-07",
             changes: [
-                "Added a native reset-to-defaults action in Settings with an iOS confirmation dialog.",
-                "Reset now restores room geometry, long-press behavior, menu mode, palette saturation, and Matrix settings.",
-                "Added a persistence regression test proving reset writes the default settings back to storage."
+                "Добавлено встроенное действие возврата к настройкам по умолчанию в настройках с диалоговым окном подтверждения iOS.",
+                "Сброс теперь восстанавливает геометрию комнаты, поведение при длительном нажатии, режим меню, насыщенность палитры и настройки матрицы.",
+                "Добавлен регрессионный тест на постоянство, подтверждающий, что сброс записывает настройки по умолчанию обратно в хранилище."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (48)",
             date: "2026-06-07",
             changes: [
-                "Added a native Settings slider for main-screen room status palette saturation.",
-                "Room cells now read their status colors through the shared theme API, so one setting adjusts pending, open, in-progress, ready, and scheduled colors together.",
-                "Added persistence and clamp regression tests for the palette saturation setting."
+                "Добавлен собственный ползунок настроек для насыщения палитры состояния комнаты на главном экране.",
+                "Ячейки комнат теперь считывают цвета своего статуса через API общей темы, поэтому одна настройка настраивает одновременно ожидающие, открытые, выполняющиеся, готовые и запланированные цвета.",
+                "Добавлены регрессионные тесты на постоянство и ограничение для настройки насыщенности палитры."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (47)",
             date: "2026-06-07",
             changes: [
-                "Added a native Settings toggle for summary action-menu mode.",
-                "Room swipe menus now default to one open menu, while the optional multi-menu mode allows several expanded room menus at once.",
-                "Moved the menu expansion rule into a tested presentation policy so gesture behavior stays predictable as Settings grows."
+                "Добавлен собственный переключатель настроек для режима сводного меню действий.",
+                "Меню смахивания комнаты теперь по умолчанию представляют собой одно открытое меню, а дополнительный режим нескольких меню позволяет одновременно открывать несколько расширенных меню комнаты.",
+                "Правило расширения меню перенесено в протестированную политику представления, чтобы поведение жестов оставалось предсказуемым по мере роста настроек."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (46)",
             date: "2026-06-07",
             changes: [
-                "Moved Matrix Rain to a single SpriteKit wallpaper path and removed the old Canvas/Timeline fallback implementation.",
-                "Added persisted Matrix controls under the new app background settings section.",
-                "Matrix wallpaper settings now flow through a shared environment configuration so all screens update the existing SpriteKit scene without recreating the engine.",
-                "Started the native Settings refactor by moving reusable settings rows, panels, and slider controls into a separate component file."
+                "Matrix Rain перемещен в один путь обоев SpriteKit и удалена старая резервная реализация Canvas/Timeline.",
+                "Добавлены сохраненные элементы управления Matrix в новый раздел настроек фона приложения.",
+                "Настройки обоев Matrix теперь проходят через общую конфигурацию среды, поэтому все экраны обновляют существующую сцену SpriteKit без повторного создания движка.",
+                "Запущен собственный рефакторинг настроек, переместив повторно используемые строки настроек, панели и ползунки в отдельный файл компонента."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (45)",
             date: "2026-06-07",
             changes: [
-                "Settings now shows a real ProMotion diagnostic row based on the installed app's Info.plist opt-in and the physical display's maximum refresh rate.",
-                "Settings now shows the current Apple sync state as local-only while the iCloud provisioning profile is not ready.",
-                "Added regression tests for the runtime diagnostics label so 120 Hz status is not just hardcoded UI text."
+                "В настройках теперь отображается реальная диагностическая строка ProMotion, основанная на согласии Info.plist установленного приложения и максимальной частоте обновления физического дисплея.",
+                "В настройках теперь отображается текущее состояние синхронизации Apple как локальное, пока профиль подготовки iCloud не готов.",
+                "Добавлены регрессионные тесты для метки диагностики времени выполнения, чтобы статус 120 Гц не был просто жестко запрограммированным текстом пользовательского интерфейса."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (44)",
             date: "2026-06-07",
             changes: [
-                "Prepared the native iCloud/CloudKit entitlement draft for the Apple-first sync path; activation is blocked until the Apple provisioning profile includes iCloud/Push capabilities.",
-                "Reduced main-screen scroll gesture conflicts by removing inactive recognizers from room controls and making the room swipe menu require a deliberate horizontal gesture.",
-                "Enabled the iPhone ProMotion Info.plist opt-in and tightened the frame telemetry display link toward the device's 120 Hz target."
+                "Подготовлен проект собственных прав iCloud/CloudKit для пути синхронизации Apple; активация блокируется до тех пор, пока профиль обеспечения Apple не включает возможности iCloud/Push.",
+                "Уменьшены конфликты жестов прокрутки главного экрана за счет удаления неактивных распознавателей из элементов управления комнатой и создания меню, требующего преднамеренного горизонтального жеста.",
+                "Включена опция iPhone ProMotion Info.plist и сжата ссылка на отображение телеметрии кадра до целевой частоты 120 Гц для устройства."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (43)",
             date: "2026-06-07",
             changes: [
-                "Fixed real-device SwiftData migration for existing setup selection records.",
-                "New selected/deselected persistence flags are now backward-compatible with older installed builds; missing values are treated as active legacy selections.",
-                "This prevents the installed app from falling back to in-memory storage after upgrading from earlier Swift builds."
+                "Исправлена миграция SwiftData на реальное устройство для существующих записей выбора настройки.",
+                "Новые флаги сохранения выбора/отмены выбора теперь обратно совместимы со старыми установленными сборками; отсутствующие значения рассматриваются как активные устаревшие выборки.",
+                "Это предотвращает возврат установленного приложения в хранилище в памяти после обновления с более ранних сборок Swift."
             ]
         ),
     ]

@@ -5,18 +5,30 @@ import Testing
 @Test
 func roomCellGeometryUsesMargaritavilleStandardAndExpandedContract() {
     #expect(RoomCellGeometry.roomy.title == "Стандартные")
-    #expect(RoomCellGeometry.roomy.description == "4 в ряд")
-    #expect(RoomCellGeometry.roomy.margaritavilleGridColumnCount == 4)
+    #expect(RoomCellGeometry.roomy.description == "Статус удержанием")
     #expect(RoomCellGeometry.roomy.margaritavilleGridSpacing == 8)
     #expect(RoomCellGeometry.roomy.margaritavilleTileHeight == 98)
     #expect(!RoomCellGeometry.roomy.margaritavilleHoldZoomEnabled)
 
     #expect(RoomCellGeometry.compact.title == "Расширенные")
     #expect(RoomCellGeometry.compact.description == "Зум удержанием")
-    #expect(RoomCellGeometry.compact.margaritavilleGridColumnCount == 4)
     #expect(RoomCellGeometry.compact.margaritavilleGridSpacing == 8)
     #expect(RoomCellGeometry.compact.margaritavilleTileHeight == 98)
     #expect(RoomCellGeometry.compact.margaritavilleHoldZoomEnabled)
+}
+
+@Test
+func margaritavilleGridColumnCountDefaultsToFourAndPersistsThree() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    #expect(AppSettingsStore.load(userDefaults: defaults).margaritavilleGridColumnCount == .four)
+
+    let settings = AppSettingsStore.load(userDefaults: defaults)
+    settings.margaritavilleGridColumnCount = .three
+
+    #expect(AppSettingsStore.load(userDefaults: defaults).margaritavilleGridColumnCount == .three)
 }
 
 @Test
@@ -60,6 +72,91 @@ func appSettingsPersistsTVStaticBackgroundMode() {
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.appBackgroundMode == .tvStaticNoise)
+}
+
+@Test
+func appSettingsPersistsBrooklynBackgroundMode() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.appBackgroundMode = .brooklyn
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.appBackgroundMode == .brooklyn)
+    #expect(defaults.string(forKey: "appBackgroundMode") == "brooklyn")
+}
+
+@Test
+func appSettingsPersistsBrooklynWebBackgroundMode() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.appBackgroundMode = .brooklynWeb
+
+    let loaded = AppSettingsStore.load(userDefaults: defaults)
+
+    #expect(loaded.appBackgroundMode == .brooklynWeb)
+    #expect(defaults.string(forKey: "appBackgroundMode") == "brooklynWeb")
+}
+
+@Test
+func appSettingsDefaultsToDonorExactAndPersistsBrooklynSurfaceStyle() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    #expect(AppSettingsStore.load(userDefaults: defaults).brooklynSurfaceStyle == .donorExact)
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.brooklynSurfaceStyle = .enhanced
+
+    #expect(AppSettingsStore.load(userDefaults: defaults).brooklynSurfaceStyle == .enhanced)
+    #expect(defaults.string(forKey: "brooklynSurfaceStyle") == "enhanced")
+}
+
+@Test
+func appSettingsPersistsClampsAndResetsBrooklynWebAppearance() {
+    let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let defaultsLoaded = AppSettingsStore.load(userDefaults: defaults)
+    #expect(defaultsLoaded.brooklynWebCellScale == 1)
+    #expect(abs(defaultsLoaded.brooklynWebHue - 0.950_292_397_660_818_7) < 0.000_000_1)
+    #expect(defaultsLoaded.brooklynWebBrightness == 1)
+    #expect(defaultsLoaded.brooklynWebContrast == 0)
+
+    defaultsLoaded.brooklynWebCellScale = 0.72
+    defaultsLoaded.brooklynWebHue = 0.24
+    defaultsLoaded.brooklynWebBrightness = 1.31
+    defaultsLoaded.brooklynWebContrast = -0.27
+
+    let persisted = AppSettingsStore.load(userDefaults: defaults)
+    #expect(persisted.brooklynWebCellScale == 0.72)
+    #expect(persisted.brooklynWebHue == 0.24)
+    #expect(persisted.brooklynWebBrightness == 1.31)
+    #expect(persisted.brooklynWebContrast == -0.27)
+
+    persisted.brooklynWebCellScale = 10
+    persisted.brooklynWebHue = -10
+    persisted.brooklynWebBrightness = 10
+    persisted.brooklynWebContrast = -10
+    #expect(persisted.brooklynWebCellScale == 1.25)
+    #expect(persisted.brooklynWebHue == 0)
+    #expect(persisted.brooklynWebBrightness == 1.55)
+    #expect(persisted.brooklynWebContrast == -0.5)
+
+    persisted.resetBrooklynWebConfiguration()
+    let reset = AppSettingsStore.load(userDefaults: defaults)
+    #expect(reset.brooklynWebCellScale == 1)
+    #expect(abs(reset.brooklynWebHue - 0.950_292_397_660_818_7) < 0.000_000_1)
+    #expect(reset.brooklynWebBrightness == 1)
+    #expect(reset.brooklynWebContrast == 0)
 }
 
 @Test
@@ -120,7 +217,9 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     defer { defaults.removePersistentDomain(forName: suiteName) }
 
     let settings = AppSettingsStore(userDefaults: defaults)
+    #expect(!settings.developerLive3DCellsEnabled)
     settings.developerCellPhysicsEnabled = true
+    settings.developerLive3DCellsEnabled = true
     settings.developerCellSpringIntensity = 0.64
     settings.developerCellSpringSpeed = 1.14
     settings.developerVIPFlickerEnabled = true
@@ -133,6 +232,7 @@ func appSettingsPersistsDeveloperExperimentalFlags() {
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.developerCellPhysicsEnabled)
+    #expect(loaded.developerLive3DCellsEnabled)
     #expect(loaded.developerCellSpringIntensity == 0.64)
     #expect(loaded.developerCellSpringSpeed == 1.14)
     #expect(loaded.developerVIPFlickerEnabled)
@@ -306,7 +406,13 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
 
     let settings = AppSettingsStore(userDefaults: defaults)
     settings.appBackgroundMode = .off
+    settings.brooklynSurfaceStyle = .enhanced
+    settings.brooklynWebCellScale = 0.58
+    settings.brooklynWebHue = 0.12
+    settings.brooklynWebBrightness = 1.42
+    settings.brooklynWebContrast = 0.38
     settings.roomCellGeometry = .compact
+    settings.margaritavilleGridColumnCount = .three
     settings.roomTaskLongPress = false
     settings.summaryActionMenuAllowsMultiple = true
     settings.personalCartMarkers = PersonalCartMarkers(aYellowFloor: 3, aGrayFloor: 4, bYellowFloor: 5, bGrayFloor: 2)
@@ -321,6 +427,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     settings.tvStaticBrightness = 0.44
     settings.tvStaticGreenTint = 0.93
     settings.developerCellPhysicsEnabled = true
+    settings.developerLive3DCellsEnabled = true
     settings.developerCellSpringIntensity = 0.35
     settings.developerCellSpringSpeed = 1.25
     settings.developerVIPFlickerEnabled = true
@@ -332,7 +439,13 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
     #expect(loaded.appBackgroundMode == .matrixRain)
+    #expect(loaded.brooklynSurfaceStyle == .donorExact)
+    #expect(loaded.brooklynWebCellScale == 1)
+    #expect(abs(loaded.brooklynWebHue - 0.950_292_397_660_818_7) < 0.000_000_1)
+    #expect(loaded.brooklynWebBrightness == 1)
+    #expect(loaded.brooklynWebContrast == 0)
     #expect(loaded.roomCellGeometry == .roomy)
+    #expect(loaded.margaritavilleGridColumnCount == .four)
     #expect(loaded.roomTaskLongPress)
     #expect(!loaded.summaryActionMenuAllowsMultiple)
     #expect(loaded.personalCartMarkers == .default)
@@ -349,6 +462,7 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     #expect(loaded.tvStaticBrightness == TVStaticNoiseConfiguration.default.brightness)
     #expect(loaded.tvStaticGreenTint == TVStaticNoiseConfiguration.default.greenTint)
     #expect(!loaded.developerCellPhysicsEnabled)
+    #expect(!loaded.developerLive3DCellsEnabled)
     #expect(loaded.developerCellSpringIntensity == 0.72)
     #expect(loaded.developerCellSpringSpeed == 0.82)
     #expect(!loaded.developerVIPFlickerEnabled)

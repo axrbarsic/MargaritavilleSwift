@@ -1,10 +1,12 @@
 import AVFoundation
+import OSLog
 import SwiftUI
 import UIKit
 
 struct LoopingVideoBackgroundView: UIViewRepresentable {
     let url: URL
     let tuning: VideoBackgroundTuning
+    @Environment(\.scenePhase) private var scenePhase
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -14,6 +16,7 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
         let view = VideoBackgroundPlayerView()
         view.isUserInteractionEnabled = false
         context.coordinator.configure(url: url, in: view)
+        context.coordinator.updateScenePhase(scenePhase)
         context.coordinator.setTuning(tuning)
         view.setTuning(tuning, animated: false)
         return view
@@ -21,6 +24,7 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
 
     func updateUIView(_ view: VideoBackgroundPlayerView, context: Context) {
         context.coordinator.configure(url: url, in: view)
+        context.coordinator.updateScenePhase(scenePhase)
         context.coordinator.setTuning(tuning)
         view.setTuning(tuning, animated: false)
     }
@@ -32,28 +36,49 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
 
     @MainActor
     final class Coordinator {
+        private struct SavedPlaybackState {
+            let url: URL
+            let position: CMTime
+            let wasPlaying: Bool
+        }
+
+        private static let logger = Logger(
+            subsystem: AppIdentity.loggerSubsystem,
+            category: "VideoBackground"
+        )
+
         private var currentURL: URL?
         private var player: AVQueuePlayer?
         private var looper: AVPlayerLooper?
         private weak var view: VideoBackgroundPlayerView?
-        private var watchdog: Timer?
         private var notifications: [NSObjectProtocol] = []
+        private var readyForDisplayObservation: NSKeyValueObservation?
+        private var recoveryState = VideoBackgroundRecoveryState()
+        private var savedPlaybackState: SavedPlaybackState?
+        private var hasRenderedFrame = false
+        private var playbackWasRequested = false
 
         @MainActor
         func configure(url: URL, in view: VideoBackgroundPlayerView) {
             self.view = view
+            installReadyForDisplayObservation(in: view)
+            installNotificationsIfNeeded()
             guard currentURL != url else {
-                ensurePlayback()
+                if view.playerLayer.player !== player {
+                    view.playerLayer.player = player
+                }
                 return
             }
             currentURL = url
-            rebuildPlayer(url: url, in: view)
+            savedPlaybackState = nil
+            playbackWasRequested = true
+            rebuildPlayer(url: url, position: nil)
         }
 
         @MainActor
-        private func rebuildPlayer(url: URL, in view: VideoBackgroundPlayerView) {
-            stopPlayback()
-
+        private func rebuildPlayer(url: URL, position: CMTime?) {
+            let previousPlayer = player
+            previousPlayer?.pause()
             let asset = AVURLAsset(url: url)
             let item = AVPlayerItem(asset: asset)
             let queuePlayer = AVQueuePlayer()
@@ -62,69 +87,181 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
             queuePlayer.allowsExternalPlayback = false
             queuePlayer.preventsDisplaySleepDuringVideoPlayback = false
 
+            let newLooper = AVPlayerLooper(player: queuePlayer, templateItem: item)
             player = queuePlayer
-            looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
-            view.playerLayer.player = queuePlayer
-            queuePlayer.play()
-            startWatchdog()
-            installNotifications()
+            looper = newLooper
+            view?.playerLayer.player = queuePlayer
+            previousPlayer?.removeAllItems()
+
+            if let position, position.isValid, position.isNumeric, position.seconds > 0 {
+                queuePlayer.seek(
+                    to: position,
+                    toleranceBefore: CMTime(seconds: 0.08, preferredTimescale: 600),
+                    toleranceAfter: CMTime(seconds: 0.08, preferredTimescale: 600)
+                )
+            }
+            if recoveryState.canPlay, savedPlaybackState?.wasPlaying != false {
+                queuePlayer.play()
+            }
         }
 
         func setTuning(_ tuning: VideoBackgroundTuning) {
         }
 
+        func updateScenePhase(_ phase: ScenePhase) {
+            handle(phase == .active ? .sceneActive : .sceneInactive)
+        }
+
         @MainActor
-        private func ensurePlayback() {
-            guard let player else { return }
-            if player.rate == 0 {
-                player.play()
+        private func handle(_ event: VideoBackgroundLifecycleEvent) {
+            if event == .interruptionBegan, !recoveryState.interruptionIsActive {
+                savePlaybackState()
             }
-            if player.currentItem == nil, let currentURL, let view {
-                rebuildPlayer(url: currentURL, in: view)
+            let action = recoveryState.transition(event, health: playbackHealth)
+            perform(action)
+        }
+
+        @MainActor
+        private func perform(_ action: VideoBackgroundRecoveryAction) {
+            switch action {
+            case .none:
+                return
+            case .pause:
+                player?.pause()
+            case .resume:
+                resumePlayback(rebindRenderOutput: recoveryState.pendingRecoveryGeneration != nil)
+            case .rebuild(let generation):
+                guard let url = savedPlaybackState?.url ?? currentURL else { return }
+                Self.logger.info("video.rebuild generation=\(generation, privacy: .public)")
+                rebuildPlayer(url: url, position: savedPlaybackState?.position)
             }
         }
 
         @MainActor
-        private func startWatchdog() {
-            watchdog?.invalidate()
-            watchdog = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+        private func resumePlayback(rebindRenderOutput: Bool) {
+            guard recoveryState.canPlay, let player else { return }
+            if rebindRenderOutput, let view {
+                view.playerLayer.player = nil
+                view.playerLayer.player = player
+            }
+            player.play()
+        }
+
+        @MainActor
+        private func savePlaybackState() {
+            guard let currentURL else { return }
+            let position = player?.currentTime() ?? .zero
+            savedPlaybackState = SavedPlaybackState(
+                url: currentURL,
+                position: position,
+                wasPlaying: playbackWasRequested
+            )
+        }
+
+        @MainActor
+        private var playbackHealth: VideoBackgroundPlaybackHealth {
+            guard let player,
+                  let item = player.currentItem,
+                  player.error == nil,
+                  item.status != .failed,
+                  let view,
+                  view.playerLayer.player === player
+            else {
+                return .renderPipelineLost
+            }
+            if recoveryState.pendingRecoveryGeneration != nil,
+               hasRenderedFrame,
+               !view.playerLayer.isReadyForDisplay {
+                return .renderPipelineLost
+            }
+            return .healthy
+        }
+
+        @MainActor
+        private func installReadyForDisplayObservation(in view: VideoBackgroundPlayerView) {
+            guard readyForDisplayObservation == nil else { return }
+            readyForDisplayObservation = view.playerLayer.observe(
+                \.isReadyForDisplay,
+                options: [.initial, .new]
+            ) { [weak self] layer, _ in
+                guard layer.isReadyForDisplay else { return }
                 Task { @MainActor in
-                    self?.ensurePlayback()
+                    guard let self else { return }
+                    self.hasRenderedFrame = true
+                    self.handle(.renderedFrame)
                 }
             }
-            watchdog?.tolerance = 0.45
         }
 
         @MainActor
-        private func installNotifications() {
-            notifications.forEach(NotificationCenter.default.removeObserver)
+        private func installNotificationsIfNeeded() {
+            guard notifications.isEmpty else { return }
             notifications = [
                 NotificationCenter.default.addObserver(
-                    forName: UIApplication.willEnterForegroundNotification,
-                    object: nil,
+                    forName: AVAudioSession.interruptionNotification,
+                    object: AVAudioSession.sharedInstance(),
+                    queue: .main
+                ) { [weak self] notification in
+                    guard let rawValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+                          let interruptionType = AVAudioSession.InterruptionType(rawValue: rawValue)
+                    else { return }
+                    Task { @MainActor in
+                        self?.handle(interruptionType == .began ? .interruptionBegan : .interruptionEnded)
+                    }
+                },
+                NotificationCenter.default.addObserver(
+                    forName: AVAudioSession.mediaServicesWereResetNotification,
+                    object: AVAudioSession.sharedInstance(),
                     queue: .main
                 ) { [weak self] _ in
-                    Task { @MainActor in self?.ensurePlayback() }
+                    Task { @MainActor in self?.handle(.mediaServicesWereReset) }
                 },
                 NotificationCenter.default.addObserver(
                     forName: .AVPlayerItemPlaybackStalled,
                     object: nil,
                     queue: .main
+                ) { [weak self] notification in
+                    let stalledItemID = (notification.object as? AVPlayerItem).map(ObjectIdentifier.init)
+                    Task { @MainActor in
+                        guard let self,
+                              let stalledItemID,
+                              let currentItem = self.player?.currentItem,
+                              stalledItemID == ObjectIdentifier(currentItem)
+                        else { return }
+                        self.handle(.playbackStalled)
+                    }
+                },
+                NotificationCenter.default.addObserver(
+                    forName: AudioCaptureActivityMonitor.activityDidChangeNotification,
+                    object: AudioCaptureActivityMonitor.shared,
+                    queue: .main
                 ) { [weak self] _ in
-                    Task { @MainActor in self?.ensurePlayback() }
+                    Task { @MainActor in
+                        self?.handle(.captureOwnershipChanged(
+                            isActive: AudioCaptureActivityMonitor.shared.isCaptureActive
+                        ))
+                    }
                 }
             ]
+            handle(.captureOwnershipChanged(
+                isActive: AudioCaptureActivityMonitor.shared.isCaptureActive
+            ))
         }
 
         func stopPlayback() {
-            watchdog?.invalidate()
-            watchdog = nil
             notifications.forEach(NotificationCenter.default.removeObserver)
             notifications.removeAll()
+            readyForDisplayObservation?.invalidate()
+            readyForDisplayObservation = nil
             player?.pause()
             player?.removeAllItems()
             player = nil
             looper = nil
+            view?.playerLayer.player = nil
+            view = nil
+            currentURL = nil
+            savedPlaybackState = nil
+            playbackWasRequested = false
         }
     }
 }

@@ -98,17 +98,119 @@ struct HousekeeperWorkPicker: View {
     let housekeepers: [Housekeeper]
     let selectedIDs: Set<HousekeeperID>
     let focusedID: HousekeeperID?
+    let dismissRequestGeneration: Int
     let onSelect: (Housekeeper) -> Void
+    let onSelectSuggestion: (Housekeeper) -> Void
+
+    @State private var query = ""
+    @FocusState private var searchFocused: Bool
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        VStack(alignment: .leading, spacing: 8) {
+            searchField
+
+            if searchFocused, !suggestions.isEmpty {
+                ScrollView {
+                    LazyVStack(spacing: 6) {
+                        ForEach(suggestions) { housekeeper in
+                            suggestionButton(housekeeper)
+                        }
+                    }
+                }
+                .scrollIndicators(.visible)
+                .frame(maxHeight: 216)
+                .padding(6)
+                .background(OceanKeyTheme.surface.opacity(0.97))
+                .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                        .stroke(OceanKeyTheme.accent.opacity(0.32), lineWidth: 1)
+                }
+                .accessibilityLabel("Подсказки уборщиц")
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(orderedHousekeepers) { housekeeper in
+                        housekeeperButton(housekeeper)
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+        }
+        .onChange(of: dismissRequestGeneration) { _, _ in
+            searchFocused = false
+        }
+        .onChange(of: focusedID) { _, newID in
+            guard let housekeeper = orderedHousekeepers.first(where: { $0.id == newID }) else { return }
+            query = housekeeper.displayName
+            searchFocused = false
+        }
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "person.text.rectangle")
+                .foregroundStyle(OceanKeyTheme.secondaryText)
+            TextField("Имя уборщицы", text: $query)
+                .textInputAutocapitalization(.words)
+                .autocorrectionDisabled()
+                .focused($searchFocused)
+                .submitLabel(.done)
+                .onSubmit { searchFocused = false }
+                .accessibilityLabel("Поиск уборщицы по началу имени")
+            if !query.isEmpty {
+                Button {
+                    query = ""
+                    searchFocused = false
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Очистить имя и закрыть подсказки")
+            }
+        }
+        .font(.system(size: 18, weight: .black, design: .rounded))
+        .foregroundStyle(.white)
+        .padding(.leading, 14)
+        .padding(.trailing, query.isEmpty ? 14 : 2)
+        .frame(minHeight: 54)
+        .background(OceanKeyTheme.surface.opacity(0.92))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(searchFocused ? OceanKeyTheme.accent.opacity(0.78) : OceanKeyTheme.accent.opacity(0.20), lineWidth: 1.5)
+        }
+    }
+
+    private func suggestionButton(_ housekeeper: Housekeeper) -> some View {
+        Button {
+            query = housekeeper.displayName
+            searchFocused = false
+            onSelectSuggestion(housekeeper)
+        } label: {
             HStack(spacing: 10) {
-                ForEach(housekeepers) { housekeeper in
-                    housekeeperButton(housekeeper)
+                Circle()
+                    .fill(housekeeper.palette.color)
+                    .frame(width: 14, height: 14)
+                Text(housekeeper.displayName)
+                    .lineLimit(1)
+                Spacer()
+                if focusedID == housekeeper.id {
+                    Image(systemName: "checkmark.circle.fill")
                 }
             }
-            .padding(.vertical, 2)
+            .font(.system(size: 17, weight: .black, design: .rounded))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .background(housekeeper.palette.color.opacity(0.18))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Выбрать уборщицу \(housekeeper.displayName)")
     }
 
     private func housekeeperButton(_ housekeeper: Housekeeper) -> some View {
@@ -118,7 +220,11 @@ struct HousekeeperWorkPicker: View {
             enabled: true,
             useLongPress: false,
             semanticLabel: housekeeper.displayName,
-            onActivate: { onSelect(housekeeper) }
+            onActivate: {
+                query = housekeeper.displayName
+                searchFocused = false
+                onSelect(housekeeper)
+            }
         ) {
             HStack(spacing: 8) {
                 Circle()
@@ -148,6 +254,14 @@ struct HousekeeperWorkPicker: View {
                 }
         }
     }
+
+    private var orderedHousekeepers: [Housekeeper] {
+        HousekeeperRosterPresentation.sorted(housekeepers)
+    }
+
+    private var suggestions: [Housekeeper] {
+        HousekeeperRosterPresentation.suggestions(for: query, in: housekeepers)
+    }
 }
 
 struct CartSetupCard: View {
@@ -159,6 +273,7 @@ struct CartSetupCard: View {
     let layout: HotelSummaryLayout
     let housekeeper: Housekeeper?
     let offTerritorySelectionGroups: [WorkSetupTerritorySelectionGroup]
+    let roomGridAnchorID: String
     let onFocus: () -> Void
     let onRemove: () -> Void
     let onTerritoryChanged: (Territory) -> Void
@@ -232,6 +347,7 @@ struct CartSetupCard: View {
                 )
             }
         }
+        .id(roomGridAnchorID)
     }
 
     private var visibleRooms: [RoomID] {

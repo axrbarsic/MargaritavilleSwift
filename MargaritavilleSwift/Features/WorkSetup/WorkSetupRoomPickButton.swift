@@ -52,15 +52,13 @@ struct RoomPickButton: View {
             }
         }
         .accessibilityHint(reservation == nil ? "" : "Комната уже закреплена за \(reservation?.displayName ?? "другой уборщицей").")
+        .anchorPreference(key: WorkSetupRoomBoundsPreferenceKey.self, value: .bounds) {
+            [room: $0]
+        }
     }
 
     private var roomNumber: some View {
-        Text(RoomCatalog.displayRoomID(room, compactLetteredLabels: true))
-            .font(.system(size: layout == .squareGrid4 ? 32 : 20, weight: .black, design: .rounded))
-            .monospacedDigit()
-            .lineLimit(1)
-            .minimumScaleFactor(0.62)
-            .padding(.horizontal, 5)
+        WorkSetupRoomNumberForeground(room: room, layout: layout)
     }
 
     private var fixedHeight: CGFloat? {
@@ -107,4 +105,18 @@ struct RoomPickButton: View {
         formatter.dateFormat = "h:mm a"
         return formatter
     }()
+}
+
+struct WorkSetupRoomNumberForeground: View {
+    let room: RoomID
+    let layout: HotelSummaryLayout
+
+    var body: some View {
+        Text(RoomCatalog.displayRoomID(room, compactLetteredLabels: true))
+            .font(.system(size: layout == .squareGrid4 ? 32 : 20, weight: .black, design: .rounded))
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.62)
+            .padding(.horizontal, 5)
+    }
 }

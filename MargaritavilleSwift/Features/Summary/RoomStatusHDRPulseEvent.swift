@@ -10,31 +10,30 @@ struct RoomStatusHDRPulseEvent: Equatable, Sendable {
     }
 }
 
-enum RoomStatusHDRPulseTiming {
-    static let riseDuration: TimeInterval = 0.42
-    static let peakTime: TimeInterval = 0.58
-    static let fadeDuration: TimeInterval = 2.0
-    static let totalDuration = peakTime + fadeDuration
-    static let cleanupTime: TimeInterval = 2.73
-    static let cleanupDelay: Duration = .milliseconds(Int(cleanupTime * 1_000))
-    static let brightnessMultiplier: CGFloat = 2
-    static let rubberAmplitudeMultiplier: CGFloat = 1.7
+struct RoomHDRPulseEnvelope: Equatable, Sendable {
+    let riseDuration: TimeInterval
+    let peakTime: TimeInterval
+    let fadeDuration: TimeInterval
+    let cleanupTime: TimeInterval
+    let brightnessMultiplier: CGFloat
 
-    static func heat(startedAt: Date?, now: Date) -> CGFloat {
-        guard let startedAt else { return 0 }
-        return heat(elapsed: now.timeIntervalSince(startedAt))
+    var totalDuration: TimeInterval { peakTime + fadeDuration }
+    var cleanupDelay: Duration { .milliseconds(Int(cleanupTime * 1_000)) }
+
+    func heat(startedAt: Date, now: Date) -> CGFloat {
+        heat(elapsed: now.timeIntervalSince(startedAt))
     }
 
-    static func isActive(startedAt: Date, now: Date) -> Bool {
+    func isActive(startedAt: Date, now: Date) -> Bool {
         let elapsed = now.timeIntervalSince(startedAt)
         return elapsed >= 0 && elapsed < totalDuration
     }
 
-    static func remainingCleanupTime(startedAt: Date, now: Date) -> TimeInterval {
+    func remainingCleanupTime(startedAt: Date, now: Date) -> TimeInterval {
         max(0, cleanupTime - max(0, now.timeIntervalSince(startedAt)))
     }
 
-    static func heat(elapsed: TimeInterval) -> CGFloat {
+    func heat(elapsed: TimeInterval) -> CGFloat {
         guard elapsed > 0 else { return 0 }
         if elapsed < riseDuration {
             return smootherStep(elapsed / riseDuration)
@@ -49,8 +48,39 @@ enum RoomStatusHDRPulseTiming {
         return CGFloat(pow(max(smoothRemainingHeat, 0), 0.7))
     }
 
-    private static func smootherStep(_ rawValue: Double) -> CGFloat {
+    private func smootherStep(_ rawValue: Double) -> CGFloat {
         let value = min(max(rawValue, 0), 1)
         return CGFloat(value * value * value * (value * (value * 6 - 15) + 10))
+    }
+}
+
+enum RoomStatusHDRPulseTiming {
+    static let envelope = RoomHDRPulseEnvelope(
+        riseDuration: 0.42,
+        peakTime: 0.58,
+        fadeDuration: 2.0,
+        cleanupTime: 2.73,
+        brightnessMultiplier: 2
+    )
+    static let totalDuration = envelope.totalDuration
+    static let cleanupDelay = envelope.cleanupDelay
+    static let brightnessMultiplier = envelope.brightnessMultiplier
+    static let rubberAmplitudeMultiplier: CGFloat = 1.7
+
+    static func heat(startedAt: Date?, now: Date) -> CGFloat {
+        guard let startedAt else { return 0 }
+        return heat(elapsed: now.timeIntervalSince(startedAt))
+    }
+
+    static func isActive(startedAt: Date, now: Date) -> Bool {
+        envelope.isActive(startedAt: startedAt, now: now)
+    }
+
+    static func remainingCleanupTime(startedAt: Date, now: Date) -> TimeInterval {
+        envelope.remainingCleanupTime(startedAt: startedAt, now: now)
+    }
+
+    static func heat(elapsed: TimeInterval) -> CGFloat {
+        envelope.heat(elapsed: elapsed)
     }
 }

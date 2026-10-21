@@ -3,7 +3,13 @@ import Foundation
 extension AppSettingsStore {
     enum Keys {
         static let appBackgroundMode = "appBackgroundMode"
+        static let brooklynSurfaceStyle = "brooklynSurfaceStyle"
+        static let brooklynWebCellScale = "brooklynWebCellScale"
+        static let brooklynWebHue = "brooklynWebHue"
+        static let brooklynWebBrightness = "brooklynWebBrightness"
+        static let brooklynWebContrast = "brooklynWebContrast"
         static let roomCellGeometry = "roomCellGeometry"
+        static let margaritavilleGridColumnCount = "margaritavilleGridColumnCount"
         static let transparentSurfacesEnabled = "transparentSurfacesEnabled"
         static let roomTaskLongPress = "roomTaskLongPress"
         static let summaryActionMenuAllowsMultiple = "summaryActionMenuAllowsMultiple"
@@ -23,6 +29,7 @@ extension AppSettingsStore {
         static let tvStaticBrightness = "tvStaticBrightness"
         static let tvStaticGreenTint = "tvStaticGreenTint"
         static let developerCellPhysicsEnabled = "developerCellPhysicsEnabled"
+        static let developerLive3DCellsEnabled = "developerLive3DCellsEnabled"
         static let developerCellSpringIntensity = "developerCellSpringIntensity"
         static let developerCellSpringSpeed = "developerCellSpringSpeed"
         static let deepSeekModelTier = "deepSeekModelTier"

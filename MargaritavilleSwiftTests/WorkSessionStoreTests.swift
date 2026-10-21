@@ -150,6 +150,27 @@ func margaritavilleReadyRoomIgnoresNormalAdvanceUntilExplicitReset() {
 }
 
 @Test
+func margaritavilleCommandCenterSelectsExistingSimpleCycleStatusesDirectly() {
+    let store = WorkSessionStore(
+        carts: [
+            CartSection(
+                id: 1,
+                building: "A1",
+                rooms: [RoomCell(id: "101", opened: false, completedTasks: [], isVIP: false)]
+            )
+        ],
+        hotelProfile: .margaritaville
+    )
+
+    store.setSimpleCycleStatus(.ready, roomId: "101")
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .ready)
+
+    store.setSimpleCycleStatus(.open, roomId: "101")
+    #expect(store.room(id: "101")?.status(in: .simpleCycle) == .open)
+    #expect(store.room(id: "101")?.completedTasks.isEmpty == true)
+}
+
+@Test
 func margaritavilleRoomDayCategoryIsStoredWithHistory() {
     let categoryTime = Date(timeIntervalSince1970: 1_802_506_400)
     let store = WorkSessionStore(
@@ -270,8 +291,8 @@ func margaritavilleCatalogPreservesRealRoomLists() {
     #expect(a1?.rooms.contains("121") == false)
     #expect(b2?.rooms.first == "239")
     #expect(b2?.rooms.last == "270")
-    #expect(b2?.rooms.count == 31)
-    #expect(b2?.rooms.contains("261") == false)
+    #expect(b2?.rooms.count == 32)
+    #expect(b2?.rooms.contains("261") == true)
     #expect(b3?.rooms.first == "330")
     #expect(b3?.rooms.last == "370")
     #expect(b3?.rooms.count == 40)

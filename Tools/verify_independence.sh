@@ -70,6 +70,20 @@ if [[ -d "$shared_root" ]]; then
   reject_fixed "AXR.OCEANKEY" "$shared_root"
 fi
 
+local_shared_roots=(
+  "Packages/BrooklynBackgroundKit/Sources"
+  "Packages/LiveCellRendererKit/Sources"
+)
+for local_shared_root in "${local_shared_roots[@]}"; do
+  if [[ -d "$local_shared_root" ]]; then
+    reject_regex 'import (OceanKeySwift|MargaritavilleSwift)\b' "$local_shared_root"
+    reject_fixed "com.alex.oceankey" "$local_shared_root"
+    reject_fixed "com.alex.margaritaville" "$local_shared_root"
+    reject_fixed "iCloud.com.alex" "$local_shared_root"
+    reject_fixed "AXR.OCEANKEY" "$local_shared_root"
+  fi
+done
+
 if (( failures > 0 )); then
   exit 1
 fi

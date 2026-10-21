@@ -11,6 +11,9 @@ struct WorkSetupScreen: View {
 
     @State private var selectedCartNumber = 1
     @State private var isSettingsPresented = false
+    @State private var selectionFlashGeneration = 0
+    @State private var selectionFlashEvents: [RoomID: RoomSelectionHDRFlashEvent] = [:]
+    @State private var cleanerSearchDismissGeneration = 0
 
     var body: some View {
         ZStack {
@@ -28,52 +31,83 @@ struct WorkSetupScreen: View {
                     onStart: startWorkday
                 )
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        HousekeeperWorkPicker(
-                            housekeepers: appSettings.housekeepers,
-                            selectedIDs: selectedHousekeeperIDs,
-                            focusedID: focusedHousekeeperID,
-                            onSelect: activateHousekeeper
-                        )
-
-                        ForEach(workSession.selectedCartNumbers, id: \.self) { cartNumber in
-                            CartSetupCard(
-                                territory: effectiveTerritory(forCart: cartNumber),
-                                selectedRooms: workSession.selectedRooms(forCart: cartNumber),
-                                reservedRooms: reservedRooms(forCart: cartNumber),
-                                isFocused: selectedCartNumber == cartNumber,
-                                territories: workSession.effectiveCatalog,
-                                layout: workSession.hotelProfile.summaryLayout,
-                                housekeeper: housekeeper(forCart: cartNumber),
-                                offTerritorySelectionGroups: offTerritorySelectionGroups(
-                                    forCart: cartNumber,
-                                    currentTerritory: effectiveTerritory(forCart: cartNumber)
-                                ),
-                                onFocus: { selectedCartNumber = cartNumber },
-                                onRemove: {
-                                    removeWorkItem(cartNumber)
-                                },
-                                onTerritoryChanged: { territory in
-                                    feedback.confirm()
-                                    selectedCartNumber = cartNumber
-                                    workSession.setCartBinding(cartNumber: cartNumber, territory: territory)
-                                },
-                                onRoomToggle: { room in
-                                    selectedCartNumber = cartNumber
-                                    toggleRoom(cartNumber: cartNumber, room: room)
-                                }
+                ScrollViewReader { scrollProxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 16) {
+                            HousekeeperWorkPicker(
+                                housekeepers: appSettings.housekeepers,
+                                selectedIDs: selectedHousekeeperIDs,
+                                focusedID: focusedHousekeeperID,
+                                dismissRequestGeneration: cleanerSearchDismissGeneration,
+                                onSelect: activateHousekeeper,
+                                onSelectSuggestion: selectHousekeeperSuggestion
                             )
-                        }
+
+                            ForEach(workSession.selectedCartNumbers, id: \.self) { cartNumber in
+                                CartSetupCard(
+                                    territory: effectiveTerritory(forCart: cartNumber),
+                                    selectedRooms: workSession.selectedRooms(forCart: cartNumber),
+                                    reservedRooms: reservedRooms(forCart: cartNumber),
+                                    isFocused: selectedCartNumber == cartNumber,
+                                    territories: workSession.effectiveCatalog,
+                                    layout: workSession.hotelProfile.summaryLayout,
+                                    housekeeper: housekeeper(forCart: cartNumber),
+                                    offTerritorySelectionGroups: offTerritorySelectionGroups(
+                                        forCart: cartNumber,
+                                        currentTerritory: effectiveTerritory(forCart: cartNumber)
+                                    ),
+                                    roomGridAnchorID: roomGridAnchorID(cartNumber),
+                                    onFocus: {
+                                        dismissCleanerSearch()
+                                        selectedCartNumber = cartNumber
+                                    },
+                                    onRemove: {
+                                        removeWorkItem(cartNumber)
+                                    },
+                                    onTerritoryChanged: { territory in
+                                        dismissCleanerSearch()
+                                        feedback.confirm()
+                                        selectedCartNumber = cartNumber
+                                        workSession.setCartBinding(cartNumber: cartNumber, territory: territory)
+                                    },
+                                    onRoomToggle: { room in
+                                        dismissCleanerSearch()
+                                        selectedCartNumber = cartNumber
+                                        toggleRoom(cartNumber: cartNumber, room: room)
+                                    }
+                                )
+                            }
 
                         if workSession.selectedCartNumbers.isEmpty {
                             EmptySetupHint()
+                                .onTapGesture(perform: dismissCleanerSearch)
+                        }
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.bottom, 26)
+                    }
+                    .scrollIndicators(.hidden)
+                    .scrollDismissesKeyboard(.interactively)
+                    .overlayPreferenceValue(WorkSetupRoomBoundsPreferenceKey.self) { bounds in
+                        WorkSetupSelectionHDRFlashOverlay(
+                            events: selectionFlashEvents,
+                            bounds: bounds,
+                            layout: workSession.hotelProfile.summaryLayout
+                        )
+                    }
+                    .onChange(of: focusedHousekeeperID) { oldID, newID in
+                        guard let newID, newID != oldID,
+                              let cartNumber = cartNumber(forHousekeeperID: newID)
+                        else { return }
+                        dismissCleanerSearch()
+                        Task { @MainActor in
+                            await Task.yield()
+                            withAnimation(.easeOut(duration: 0.22)) {
+                                scrollProxy.scrollTo(roomGridAnchorID(cartNumber), anchor: .top)
+                            }
                         }
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.bottom, 26)
                 }
-                .scrollIndicators(.hidden)
             }
             .padding(.top, 18)
         }
@@ -107,8 +141,39 @@ struct WorkSetupScreen: View {
     }
 
     private func toggleRoom(cartNumber: Int, room: RoomID) {
+        let wasSelected = workSession.selectedRooms(forCart: cartNumber).contains(room)
         playRoomSelectionFeedback(cartNumber: cartNumber, room: room)
-        workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
+        let result = workSession.toggleRoomSelection(cartNumber: cartNumber, room: room)
+        let isSelected = workSession.selectedRooms(forCart: cartNumber).contains(room)
+        guard !wasSelected, result == .changed, isSelected else { return }
+        recordSelectionFlash(cartNumber: cartNumber, room: room)
+    }
+
+    private func recordSelectionFlash(cartNumber: Int, room: RoomID) {
+        selectionFlashGeneration += 1
+        let event = RoomSelectionHDRFlashEvent(
+            generation: selectionFlashGeneration,
+            roomID: room,
+            palette: housekeeper(forCart: cartNumber)?.palette ?? .mint,
+            startedAt: Date()
+        )
+        selectionFlashEvents[room] = event
+        trimSelectionFlashEventsIfNeeded()
+
+        Task { @MainActor in
+            try? await Task.sleep(for: RoomSelectionHDRFlashEvent.envelope.cleanupDelay)
+            guard selectionFlashEvents[room]?.generation == event.generation else { return }
+            selectionFlashEvents[room] = nil
+        }
+    }
+
+    private func trimSelectionFlashEventsIfNeeded() {
+        let maximumActiveEvents = 32
+        guard selectionFlashEvents.count > maximumActiveEvents else { return }
+        let overflow = selectionFlashEvents.count - maximumActiveEvents
+        for event in selectionFlashEvents.values.sorted(by: { $0.startedAt < $1.startedAt }).prefix(overflow) {
+            selectionFlashEvents[event.roomID] = nil
+        }
     }
 
     private func effectiveTerritory(forCart cartNumber: Int) -> Territory {
@@ -173,6 +238,15 @@ struct WorkSetupScreen: View {
         workSession.housekeeperID(forCart: selectedCartNumber)
     }
 
+    private func selectHousekeeperSuggestion(_ housekeeper: Housekeeper) {
+        if let cartNumber = cartNumber(forHousekeeperID: housekeeper.id) {
+            feedback.select()
+            selectedCartNumber = cartNumber
+            return
+        }
+        activateHousekeeper(housekeeper)
+    }
+
     private func activateHousekeeper(_ housekeeper: Housekeeper) {
         if let cartNumber = cartNumber(forHousekeeperID: housekeeper.id) {
             removeWorkItem(cartNumber)
@@ -195,6 +269,14 @@ struct WorkSetupScreen: View {
         feedback.deselect()
         workSession.toggleCartSelection(cartNumber)
         selectedCartNumber = workSession.selectedCartNumbers.first ?? WorkSessionSelectionRules.cartRange.lowerBound
+    }
+
+    private func dismissCleanerSearch() {
+        cleanerSearchDismissGeneration += 1
+    }
+
+    private func roomGridAnchorID(_ cartNumber: Int) -> String {
+        "work-setup-room-grid-\(cartNumber)"
     }
 
     private func cartNumber(forHousekeeperID housekeeperID: HousekeeperID) -> Int? {

@@ -8,9 +8,16 @@ settings:
   base:
     SWIFT_VERSION: "6.0"
     MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: "37"
+    CURRENT_PROJECT_VERSION: "63"
     DEVELOPMENT_TEAM: J6MW4855LU
     CODE_SIGN_STYLE: Automatic
+packages:
+  BrooklynBackgroundKit:
+    path: Packages/BrooklynBackgroundKit
+  BrooklynWebBackgroundKit:
+    path: Packages/BrooklynWebBackgroundKit
+  LiveCellRendererKit:
+    path: Packages/LiveCellRendererKit
 targets:
   MargaritavilleSwift:
     type: application
@@ -27,6 +34,12 @@ targets:
       - sdk: Speech.framework
       - sdk: SwiftData.framework
       - sdk: CloudKit.framework
+      - package: BrooklynBackgroundKit
+        product: BrooklynBackgroundKit
+      - package: BrooklynWebBackgroundKit
+        product: BrooklynWebBackgroundKit
+      - package: LiveCellRendererKit
+        product: LiveCellRendererKit
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.alex.margaritaville.swift

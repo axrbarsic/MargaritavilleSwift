@@ -1,0 +1,1663 @@
+diff --git a/upstream/index.html b/patched/index.html
+index 60962b1..a22df88 100644
+--- a/upstream/index.html
++++ b/patched/index.html
+@@ -2,31 +2,17 @@
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8" />
+-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-  
++  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
++  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
++  <meta name="theme-color" content="#000000" />
+   <meta
+-  content="black"
+-  name="apple-mobile-web-app-status-bar-style"
++    http-equiv="Content-Security-Policy"
++    content="default-src 'self' file: data: blob:; script-src 'self' file:; style-src 'self' file: 'unsafe-inline'; img-src 'self' file: data: blob:; connect-src 'self' file: data: blob:; font-src 'self' file: data:; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"
+   />
+-  
+-  <meta content="#f36" name="msapplication-TileColor" />
+-  <meta content="#fff" name="theme-color" />
+-  <meta content="#f36" key="theme-color" name="theme-color" />
+-  
+-  <meta
+-  content="I am a full stack engineer and have been coding since I was ~12."
+-  name="desc"
+-  />
+-  
+-  <title>Brooklyn! Nicholson</title>
++  <title>Brooklyn Web Background</title>
+ </head>
+-
+ <body>
+   <main id="root"></main>
+-  <script type="module" src="/src/index.tsx"></script>
++  <script defer src="./assets/brooklyn.js"></script>
+ </body>
+-
+-<script>!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="4.0.0";
+-  analytics.load("y2cB1SA9QA3iT03sPDb9VYko6yXCq0N9");
+-  analytics.page();}}();</script>
+-</html>
+\ No newline at end of file
++</html>
+diff --git a/upstream/src/App.tsx b/patched/src/App.tsx
+index 37c83f5..2edb0a1 100644
+--- a/upstream/src/App.tsx
++++ b/patched/src/App.tsx
+@@ -1,68 +1,179 @@
+-import { Canvas } from '@react-three/fiber'
+-import { Leva, button, useControls } from 'leva'
+-import { Suspense, lazy, useState } from 'react'
++import { Canvas, useThree } from '@react-three/fiber'
++import gsap from 'gsap'
++import {
++  Suspense,
++  useCallback,
++  useEffect,
++  useLayoutEffect,
++  useRef,
++  useState
++} from 'react'
++import { OrthographicCamera } from 'three'
+ 
+-import Cursor from './Cursor'
++import { type BrooklynAppearance, DEFAULT_APPEARANCE } from './Appearance'
++import Env from './Env'
++import {
++  markHighRefreshActivity,
++  recordManualAdvance,
++  recordSchedulerDroppedSlots
++} from './HighRefresh'
++import { installRuntimeBridge, markRuntimeReady } from './RuntimeBridge'
++import Scene from './Scene'
+ import FX from './Scene/effects'
+ 
+-const Scene = lazy(() => import('./Scene'))
+-const Env = lazy(() => import('./Env'))
+-const Code = lazy(() => import('./Code'))
++interface BrooklynBootstrapWindow extends Window {
++  __brooklynInitialHighRefresh?: boolean
++}
+ 
+-export default function App() {
+-  const [stage, setStage] = useState<HTMLDivElement | null>(null)
+-
+-  useControls('(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ 🐇', {
+-    x: button(() =>
+-      window.open('//x.com/imbabybrooklyn', '_blank', 'noopener,noreferrer')
+-    ),
+-    'Email Me': button(() =>
+-      window.open('mailto:brooklyn.bb.nicholson@gmail.com', '_blank')
+-    ),
+-    GitHub: button(() =>
+-      window.open('//github.com/outthislife', '_blank', 'noopener,noreferrer')
+-    ),
+-    LinkedIn: button(() =>
+-      window.open(
+-        '//linkedin.com/in/bbbrooklyn',
+-        '_blank',
+-        'noopener,noreferrer'
++const initialHighRefresh =
++  (window as BrooklynBootstrapWindow).__brooklynInitialHighRefresh === true
++
++function RuntimeReady() {
++  useEffect(() => {
++    markRuntimeReady()
++  }, [])
++  return null
++}
++
++function CameraScale({ cellScale }: Pick<BrooklynAppearance, 'cellScale'>) {
++  const camera = useThree(state => state.camera)
++  const invalidate = useThree(state => state.invalidate)
++
++  useLayoutEffect(() => {
++    if (!(camera instanceof OrthographicCamera)) return
++    camera.zoom = 600 * cellScale
++    camera.updateProjectionMatrix()
++    invalidate()
++  }, [camera, cellScale, invalidate])
++
++  return null
++}
++
++function ManualFrameLoop({ active, enabled }: ManualFrameLoopProps) {
++  const advance = useThree(state => state.advance)
++
++  useEffect(() => {
++    if (!active || !enabled) return
++
++    const intervalMS = 1_000 / 120
++    const startedAtMS = performance.now()
++    const rootStartedAtSeconds = gsap.globalTimeline.time()
++    let nextFrameMS = startedAtMS
++    let timeoutID = 0
++    let cancelled = false
++
++    gsap.ticker.remove(gsap.updateRoot)
++
++    const tick = () => {
++      if (cancelled) return
++
++      const nowMS = performance.now()
++      const rootTimeSeconds =
++        rootStartedAtSeconds + (nowMS - startedAtMS) / 1_000
++      gsap.updateRoot(rootTimeSeconds)
++      advance(nowMS)
++      const completedAtMS = performance.now()
++      recordManualAdvance(completedAtMS)
++
++      nextFrameMS += intervalMS
++      if (nextFrameMS <= completedAtMS) {
++        const droppedSlots =
++          Math.floor((completedAtMS - nextFrameMS) / intervalMS) + 1
++        recordSchedulerDroppedSlots(droppedSlots)
++        nextFrameMS += droppedSlots * intervalMS
++      }
++      timeoutID = window.setTimeout(
++        tick,
++        Math.max(0, nextFrameMS - performance.now())
+       )
+-    ),
+-    Resume: button(() =>
+-      window.open('/resume.pdf', '_blank', 'noopener,noreferrer')
++    }
++
++    tick()
++
++    return () => {
++      cancelled = true
++      window.clearTimeout(timeoutID)
++      gsap.ticker.add(gsap.updateRoot)
++    }
++  }, [active, advance, enabled])
++
++  return null
++}
++
++export default function App() {
++  const initiallyVisible = document.visibilityState !== 'hidden'
++  const hostActiveRef = useRef(true)
++  const documentVisibleRef = useRef(initiallyVisible)
++  const [active, setActive] = useState(initiallyVisible)
++  const [appearance, setAppearance] = useState(DEFAULT_APPEARANCE)
++  const [highRefreshEnabled, setHighRefreshEnabled] =
++    useState(initialHighRefresh)
++
++  const applyActivity = useCallback((hostActive: boolean, visible: boolean) => {
++    hostActiveRef.current = hostActive
++    documentVisibleRef.current = visible
++    const nextActive = hostActive && visible
++    markHighRefreshActivity(hostActive, visible)
++    setActive(nextActive)
++    gsap.globalTimeline.paused(!nextActive)
++  }, [])
++
++  const updateHostActive = useCallback(
++    (hostActive: boolean) => {
++      applyActivity(hostActive, documentVisibleRef.current)
++    },
++    [applyActivity]
++  )
++
++  useEffect(() => {
++    const removeBridge = installRuntimeBridge(
++      updateHostActive,
++      setAppearance,
++      setHighRefreshEnabled
+     )
+-  })
++    const onVisibilityChange = () => {
++      applyActivity(
++        hostActiveRef.current,
++        document.visibilityState !== 'hidden'
++      )
++    }
+ 
+-  return (
+-    <>
+-      <div className="fixed inset-0" ref={setStage}>
+-        <Canvas
+-          camera={{ zoom: 600 }}
+-          dpr={[1, 1.5]}
+-          eventPrefix="client"
+-          eventSource={stage ?? undefined}
+-          gl={{ antialias: true, powerPreference: 'high-performance' }}
+-          orthographic>
+-          <Suspense>
+-            <Scene />
+-            <Env />
+-            <FX />
+-          </Suspense>
+-        </Canvas>
+-
+-        <Suspense>
+-          <Code />
+-        </Suspense>
++    document.addEventListener('visibilitychange', onVisibilityChange)
+ 
+-        <Cursor />
+-      </div>
++    return () => {
++      document.removeEventListener('visibilitychange', onVisibilityChange)
++      removeBridge()
++    }
++  }, [applyActivity, updateHostActive])
+ 
+-      <Leva
+-        collapsed
+-        theme={{ colors: { accent2: '#ec4899' } }}
+-        titleBar={{ filter: false }}
+-      />
+-    </>
++  return (
++    <div id="brooklyn-stage">
++      <Canvas
++        camera={{ zoom: 600 }}
++        dpr={highRefreshEnabled ? 1 : [1, 1.5]}
++        events={() => ({ enabled: false, priority: 0 })}
++        frameloop={highRefreshEnabled ? 'never' : active ? 'always' : 'never'}
++        gl={{
++          antialias: !highRefreshEnabled,
++          powerPreference: 'high-performance'
++        }}
++        orthographic
++        style={{ pointerEvents: 'none' }}
++      >
++        <Suspense fallback={null}>
++          <Scene appearance={appearance} />
++          <Env appearance={appearance} />
++          <FX appearance={appearance} />
++          <CameraScale cellScale={appearance.cellScale} />
++          <ManualFrameLoop active={active} enabled={highRefreshEnabled} />
++          <RuntimeReady />
++        </Suspense>
++      </Canvas>
++    </div>
+   )
+ }
++
++interface ManualFrameLoopProps {
++  active: boolean
++  enabled: boolean
++}
+diff --git a/patched/src/Appearance.ts b/patched/src/Appearance.ts
+new file mode 100644
+index 0000000..e718984
+--- /dev/null
++++ b/patched/src/Appearance.ts
+@@ -0,0 +1,57 @@
++import * as THREE from 'three'
++
++export interface BrooklynAppearance {
++  cellScale: number
++  hue: number
++  brightness: number
++  contrast: number
++}
++
++export const DONOR_HUE = 0.9502923976608187
++
++export const DEFAULT_APPEARANCE: BrooklynAppearance = {
++  cellScale: 1,
++  hue: DONOR_HUE,
++  brightness: 1,
++  contrast: 0
++}
++
++const clamp = (
++  value: unknown,
++  minimum: number,
++  maximum: number,
++  fallback: number
++) =>
++  typeof value === 'number' && Number.isFinite(value)
++    ? Math.min(maximum, Math.max(minimum, value))
++    : fallback
++
++export const normalizeAppearance = (
++  value: Partial<BrooklynAppearance> | null | undefined
++): BrooklynAppearance => ({
++  cellScale: clamp(value?.cellScale, 0.45, 1.25, DEFAULT_APPEARANCE.cellScale),
++  hue: clamp(value?.hue, 0, 1, DEFAULT_APPEARANCE.hue),
++  brightness: clamp(
++    value?.brightness,
++    0.45,
++    1.55,
++    DEFAULT_APPEARANCE.brightness
++  ),
++  contrast: clamp(value?.contrast, -0.5, 0.5, DEFAULT_APPEARANCE.contrast)
++})
++
++export const appearanceColor = (
++  donorColor: string,
++  appearance: BrooklynAppearance
++) => {
++  if (appearance.hue === DEFAULT_APPEARANCE.hue) {
++    return donorColor
++  }
++
++  const color = new THREE.Color(donorColor)
++  const hsl = { h: 0, s: 0, l: 0 }
++  color.getHSL(hsl)
++  const hue = (hsl.h + appearance.hue - DONOR_HUE + 1) % 1
++  color.setHSL(hue, hsl.s, hsl.l)
++  return `#${color.getHexString()}`
++}
+diff --git a/upstream/src/Env/index.tsx b/patched/src/Env/index.tsx
+index 89baa63..8474357 100644
+--- a/upstream/src/Env/index.tsx
++++ b/patched/src/Env/index.tsx
+@@ -1,15 +1,37 @@
+-import { Environment } from '@react-three/drei'
+-import { useControls } from 'leva'
++import { useLoader, useThree } from '@react-three/fiber'
++import { useLayoutEffect } from 'react'
++import { EquirectangularReflectionMapping } from 'three'
++import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+ 
+-export default function Env() {
+-  const { fog } = useControls({ fog: { label: 'Fog', value: '#f800a8' } })
++import cityHDR from '../../public/potsdamer_platz_1k.hdr?inline'
++import { appearanceColor, type BrooklynAppearance } from '../Appearance'
++
++export default function Env({ appearance }: EnvProps) {
++  const scene = useThree(state => state.scene)
++  const city = useLoader(RGBELoader, cityHDR)
++  const fogColor = appearanceColor('#f800a8', appearance)
++
++  useLayoutEffect(() => {
++    const previousEnvironment = scene.environment
++    const previousIntensity = scene.environmentIntensity
++    city.mapping = EquirectangularReflectionMapping
++    scene.environment = city
++    scene.environmentIntensity = 0.24
++
++    return () => {
++      scene.environment = previousEnvironment
++      scene.environmentIntensity = previousIntensity
++    }
++  }, [city, scene])
+ 
+   return (
+     <>
+       <color args={['#000']} attach="background" />
+-      <fogExp2 args={[fog, 0.08]} attach="fog" />
+-
+-      <Environment environmentIntensity={0.24} preset="city" />
++      <fogExp2 args={[fogColor, 0.08]} attach="fog" />
+     </>
+   )
+ }
++
++interface EnvProps {
++  appearance: BrooklynAppearance
++}
+diff --git a/patched/src/HighRefresh.ts b/patched/src/HighRefresh.ts
+new file mode 100644
+index 0000000..fbb909c
+--- /dev/null
++++ b/patched/src/HighRefresh.ts
+@@ -0,0 +1,157 @@
++type TransformSnapshot = readonly number[]
++type TransformProbe = () => TransformSnapshot | null
++
++let transformProbe: TransformProbe | null = null
++let previousAdvanceMS: number | null = null
++let previousTransform: TransformSnapshot | null = null
++let previousTransformMotionMS: number | null = null
++let manualAdvanceIntervals: number[] = []
++let transformMotionIntervals: number[] = []
++let hostActive = true
++let documentVisible = document.visibilityState === 'visible'
++let activityActive = hostActive && documentVisible
++let activitySegmentID = activityActive ? 1 : 0
++let telemetryStartedAtMS: number | null = null
++let activePeriodStartedAtMS: number | null = null
++let accumulatedActiveDurationMS = 0
++let activeSegmentCount = 0
++let suspensionCount = 0
++let suspensionReasons = new Set<string>()
++let schedulerDroppedSlots = 0
++let startedVisibilityState = document.visibilityState
++let sceneInstanceCount = 256
++let sceneGridDrawCalls = 1
++
++export const registerTransformProbe = (probe: TransformProbe) => {
++  transformProbe = probe
++  return () => {
++    if (transformProbe === probe) transformProbe = null
++  }
++}
++
++export const recordSceneMetrics = (
++  instanceCount: number,
++  gridDrawCalls = 1
++) => {
++  sceneInstanceCount = Math.max(0, Math.floor(instanceCount))
++  sceneGridDrawCalls = Math.max(0, Math.floor(gridDrawCalls))
++}
++
++export const highRefreshActivityState = () => ({
++  active: activityActive,
++  segmentID: activitySegmentID
++})
++
++export const resetHighRefreshTelemetry = (nowMS = performance.now()) => {
++  previousAdvanceMS = null
++  previousTransform = null
++  previousTransformMotionMS = null
++  manualAdvanceIntervals = []
++  transformMotionIntervals = []
++  telemetryStartedAtMS = nowMS
++  activePeriodStartedAtMS = activityActive ? nowMS : null
++  accumulatedActiveDurationMS = 0
++  activeSegmentCount = activityActive ? 1 : 0
++  suspensionCount = activityActive ? 0 : 1
++  suspensionReasons = new Set()
++  if (!hostActive) suspensionReasons.add('hostInactive')
++  if (!documentVisible) suspensionReasons.add('documentHidden')
++  schedulerDroppedSlots = 0
++  startedVisibilityState = document.visibilityState
++}
++
++export const markHighRefreshActivity = (
++  nextHostActive: boolean,
++  nextDocumentVisible: boolean,
++  nowMS = performance.now()
++) => {
++  hostActive = nextHostActive
++  documentVisible = nextDocumentVisible
++  const nextActive = hostActive && documentVisible
++
++  if (telemetryStartedAtMS !== null) {
++    if (!hostActive) suspensionReasons.add('hostInactive')
++    if (!documentVisible) suspensionReasons.add('documentHidden')
++  }
++
++  if (nextActive === activityActive) return
++
++  if (telemetryStartedAtMS !== null) {
++    if (activityActive && activePeriodStartedAtMS !== null) {
++      accumulatedActiveDurationMS += Math.max(
++        0,
++        nowMS - activePeriodStartedAtMS
++      )
++    }
++    if (nextActive) {
++      activeSegmentCount += 1
++    } else {
++      suspensionCount += 1
++    }
++    activePeriodStartedAtMS = nextActive ? nowMS : null
++  }
++
++  activityActive = nextActive
++  activitySegmentID += 1
++  previousAdvanceMS = null
++  previousTransform = null
++  previousTransformMotionMS = null
++}
++
++export const recordSchedulerDroppedSlots = (count: number) => {
++  schedulerDroppedSlots += Math.max(0, Math.floor(count))
++}
++
++export const recordManualAdvance = (completedAtMS: number) => {
++  if (!activityActive) return
++  if (previousAdvanceMS !== null) {
++    manualAdvanceIntervals.push(completedAtMS - previousAdvanceMS)
++  }
++  previousAdvanceMS = completedAtMS
++
++  const transform = transformProbe?.() ?? null
++  if (!transform) return
++
++  const moved =
++    previousTransform !== null &&
++    transform.some(
++      (component, index) =>
++        Math.abs(component - (previousTransform?.[index] ?? component)) > 1e-8
++    )
++  previousTransform = [...transform]
++  if (!moved) return
++
++  if (previousTransformMotionMS !== null) {
++    transformMotionIntervals.push(completedAtMS - previousTransformMotionMS)
++  }
++  previousTransformMotionMS = completedAtMS
++}
++
++export const highRefreshTelemetrySnapshot = (nowMS = performance.now()) => {
++  const wallDurationMS =
++    telemetryStartedAtMS === null ? 0 : nowMS - telemetryStartedAtMS
++  const openActiveDurationMS =
++    activityActive && activePeriodStartedAtMS !== null
++      ? nowMS - activePeriodStartedAtMS
++      : 0
++  const activeDurationMS = Math.max(
++    0,
++    accumulatedActiveDurationMS + openActiveDurationMS
++  )
++
++  return {
++    activeDurationMS,
++    activeSegmentCount,
++    endedVisibilityState: document.visibilityState,
++    manualAdvanceIntervals: [...manualAdvanceIntervals],
++    sceneGridDrawCalls,
++    sceneInstanceCount,
++    schedulerDroppedSlots,
++    startedVisibilityState,
++    suspendedDurationMS: Math.max(0, wallDurationMS - activeDurationMS),
++    suspensionCount,
++    suspensionReasons: [...suspensionReasons].sort(),
++    transformMotionIntervals: [...transformMotionIntervals],
++    wallDurationMS
++  }
++}
+diff --git a/patched/src/RuntimeBridge.tsx b/patched/src/RuntimeBridge.tsx
+new file mode 100644
+index 0000000..c74010d
+--- /dev/null
++++ b/patched/src/RuntimeBridge.tsx
+@@ -0,0 +1,224 @@
++import { type BrooklynAppearance, normalizeAppearance } from './Appearance'
++import {
++  highRefreshActivityState,
++  highRefreshTelemetrySnapshot,
++  resetHighRefreshTelemetry
++} from './HighRefresh'
++
++type ActiveHandler = (active: boolean) => void
++type AppearanceHandler = (appearance: BrooklynAppearance) => void
++type HighRefreshHandler = (enabled: boolean) => void
++
++interface BrooklynWebWindow extends Window {
++  __brooklynSetActive?: ActiveHandler
++  __brooklynSetAppearance?: (appearance: Partial<BrooklynAppearance>) => void
++  __brooklynSetHighRefresh?: (enabled: boolean) => void
++  __brooklynStartTelemetry?: (durationMS?: number) => void
++  webkit?: {
++    messageHandlers?: {
++      brooklynLifecycle?: { postMessage: (message: unknown) => void }
++      brooklynTelemetry?: { postMessage: (message: unknown) => void }
++    }
++  }
++}
++
++const bridgeWindow = window as BrooklynWebWindow
++let runtimeReady = false
++let didPostRuntimeReady = false
++let bridgeInstalled = false
++
++const postRuntimeReadyIfPossible = () => {
++  const handler = bridgeWindow.webkit?.messageHandlers?.brooklynLifecycle
++  if (!runtimeReady || !bridgeInstalled || didPostRuntimeReady || !handler)
++    return
++  didPostRuntimeReady = true
++  handler.postMessage({ kind: 'ready', version: 1 })
++}
++
++export function markRuntimeReady() {
++  runtimeReady = true
++  postRuntimeReadyIfPossible()
++}
++
++const percentile = (sorted: number[], fraction: number) => {
++  if (sorted.length === 0) return null
++  const index = Math.min(
++    sorted.length - 1,
++    Math.max(0, Math.ceil(sorted.length * fraction) - 1)
++  )
++  return sorted[index]
++}
++
++const rounded = (value: number | null) =>
++  value === null || !Number.isFinite(value) ? null : Number(value.toFixed(3))
++
++const TARGET_INTERVAL_MS = 1_000 / 120
++const STALL_THRESHOLD_MS = 25
++const MISSED_SLOT_THRESHOLD_MS = 12.5
++const BURST_THRESHOLD_MS = TARGET_INTERVAL_MS / 2
++
++const cadenceMetrics = (intervals: number[]) => {
++  const sorted = [...intervals].sort((a, b) => a - b)
++  const medianMS = percentile(sorted, 0.5)
++  const p99MS = percentile(sorted, 0.99)
++  const maximumMS = sorted.length === 0 ? null : sorted[sorted.length - 1]
++  const observedActiveMS = intervals.reduce(
++    (total, interval) => total + interval,
++    0
++  )
++  return {
++    activeIntervalCount: intervals.length,
++    burstCount: intervals.filter(interval => interval < BURST_THRESHOLD_MS)
++      .length,
++    cadenceHz:
++      medianMS === null || medianMS <= 0 ? null : rounded(1_000 / medianMS),
++    effectiveCadenceHz:
++      observedActiveMS <= 0
++        ? null
++        : rounded((intervals.length * 1_000) / observedActiveMS),
++    maximumMS: rounded(maximumMS),
++    medianMS: rounded(medianMS),
++    missedSlotCount: intervals.filter(
++      interval => interval > MISSED_SLOT_THRESHOLD_MS
++    ).length,
++    missedSlotThresholdMS: rounded(MISSED_SLOT_THRESHOLD_MS),
++    observedActiveMS: rounded(observedActiveMS),
++    p99MS: rounded(p99MS),
++    sampleCount: intervals.length,
++    stallCount: intervals.filter(interval => interval > STALL_THRESHOLD_MS)
++      .length,
++    stallThresholdMS: rounded(STALL_THRESHOLD_MS)
++  }
++}
++
++export function installRuntimeBridge(
++  setActive: ActiveHandler,
++  setAppearance: AppearanceHandler,
++  setHighRefresh: HighRefreshHandler
++) {
++  let telemetryGeneration = 0
++  bridgeInstalled = true
++
++  bridgeWindow.__brooklynSetActive = setActive
++  bridgeWindow.__brooklynSetAppearance = appearance =>
++    setAppearance(normalizeAppearance(appearance))
++  bridgeWindow.__brooklynSetHighRefresh = enabled =>
++    setHighRefresh(enabled === true)
++  bridgeWindow.__brooklynStartTelemetry = (requestedDurationMS = 30_000) => {
++    const durationMS = Math.max(1_000, Math.min(60_000, requestedDurationMS))
++    const generation = ++telemetryGeneration
++    const intervals: number[] = []
++    const startedAt = performance.now()
++    let previousFrame: number | null = null
++    let previousActivitySegment: number | null = null
++    resetHighRefreshTelemetry()
++
++    const sample = (now: number) => {
++      if (generation !== telemetryGeneration) return
++
++      const activity = highRefreshActivityState()
++      if (
++        activity.active &&
++        previousFrame !== null &&
++        previousActivitySegment === activity.segmentID
++      ) {
++        intervals.push(now - previousFrame)
++      }
++      previousFrame = activity.active ? now : null
++      previousActivitySegment = activity.segmentID
++
++      if (now - startedAt < durationMS) {
++        requestAnimationFrame(sample)
++        return
++      }
++
++      const highRefresh = highRefreshTelemetrySnapshot(now)
++      const legacy = cadenceMetrics(intervals)
++      const manual = cadenceMetrics(highRefresh.manualAdvanceIntervals)
++      const transform = cadenceMetrics(highRefresh.transformMotionIntervals)
++      const report = {
++        activeDurationMS: rounded(highRefresh.activeDurationMS),
++        activeSegmentCount: highRefresh.activeSegmentCount,
++        durationMS: rounded(now - startedAt),
++        endedVisibilityState: highRefresh.endedVisibilityState,
++        frameCount: intervals.length + 1,
++        legacyRAFActiveIntervalCount: legacy.activeIntervalCount,
++        legacyRAFBurstCount: legacy.burstCount,
++        legacyRAFCadenceHz: legacy.cadenceHz,
++        legacyRAFEffectiveCadenceHz: legacy.effectiveCadenceHz,
++        legacyRAFMaximumMS: legacy.maximumMS,
++        legacyRAFMedianMS: legacy.medianMS,
++        legacyRAFMissedSlotCount: legacy.missedSlotCount,
++        legacyRAFMissedSlotThresholdMS: legacy.missedSlotThresholdMS,
++        legacyRAFObservedActiveMS: legacy.observedActiveMS,
++        legacyRAFP99MS: legacy.p99MS,
++        legacyRAFSampleCount: legacy.sampleCount,
++        legacyRAFStallCount: legacy.stallCount,
++        legacyRAFStallThresholdMS: legacy.stallThresholdMS,
++        manualAdvanceActiveIntervalCount: manual.activeIntervalCount,
++        manualAdvanceBurstCount: manual.burstCount,
++        manualAdvanceEffectiveCadenceHz: manual.effectiveCadenceHz,
++        manualAdvanceMaximumMS: manual.maximumMS,
++        manualAdvanceMedianMS: manual.medianMS,
++        manualAdvanceMissedSlotCount: manual.missedSlotCount,
++        manualAdvanceMissedSlotThresholdMS: manual.missedSlotThresholdMS,
++        manualAdvanceObservedActiveMS: manual.observedActiveMS,
++        manualAdvanceP99MS: manual.p99MS,
++        manualAdvanceStallCount: manual.stallCount,
++        manualAdvanceStallThresholdMS: manual.stallThresholdMS,
++        manualRenderCadenceHz: manual.cadenceHz,
++        manualRenderMedianMS: manual.medianMS,
++        manualRenderSampleCount: manual.sampleCount,
++        manualSchedulerDroppedSlots: highRefresh.schedulerDroppedSlots,
++        maximumMS: legacy.maximumMS,
++        medianCadenceHz: legacy.cadenceHz,
++        medianMS: legacy.medianMS,
++        p99MS: legacy.p99MS,
++        presentationMeasured: false,
++        requestedDurationMS: durationMS,
++        sampleCount: legacy.sampleCount,
++        sceneGridDrawCalls: highRefresh.sceneGridDrawCalls,
++        sceneInstanceCount: highRefresh.sceneInstanceCount,
++        stallThresholdMS: legacy.stallThresholdMS,
++        stalls: legacy.stallCount,
++        startedVisibilityState: highRefresh.startedVisibilityState,
++        suspendedDurationMS: rounded(highRefresh.suspendedDurationMS),
++        suspensionCount: highRefresh.suspensionCount,
++        suspensionReasons: highRefresh.suspensionReasons,
++        transformMotionActiveIntervalCount: transform.activeIntervalCount,
++        transformMotionBurstCount: transform.burstCount,
++        transformMotionCadenceHz: transform.cadenceHz,
++        transformMotionEffectiveCadenceHz: transform.effectiveCadenceHz,
++        transformMotionMaximumMS: transform.maximumMS,
++        transformMotionMedianMS: transform.medianMS,
++        transformMotionMissedSlotCount: transform.missedSlotCount,
++        transformMotionMissedSlotThresholdMS: transform.missedSlotThresholdMS,
++        transformMotionObservedActiveMS: transform.observedActiveMS,
++        transformMotionP99MS: transform.p99MS,
++        transformMotionSampleCount: transform.sampleCount,
++        transformMotionStallCount: transform.stallCount,
++        transformMotionStallThresholdMS: transform.stallThresholdMS,
++        version: 3,
++        visibilityState: highRefresh.endedVisibilityState,
++        wallDurationMS: rounded(highRefresh.wallDurationMS)
++      }
++
++      bridgeWindow.webkit?.messageHandlers?.brooklynTelemetry?.postMessage(
++        report
++      )
++    }
++
++    requestAnimationFrame(sample)
++  }
++  postRuntimeReadyIfPossible()
++
++  return () => {
++    telemetryGeneration += 1
++    bridgeInstalled = false
++    didPostRuntimeReady = false
++    delete bridgeWindow.__brooklynSetActive
++    delete bridgeWindow.__brooklynSetAppearance
++    delete bridgeWindow.__brooklynSetHighRefresh
++    delete bridgeWindow.__brooklynStartTelemetry
++  }
++}
+diff --git a/upstream/src/Scene/Material.tsx b/patched/src/Scene/Material.tsx
+index 4252cb7..533c009 100644
+--- a/upstream/src/Scene/Material.tsx
++++ b/patched/src/Scene/Material.tsx
+@@ -5,7 +5,8 @@ import { useCallback, useMemo, useRef } from 'react'
+ import type { WebGLProgramParametersWithUniforms } from 'three'
+ import * as THREE from 'three'
+ 
+-import { $output } from './Output'
++import texture0URL from '../../public/tex0.png?inline'
++import texture1URL from '../../public/tex1.png?inline'
+ 
+ export const vertex = /* glsl */ `
+ vec4 mvPosition = vec4(transformed, 1);
+@@ -26,14 +27,6 @@ mvPosition = modelViewMatrix * mvPosition;
+ gl_Position = projectionMatrix * mvPosition;
+ `
+ 
+-const sgn = (n: number) => `${n >= 0 ? '+' : '-'}${Math.abs(n).toFixed(2)}`
+-
+-const indent = (s: string) =>
+-  s
+-    .split('\n')
+-    .map(l => (l ? '  ' + l : l))
+-    .join('\n')
+-
+ export const fragment = /* glsl */ `
+ #include <map_fragment>
+ 
+@@ -86,44 +79,9 @@ vec2 mv = (vMouse - p).xy;
+ }
+ `
+ 
+-const template = `uniform vec3 uMouse;
+-
+-varying vec3 vPos;
+-varying vec3 vMouse;
+-
+-void main() {
+-${indent(vertex.trim().replace(/\buMouse\b/g, 'vec3({mx}, {my}, {mz})'))}
+-}
+-
+-
+-uniform mat4 modelMatrix;
+-uniform float uTime;
+-uniform vec3 uMouse;
+-uniform sampler2D uChannel0;
+-uniform sampler2D uChannel1;
+-
+-varying vec3 vPos;
+-varying vec3 vMouse;
+-
+-vec2 rotateUV(vec2 uv, float a, vec2 mid) {
+-  return vec2(
+-    cos(a) * (uv.x - mid.x) + sin(a) * (uv.y - mid.y) + mid.x,
+-    cos(a) * (uv.y - mid.y) - sin(a) * (uv.x - mid.x) + mid.y
+-  );
+-}
+-
+-void main() {
+-${indent(fragment.trim().replace(/\buTime\b/g, '{t}'))}
+-}`
+-  .split('\n')
+-  .map((ln, i) => `${String(i + 1).padStart(3, ' ')} │ ${ln}`)
+-  .join('\n')
+-
+ export default function Material(props: MeshStandardMaterialProps) {
+-  const [tex0, tex1] = useTexture(['/tex0.png', '/tex1.png'])
+-
+-  const tick = useRef(0)
+-  const pointer = useMemo(() => new THREE.Vector3(), [])
++  const [tex0, tex1] = useTexture([texture0URL, texture1URL])
++  const elapsedTime = useRef(0)
+ 
+   const uniforms = useMemo(
+     () => ({
+@@ -176,28 +134,9 @@ export default function Material(props: MeshStandardMaterialProps) {
+     [uniforms]
+   )
+ 
+-  useFrame(({ camera, clock, pointer: mouse }, delta) => {
+-    pointer.set(mouse.x, mouse.y, 0.5).unproject(camera)
+-    pointer.z = 0
+-
+-    uniforms.uMouse.value.copy(pointer)
+-    uniforms.uTime.value = clock.elapsedTime
+-
+-    tick.current += delta
+-
+-    if (tick.current < 1 / 12) return
+-
+-    tick.current = 0
+-
+-    $output.set({
+-      template,
+-      vals: {
+-        mx: sgn(pointer.x),
+-        my: sgn(pointer.y),
+-        mz: sgn(pointer.z),
+-        t: clock.elapsedTime.toFixed(2).padStart(6, ' ')
+-      }
+-    })
++  useFrame((_, delta) => {
++    elapsedTime.current += Math.min(delta, 0.05)
++    uniforms.uTime.value = elapsedTime.current
+   })
+ 
+   return (
+diff --git a/upstream/src/Scene/Particle.tsx b/patched/src/Scene/Particle.tsx
+index 799fecd..cfaf221 100644
+--- a/upstream/src/Scene/Particle.tsx
++++ b/patched/src/Scene/Particle.tsx
+@@ -4,9 +4,10 @@ import gsap from 'gsap'
+ import { useEffect, useMemo, useRef } from 'react'
+ import type * as THREE from 'three'
+ 
++import { registerTransformProbe } from '../HighRefresh'
++
+ export default function Particle({
+   color,
+-  hidden = false,
+   highlight,
+   id = 0,
+   seed,
+@@ -14,35 +15,29 @@ export default function Particle({
+   ...props
+ }: ParticleProps) {
+   const ref = useRef<(THREE.Object3D & { color?: THREE.Color }) | null>(null)
+-  const init = useRef(false)
+-
+   const stableSeed = useMemo(
+     () => seed ?? (id * 0.618033988749895) % 1,
+     [id, seed]
+   )
+-
+   const scale = useMemo(() => spacing * 0.9, [spacing])
+ 
+   useEffect(() => {
+     const current = ref.current
+-
+     if (!current) return
+ 
+     const duration = Math.PI / 2 + stableSeed * Math.PI
+     const delay = stableSeed * 1.8 + 0.2
+     const scalar = stableSeed * 0.05 - 0.05
+-
+     const getRotation = () => ({
+       [stableSeed < 0.5 ? 'x' : 'z']: `+=${Math.PI * 0.5}`,
+       ease: ['power2.inOut', 'power3.inOut', 'power4.inOut'][
+         Math.floor(stableSeed * 3)
+       ]
+     })
+-
+-    const tl = gsap.timeline({
++    const timeline = gsap.timeline({
+       defaults: { delay, duration, ease: 'power2.inOut' },
+       onRepeat: () => {
+-        tl.clear().to(current.rotation, getRotation())
++        timeline.clear().to(current.rotation, getRotation())
+       },
+       onStart: () => {
+         gsap.to(current.scale, {
+@@ -50,7 +45,7 @@ export default function Particle({
+           duration: 2,
+           ease: 'sine.inOut',
+           onComplete: () => {
+-            gsap.set(current.scale, { x: scale, y: scale, z: scale })
++            current.scale.setScalar(scale)
+           },
+           repeat: 1,
+           x: `+=${scalar}`,
+@@ -63,10 +58,12 @@ export default function Particle({
+       repeatDelay: 2 + stableSeed
+     })
+ 
+-    tl.clear().to(current.rotation, getRotation())
++    current.scale.setScalar(scale)
++    current.updateMatrix()
++    timeline.clear().to(current.rotation, getRotation())
+ 
+     return () => {
+-      tl.kill()
++      timeline.kill()
+     }
+   }, [stableSeed, scale])
+ 
+@@ -76,37 +73,28 @@ export default function Particle({
+   }, [color, highlight])
+ 
+   useEffect(() => {
+-    const c = ref.current
+-
+-    if (!c) return
+-
+-    const target = hidden ? 0.001 : scale
+-
+-    if (!init.current) {
+-      init.current = true
+-      c.scale.setScalar(target)
+-      c.updateMatrix()
+-      return
+-    }
+-
+-    gsap.to(c.scale, {
+-      duration: hidden ? 0.32 : 0.55,
+-      ease: hidden ? 'power2.in' : 'back.out(2.4)',
+-      onUpdate: () => c.updateMatrix(),
+-      overwrite: 'auto',
+-      x: target,
+-      y: target,
+-      z: target
++    if (id !== 0) return
++    return registerTransformProbe(() => {
++      const current = ref.current
++      if (!current) return null
++      return [
++        current.rotation.x,
++        current.rotation.y,
++        current.rotation.z,
++        current.scale.x,
++        current.scale.y,
++        current.scale.z
++      ]
+     })
+-  }, [hidden, scale])
++  }, [id])
+ 
+   return <Instance color={color} ref={ref} {...props} />
+ }
+ 
+ interface ParticleProps extends InstanceProps {
+   color: string
+-  hidden?: boolean
+   highlight?: boolean
++  id?: number
+   seed?: number
+   spacing: number
+ }
+diff --git a/upstream/src/Scene/effects/index.tsx b/patched/src/Scene/effects/index.tsx
+index f689b55..cba94ba 100644
+--- a/upstream/src/Scene/effects/index.tsx
++++ b/patched/src/Scene/effects/index.tsx
+@@ -1,67 +1,104 @@
+ import { Effects } from '@react-three/drei'
+-import { extend } from '@react-three/fiber'
+-import { folder, useControls } from 'leva'
+-import { useMemo } from 'react'
++import { extend, useThree } from '@react-three/fiber'
++import {
++  BrightnessContrastEffect,
++  EffectPass as PostprocessingEffectPass
++} from 'postprocessing'
++import { useEffect, useLayoutEffect, useMemo } from 'react'
++import type { Camera, WebGLRenderer, WebGLRenderTarget } from 'three'
+ import * as THREE from 'three'
+-import { UnrealBloomPass } from 'three-stdlib'
++import { Pass, UnrealBloomPass } from 'three-stdlib'
+ 
+-import { GrainPass } from './grain'
++import type { BrooklynAppearance } from '../../Appearance'
+ 
+-extend({ GrainPass, UnrealBloomPass })
++extend({ UnrealBloomPass })
+ 
+-export default function FX() {
++class BrightnessContrastPass extends Pass {
++  private readonly effect: BrightnessContrastEffect
++  private readonly effectPass: PostprocessingEffectPass
++  private initialized = false
++
++  constructor(camera: Camera) {
++    super()
++    this.effect = new BrightnessContrastEffect()
++    this.effectPass = new PostprocessingEffectPass(camera, this.effect)
++    this.needsSwap = true
++    this.enabled = false
++  }
++
++  setCorrection(brightness: number, contrast: number) {
++    this.effect.brightness = brightness
++    this.effect.contrast = contrast
++    this.enabled = Math.abs(brightness) > 0.0001 || Math.abs(contrast) > 0.0001
++  }
++
++  render(
++    renderer: WebGLRenderer,
++    writeBuffer: WebGLRenderTarget,
++    readBuffer: WebGLRenderTarget,
++    deltaTime?: number,
++    maskActive?: boolean
++  ) {
++    if (!this.initialized) {
++      const alpha = renderer.getContext().getContextAttributes()?.alpha ?? false
++      this.effectPass.initialize(renderer, alpha, readBuffer.texture.type)
++      this.initialized = true
++    }
++    this.effectPass.renderToScreen = this.renderToScreen
++    this.effectPass.render(
++      renderer,
++      readBuffer,
++      writeBuffer,
++      deltaTime,
++      maskActive
++    )
++  }
++
++  setSize(width: number, height: number) {
++    this.effectPass.setSize(width, height)
++  }
++
++  dispose() {
++    this.effectPass.dispose()
++  }
++}
++
++export default function FX({ appearance }: FXProps) {
++  const camera = useThree(state => state.camera)
+   const bloomSize = useMemo(() => new THREE.Vector2(1024, 1024), [])
++  const colorCorrectionPass = useMemo(
++    () => new BrightnessContrastPass(camera),
++    [camera]
++  )
++
++  useLayoutEffect(() => {
++    colorCorrectionPass.setCorrection(
++      appearance.brightness - 1,
++      appearance.contrast
++    )
++  }, [appearance.brightness, appearance.contrast, colorCorrectionPass])
+ 
+-  const config = useControls(
+-    'Effects',
+-    {
+-      bloom: folder({
+-        bloomRadius: { max: 2, min: 0, step: 0.01, value: 0.95 },
+-        bloomStrength: { max: 3, min: 0, step: 0.01, value: 0.25 },
+-        bloomThreshold: { max: 1, min: 0, step: 0.01, value: 0.01 },
+-        enableBloom: { value: true }
+-      }),
+-      grain: folder({
+-        blendMode: {
+-          options: {
+-            Add: 0,
+-            Multiply: 1,
+-            Overlay: 2,
+-            Screen: 3,
+-            'Soft Light': 4
+-          },
+-          value: 0
+-        },
+-        enableGrain: { value: false },
+-        intensity: { max: 1, min: 0, step: 0.003, value: 0.02 },
+-        size: { max: 5, min: 0.5, step: 0.1, value: 0.5 },
+-        speed: { max: 60, min: 0, step: 1, value: 0 }
+-      })
++  useEffect(
++    () => () => {
++      colorCorrectionPass.dispose()
+     },
+-    { collapsed: true }
++    [colorCorrectionPass]
+   )
+ 
+   return (
+     <Effects anisotropy={16} disableGamma multisamping={0}>
+-      <grainPass
+-        args={[
+-          {
+-            blendMode: config.blendMode,
+-            intensity: config.intensity,
+-            size: config.size,
+-            speed: config.speed
+-          }
+-        ]}
+-        enabled={config.enableGrain}
+-      />
+-
+       <unrealBloomPass
+         args={[bloomSize, 0.25, 0.95, 0.01]}
+-        enabled={config.enableBloom}
+-        radius={config.bloomRadius}
+-        strength={config.bloomStrength}
+-        threshold={config.bloomThreshold}
++        enabled
++        radius={0.95}
++        strength={0.25}
++        threshold={0.01}
+       />
++      <primitive object={colorCorrectionPass} />
+     </Effects>
+   )
+ }
++
++interface FXProps {
++  appearance: BrooklynAppearance
++}
+diff --git a/upstream/src/Scene/index.tsx b/patched/src/Scene/index.tsx
+index edf6bbe..571aa57 100644
+--- a/upstream/src/Scene/index.tsx
++++ b/patched/src/Scene/index.tsx
+@@ -1,139 +1,207 @@
+ import { Instances } from '@react-three/drei'
+-import type { ThreeEvent } from '@react-three/fiber'
+ import { useThree } from '@react-three/fiber'
+-import { useControls } from 'leva'
+-import { lazy, useMemo, useState } from 'react'
++import { useEffect, useMemo } from 'react'
+ import * as THREE from 'three'
+ 
+-import { poof } from './Poof'
+-
+-const Geometry = lazy(() => import('./Geometry'))
+-const Material = lazy(() => import('./Material'))
+-const Output = lazy(() => import('./Output'))
+-const Particle = lazy(() => import('./Particle'))
+-const Poof = lazy(() => import('./Poof'))
++import { appearanceColor, type BrooklynAppearance } from '../Appearance'
++import { recordSceneMetrics } from '../HighRefresh'
++import Geometry from './Geometry'
++import Material from './Material'
++import Particle from './Particle'
+ 
+ const ROT: [number, number, number] = [Math.PI / 5, -Math.PI / 4, 0]
++const DONOR_GRID_SIZE = 16
++const BASE_CAMERA_ZOOM = 600
++const COVERAGE_GUARD_CELLS = 1.25
++
++const gridQ = new THREE.Quaternion().setFromEuler(new THREE.Euler(...ROT))
++const gridInvQ = gridQ.clone().invert()
++const localRayDirection = new THREE.Vector3(0, 0, -1).applyQuaternion(gridInvQ)
++
++interface GridCell {
++  gridX: number
++  gridZ: number
++  id: number
++  key: string
++  seed?: number
++}
+ 
+-const gridInvQ = new THREE.Quaternion()
+-  .setFromEuler(new THREE.Euler(...ROT))
+-  .invert()
++const donorCells: GridCell[] = Array.from(
++  { length: DONOR_GRID_SIZE ** 2 },
++  (_, index) => ({
++    gridX: Math.floor(index / DONOR_GRID_SIZE) - (DONOR_GRID_SIZE - 1) / 2,
++    gridZ: (index % DONOR_GRID_SIZE) - (DONOR_GRID_SIZE - 1) / 2,
++    id: index,
++    key: `donor-${index}`
++  })
++)
+ 
+-const HIDE_MS = 1600
++const coordinateSeed = (gridX: number, gridZ: number) => {
++  const value = Math.sin(gridX * 12.9898 + gridZ * 78.233) * 43_758.5453
++  return value - Math.floor(value)
++}
+ 
+-export default function Scene() {
+-  const { viewport } = useThree()
++const projectedLocalCorner = (
++  screenX: number,
++  screenY: number,
++  cameraZ: number
++) => {
++  const origin = new THREE.Vector3(screenX, screenY, cameraZ).applyQuaternion(
++    gridInvQ
++  )
++  if (Math.abs(localRayDirection.y) < 0.0001) return null
++  const distance = -origin.y / localRayDirection.y
++  return origin.addScaledVector(localRayDirection, distance)
++}
+ 
+-  const { color, gridSize } = useControls({
+-    color: { label: 'Color', value: '#f51155' },
+-    gridSize: { label: 'Grid Size', max: 20, min: 1, value: 16 }
+-  })
++const adaptiveCells = (
++  cellScale: number,
++  spacing: number,
++  viewportWidth: number,
++  viewportHeight: number,
++  cameraZ: number
++) => {
++  if (cellScale >= 1) return donorCells
++
++  const halfWidth = viewportWidth / (2 * cellScale)
++  const halfHeight = viewportHeight / (2 * cellScale)
++  const guard = spacing * COVERAGE_GUARD_CELLS
++  const corners = [
++    [-halfWidth, -halfHeight],
++    [-halfWidth, halfHeight],
++    [halfWidth, -halfHeight],
++    [halfWidth, halfHeight]
++  ] as const
++  const localCorners = corners
++    .map(([x, y]) => projectedLocalCorner(x, y, cameraZ))
++    .filter((corner): corner is THREE.Vector3 => corner !== null)
++  const maximumLocalCoordinate = localCorners.reduce(
++    (maximum, corner) =>
++      Math.max(maximum, Math.abs(corner.x), Math.abs(corner.z)),
++    0
++  )
++  const candidateLimit = Math.ceil(maximumLocalCoordinate / spacing) + 2
++  const cells = [...donorCells]
++  const keys = new Set(donorCells.map(cell => `${cell.gridX},${cell.gridZ}`))
++
++  for (let xIndex = -candidateLimit; xIndex < candidateLimit; xIndex += 1) {
++    for (let zIndex = -candidateLimit; zIndex < candidateLimit; zIndex += 1) {
++      const gridX = xIndex + 0.5
++      const gridZ = zIndex + 0.5
++      const coordinateKey = `${gridX},${gridZ}`
++      if (keys.has(coordinateKey)) continue
++
++      const projected = new THREE.Vector3(
++        gridX * spacing,
++        0,
++        gridZ * spacing
++      ).applyQuaternion(gridQ)
++      if (
++        Math.abs(projected.x) > halfWidth + guard ||
++        Math.abs(projected.y) > halfHeight + guard
++      ) {
++        continue
++      }
++
++      const id = cells.length
++      cells.push({
++        gridX,
++        gridZ,
++        id,
++        key: `adaptive-${coordinateKey}`,
++        seed: coordinateSeed(gridX, gridZ)
++      })
++      keys.add(coordinateKey)
++    }
++  }
++
++  return cells
++}
+ 
++export default function Scene({ appearance }: SceneProps) {
++  const { camera, size, viewport } = useThree()
+   const span = useMemo(
+     () => Math.max(4, Math.max(viewport.width, viewport.height) * 1.1),
+     [viewport.height, viewport.width]
+   )
++  const spacing = useMemo(() => span / (DONOR_GRID_SIZE - 1), [span])
++  const baseViewportWidth = size.width / BASE_CAMERA_ZOOM
++  const baseViewportHeight = size.height / BASE_CAMERA_ZOOM
++  const cells = useMemo(
++    () =>
++      adaptiveCells(
++        appearance.cellScale,
++        spacing,
++        baseViewportWidth,
++        baseViewportHeight,
++        camera.position.z
++      ),
++    [
++      appearance.cellScale,
++      baseViewportHeight,
++      baseViewportWidth,
++      camera.position.z,
++      spacing
++    ]
++  )
++  const color = useMemo(
++    () => appearanceColor('#f51155', appearance),
++    [appearance]
++  )
+ 
+-  const steps = Math.max(gridSize - 1, 1)
+-  const spacing = useMemo(() => span / steps, [span, steps])
+-  const count = gridSize ** 2
+-
+-  const cellPos = (i: number): [number, number, number] => [
+-    (Math.floor(i / gridSize) - steps / 2) * spacing,
+-    0,
+-    ((i % gridSize) - steps / 2) * spacing
+-  ]
+-
+-  const highlight = useMemo(() => {
+-    const o = new THREE.Vector3(
+-      (viewport.width / 2) * 0.4,
+-      (viewport.height / 2) * 0.4,
+-      10
+-    ).applyQuaternion(gridInvQ)
+-
+-    const d = new THREE.Vector3(0, 0, -1).applyQuaternion(gridInvQ)
+-
+-    if (Math.abs(d.y) < 0.0001) return -1
+-
+-    const t = -o.y / d.y
+-
+-    const cell = (v: number) =>
+-      Math.max(
+-        0,
+-        Math.min(gridSize - 1, Math.round(v / spacing + gridSize / 2 - 0.5))
+-      )
+-
+-    return cell(o.x + t * d.x) * gridSize + cell(o.z + t * d.z)
+-  }, [gridSize, spacing, viewport.height, viewport.width])
+-
+-  const [hidden, setHidden] = useState<Set<number>>(() => new Set())
+-
+-  const onClickCell = (e: ThreeEvent<MouseEvent>) => {
+-    if (e.instanceId === undefined) return
+-
+-    e.stopPropagation()
+-
+-    const id = e.instanceId
+-
+-    if (hidden.has(id)) return
+-
+-    setHidden(s => new Set(s).add(id))
+-
+-    poof(cellPos(id), spacing)
++  useEffect(() => {
++    recordSceneMetrics(cells.length, 1)
++  }, [cells.length])
+ 
+-    window.setTimeout(
+-      () =>
+-        setHidden(s => {
+-          if (!s.has(id)) return s
++  const highlightKey = useMemo(() => {
++    const origin = new THREE.Vector3(
++      (baseViewportWidth / appearance.cellScale / 2) * 0.4,
++      (baseViewportHeight / appearance.cellScale / 2) * 0.4,
++      camera.position.z
++    ).applyQuaternion(gridInvQ)
+ 
+-          const ns = new Set(s)
+-          ns.delete(id)
+-          return ns
+-        }),
+-      HIDE_MS
+-    )
+-  }
++    if (Math.abs(localRayDirection.y) < 0.0001) return ''
++
++    const distance = -origin.y / localRayDirection.y
++    const target = origin.addScaledVector(localRayDirection, distance)
++    const gridX = Math.round(target.x / spacing - 0.5) + 0.5
++    const gridZ = Math.round(target.z / spacing - 0.5) + 0.5
++    return `${gridX},${gridZ}`
++  }, [
++    appearance.cellScale,
++    baseViewportHeight,
++    baseViewportWidth,
++    camera.position.z,
++    spacing
++  ])
+ 
+   const particles = useMemo(
+     () =>
+-      Array.from({ length: count }, (_, i) => (
++      cells.map(cell => (
+         <Particle
+           color={color}
+-          hidden={hidden.has(i)}
+-          highlight={i === highlight}
+-          id={i}
+-          key={`${gridSize}-${i}`}
+-          position={cellPos(i)}
++          highlight={`${cell.gridX},${cell.gridZ}` === highlightKey}
++          id={cell.id}
++          key={cell.key}
++          position={[cell.gridX * spacing, 0, cell.gridZ * spacing]}
++          seed={cell.seed}
+           spacing={spacing}
+         />
+       )),
+-    // eslint-disable-next-line react-hooks/exhaustive-deps
+-    [color, count, gridSize, hidden, highlight, spacing, steps]
++    [cells, color, highlightKey, spacing]
+   )
+ 
+   return (
+-    <>
+-      <group rotation={ROT}>
+-        <Instances
+-          key={gridSize}
+-          onClick={onClickCell}
+-          onPointerOut={() => {
+-            document.body.style.cursor = ''
+-          }}
+-          onPointerOver={() => {
+-            document.body.style.cursor = 'pointer'
+-          }}
+-          range={count}>
+-          <Geometry />
+-          <Material />
+-
+-          {particles}
+-        </Instances>
+-
+-        <Poof />
+-      </group>
+-
+-      <Output />
+-    </>
++    <group rotation={ROT}>
++      <Instances range={cells.length}>
++        <Geometry />
++        <Material />
++        {particles}
++      </Instances>
++    </group>
+   )
+ }
++
++interface SceneProps {
++  appearance: BrooklynAppearance
++}
+diff --git a/upstream/src/index.css b/patched/src/index.css
+index 5365209..0b949b0 100644
+--- a/upstream/src/index.css
++++ b/patched/src/index.css
+@@ -1,72 +1,33 @@
+-@tailwind base;
+-@tailwind components;
+-@tailwind utilities;
+-
+ :root {
+-  --columns: 40;
+-  --vsq: calc(0.5dvw + 0.5dvh);
+-  --cell: calc((var(--vsq) * 50) / var(--columns));
+-  --pad-scale: 3;
+-  --pad: calc(var(--vsq) * var(--pad-scale));
+-  --easing: cubic-bezier(0.33, 1, 0.68, 1);
++  color-scheme: dark;
++  background: #000;
+ }
+ 
+-* {
+-  @apply box-border;
++*,
++*::before,
++*::after {
++  box-sizing: border-box;
+ }
+ 
+ html,
+ body,
+-#root {
+-  @apply 
+-  fixed inset-0 
+-  w-dvw h-dvh 
+-  overflow-hidden overscroll-none
+-  touch-none select-none;
+-}
+-
+-html {
+-  @apply font-sans tracking-tight cursor-none;
+-
+-  -moz-osx-font-smoothing: grayscale;
+-  -webkit-font-smoothing: antialiased;
+-  -webkit-text-size-adjust: 100%;
+-  font-feature-settings: 'ss01' on, 'calt' off;
+-  font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 1rem);
+-  line-height: 1.75;
+-  text-rendering: optimizeLegibility;
+-}
+-
+-img,
+-video,
+-svg {
+-  @apply max-w-full h-auto;
+-}
+-
+-strong {
+-  @apply font-medium;
+-}
+-
+-::-webkit-scrollbar {
+-  @apply hidden;
+-}
+-
+-::selection {
+-  @apply text-white;
+-
+-  background: rgba(0, 0, 0, 0.95);
+-}
+-
+-#root > div[class*="leva"] {
+-  @apply absolute top-auto bottom-5 right-5 z-50;
+-
+-  button {
+-    @apply px-2 font-medium font-sans;
+-  }
+-}
+-
+-@media (pointer: coarse) {
+-  html {
+-    @apply cursor-auto;
+-  }
++#root,
++#brooklyn-stage {
++  position: fixed;
++  inset: 0;
++  width: 100%;
++  height: 100%;
++  margin: 0;
++  overflow: hidden;
++  overscroll-behavior: none;
++  touch-action: none;
++  user-select: none;
++  background: #000;
++}
++
++canvas {
++  display: block;
++  width: 100%;
++  height: 100%;
++  pointer-events: none;
+ }
+diff --git a/upstream/src/index.tsx b/patched/src/index.tsx
+index d5ec36a..341505e 100644
+--- a/upstream/src/index.tsx
++++ b/patched/src/index.tsx
+@@ -2,7 +2,11 @@ import { StrictMode } from 'react'
+ import { createRoot } from 'react-dom/client'
+ 
+ import App from './App'
+-import './index.css'
++import stylesheet from './index.css?inline'
++
++const style = document.createElement('style')
++style.textContent = stylesheet
++document.head.append(style)
+ 
+ createRoot(document.getElementById('root')!).render(
+   <StrictMode>
+diff --git a/upstream/vite.config.ts b/patched/vite.config.ts
+index efe9776..0149371 100644
+--- a/upstream/vite.config.ts
++++ b/patched/vite.config.ts
+@@ -1,9 +1,32 @@
+ import react from '@vitejs/plugin-react-swc'
++import { fileURLToPath } from 'node:url'
+ import { defineConfig } from 'vite'
+ import glsl from 'vite-plugin-glsl'
+ import tsconfigPaths from 'vite-tsconfig-paths'
+ 
+ export default defineConfig({
++  assetsInclude: ['**/*.hdr'],
++  base: './',
++  define: {
++    'process.env.NODE_ENV': JSON.stringify('production')
++  },
++  build: {
++    assetsInlineLimit: 0,
++    cssCodeSplit: false,
++    lib: {
++      entry: fileURLToPath(new URL('./src/index.tsx', import.meta.url)),
++      fileName: () => 'assets/brooklyn.js',
++      formats: ['iife'],
++      name: 'BrooklynWebBackground'
++    },
++    rollupOptions: {
++      output: {
++        inlineDynamicImports: true
++      }
++    },
++    target: 'es2020'
++  },
++  publicDir: false,
+   plugins: [
+     react(),
+     glsl({ warnDuplicatedImports: false, watch: true }),

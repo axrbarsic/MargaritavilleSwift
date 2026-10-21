@@ -34,6 +34,8 @@ struct AppRootView: View {
             }
         }
         .environment(\.appBackgroundMode, appSettings.appBackgroundMode)
+        .environment(\.brooklynSurfaceStyle, appSettings.brooklynSurfaceStyle)
+        .environment(\.brooklynWebConfiguration, appSettings.brooklynWebConfiguration)
         .environment(\.appBackgroundVideoURL, appSettings.backgroundVideoURL)
         .environment(\.appBackgroundVideoBlur, appSettings.backgroundVideoBlur)
         .environment(\.appBackgroundVideoBrightness, appSettings.backgroundVideoBrightness)
@@ -42,6 +44,7 @@ struct AppRootView: View {
         .environment(\.matrixRainConfiguration, appSettings.matrixConfiguration)
         .environment(\.tvStaticNoiseConfiguration, appSettings.tvStaticNoiseConfiguration)
         .environment(\.experimentalCellPhysicsEnabled, appSettings.developerCellPhysicsEnabled)
+        .environment(\.experimentalLive3DCellsEnabled, appSettings.developerLive3DCellsEnabled)
         .environment(\.experimentalCellSpringIntensity, appSettings.developerCellSpringIntensity)
         .environment(\.experimentalCellSpringSpeed, appSettings.developerCellSpringSpeed)
         .environment(\.experimentalVIPJellyEnabled, appSettings.developerVIPJellyEnabled)

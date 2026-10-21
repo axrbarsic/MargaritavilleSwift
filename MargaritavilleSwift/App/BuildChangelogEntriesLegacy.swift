@@ -6,111 +6,111 @@ extension BuildChangelog {
             version: "0.2.0 (42)",
             date: "2026-06-07",
             changes: [
-                "Added a pure domain WorkSessionMergePolicy for future Apple-first iCloud sync.",
-                "The merge policy compares field-level timestamps for room state and setup selections, keeps earlier milestone facts, and unions append-only history.",
-                "Added regression tests proving stale remote data does not overwrite newer local room state and newer deselection tombstones remove rooms from setup."
+                "Добавлен чистый домен WorkSessionMergePolicy для будущей синхронизации Apple с iCloud.",
+                "Политика слияния сравнивает временные метки на уровне полей для состояний помещений и выбранных настроек, сохраняет факты предыдущих этапов и объединяет историю, доступную только для добавления.",
+                "Регрессионные тесты подтверждают: устаревшие удалённые данные не перезаписывают новое локальное состояние, а свежие метки снятия выбора удаляют комнаты из настройки."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (41)",
             date: "2026-06-07",
             changes: [
-                "Added sync metadata for setup selections: cart bindings, room selections, room deselection tombstones, and workday lock changes now carry timestamps.",
-                "SwiftData now persists setup selection records with selected/deselected state instead of only storing the currently visible room set.",
-                "Added regression coverage so removed room selections survive persistence as timestamped tombstones for future local-first iCloud merges."
+                "Для выбора настройки добавлены метаданные синхронизации: привязки тележки, выбор комнат, метки снятия выбора и блокировка рабочего дня теперь содержат временные метки.",
+                "SwiftData теперь сохраняет записи выбора установки с выбранным/невыбранным состоянием, а не только сохраняет видимый в данный момент набор комнат.",
+                "Регрессионные тесты подтверждают сохранение снятых выборов комнат как временных меток удаления для будущего локального слияния с iCloud."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (40)",
             date: "2026-06-07",
             changes: [
-                "Added field-level update timestamps for the room open state and each S/L/B task state.",
-                "Kept first-happened room milestones separate from last-updated sync metadata, so closing a room or removing a task can be merged correctly later.",
-                "Persisted the new task/open timestamps through SwiftData and covered them with regression tests."
+                "Добавлены временные метки обновления на уровне поля для состояния открытой комнаты и каждого состояния задачи S/L/B.",
+                "Первые этапы комнаты сохраняются отдельно от последних обновленных метаданных синхронизации, поэтому закрытие комнаты или удаление задачи можно будет правильно объединить позже.",
+                "Сохранили новые временные метки задач/открытий через SwiftData и покрыли их регрессионными тестами."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (39)",
             date: "2026-06-07",
             changes: [
-                "Added field-level update timestamps for room VIP state and scheduled room time.",
-                "SwiftData now persists those timestamps so future iCloud/CloudKit merges can compare individual room fields instead of whole-session snapshots.",
-                "Added regression tests for VIP/schedule timestamp mutations and SwiftData round-trip persistence."
+                "Добавлены временные метки обновления на уровне поля для VIP-состояния комнаты и запланированного времени комнаты.",
+                "SwiftData теперь сохраняет эти временные метки, поэтому в будущих слияниях iCloud/CloudKit можно будет сравнивать отдельные поля комнаты, а не снимки всего сеанса.",
+                "Добавлены регрессионные тесты для мутаций меток времени VIP/расписания и устойчивости SwiftData туда и обратно."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (38)",
             date: "2026-06-07",
             changes: [
-                "Added a lightweight app-wide performance telemetry store for live FPS and slow-frame tracking.",
-                "Settings now shows the current FPS target, recent slow frames, total slow frames, and worst recent frame time.",
-                "Telemetry updates SwiftUI once per sampling window instead of invalidating screens on every display frame."
+                "Добавлено облегченное хранилище телеметрии производительности для всего приложения для отслеживания FPS в реальном времени и отслеживания медленных кадров.",
+                "В настройках теперь отображается текущее целевое значение FPS, последние медленные кадры, общее количество медленных кадров и худшее время последнего кадра.",
+                "Телеметрия обновляет SwiftUI один раз для каждого окна выборки вместо аннулирования экранов в каждом кадре дисплея."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (37)",
             date: "2026-06-07",
             changes: [
-                "Added an explicit SwiftData sync mode boundary for future Apple-first CloudKit sync.",
-                "Kept the installed app local-only by default; iCloud remains disabled until entitlements, container setup, and conflict policy are ready.",
-                "Added a repository test proving the CloudKit mode injection path still round-trips through isolated local test storage."
+                "Добавлена явная граница режима синхронизации SwiftData для будущей синхронизации CloudKit с Apple.",
+                "По умолчанию установленное приложение оставалось только локальным; iCloud остается отключенным до тех пор, пока не будут готовы права, настройка контейнера и политика конфликтов.",
+                "Добавлен тест репозитория, доказывающий, что путь внедрения режима CloudKit по-прежнему проходит через изолированное локальное тестовое хранилище."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (36)",
             date: "2026-06-07",
             changes: [
-                "Added a shared native full-screen media viewer for room and cart attachments.",
-                "Photos now open in a pinch-zoom viewer, and videos open through AVKit playback with automatic looping.",
-                "Thumbnail taps now use the same viewer path for room media and cart media."
+                "Добавлен общий полноэкранный просмотрщик мультимедиа для вложений комнат и корзин.",
+                "Фотографии теперь открываются в средстве просмотра с масштабированием, а видео открываются посредством воспроизведения AVKit с автоматическим циклическим воспроизведением.",
+                "Нажатия на миниатюры теперь используют один и тот же путь просмотра для медиафайлов комнаты и корзины."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (35)",
             date: "2026-06-07",
             changes: [
-                "Replaced the cart consumables placeholder with real native cart consumable rows for towels, mats, sheets, and pillowcases.",
-                "Consumables now support quantity changes, completion marks, timestamps, event history, and SwiftData persistence.",
-                "Kept consumables as cart-specific domain data, separate from room-cell tasks."
+                "Заполнитель расходных материалов тележки заменен реальными рядами расходных материалов тележки для полотенец, ковриков, простыней и наволочек.",
+                "Расходные материалы теперь поддерживают изменения количества, отметки завершения, временные метки, историю событий и сохранение данных SwiftData.",
+                "Расходные материалы хранились в виде данных домена, специфичных для тележки, отдельно от задач комнатных ячеек."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (34)",
             date: "2026-06-07",
             changes: [
-                "Added the first native history viewer in Settings.",
-                "History cards show the event title, timestamp, and a compact visual preview of the main room screen snapshot.",
-                "Changed rooms are highlighted inside the snapshot preview so the history is readable on the move."
+                "Добавлен первый встроенный просмотрщик истории в настройках.",
+                "На карточках истории отображаются название события, временная метка и компактный предварительный просмотр снимка экрана главной комнаты.",
+                "Измененные комнаты выделяются внутри предварительного просмотра снимка, поэтому историю можно прочитать на ходу."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (33)",
             date: "2026-06-07",
             changes: [
-                "Added the native work-session event history foundation: room, cart, selection, schedule, note, media, VIP, and automatic scheduled-open changes now create timestamped history entries.",
-                "Each history entry stores a lightweight visual snapshot of the main screen state so the future history UI can preview what the room grid looked like at that moment.",
-                "Persisted history through SwiftData as separate records instead of returning to full JSON snapshot rewrites."
+                "Добавлена собственная основа истории событий рабочего сеанса: комната, корзина, выбор, расписание, заметка, мультимедиа, VIP, а автоматические изменения открытия по расписанию теперь создают записи истории с отметкой времени.",
+                "Каждая запись истории сохраняет упрощенный визуальный снимок состояния главного экрана, поэтому пользовательский интерфейс будущей истории может предварительно просмотреть, как выглядела сетка комнаты в тот момент.",
+                "Сохранение истории через SwiftData в виде отдельных записей вместо возврата к полной перезаписи моментального снимка JSON."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (32)",
             date: "2026-06-07",
             changes: [
-                "Prepared the SwiftData schema for future Apple iCloud/CloudKit sync by removing the local unique attribute and making persisted relationships optional.",
-                "Explicitly keeps the current SwiftData store local-only until iCloud entitlements, CloudKit container setup, and conflict policy are enabled deliberately.",
-                "Kept build 31's SwiftData local persistence, async startup loading, and WorkSessionStore layer split."
+                "Подготовили схему SwiftData для будущей синхронизации Apple iCloud/CloudKit, удалив локальный уникальный атрибут и сделав постоянные связи необязательными.",
+                "Явно сохраняет текущее хранилище SwiftData только локально до тех пор, пока права iCloud, настройка контейнера CloudKit и политика конфликтов не будут включены намеренно.",
+                "Сохранено локальное постоянство SwiftData сборки 31, асинхронная загрузка при запуске и разделение слоев WorkSessionStore."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (31)",
             date: "2026-06-07",
             changes: [
-                "Work-session persistence now uses SwiftData as the native local-first store instead of rewriting the full JSON snapshot on every change.",
-                "Legacy JSON work-session data is still imported on first SwiftData load so existing local installs keep their rooms, notes, schedules, VIP flags, and media metadata.",
-                "The app now starts with a lightweight seed store and loads the saved work session off the main thread before applying it on the main actor.",
-                "Moved WorkSessionStore out of Domain into the work-session feature layer, with persistence/bootstrap split into a dedicated extension.",
-                "Moved room-cell geometry into the Design layer so Domain stays free of presentation sizing.",
-                "Added SwiftData repository regression tests for complete round-trip persistence and stale child cleanup."
+                "Сохранение рабочего сеанса теперь использует SwiftData в качестве собственного локального хранилища вместо перезаписи полного снимка JSON при каждом изменении.",
+                "Устаревшие данные рабочего сеанса JSON по-прежнему импортируются при первой загрузке SwiftData, поэтому существующие локальные установки сохраняют свои комнаты, заметки, расписания, VIP-флаги и метаданные мультимедиа.",
+                "Теперь приложение запускается с облегченным хранилищем начальных значений и загружает сохраненный рабочий сеанс из основного потока, прежде чем применить его к основному актеру.",
+                "WorkSessionStore перемещен из домена в уровень объектов рабочего сеанса, а персистентность/загрузочная загрузка разделена на выделенное расширение.",
+                "Геометрия ячеек комнаты перенесена на уровень дизайна, чтобы домен не изменял размер презентации.",
+                "Добавлены регрессионные тесты репозитория SwiftData для полной устойчивости и очистки устаревших дочерних элементов."
             ]
         ),
         BuildChangelogEntry(
@@ -126,135 +126,135 @@ extension BuildChangelog {
             version: "0.2.0 (29)",
             date: "2026-06-06",
             changes: [
-                "Removed debug traps from interaction sound setup so optional click audio cannot crash the app.",
-                "Voice recording start and stop now use haptic-only feedback to avoid competing with the microphone audio session.",
-                "Kept build 28's Apple-style Speech recording session and voice recorder diagnostics."
+                "Удалены ловушки отладки из настройки звука взаимодействия, поэтому дополнительный звук щелчка не может привести к сбою приложения.",
+                "При запуске и остановке записи голоса теперь используется только тактильная обратная связь, чтобы избежать конкуренции с аудиосеансом микрофона.",
+                "Сохранен сеанс записи речи в стиле Apple сборки 28 и диагностика диктофона."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (28)",
             date: "2026-06-06",
             changes: [
-                "Aligned live speech startup with Apple's documented AVAudioSession record/measurement pattern.",
-                "Removed interaction sound playback from the voice record button so AVAudioPlayer no longer races Speech startup.",
-                "Added structured voice-recorder runtime logs for start, stop, finish, and failure diagnosis."
+                "Запуск живой речи согласован с документированным шаблоном записи/измерения AVAudioSession от Apple.",
+                "Убрано воспроизведение звука взаимодействия с кнопки записи голоса, поэтому AVAudioPlayer больше не запускает речь.",
+                "Добавлены структурированные журналы работы диктофона для запуска, остановки, завершения и диагностики сбоев."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (27)",
             date: "2026-06-06",
             changes: [
-                "Hardened real-device voice recording shutdown with a locked Speech audio pipe.",
-                "Speech audio now finishes exactly once even if the panel disappears, stop is tapped, or cleanup runs later.",
-                "Microphone buffers are ignored after stop so the audio tap cannot append into a closed Speech request."
+                "Усилено отключение записи голоса на реальном устройстве при заблокированном звуковом канале речи.",
+                "Звук речи теперь завершается ровно один раз, даже если панель исчезает, нажимается кнопка «Стоп» или очистка запускается позже.",
+                "Буферы микрофона игнорируются после остановки, поэтому звуковой сигнал не может быть добавлен в закрытый запрос речи."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (26)",
             date: "2026-06-06",
             changes: [
-                "Started the native-migration refactor pass: Flutter is now treated as product behavior reference, not an architecture template.",
-                "Rebuilt voice notes around an iOS-native Speech service plus a small SwiftUI ViewModel instead of a UI-owned recorder controller.",
-                "Voice stop now waits briefly for final Speech results so transcripts are not discarded during cleanup.",
-                "Made the SpriteKit coordinator explicitly MainActor to match UIKit and SpriteKit lifecycle rules."
+                "Начался этап рефакторинга встроенной миграции: Flutter теперь рассматривается как справочник по поведению продукта, а не как шаблон архитектуры.",
+                "Перестроены голосовые заметки на основе родной для iOS службы речи, а также небольшая модель представления SwiftUI вместо контроллера записи, принадлежащего пользовательскому интерфейсу.",
+                "Остановка голоса теперь некоторое время ожидает окончательных результатов речи, поэтому расшифровки не отбрасываются во время очистки.",
+                "Сделал координатор SpriteKit явно MainActor, чтобы он соответствовал правилам жизненного цикла UIKit и SpriteKit."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (25)",
             date: "2026-06-06",
             changes: [
-                "Fixed a second voice-recording crash caused by overlapping audio tap startup.",
-                "Voice capture now uses an explicit idle, starting, recording, and stopping state machine.",
-                "Each voice recording gets a fresh AVAudioEngine so repeated recordings do not inherit stale input taps."
+                "Исправлен второй сбой записи голоса, вызванный перекрытием запуска звука.",
+                "Захват голоса теперь использует явный конечный автомат ожидания, запуска, записи и остановки.",
+                "Каждая голосовая запись получает новый AVAudioEngine, поэтому повторяющиеся записи не наследуют устаревшие нажатия."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (24)",
             date: "2026-06-06",
             changes: [
-                "Fixed the real-device crash when starting voice recording from room or cart notes.",
-                "Moved Speech and microphone permission callbacks outside MainActor isolation so iOS background permission queues cannot trip Swift concurrency checks.",
-                "Kept the hardened audio-engine startup and tap cleanup from build 23."
+                "Исправлен сбой реального устройства при запуске записи голоса из заметок о комнате или корзине.",
+                "Обратные вызовы разрешения речи и микрофона перемещены за пределы изоляции MainActor, поэтому очереди фоновых разрешений iOS не могут отключать проверки параллелизма Swift.",
+                "Сохранен усиленный запуск аудио-движка и очистка касания из сборки 23."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (23)",
             date: "2026-06-06",
             changes: [
-                "Hardened the native voice recorder against real-device Speech and microphone startup crashes.",
-                "Voice recording no longer calls risky task finish or duplicate audio-tap removal paths.",
-                "The recorder now validates the microphone input format before starting live transcription."
+                "Улучшена защита встроенного диктофона от сбоев при запуске речи и микрофона на реальном устройстве.",
+                "Запись голоса больше не требует рискованного завершения задачи или дублирует пути удаления аудионажатия.",
+                "Теперь диктофон проверяет входной формат микрофона перед началом прямой транскрипции."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (22)",
             date: "2026-06-06",
             changes: [
-                "Reduced gesture conflicts while scrolling the main room list.",
-                "Long-press haptics now wait briefly so a normal vertical scroll does not buzz across room cells.",
-                "Room swipe-menu arming now requires a stronger horizontal gesture before it gives feedback or toggles the menu."
+                "Уменьшены конфликты жестов при прокрутке основного списка комнат.",
+                "Тактильные ощущения при длительном нажатии теперь ненадолго ждут, чтобы обычная вертикальная прокрутка не перемещалась по ячейкам комнаты.",
+                "Для постановки на охрану меню смахивания комнаты теперь требуется более сильный горизонтальный жест, прежде чем он даст ответ или переключит меню."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (21)",
             date: "2026-06-06",
             changes: [
-                "Added native Russian speech recognition for room voice notes.",
-                "Cart notes now use the same voice-to-text control as room notes.",
-                "Speech capture uses a shared Swift controller with microphone and speech permissions instead of a Gemini fallback."
+                "Добавлено распознавание родной русской речи для голосовых заметок в комнате.",
+                "В заметках о корзине теперь используется то же управление голосовым текстом, что и в заметках о комнатах.",
+                "Для захвата речи используется общий контроллер Swift с разрешениями на микрофон и речь вместо резервного варианта Gemini."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (20)",
             date: "2026-06-06",
             changes: [
-                "Restored the Flutter-style puzzle swipe handle in the summary header; dragging the puzzle now returns to room/cart selection.",
-                "Room action-menu swipes now use an armed threshold state machine with start, warning, commit, and confirm feedback.",
-                "Right-swipe handling now waits for a clear horizontal threshold so it does not fight room/task long-press actions."
+                "Восстановлен маркер смахивания головоломки в стиле Flutter в заголовке сводки; перетаскивание головоломки теперь возвращает к выбору комнаты/тележки.",
+                "При пролистывании меню действий в комнате теперь используется активированный пороговый конечный автомат с обратной связью по запуску, предупреждению, фиксации и подтверждению.",
+                "Обработка смахивания правой кнопкой мыши теперь ожидает четкого горизонтального порога, поэтому не мешает действиям при длительном нажатии на комнату/задачу."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (19)",
             date: "2026-06-06",
             changes: [
-                "Replaced the temporary +15 minute schedule toggle with a native time picker for hour, 00/15/30/45 minutes, and AM/PM.",
-                "Scheduled rooms now always render as pink while a schedule is attached, matching the Flutter behavior.",
-                "Scheduled rooms automatically open and clear their schedule when the chosen time is due.",
-                "Added local iOS notifications for scheduled room opening times, including foreground banner presentation.",
-                "Added regression coverage for scheduled status priority, due-time opening, and quarter-hour AM/PM selection."
+                "Временный переключатель расписания +15 минут заменен на собственный выбор времени для часов, 00/15/30/45 минут и AM/PM.",
+                "Запланированные комнаты теперь всегда отображаются розовым цветом, если к ним прикреплено расписание, что соответствует поведению Flutter.",
+                "Запланированные комнаты автоматически открываются и очищают свое расписание, когда наступает выбранное время.",
+                "Добавлены локальные уведомления iOS о запланированном времени открытия зала, включая показ баннера на переднем плане.",
+                "Добавлено регрессионное покрытие для запланированного приоритета статуса, времени открытия и выбора четверти часа до полудня/после полудня."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (18)",
             date: "2026-06-06",
             changes: [
-                "Ported the Flutter interaction feedback foundation to native Swift: UIKit haptics plus bundled click/pressed WAV sounds.",
-                "Interaction sounds now use an ambient mixed audio session so they do not take over other playback.",
-                "Room number and S/L/B actions now use the Flutter-style protected long-press interaction by default.",
-                "Added a Settings toggle to switch room actions between long-press and quick-tap mode.",
-                "Right-swipe room menus now give one clean haptic response when the horizontal gesture is recognized and committed.",
-                "Removed the conflicting whole-cell VIP long press; VIP stays in the swipe action menu."
+                "Основу обратной связи взаимодействия Flutter перенесли на родной Swift: тактильные ощущения UIKit плюс встроенные звуки щелчков/нажатий в формате WAV.",
+                "Звуки взаимодействия теперь используют сеанс смешанного окружающего звука, поэтому они не перекрывают другое воспроизведение.",
+                "Номер комнаты и действия S/L/B теперь по умолчанию используют защищенное взаимодействие при длительном нажатии в стиле Flutter.",
+                "Добавлен переключатель «Настройки», позволяющий переключать действия в комнате между режимом длительного нажатия и режима быстрого нажатия.",
+                "Меню комнаты, проводимое по смахиванию правой кнопкой мыши, теперь дает четкий тактильный отклик, когда горизонтальный жест распознается и совершается.",
+                "Убрано конфликтующее долгое нажатие VIP всей ячейки; VIP остается в меню действий смахивания."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (17)",
             date: "2026-06-06",
             changes: [
-                "Added a settings action to unlock the workday and return to the setup screen for editing carts and rooms.",
-                "Added the native first work setup screen for selecting carts, territory, and rooms before opening the summary.",
-                "Added native domain rules for room catalog, cart binding, room selection, duplicate blocking, and workday locking.",
-                "Moved local persistence to a work-session snapshot that stores selection and carts together, with legacy cart-list restore support.",
-                "Aligned core room task invariants: S/L/B require an open room and ready status requires open plus all tasks.",
-                "Documented Apple-first iCloud/CloudKit sync direction; Firebase is not a Swift migration target.",
-                "Scheduled pink rooms now automatically become open/red when their time arrives.",
-                "Added a settings switch between taller first-test cells and compact Flutter-parity cells.",
-                "Restored the taller first-test room-cell geometry as a deliberate Swift-only visual exception.",
-                "Native Swift rewrite runs on physical iPhone with SpriteKit Matrix background.",
-                "Main screen has cart sections, room cells, S/L/B actions, VIP, schedule, and one-open swipe menu.",
-                "Room and cart state now persists locally through Application Support JSON storage.",
-                "Room text notes, voice transcript drafts, cart notes, and local photo/video attachments are domain data.",
-                "Room and cart media use native camera capture and local thumbnail previews.",
-                "Settings screen shows build, diagnostics basics, and this changelog."
+                "Добавлено действие настройки, позволяющее разблокировать рабочий день и вернуться на экран настройки для редактирования корзин и комнат.",
+                "Добавлен собственный экран настройки первой работы для выбора тележек, территории и комнат перед открытием сводки.",
+                "Добавлены собственные правила домена для каталога комнат, привязки корзины, выбора комнаты, блокировки дубликатов и блокировки рабочих дней.",
+                "Локальное сохранение перемещено в снимок рабочего сеанса, в котором выбор и корзины хранятся вместе, с поддержкой устаревшего восстановления списка корзин.",
+                "Согласованные инварианты задач основной комнаты: S/L/B требует открытой комнаты, а статус готовности требует открытия плюс все задачи.",
+                "Документированное направление синхронизации iCloud/CloudKit, ориентированное на Apple; Firebase не является целью миграции Swift.",
+                "Запланированные розовые комнаты теперь автоматически становятся открытыми/красными, когда приходит их время.",
+                "Добавлен переключатель настроек между более высокими ячейками первого теста и компактными ячейками Flutter-parity.",
+                "Восстановлена более высокая геометрия ячейки комнаты из первого теста как преднамеренное визуальное исключение, предназначенное только для Swift.",
+                "Перезапись Native Swift выполняется на физическом iPhone с фоном SpriteKit Matrix.",
+                "На главном экране есть разделы корзины, ячейки комнат, действия S/L/B, VIP, расписание и меню, открываемое одним пальцем.",
+                "Состояние комнаты и корзины теперь сохраняется локально через хранилище JSON поддержки приложений.",
+                "Текстовые заметки комнаты, черновики голосовой расшифровки, заметки в корзине и локальные вложения с фотографиями и видео являются данными домена.",
+                "В медиафайлах комнаты и корзины используется встроенный захват с камеры и локальный предварительный просмотр миниатюр.",
+                "На экране настроек показаны сборка, основы диагностики и этот журнал изменений."
             ]
         )
     ]

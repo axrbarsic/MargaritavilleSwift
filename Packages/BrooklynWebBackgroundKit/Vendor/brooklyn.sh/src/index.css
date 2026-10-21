@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --columns: 40;
+  --vsq: calc(0.5dvw + 0.5dvh);
+  --cell: calc((var(--vsq) * 50) / var(--columns));
+  --pad-scale: 3;
+  --pad: calc(var(--vsq) * var(--pad-scale));
+  --easing: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+* {
+  @apply box-border;
+}
+
+html,
+body,
+#root {
+  @apply 
+  fixed inset-0 
+  w-dvw h-dvh 
+  overflow-hidden overscroll-none
+  touch-none select-none;
+}
+
+html {
+  @apply font-sans tracking-tight cursor-none;
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  font-feature-settings: 'ss01' on, 'calt' off;
+  font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 1rem);
+  line-height: 1.75;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video,
+svg {
+  @apply max-w-full h-auto;
+}
+
+strong {
+  @apply font-medium;
+}
+
+::-webkit-scrollbar {
+  @apply hidden;
+}
+
+::selection {
+  @apply text-white;
+
+  background: rgba(0, 0, 0, 0.95);
+}
+
+#root > div[class*="leva"] {
+  @apply absolute top-auto bottom-5 right-5 z-50;
+
+  button {
+    @apply px-2 font-medium font-sans;
+  }
+}
+
+@media (pointer: coarse) {
+  html {
+    @apply cursor-auto;
+  }
+}

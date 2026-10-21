@@ -5,6 +5,8 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
     case matrixRain
     case tvStaticNoise
     case video
+    case brooklyn
+    case brooklynWeb
 
     var id: String { rawValue }
 
@@ -18,6 +20,10 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
             "TV"
         case .video:
             "Видео"
+        case .brooklyn:
+            "Brooklyn"
+        case .brooklynWeb:
+            "Brooklyn Web"
         }
     }
 
@@ -31,6 +37,10 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
             "Сломанный телевизор"
         case .video:
             "Видео фон"
+        case .brooklyn:
+            "Brooklyn 3D"
+        case .brooklynWeb:
+            "Brooklyn Web локально"
         }
     }
 }

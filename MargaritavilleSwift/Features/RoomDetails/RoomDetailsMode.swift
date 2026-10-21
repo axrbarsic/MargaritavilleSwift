@@ -1,6 +1,6 @@
 import Foundation
 
-enum RoomDetailsMode: String, Identifiable {
+enum RoomDetailsMode: String, Identifiable, Sendable {
     case text
     case voice
     case media

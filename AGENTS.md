@@ -1,5 +1,18 @@
 # MargaritavilleSwift Agent Instructions
 
+## Session Role
+
+- This repository session is the hands-on owner and executor of assigned
+  MargaritavilleSwift checkpoints, not the command center.
+- Build the technical plan, inspect and edit the product, write and run tests,
+  build, install, and return only the evidence proportionate to the assigned
+  checkpoint and its concrete risk.
+- Do not hand normal implementation, tests, build, installation, or QA back to
+  the command center. If externally blocked, exhaust safe in-session paths and
+  report the exact missing user/system action.
+- Preserve dirty state and stay inside the bounded checkpoint assigned by the
+  command center. Do not commit or push unless Alex explicitly authorizes it.
+
 ## Language And Context
 
 - Always answer Alex in Russian unless he explicitly asks otherwise.
@@ -12,19 +25,27 @@
 - Do not edit the Flutter app while porting unless Alex explicitly asks.
 - Android and Web are frozen for this migration track until Alex changes that.
 
-## Global Goal
+## Bounded Checkpoint And Cost Discipline
 
-The primary goal is a stable standalone Margaritaville iOS app, not completion
-of one isolated subtask.
-
-Do not stop just because one subgoal is complete. After finishing a coherent
-piece, immediately continue to the next highest-priority migration gap unless:
-
-- Alex explicitly says to pause or stop.
-- A real blocker requires Alex's action, such as unlocking a device, signing in,
-  approving a certificate/account prompt, or providing a missing secret.
-- The current turn must end because a build/install/commit checkpoint has been
-  reached and no safe next step can be taken without user feedback.
+- Work only on the bounded checkpoint assigned by Alex or the command center.
+  After installing and reporting that checkpoint, stop for Alex's feedback; do
+  not automatically begin the next migration gap.
+- Default to install-first acceptance on Alex's physical iPhone. For visual or
+  UX tuning, Alex's direct evaluation of the installed build is the primary QA.
+- Use the cheapest sufficient gate. Reuse valid prior test results and signed
+  artifacts when the relevant source has not changed.
+- Do not add a UI-test harness, run multiple simulators/devices, perform
+  quartile/pixel measurements, collect redundant screenshots, repeat passing
+  tests, or run a full regression unless Alex explicitly asks or a concrete
+  crash, data-loss, security, payment, or platform-compatibility risk requires
+  it.
+- Do not turn visual polish into an autonomous investigation. Build/install/
+  launch, report the exact path for Alex to inspect, and wait for feedback.
+- Before any verification step beyond a targeted test plus physical
+  build/install/launch, state the specific risk it covers. If no specific risk
+  can be named, skip it.
+- After two failed attempts from the same causal class, stop patching and report
+  the system boundary or blocker instead of starting a broader test campaign.
 
 ## Critical Path Order
 
@@ -39,13 +60,17 @@ Keep moving through this order:
 7. Apple-first sync design and implementation through CloudKit/iCloud.
 8. Production cutover from Flutter only after the Swift app is stable.
 
-If Alex gives a small visual or UX request, handle it, then return to this
-critical path automatically.
+If Alex gives a small visual or UX request, handle only that request, install it,
+report, and stop until Alex responds.
 
 ## Verification Rules
 
 - Use the physical iPhone by default. Do not use the iOS Simulator unless Alex
   explicitly allows it.
+- For a normal visual checkpoint, the default completion gate is: relevant
+  targeted test only when needed, successful device build or reuse of a valid
+  signed artifact, install over the existing app without deleting data, launch,
+  and Alex's visual verdict. Do not substitute simulator evidence for this path.
 - Current physical device target:
   `85E776B1-9069-5E68-BC3A-3BCAA4AAB870`.
 - Bundle identifier:
@@ -65,10 +90,16 @@ xcrun devicectl device process launch --device 85E776B1-9069-5E68-BC3A-3BCAA4AAB
 ## Build Number Discipline
 
 - Increment `CURRENT_PROJECT_VERSION` in `project.yml` for every installed build.
-- Keep the in-app changelog updated when the user-facing behavior changes.
-- Commit each coherent migration block separately.
-- If a Git remote exists, push after committed checkpoints. If no remote exists,
-  state that clearly.
+- Every build installed for Alex must have its own in-app changelog entry tied
+  to the exact build number and date, even when the checkpoint is primarily a
+  fix rather than a new feature.
+- Write every new changelog title and bullet only in Russian. Briefly state what
+  was added, changed, and fixed in user-facing language; do not leave English
+  release notes for new builds.
+- Before device installation, verify that the artifact build number and the
+  newest changelog entry match. A build without its Russian changelog entry is
+  not ready to install.
+- Commit or push only when Alex explicitly authorizes it.
 
 ## Architecture Rules
 
@@ -132,5 +163,6 @@ similar, interpret that as:
 2. Pick the next missing item from the critical path.
 3. Implement it.
 4. Build and install on the physical iPhone when app code changed.
-5. Commit the checkpoint.
-6. Continue to the next migration gap if no blocker or explicit pause exists.
+5. Report the installed checkpoint and stop for Alex's feedback.
+6. Commit, push, or continue to another migration gap only after explicit
+   authorization from Alex.

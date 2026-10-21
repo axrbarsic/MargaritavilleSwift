@@ -5,6 +5,7 @@ struct MargaritavilleSummarySection: View {
     let housekeeper: Housekeeper?
     let consumableTickerText: String?
     let geometry: RoomCellGeometry
+    let gridColumnCount: MargaritavilleGridColumnCount
     let zoomedRoomID: RoomCell.ID?
     let roomZoomNamespace: Namespace.ID
     let statusPaletteSaturation: Double
@@ -17,23 +18,18 @@ struct MargaritavilleSummarySection: View {
     let onReset: (RoomCell.ID) -> Void
     let onSchedule: (RoomCell.ID) -> Void
 
-    private var columns: [GridItem] {
-        Array(
-            repeating: GridItem(.flexible(), spacing: geometry.margaritavilleGridSpacing),
-            count: geometry.margaritavilleGridColumnCount
-        )
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             groupHeader
-            LazyVGrid(columns: columns, spacing: geometry.margaritavilleGridSpacing) {
-                ForEach(section.rooms) { room in
-                    tile(for: room)
-                }
+                .padding(.horizontal, MargaritavilleRoomGridLayout.horizontalInset)
+            MargaritavilleRoomGrid(
+                section.rooms,
+                geometry: geometry,
+                columnCount: gridColumnCount
+            ) { room in
+                tile(for: room)
             }
         }
-        .padding(.horizontal, 8)
         .padding(.vertical, 8)
     }
 
@@ -64,6 +60,7 @@ struct MargaritavilleSummarySection: View {
         MargaritavilleRoomTile(
             room: room,
             geometry: geometry,
+            typography: .production,
             isZoomed: zoomedRoomID == room.id,
             zoomNamespace: roomZoomNamespace,
             statusPaletteSaturation: statusPaletteSaturation,
@@ -109,9 +106,10 @@ private struct HousekeeperSummaryNameButton: View {
     }
 }
 
-private struct MargaritavilleRoomTile: View {
+struct MargaritavilleRoomTile: View {
     let room: RoomCell
     let geometry: RoomCellGeometry
+    let typography: RoomCellTypography
     let isZoomed: Bool
     let zoomNamespace: Namespace.ID
     let statusPaletteSaturation: Double
@@ -128,21 +126,28 @@ private struct MargaritavilleRoomTile: View {
     @Environment(\.experimentalVIPHDREnabled) private var experimentalVIPHDREnabled
     @Environment(\.experimentalStatusHDRPulseEnabled) private var experimentalStatusHDRPulseEnabled
     @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
+    @Environment(\.experimentalLive3DCellsEnabled) private var experimentalLive3DCellsEnabled
+    @Environment(\.experimentalLive3DCellsRendererReady) private var experimentalLive3DCellsRendererReady
     @Environment(\.experimentalCellSpringIntensity) private var experimentalCellSpringIntensity
     @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
+    @Environment(\.margaritavilleRoomBaselineTileWidth) private var baselineTileWidth
     @State private var isActionDialogPresented = false
     @State private var actionSwipeArmed = false
     @State private var actionSwipeFeedbackStarted = false
-    @State private var measuredTileWidth: CGFloat = 0
     @State private var statusHDRPulseStatus: RoomStatus?
     @State private var statusHDRPulseGeneration = 0
     @State private var cellPulseStartedAt: Date?
     @State private var cellPulseCleanupTask: Task<Void, Never>?
 
     var body: some View {
-        tileBody
+        canonicalTileBody
             .opacity(isZoomed ? 0 : 1)
             .simultaneousGesture(actionMenuSwipeGesture)
+            .accessibilityAction(.default, activateAccessibilityPrimaryAction)
+            .accessibilityAction(
+                named: "Открыть меню действий",
+                openActionDialog
+            )
             .confirmationDialog("Комната \(room.id)", isPresented: $isActionDialogPresented, titleVisibility: .visible) {
                 Button("Голос/медиа", systemImage: "mic.and.signal.meter.fill", action: openVoiceDetails)
                 Button(room.isVIP ? "VIP выключить" : "VIP включить", systemImage: room.isVIP ? "diamond.fill" : "diamond", action: toggleVIP)
@@ -168,27 +173,24 @@ private struct MargaritavilleRoomTile: View {
             }
     }
 
-    @ViewBuilder
+    private var canonicalTileBody: some View {
+        tileBody
+            .frame(
+                width: baselineTileWidth,
+                height: geometry.margaritavilleTileHeight,
+                alignment: .topLeading
+            )
+            .contentShape(Rectangle())
+    }
+
     private var tileBody: some View {
-        if vipJellyActive || cellPulseStartedAt != nil {
-            TimelineView(.animation(minimumInterval: 1.0 / 120.0)) { timeline in
-                tileBodyContent(
-                    vipJellyTime: vipJellyActive ? timeline.date.timeIntervalSinceReferenceDate : nil,
-                    pulseHeat: RoomStatusHDRPulseTiming.heat(
-                        startedAt: cellPulseStartedAt,
-                        now: timeline.date
-                    )
-                )
-            }
-        } else {
-            tileBodyContent(vipJellyTime: nil, pulseHeat: 0)
-        }
+        tileBodyContent
     }
 
     @ViewBuilder
-    private func tileBodyContent(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
+    private var tileBodyContent: some View {
         if geometry.margaritavilleHoldZoomEnabled {
-            roomTileContent(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+            roomTileContent
                 .contentShape(Rectangle())
                 .accessibilityAddTraits(.isButton)
                 .accessibilityLabel("Комната \(room.id)")
@@ -205,72 +207,129 @@ private struct MargaritavilleRoomTile: View {
                 semanticLabel: "Комната \(room.id)",
                 onActivate: advanceRoomWithPulse
             ) {
-                roomTileContent(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+                roomTileContent
             }
         }
     }
 
-    private func roomTileContent(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
+    private var roomTileContent: some View {
         VStack(spacing: 6) {
             Text(room.id)
-                .font(.system(size: 44, weight: .black, design: .rounded))
+                .font(.system(
+                    size: CGFloat(typography.roomNumberSize),
+                    weight: typography.roomNumberWeight.fontWeight,
+                    design: .rounded
+                ))
                 .monospacedDigit()
                 .lineLimit(1)
-                .minimumScaleFactor(0.50)
+                .fixedSize(horizontal: true, vertical: false)
+                .offset(y: CGFloat(typography.roomNumberVerticalOffset))
             Text(timeLabel)
-                .font(.system(size: 16, weight: .black, design: .rounded))
+                .font(.system(
+                    size: CGFloat(typography.activationTimeSize),
+                    weight: typography.activationTimeWeight.fontWeight,
+                    design: .rounded
+                ))
                 .monospacedDigit()
                 .lineLimit(1)
-                .minimumScaleFactor(0.62)
+                .offset(y: CGFloat(typography.activationTimeVerticalOffset))
         }
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .padding(.horizontal, 4)
         .padding(.vertical, 10)
         .frame(
-            maxWidth: .infinity,
-            minHeight: geometry.margaritavilleTileHeight,
-            maxHeight: geometry.margaritavilleTileHeight
+            width: baselineTileWidth,
+            height: geometry.margaritavilleTileHeight
         )
         .background {
-            fill(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+            tileBodyDecoration
         }
         .overlay(alignment: .bottomTrailing) {
             RoomMediaIndicator(room: room)
                 .allowsHitTesting(false)
         }
-        .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
-        .vipJellyUnifiedLayer(
-            enabled: vipJellyActive,
-            time: vipJellyTime,
-            speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed,
-            cornerRadius: tileCornerRadius
-        )
-        .vipJellyShapeMask(
-            enabled: vipJellyActive,
-            time: vipJellyTime,
-            speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed,
-            cornerRadius: tileCornerRadius,
-            isMenuExpanded: false
-        )
         .matchedGeometryEffect(id: room.id, in: zoomNamespace)
-        .scaleEffect(
-            x: 1 + 0.10 * experimentalCellSpringIntensity * pulseRubberAmount(pulseHeat),
-            y: 1 + 0.10 * experimentalCellSpringIntensity * pulseRubberAmount(pulseHeat)
-        )
-        .offset(y: -7.5 * experimentalCellSpringIntensity * pulseRubberAmount(pulseHeat))
-        .background {
-            GeometryReader { proxy in
-                Color.clear
-                    .onAppear {
-                        measuredTileWidth = proxy.size.width
-                    }
-                    .onChange(of: proxy.size.width) { _, width in
-                        measuredTileWidth = width
-                    }
-            }
+    }
+
+    @ViewBuilder
+    private var tileBodyDecoration: some View {
+        switch SummaryLiveCellOverlayContract.bodyMode(
+            isEnabled: experimentalLive3DCellsEnabled,
+            rendererAvailable: experimentalLive3DCellsRendererReady
+        ) {
+        case .swiftUIDecoration:
+            animatedTileDecoration
+        case .metalBody:
+            Color.clear.summaryLiveCellSurface(
+                isEnabled: !isZoomed,
+                descriptor: liveCellDescriptor
+            )
         }
+    }
+
+    private var liveCellDescriptor: SummaryLiveCellDescriptor {
+        SummaryLiveCellDescriptor(
+            roomID: room.id,
+            isVIP: room.isVIP,
+            status: room.status(in: .simpleCycle),
+            statusPaletteSaturation: statusPaletteSaturation,
+            usesPurpleScheduled: false,
+            cornerRadius: tileCornerRadius,
+            depth: 15
+        )
+    }
+
+    @ViewBuilder
+    private var animatedTileDecoration: some View {
+        if vipJellyActive || cellPulseStartedAt != nil {
+            TimelineView(.animation(minimumInterval: 1.0 / 120.0)) { timeline in
+                tileDecoration(
+                    vipJellyTime:
+                        vipJellyActive
+                            ? timeline.date.timeIntervalSinceReferenceDate
+                            : nil,
+                    pulseHeat: RoomStatusHDRPulseTiming.heat(
+                        startedAt: cellPulseStartedAt,
+                        now: timeline.date
+                    )
+                )
+            }
+        } else {
+            tileDecoration(vipJellyTime: nil, pulseHeat: 0)
+        }
+    }
+
+    private func tileDecoration(
+        vipJellyTime: TimeInterval?,
+        pulseHeat: CGFloat
+    ) -> some View {
+        fill(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+            .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
+            .vipJellyUnifiedLayer(
+                enabled: vipJellyActive,
+                time: vipJellyTime,
+                speed: experimentalVIPJellySpeed,
+                seed: vipJellySeed,
+                cornerRadius: tileCornerRadius
+            )
+            .vipJellyShapeMask(
+                enabled: vipJellyActive,
+                time: vipJellyTime,
+                speed: experimentalVIPJellySpeed,
+                seed: vipJellySeed,
+                cornerRadius: tileCornerRadius,
+                isMenuExpanded: false
+            )
+            .scaleEffect(
+                x: 1 + 0.10 * experimentalCellSpringIntensity
+                    * pulseRubberAmount(pulseHeat),
+                y: 1 + 0.10 * experimentalCellSpringIntensity
+                    * pulseRubberAmount(pulseHeat)
+            )
+            .offset(
+                y: -7.5 * experimentalCellSpringIntensity
+                    * pulseRubberAmount(pulseHeat)
+            )
     }
 
     private func zoomRoom() {
@@ -360,6 +419,10 @@ private struct MargaritavilleRoomTile: View {
     }
 
     private func updateActionSwipe(_ value: DragGesture.Value) {
+        guard !geometry.margaritavilleHoldZoomEnabled else {
+            resetActionSwipe()
+            return
+        }
         let horizontal = value.translation.width
         let absX = abs(horizontal)
         let absY = abs(value.translation.height)
@@ -390,6 +453,7 @@ private struct MargaritavilleRoomTile: View {
 
     private func finishActionSwipe(_ value: DragGesture.Value) {
         defer { resetActionSwipe() }
+        guard !geometry.margaritavilleHoldZoomEnabled else { return }
         let horizontal = value.translation.width
         let predicted = value.predictedEndTranslation.width
         let absY = abs(value.translation.height)
@@ -400,8 +464,7 @@ private struct MargaritavilleRoomTile: View {
             cellWidth: compactActionMenuCellWidth
         )
         guard armed else { return }
-        feedback.playEvent(.actionMenuOpen)
-        isActionDialogPresented = true
+        openActionDialog()
     }
 
     private func resetActionSwipe() {
@@ -409,12 +472,25 @@ private struct MargaritavilleRoomTile: View {
         actionSwipeFeedbackStarted = false
     }
 
+    private func activateAccessibilityPrimaryAction() {
+        if geometry.margaritavilleHoldZoomEnabled {
+            zoomRoom()
+        } else {
+            advanceRoomWithPulse()
+        }
+    }
+
+    private func openActionDialog() {
+        feedback.playEvent(.actionMenuOpen)
+        isActionDialogPresented = true
+    }
+
     private var compactActionMenuThreshold: CGFloat {
         SummarySwipeCommitPolicy.compactRoomActionMenuThreshold(cellWidth: compactActionMenuCellWidth)
     }
 
     private var compactActionMenuCellWidth: CGFloat {
-        measuredTileWidth > 0 ? measuredTileWidth : 88
+        baselineTileWidth
     }
 
     private func advanceRoomWithPulse() {
@@ -513,6 +589,7 @@ private struct MargaritavilleRoomTile: View {
 
 }
 
+// Static text lives outside the decoration TimelineView and shares this formatter.
 private let margaritavilleTimeFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "en_US_POSIX")

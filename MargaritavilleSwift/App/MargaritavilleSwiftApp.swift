@@ -1,9 +1,15 @@
 import CloudKit
 import SwiftUI
+#if DEBUG
+import UIKit
+#endif
 
 @main
 struct MargaritavilleSwiftApp: App {
     @Environment(\.scenePhase) private var scenePhase
+#if DEBUG
+    private let debugKeepAwake = DebugKeepAwakeController()
+#endif
     @State private var workSession: WorkSessionStore
     @State private var appSettings: AppSettingsStore
     @State private var activeHotel: HotelProfile
@@ -74,6 +80,12 @@ struct MargaritavilleSwiftApp: App {
                 .environment(\.appleSyncStatus, appleSyncStatus)
                 .environment(\.scheduleNotifications, .live(scheduleNotifications))
                 .onAppear {
+#if DEBUG
+                    debugKeepAwake.update(
+                        isAppActive: scenePhase == .active,
+                        reason: "appear"
+                    )
+#endif
                     performanceTelemetry.start()
                 }
                 .task {
@@ -86,9 +98,24 @@ struct MargaritavilleSwiftApp: App {
                     }
                 }
                 .onChange(of: scenePhase) { _, phase in
+#if DEBUG
+                    debugKeepAwake.update(
+                        isAppActive: phase == .active,
+                        reason: "scenePhase:\(phase)"
+                    )
+#endif
                     guard phase != .active else { return }
                     workSession.flushPendingPersistence()
                 }
+#if DEBUG
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIApplication.willTerminateNotification
+                    )
+                ) { _ in
+                    debugKeepAwake.reset(reason: "willTerminate")
+                }
+#endif
         }
     }
 

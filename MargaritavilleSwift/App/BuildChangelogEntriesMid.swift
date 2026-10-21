@@ -6,18 +6,18 @@ extension BuildChangelog {
             version: "0.2.0 (94)",
             date: "2026-06-09",
             changes: [
-                "Restored a visible animated VIP jelly mask over the whole composited cell so VIP rooms no longer stay plain rectangles.",
-                "Kept the Metal layer effect for content deformation while the shared jelly mask guarantees the cell contour visibly moves.",
-                "Migrated existing installs to enable VIP jelly once by default so old saved experiment flags cannot hide the effect."
+                "Восстановлена видимая анимированная желейная маска VIP по всей составной ячейке, поэтому VIP-комнаты больше не остаются простыми прямоугольниками.",
+                "Сохранен эффект металлического слоя для деформации содержимого, а общая желеобразная маска гарантирует заметное движение контура ячейки.",
+                "Существующие установки перенесены, чтобы включить VIP jelly один раз по умолчанию, поэтому старые сохраненные флаги эксперимента не могут скрыть эффект."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (93)",
             date: "2026-06-09",
             changes: [
-                "Replaced the invisible VIP jelly distortion with a SwiftUI layerEffect shader that samples the full composited cell layer.",
-                "Moved the VIP jelly silhouette into the Metal shader alpha mask so the cell contour and its contents deform through the same field.",
-                "Removed the pre-warp static clipping for VIP jelly cells so the animated contour is visible again."
+                "Невидимое желеобразное искажение VIP заменено на шейдер SwiftUI LayerEffect, который сэмплирует полный составной слой ячейки.",
+                "Силуэт VIP-желе перемещен в альфа-маску шейдера металла, чтобы контур ячейки и ее содержимое деформировались в одном и том же поле.",
+                "Удалена статическая обрезка до деформации для ячеек VIP-желе, поэтому анимированный контур снова виден."
             ]
         ),
         BuildChangelogEntry(
@@ -33,196 +33,196 @@ extension BuildChangelog {
             version: "0.2.0 (91)",
             date: "2026-06-09",
             changes: [
-                "Fixed VIP jelly content warp so the room number and S/L/B layer uses repeating local shader coordinates instead of collapsing to a nearly static edge sample.",
-                "Moved VIP jelly deformation onto the composited cell layer so the status fill, room number, and S/L/B controls warp as one material.",
-                "Increased the Metal warp amplitude and sample offset so content deformation is visibly tied to the moving jelly cell."
+                "Исправлена деформация содержимого VIP-желе, поэтому номер комнаты и слой S/L/B используют повторяющиеся координаты локального шейдера вместо того, чтобы сжиматься до почти статического образца края.",
+                "Деформация желе VIP перемещена на составной слой ячеек, поэтому заливка статуса, номер комнаты и элементы управления S/L/B деформируются как один материал.",
+                "Увеличена амплитуда деформации металла и смещение образца, поэтому деформация содержимого явно привязана к движущейся ячейке желе."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (90)",
             date: "2026-06-09",
             changes: [
-                "Hid and force-disabled the unfinished VIP jelly depth experiment so it cannot remain active from saved settings.",
-                "Started the performance audit by collapsing VIP jelly animation work to one frame clock per VIP cell instead of separate clocks for background, mask, and each label.",
-                "Replaced per-label fake motion with a single Metal distortion pass that warps the rendered room number and S/L/B layer together."
+                "Скрыл и принудительно отключил незавершенный эксперимент по глубине VIP-желе, чтобы он не мог оставаться активным из сохраненных настроек.",
+                "Начал проверку производительности, свернув работу VIP-желе-анимации до одной тактовой частоты кадра на VIP-ячейку вместо отдельных тактовых частот для фона, маски и каждой метки.",
+                "Ложное движение для каждой метки заменено одним проходом искажения металла, который искажает вместе визуализированный номер комнаты и слой S/L/B."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (89)",
             date: "2026-06-09",
             changes: [
-                "Added a Developer toggle for VIP jelly depth so the raised blob look can be compared on and off.",
-                "Strengthened the VIP jelly depth lighting with a clear specular highlight, darker lower edge, and deeper status-colored body shadow.",
-                "Made the room number and S/L/B controls move subtly with VIP jelly so the content follows the blob instead of staying rigid."
+                "Добавлен переключатель разработчика для VIP-глубины желе, чтобы можно было сравнивать внешний вид приподнятой капли.",
+                "Усилено глубинное освещение VIP-желе за счет четкого зеркального блика, более темного нижнего края и более глубоких теней тела, соответствующих статусному цвету.",
+                "Номер комнаты и элементы управления S/L/B теперь плавно перемещаются с помощью VIP-желе, поэтому содержимое следует за каплей, а не остается неподвижным."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (88)",
             date: "2026-06-09",
             changes: [
-                "Added native bevel depth to VIP jelly cells using inner highlights, inner shadows, and soft edge lighting.",
-                "Kept depth, flicker, and shadow effects clipped to the same live jelly shape so the blob reads as the cell itself, not an overlay."
+                "Добавлена глубина скоса к ячейкам VIP-желе с использованием внутренних бликов, внутренних теней и мягкого краевого освещения.",
+                "Эффекты глубины, мерцания и тени сохранены в одной и той же форме живого желе, поэтому капля читается как сама ячейка, а не как наложение."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (87)",
             date: "2026-06-09",
             changes: [
-                "Added selectable Broken TV background variants: Analog, Fine, Tear, Green, and Hard.",
-                "Persisted the selected TV-static variant and included it in the background renderer configuration.",
-                "Moved VIP flicker into the jelly cell renderer when VIP jelly is active, so flashes follow the blob shape instead of the old rectangle."
+                "Добавлены выбираемые варианты фона сломанного телевизора: «Аналоговый», «Хороший», «Слеза», «Зеленый» и «Жесткий».",
+                "Выбранный вариант ТВ-помех сохранён и включён в конфигурацию фонового рендеринга.",
+                "Мерцание VIP перемещено в средство рендеринга ячеек желе, когда VIP желе активно, поэтому вспышки следуют за формой капли, а не за старым прямоугольником."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (86)",
             date: "2026-06-09",
             changes: [
-                "Smoothed VIP jelly edges with cubic curves so the cell no longer catches angular polygon corners while wobbling.",
-                "Clipped VIP flicker through the same jelly cell mask and replaced the diagonal light gradient with a uniform natural flash."
+                "Сглажены желеобразные VIP-края с кубическими кривыми, поэтому ячейка больше не цепляется за угловатые углы многоугольников при покачивании.",
+                "Убрано VIP-мерцание через ту же маску из желеобразных ячеек и заменен диагональный градиент света на равномерную естественную вспышку."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (85)",
             date: "2026-06-09",
             changes: [
-                "Removed the VIP breathing experiment from active settings and replaced it with VIP jelly.",
-                "Made VIP jelly deform the actual cell shape and mask instead of drawing a moving line inside a stable rectangle.",
-                "Added per-room seeded multi-wave motion so VIP jelly cells do not move in the same short visible loop."
+                "Удален эксперимент с дыханием VIP из активных настроек и заменен VIP-желе.",
+                "VIP-желе теперь деформирует реальную форму ячейки и маскирует ее вместо рисования движущейся линии внутри стабильного прямоугольника.",
+                "Добавлено многоволновое движение для каждой комнаты, чтобы VIP-железные ячейки не двигались по одной и той же короткой видимой петле."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (84)",
             date: "2026-06-09",
             changes: [
-                "Strengthened the VIP jelly effect so enabled VIP cells visibly pulse vertically and warp through the real cell size.",
-                "Added animated jelly edge highlights to make the effect easier to see without bringing back the removed zebra or TV-static VIP modes."
+                "Усилен эффект VIP-желе, благодаря чему VIP-ячейки заметно пульсируют вертикально и искажаются по сравнению с реальным размером ячейки.",
+                "Добавлены анимированные блики по краям, чтобы эффект был легче увидеть, не возвращая удаленные VIP-режимы «зебра» или статический ТВ-режим."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (83)",
             date: "2026-06-09",
             changes: [
-                "Removed the old VIP TV-static and VIP zebra experiments from active settings and room rendering.",
-                "Reworked VIP breathing into a GPU distortion shader so VIP cells can jelly-warp instead of only stretching horizontally.",
-                "Simplified Broken TV background controls to brightness and green tint, with stronger visible response."
+                "Из активных настроек и рендеринга комнат удалены старые эксперименты с VIP TV-статикой и VIP-зеброй.",
+                "Переработано дыхание VIP в шейдер искажений графического процессора, чтобы VIP-ячейки могли деформироваться, а не только растягиваться по горизонтали.",
+                "Упрощено управление яркостью и зеленым оттенком фона сломанного телевизора с более сильным видимым откликом."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (82)",
             date: "2026-06-09",
             changes: [
-                "Added live controls for the Broken TV background: noise speed, grain size, brightness, and green tint.",
-                "Added experimental VIP flicker and VIP breathing controls so VIP cells can pulse without using the coarse TV-static cell effect."
+                "Добавлены живые элементы управления фоном сломанного телевизора: скорость шума, размер зерна, яркость и зеленый оттенок.",
+                "Добавлены экспериментальные элементы управления мерцанием VIP и дыханием VIP, чтобы VIP-ячейки могли пульсировать без использования грубого эффекта ТВ-статических ячеек."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (81)",
             date: "2026-06-09",
             changes: [
-                "Rebuilt the VIP TV-noise cell effect on the same Core Image random-noise renderer used by the full-screen TV background.",
-                "Replaced the coarse Canvas block pattern with finer status-tinted static grain and matching scanlines inside VIP cells."
+                "Перестроен эффект VIP-телевизионного шума на том же рендерере случайного шума Core Image, который используется для полноэкранного фона телевизора.",
+                "Заменен грубый шаблон блока Canvas на более мелкую статическую зернистость с оттенком статуса и соответствующими строками развертки внутри VIP-ячейок."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (80)",
             date: "2026-06-08",
             changes: [
-                "Removed the TV-noise cell toggle from the Background settings so it can no longer read as a global all-cells mode.",
-                "Kept TV noise only as a VIP experimental effect: regular cells never create the overlay."
+                "Удален переключатель ячейки ТВ-шума из настроек фона, поэтому его больше нельзя считать глобальным режимом всех ячеек.",
+                "Телевизионный шум сохранен только как VIP-экспериментальный эффект: обычные ячейки никогда не создают наложение."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (79)",
             date: "2026-06-08",
             changes: [
-                "Changed the broken-TV cell effect into a VIP-only mode instead of applying it to every room cell.",
-                "When the VIP TV mode is enabled, VIP cells use status-tinted TV static and the regular VIP zebra is suppressed to avoid stacked animated overlays."
+                "Изменен эффект сломанной ТВ-ячейки на режим только для VIP вместо применения его к каждой ячейке комнаты.",
+                "Когда включен режим VIP TV, VIP-ячейки используют статический ТВ-статус с тонировкой состояния, а обычная VIP-зебра подавляется, чтобы избежать наложений анимированных друг на друга."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (78)",
             date: "2026-06-08",
             changes: [
-                "Optimized the broken-TV cell overlay after device testing showed heat and scrolling jank.",
-                "Kept the cell TV static visually obvious while replacing per-pixel drawing with a bounded low-cost noise grid."
+                "Оптимизировано наложение сломанного ТВ-ячейки после того, как тестирование устройства показало нагрев и рывки при прокрутке.",
+                "Заметные ТВ-помехи сохранены, а попиксельная отрисовка заменена ограниченной недорогой шумовой сеткой."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (77)",
             date: "2026-06-08",
             changes: [
-                "Made the broken-TV cell overlay much more visible with high-contrast black, white, and status-tinted static.",
-                "Raised the cell TV static cadence to 60 Hz and added stronger scanline/glitch bands so the effect reads like the full-screen TV background."
+                "Наложение сломанной ячейки телевизора стало намного более заметным за счет высококонтрастных черных, белых и статических статических изображений с оттенком статуса.",
+                "Частота ТВ-помех увеличена до 60 Гц; усилены полосы развёртки и глитчи, чтобы эффект воспринимался как полноэкранный телевизионный фон."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (76)",
             date: "2026-06-08",
             changes: [
-                "Made the cell broken-TV experiment easier to find by showing it in Background settings as well as Developer experiments.",
-                "Renamed the toggle to 'Сломанный ТВ в ячейках' so it clearly describes the visible cell effect."
+                "Эксперимент «Сломанный ТВ» теперь проще найти: он показан и в настройках фона, и в экспериментах разработчика.",
+                "Переключатель переименован в «Сломанный ТВ в ячейках», чтобы точнее описывать видимый эффект."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (75)",
             date: "2026-06-08",
             changes: [
-                "Added a Developer experiment that applies broken-TV static inside room cells instead of only as a full-screen background.",
-                "Tinted the cell TV static from each room's current status color so yellow, red, green, blue, and scheduled cells keep their meaning.",
-                "Kept the effect as a lightweight visible-cell overlay with deterministic per-room noise instead of creating a SpriteKit scene per cell."
+                "Добавлен эксперимент разработчика, который применяет статические помехи от сломанного телевизора внутри ячеек комнаты, а не только в качестве полноэкранного фона.",
+                "ТВ-помехи окрашиваются в цвет текущего статуса комнаты, поэтому жёлтые, красные, зелёные, синие и запланированные ячейки сохраняют своё значение.",
+                "Сохранен эффект в виде облегченного наложения видимых ячеек с детерминированным шумом для каждой комнаты вместо создания сцены SpriteKit для каждой ячейки."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (74)",
             date: "2026-06-08",
             changes: [
-                "Replaced the black SpriteKit GLSL TV Static path with a native Core Image CIRandomGenerator background so the TV mode renders visibly on the iPhone.",
-                "Kept TV Static as a regular background mode next to Off, Matrix, and Video, with scanline overlay for an analog television feel.",
-                "Removed the unused SpriteKit TV shader scene from the active code path."
+                "Заменен черный статический путь SpriteKit GLSL TV на собственный фон Core Image CIRandomGenerator, чтобы режим ТВ отображался на iPhone визуально.",
+                "Сохранен режим «ТВ-статический» в качестве обычного фонового режима рядом с режимами «Выкл.», «Матрица» и «Видео» с наложением строк развертки для ощущения аналогового телевидения.",
+                "Удалена неиспользуемая сцена шейдера SpriteKit TV из активного пути кода."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (73)",
             date: "2026-06-08",
             changes: [
-                "Moved the broken-TV effect out of the Developer preview and into the regular background mode picker next to Off, Matrix, and Video.",
-                "Made TV Static render as a full-screen SpriteKit background and write opaque shader fragments directly so it cannot appear as a black preview panel.",
-                "Added persistence coverage for the TV Static background mode."
+                "Эффект разбитого телевизора перенесен из предварительного просмотра для разработчиков в обычный выбор фонового режима рядом с пунктами «Выкл.», «Матрица» и «Видео».",
+                "TV Static теперь рендерится как полноэкранный фон SpriteKit; шейдер напрямую записывает непрозрачные фрагменты и больше не выглядит чёрной панелью.",
+                "Добавлено постоянное покрытие для статического фонового режима ТВ."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (72)",
             date: "2026-06-08",
             changes: [
-                "Fixed the temporary broken-TV preview visibility by adapting ShaderKit's Dynamic Gray Noise output alpha to OceanKey's direct SKSpriteNode shader wrapper.",
-                "Kept the ShaderKit noise algorithm intact while removing the dependency on ShaderKit's color-mix helper state.",
-                "Restored video wallpaper matte blur as a real variable UIBlurEffect instead of the coarse gray material-step overlay."
+                "Исправлена временная неработающая видимость предварительного просмотра телевизора путем адаптации выходной альфа-версии динамического серого шума ShaderKit к прямой оболочке шейдера SKSpriteNode OceanKey.",
+                "Алгоритм шума ShaderKit сохранён без изменений, а зависимость от вспомогательного состояния смешивания цветов удалена.",
+                "Восстановлено матовое размытие видеообоев в виде реальной переменной UIBlurEffect вместо грубого серого наложения ступенчатого материала."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (71)",
             date: "2026-06-08",
             changes: [
-                "Added a temporary experimental Settings block for the first broken-TV visual candidate.",
-                "Integrated ShaderKit's MIT Dynamic Gray Noise shader as a SpriteKit GPU preview instead of hand-rolling the TV static effect.",
-                "Persisted the temporary TV noise toggle so the preview can be switched on and off while testing."
+                "Добавлен временный экспериментальный блок настроек для первого визуального кандидата со сломанным телевизором.",
+                "Интегрированный шейдер MIT Dynamic Gray Noise от ShaderKit в качестве предварительного просмотра графического процессора SpriteKit вместо ручной прокрутки статического эффекта телевизора.",
+                "Сохранился временный переключатель шума телевизора, чтобы можно было включать и выключать предварительный просмотр во время тестирования."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (70)",
             date: "2026-06-08",
             changes: [
-                "Rebuilt the top setup-unlock puzzle swipe as one measured GeometryReader track so the dragged piece lands exactly in the settings-button socket.",
-                "Fixed the room-cell puzzle swipe math so the piece center and socket center match exactly at commit instead of landing a few points off."
+                "Переделано верхнее пролистывание головоломки для настройки и разблокировки как измеренная дорожка GeometryReader, так что перетаскиваемый фрагмент попадает точно в гнездо кнопки настроек.",
+                "Исправлена математика смахивания головоломки с ячейками комнаты, так что центр детали и центр гнезда точно совпадают при фиксации, а не отклоняются на несколько точек."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (69)",
             date: "2026-06-08",
             changes: [
-                "Rebuilt video wallpaper playback around a stable AVPlayerLayer path so the main screen no longer starts black until Settings forces a redraw.",
-                "Moved blur, green tint, brightness, and grid to lightweight overlay layers instead of per-frame Core Image video composition.",
-                "Added tap-to-close behavior: when a room action menu is open, tapping the room cell closes it."
+                "Перестроено воспроизведение видеообоев по стабильному пути AVPlayerLayer, поэтому главный экран больше не становится черным, пока настройки не заставят его перерисовать.",
+                "Размытие, зеленый оттенок, яркость и сетка перемещены в легкие наложенные слои вместо покадровой композиции видео основного изображения.",
+                "Добавлено поведение закрытия нажатием: когда меню действий в комнате открыто, нажатие на ячейку комнаты закрывает его."
             ]
         ),
     ]

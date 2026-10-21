@@ -13,6 +13,7 @@ struct SettingsScreen: View {
     @State private var selectedCategory: SettingsCategory = .appearance
     @State private var isChangelogPresented = false
     @State private var isResetConfirmationPresented = false
+    @State private var isCellTypographyLabPresented = false
 
     var body: some View {
         ZStack {
@@ -36,6 +37,13 @@ struct SettingsScreen: View {
         .sheet(isPresented: $isChangelogPresented) {
             BuildChangelogScreen()
                 .preferredColorScheme(.dark)
+        }
+        .fullScreenCover(isPresented: $isCellTypographyLabPresented) {
+            CellTypographyLabScreen(
+                geometry: appSettings.roomCellGeometry,
+                gridColumnCount: appSettings.margaritavilleGridColumnCount,
+                statusPaletteSaturation: appSettings.statusPaletteSaturation
+            )
         }
         .confirmationDialog(
             "Сбросить настройки?",
@@ -101,6 +109,20 @@ struct SettingsScreen: View {
             title: "Экспериментальное",
             subtitle: "Только активные режимы, которые можно реально оценить на основном экране."
         ) {
+            Toggle(isOn: $appSettings.developerLive3DCellsEnabled) {
+                SettingsInfoRow(
+                    title: "Живые 3D-ячейки",
+                    value: appSettings.developerLive3DCellsEnabled ? "Вкл" : "Выкл",
+                    systemName: "cube.transparent.fill",
+                    subtitle: "Экспериментальный Metal-рендер тела ячеек. Текст и все действия остаются обычным интерфейсом."
+                )
+            }
+            .tint(OceanKeyTheme.accent)
+            .onChange(of: appSettings.developerLive3DCellsEnabled) { _, _ in
+                feedback.confirm()
+            }
+            .accessibilityIdentifier("settings.experimental.live3DCells")
+
             Toggle(isOn: $appSettings.developerCellPhysicsEnabled) {
                 SettingsInfoRow(
                     title: "Живые ячейки",
@@ -132,6 +154,17 @@ struct SettingsScreen: View {
                     value: $appSettings.developerCellSpringSpeed
                 )
             }
+
+            Button(action: openCellTypographyLab) {
+                SettingsInfoRow(
+                    title: "Типографика ячеек",
+                    value: "Стенд",
+                    systemName: "textformat.size",
+                    subtitle: "Живой preview production-ячеек с отдельными настройками номера и времени."
+                )
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("settings.experimental.cellTypographyLab")
 
             Toggle(isOn: $appSettings.developerVIPJellyEnabled) {
                 SettingsInfoRow(
@@ -230,6 +263,35 @@ struct SettingsScreen: View {
                     subtitle: "Стандартный режим меняет статус удержанием, расширенный увеличивает комнату почти на весь экран."
                 )
 
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Ячеек в ряду")
+                            .font(.system(size: 16, weight: .black, design: .rounded))
+                        Spacer()
+                        Text("\(appSettings.margaritavilleGridColumnCount.rawValue)")
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .foregroundStyle(OceanKeyTheme.secondaryText)
+                    }
+
+                    Picker("Ячеек в ряду", selection: $appSettings.margaritavilleGridColumnCount) {
+                        ForEach(MargaritavilleGridColumnCount.allCases) { count in
+                            Text(count.title).tag(count)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    Text("Меняет только число production-ячеек в строке главного экрана и стенда.")
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .foregroundStyle(OceanKeyTheme.secondaryText.opacity(0.82))
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+                .background(OceanKeyTheme.surface.opacity(0.84))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .onChange(of: appSettings.margaritavilleGridColumnCount) { _, _ in
+                    feedback.confirm()
+                }
+
                 Toggle(isOn: $appSettings.transparentSurfacesEnabled) {
                     SettingsInfoRow(
                         title: "Прозрачные панели",
@@ -292,6 +354,11 @@ struct SettingsScreen: View {
     private func openChangelog() {
         feedback.tap()
         isChangelogPresented = true
+    }
+
+    private func openCellTypographyLab() {
+        feedback.tap()
+        isCellTypographyLabPresented = true
     }
 
     private func confirmResetSettings() {

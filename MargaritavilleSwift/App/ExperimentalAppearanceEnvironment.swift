@@ -4,6 +4,14 @@ private struct ExperimentalCellPhysicsEnabledKey: EnvironmentKey {
     static let defaultValue = false
 }
 
+private struct ExperimentalLive3DCellsEnabledKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+private struct ExperimentalLive3DCellsRendererReadyKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
 private struct ExperimentalCellSpringIntensityKey: EnvironmentKey {
     static let defaultValue = 0.72
 }
@@ -32,6 +40,16 @@ extension EnvironmentValues {
     var experimentalCellPhysicsEnabled: Bool {
         get { self[ExperimentalCellPhysicsEnabledKey.self] }
         set { self[ExperimentalCellPhysicsEnabledKey.self] = newValue }
+    }
+
+    var experimentalLive3DCellsEnabled: Bool {
+        get { self[ExperimentalLive3DCellsEnabledKey.self] }
+        set { self[ExperimentalLive3DCellsEnabledKey.self] = newValue }
+    }
+
+    var experimentalLive3DCellsRendererReady: Bool {
+        get { self[ExperimentalLive3DCellsRendererReadyKey.self] }
+        set { self[ExperimentalLive3DCellsRendererReadyKey.self] = newValue }
     }
 
     var experimentalCellSpringIntensity: Double {

@@ -64,6 +64,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         category: "VoiceTranscription"
     )
 
+    private let audioCaptureOwnerID = UUID()
     private let recognizer: SFSpeechRecognizer?
     private var recorder: AVAudioRecorder?
     private var recordingURL: URL?
@@ -179,6 +180,7 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
         }
         self.recorder = recorder
         recordingURL = url
+        AudioCaptureActivityMonitor.shared.begin(ownerID: audioCaptureOwnerID)
     }
 
     // MARK: - File-based transcription
@@ -266,6 +268,9 @@ final class VoiceTranscriptionService: VoiceTranscriptionServicing {
     }
 
     private func deactivateSession() {
+        defer {
+            AudioCaptureActivityMonitor.shared.end(ownerID: audioCaptureOwnerID)
+        }
         do {
             try AVAudioSession.sharedInstance().setActive(
                 false,

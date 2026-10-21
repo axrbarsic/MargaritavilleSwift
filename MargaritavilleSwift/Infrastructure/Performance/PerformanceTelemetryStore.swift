@@ -1,11 +1,17 @@
 import Foundation
 import Observation
 import UIKit
+#if DEBUG
+import QuartzCore
+#endif
 
 @MainActor
 @Observable
 final class PerformanceTelemetryStore {
     @ObservationIgnored private var displayLinkDriver: DisplayLinkDriver?
+#if DEBUG
+    @ObservationIgnored private var debugScrollProbe: DebugScrollProbeController?
+#endif
     @ObservationIgnored private var windowStartedAt: TimeInterval?
     @ObservationIgnored private var windowFrameCount = 0
     @ObservationIgnored private var windowSlowFrameCount = 0
@@ -20,6 +26,11 @@ final class PerformanceTelemetryStore {
 
     init(targetFPS: Int = UIScreen.main.maximumFramesPerSecond) {
         self.targetFPS = max(targetFPS, 60)
+#if DEBUG
+        debugScrollProbe = DebugScrollProbeController.makeIfRequested(
+            displayMaximumFramesPerSecond: self.targetFPS
+        )
+#endif
     }
 
     func start() {
@@ -27,6 +38,13 @@ final class PerformanceTelemetryStore {
         resetWindow()
         isRunning = true
         let driver = DisplayLinkDriver(targetFPS: targetFPS) { [weak self] displayLink in
+#if DEBUG
+            self?.debugScrollProbe?.recordDisplayLinkCallback(
+                at: CACurrentMediaTime(),
+                targetTimestampInterval:
+                    displayLink.targetTimestamp - displayLink.timestamp
+            )
+#endif
             self?.recordFrame(
                 duration: displayLink.targetTimestamp - displayLink.timestamp,
                 timestamp: displayLink.timestamp
@@ -37,6 +55,9 @@ final class PerformanceTelemetryStore {
     }
 
     func stop() {
+#if DEBUG
+        debugScrollProbe?.updateScrollPhase(isNonIdle: false)
+#endif
         displayLinkDriver?.stop()
         displayLinkDriver = nil
         isRunning = false
@@ -54,6 +75,12 @@ final class PerformanceTelemetryStore {
     func recordFrameForTesting(duration: TimeInterval, timestamp: TimeInterval) {
         recordFrame(duration: duration, timestamp: timestamp)
     }
+
+#if DEBUG
+    func updateDebugSummaryScrollPhase(isNonIdle: Bool) {
+        debugScrollProbe?.updateScrollPhase(isNonIdle: isNonIdle)
+    }
+#endif
 
     private func recordFrame(duration: TimeInterval, timestamp: TimeInterval) {
         if windowStartedAt == nil {

@@ -3,564 +3,797 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (63)",
+            date: "2026-10-21",
+            changes: [
+                "В каталог комнат возвращены номера 142 (корпус B, первый этаж) и 261 (корпус B, второй этаж).",
+                "Исправлена проверка каталога, которая ошибочно закрепляла отсутствие номера 261."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (62)",
+            date: "2026-07-23",
+            changes: [
+                "Добавлен выключенный по умолчанию эксперимент «Живые 3D-ячейки» с единым Metal-рендером для видимой области списка.",
+                "Обычные ячейки получили фронтальный объёмный материал с редкими четверть-поворотами, а VIP сохранил отдельную текучую форму с волнами и рябью.",
+                "Номера, время, жесты, меню и VoiceOver остаются стабильным SwiftUI-слоем; симулятор использует честный SDR-режим."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (61)",
+            date: "2026-07-23",
+            changes: [
+                "DEBUG-измеритель теперь сохраняет режим энергосбережения, тепловое состояние, активный максимум дисплея и интервал target timestamp.",
+                "VIP-анимация пересчитывает только декоративный слой, оставляя номер, время, жесты и matched geometry статичными.",
+                "HDR-слой пропускает неизменившиеся назначения и переиспользует маску без снижения частоты, амплитуды или EDR."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (60)",
+            date: "2026-07-23",
+            changes: [
+                "В DEBUG-сборке добавлен запускаемый флагом измеритель плавности прокрутки реального списка комнат.",
+                "Измеритель использует общий display link, считает фактические интервалы только во время прокрутки и сохраняет один компактный JSON-отчёт.",
+                "Пользовательский интерфейс, ячейки, эффекты и раскладка не изменены."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (59)",
+            date: "2026-07-22",
+            changes: [
+                "В тестовой сборке добавлен явный режим, который не даёт экрану гаснуть во время активной сессии с подключённым устройством.",
+                "Режим автоматически отпускает блокировку экрана при сворачивании приложения и не сохраняется в пользовательских настройках."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (58)",
+            date: "2026-07-22",
+            changes: [
+                "Brooklyn Web сохраняет бесконечную сетку на всём диапазоне размера: при уменьшении добавляются только видимые крайние ячейки.",
+                "Яркость перенесена в финальную цветокоррекцию без усиления тумана, окружения и bloom; добавлен сохраняемый нейтральный контраст.",
+                "DEBUG-эксперимент 120 Гц получил честные active tails, учёт пропусков, пауз и нагрузки сетки без догоняющих кадров."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (57)",
+            date: "2026-07-22",
+            changes: [
+                "Brooklyn Web получил живые настройки размера ячеек, кругового оттенка и яркости с сохранением и точным сбросом к розовому donor.",
+                "Настройки передаются в локальную Canvas-сцену без перезагрузки, меняя ортографическую камеру, цвета, туман, окружение и bloom.",
+                "Добавлен изолированный DEBUG-эксперимент 120 Гц с раздельной телеметрией display link, legacy rAF, ручного WebGL render и движения кубов."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (56)",
+            date: "2026-07-22",
+            changes: [
+                "Brooklyn Web переведён на единый classic IIFE bundle, который WKWebView загружает напрямую с локального file origin.",
+                "HDR-карта и обе текстуры встроены как data URL, поэтому сцена запускается полностью offline без файловых fetch-запросов.",
+                "Сохранены строгая CSP, локальные исходные assets, lifecycle bridge и 30-секундная агрегированная телеметрия кадров."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (55)",
+            date: "2026-07-22",
+            changes: [
+                "Добавлен отдельный Brooklyn Web фон с локально упакованной исходной React и Three.js сценой.",
+                "Из web renderer удалены текст, панель управления, аналитика, ссылки, курсор и реакции на касания.",
+                "Brooklyn Web работает offline, приостанавливает анимацию вместе с приложением и сохраняет агрегированный отчёт частоты кадров."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (54)",
+            date: "2026-07-22",
+            changes: [
+                "Brooklyn перенесён заново по исходной 3D сцене: точная сетка, камера, геометрия, текстуры и расписание поворотов.",
+                "Удалён белый текст поверх фона, а сцена полностью игнорирует касания и движение пальца.",
+                "Добавлен сохраняемый выбор оригинального материала или усиленных отражательных бликов без изменения анимации."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (53)",
+            date: "2026-07-22",
+            changes: [
+                "Добавлен новый живой фон Brooklyn с нативной объёмной Metal сценой и автоматическим вращением.",
+                "Розовая сетка получила шейдерные текстуры, туман, свечение, зерно и фоновую кодовую эстетику без WebView и управления касаниями.",
+                "Выбор пяти режимов фона перенесён в читаемое меню, а анимация Brooklyn корректно приостанавливается вне активной сцены."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (52)",
+            date: "2026-07-13",
+            changes: [
+                "Видеофон теперь детерминированно восстанавливается после входящих звонков и прерываний аудиосессии.",
+                "Возобновление ждёт возвращения приложения на экран и завершения активной голосовой записи.",
+                "При сбросе медиасервисов потерянный видеовывод перестраивается не более одного раза без циклических повторов."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (51)",
+            date: "2026-07-13",
+            changes: [
+                "Сетка комнат полностью переведена на явные эталонные строки без неявного распределения колонок.",
+                "Каждая готовая строка масштабируется целиком вместе с ячейками, промежутками и боковыми отступами одним коэффициентом.",
+                "Удалено отдельное масштабирование ячеек; главный экран и лаборатория типографики используют единый построчный контракт раскладки."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (50)",
+            date: "2026-07-13",
+            changes: [
+                "Исправлено визуальное перекрытие горизонтальных промежутков масштабированными ячейками в трёхколоночной сетке.",
+                "Обычный фон ячейки теперь строго остаётся внутри выделенной ширины колонки, сохраняя рассчитанный горизонтальный интервал.",
+                "Jelly- и rubber-эффекты сохраняют разрешённый выход за контур без изменения полных номеров и внутренней геометрии."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (49)",
+            date: "2026-07-13",
+            changes: [
+                "Исправлены почти исчезнувшие горизонтальные интервалы между ячейками трёхколоночной сетки.",
+                "Ширина каждой колонки теперь рассчитывается после вычитания масштабированных боковых отступов и двух горизонтальных промежутков.",
+                "Сохранены полные номера комнат, единое rubber-масштабирование ячеек и уже настроенные вертикальные интервалы."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (48)",
+            date: "2026-07-13",
+            changes: [
+                "Горизонтальные и вертикальные интервалы трёхколоночной сетки теперь увеличиваются тем же коэффициентом, что и целая эталонная ячейка.",
+                "Ширина ячеек, межъячеечные расстояния и боковые отступы рассчитываются совместно, сохраняя пропорции четырёхколоночной сетки.",
+                "Сохранены полные номера комнат и единое rubber-масштабирование всей ячейки на главном экране и в лаборатории типографики."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (47)",
+            date: "2026-07-13",
+            changes: [
+                "Трёхколоночная сетка переведена с раздельного пересчёта размеров на единое rubber-масштабирование готовой четырёхколоночной ячейки.",
+                "Номер комнаты сначала размещается целиком в эталонной ячейке, поэтому трёхзначные номера больше не сокращаются многоточием.",
+                "Типографика, отступы, маски, значки, jelly, rubber и HDR/EDR теперь масштабируются вместе как единая композиция."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (46)",
+            date: "2026-07-13",
+            changes: [
+                "Раскладка трёхколоночной ячейки переведена на фактическую ширину выбранной колонки.",
+                "Размеры текста, смещения, отступы, скругления, медиа-значки, маски и эффекты получили общий пропорциональный коэффициент.",
+                "Та же геометрия номера применена в лаборатории типографики без привязки к конкретным номерам комнат."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (45)",
+            date: "2026-07-13",
+            changes: [
+                "Для трёхколоночной сетки добавлено пропорциональное увеличение ячеек относительно неизменной четырёхколоночной основы.",
+                "Вместе с ячейкой увеличиваются утверждённая типографика, высота, отступы, скругления, значки, маски, жесты и визуальные эффекты.",
+                "Лаборатория типографики использует тот же режим сетки, а высота строк учитывает увеличенный размер карточек."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (44)",
+            date: "2026-07-13",
+            changes: [
+                "Добавлены живые подсказки уборщиц по началу имени с первой введённой буквы без учёта регистра и диакритики.",
+                "Полный список и отфильтрованные подсказки отображаются по алфавиту без изменения сохранённых данных и назначений.",
+                "После смены уборщицы клавиатура и подсказки закрываются, а сетка её комнат возвращается к первой строке.",
+                "Номера комнат остаются чёрными и читаемыми поверх яркой EDR-вспышки выбора."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (43)",
+            date: "2026-07-13",
+            changes: [
+                "После успешного выбора комнаты для уборщицы появляется мгновенная яркая EDR/HDR-вспышка с плавным затуханием около 1,8 секунды.",
+                "Несколько быстрых выборов обрабатываются общим эффектом без задержки нажатий и повторного воспроизведения старых вспышек.",
+                "При снятии выбора вспышка не запускается, а режим «Уменьшение движения» снижает её пиковую интенсивность."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (42)",
+            date: "2026-07-13",
+            changes: [
+                "Увеличенная ячейка в режиме «Расширенные» стала командным центром со статусами, VIP, временем, заметками, голосом, камерой и медиа.",
+                "После успешно сохранённого действия карточка схлопывается; отмена, ошибка или отказ в разрешении возвращают пользователя к командам.",
+                "Командный центр закрывается одним поглощённым нажатием вне карточки, не затрагивая жесты стандартного режима."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (41)",
+            date: "2026-07-13",
+            changes: [
+                "В настройках добавлен сохраняемый выбор сетки: три или четыре комнаты в ряд; безопасным значением по умолчанию остаются четыре.",
+                "Главный экран и лаборатория типографики используют выбранную общую сетку без изменения данных комнат, эффектов и жестов."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (40)",
+            date: "2026-07-13",
+            changes: [
+                "Утверждённая типографика применена ко всем рабочим ячейкам: номер 45 pt Black со смещением Y +7, время 12 pt Regular со смещением Y +1.",
+                "Новые параметры одинаково работают со всеми статусами, VIP, rubber- и HDR-эффектами без изменения поведения комнат.",
+                "Лаборатория типографики и сохранённый редакторский пресет остаются независимыми от рабочих значений."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (39)",
+            date: "2026-07-13",
+            changes: [
+                "Лаборатория типографики переведена на настоящую рабочую сетку и тот же компонент ячейки с реальными размерами, отступами и обрезанием.",
+                "В лаборатории показаны все реальные цвета статусов, HDR/rubber-всплеск, VIP jelly, VIP HDR и их совместный вариант.",
+                "Редакторские параметры и сохранённые пресеты остаются изолированными от главного экрана."
+            ]
+        ),
+        BuildChangelogEntry(
+            version: "0.1.0 (38)",
+            date: "2026-07-12",
+            changes: [
+                "Добавлено постоянное сохранение, точная временная метка, читаемые значения и стабильная копия JSON для лабораторных настроек типографики ячеек комнаты.",
+                "Сброс теперь затрагивает только редактор; для удаления сохранённого пресета добавлено отдельное действие с подтверждением.",
+                "Устранено плато ползунка типографики: настоящие ячейки получили достаточно места для каждого выбранного размера шрифта без автоматического уменьшения текста.",
+                "Оформление ячеек комнаты на главном экране сохранялось неизменным до тех пор, пока сохраненная предустановка не будет явно одобрена."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (37)",
             date: "2026-07-09",
             changes: [
-                "Prevented recycled top-row room cells from replaying old HDR and rubber events when a scroll returns to the top.",
-                "Bound each pulse to its original timestamp and remove completed events so view reappearance can only continue the remaining live animation."
+                "Ячейки верхнего ряда больше не повторяют старые HDR- и rubber-события после возврата прокрутки наверх.",
+                "Каждый импульс привязан к исходной временной метке, а завершённые события удаляются; повторно появившаяся ячейка продолжает только актуальный остаток анимации."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (36)",
             date: "2026-07-09",
             changes: [
-                "Replaced state-driven HDR and rubber animations with one deterministic 120 Hz heat-and-cooling timeline so the two-second fade cannot be cut off by a SwiftUI rebuild.",
-                "Restored the full centered rubber pulse for VIP room cells and synchronized it with the same HDR brightness envelope.",
-                "Prevented scrolling over room cells from changing their status by requiring the system long-press recognizer to complete instead of using an independent timer."
+                "Управляемые состоянием HDR- и rubber-анимации заменены одной детерминированной шкалой нагрева и охлаждения с частотой 120 Гц, поэтому перестройка SwiftUI не обрывает двухсекундное затухание.",
+                "Для VIP-ячеек восстановлен полностью центрированный rubber-импульс, синхронизированный с той же огибающей яркости HDR.",
+                "Прокрутка по ячейкам больше не меняет их статус: действие выполняется только после завершения системного распознавания долгого нажатия."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (35)",
             date: "2026-07-09",
             changes: [
-                "Fixed the HDR flash layer being removed as soon as its target opacity became zero, which bypassed the cooling animation.",
-                "Kept the HDR and fallback glow layers mounted through the complete two-second fade, then removed them only after the tail finishes."
+                "Исправлен слой вспышки HDR, который удалялся, как только его целевая непрозрачность становилась нулевой, что обходило анимацию охлаждения.",
+                "Слои HDR и резервного свечения оставались установленными в течение всего двухсекундного затухания, а затем удалялись только после завершения хвоста."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (34)",
             date: "2026-07-09",
             changes: [
-                "Extended the HDR flash cooling phase itself to a full two seconds instead of fitting the entire pulse into that window.",
-                "Replaced the symmetric fade with a white-hot-metal cooling curve that preserves a long dim tail and reaches zero without a visible cutoff.",
-                "Kept the 1.7x rubber deformation synchronized with the same longer cooling curve."
+                "Сама фаза охлаждения вспышки HDR увеличена до полных двух секунд вместо того, чтобы помещать весь импульс в это окно.",
+                "Симметричное затухание заменено на кривую охлаждения раскаленного добела металла, которая сохраняет длинный тусклый хвост и достигает нуля без видимого среза.",
+                "Сохранена синхронизация деформации резины в 1,7 раза с той же более длинной кривой охлаждения."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (33)",
             date: "2026-07-09",
             changes: [
-                "Doubled the one-shot HDR flash intensity and stretched its smooth heat-and-cool curve to about two seconds.",
-                "Synchronized the rubber pulse with the HDR curve and increased its deformation amplitude by 1.7x.",
-                "Kept the pulse centered and ProMotion-ready so both edges move evenly at the display's available refresh rate."
+                "Удвоена интенсивность однократной вспышки HDR и увеличена плавность кривой нагрева и охлаждения примерно до двух секунд.",
+                "Rubber-импульс синхронизирован с кривой HDR, а амплитуда деформации увеличена в 1,7 раза.",
+                "Импульс сохраняется по центру и готов к работе с ProMotion, поэтому оба края перемещаются равномерно при доступной частоте обновления дисплея."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (32)",
             date: "2026-07-09",
             changes: [
-                "Smoothed the one-shot HDR status flash into a roughly 1.4-second rise, peak, and fade cycle.",
-                "Changed both Settings buttons to require a deliberate long press with haptic confirmation.",
-                "Added a one-tap developer tool that randomly distributes every hotel room across every housekeeper as evenly as possible.",
-                "Centered the rubber cell pulse so its left and right edges expand with equal strength."
+                "Одноразовая вспышка состояния HDR сглажена до примерно 1,4-секундного цикла подъема, пика и затухания.",
+                "Изменены обе кнопки настроек, чтобы они требовали намеренного длительного нажатия с тактильным подтверждением.",
+                "Добавлен инструмент разработчика в одно касание, который случайным образом распределяет каждый гостиничный номер по каждой уборщице как можно более равномерно.",
+                "Rubber-деформация отцентрирована: левый и правый края ячейки расширяются с одинаковой силой."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (31)",
             date: "2026-07-09",
             changes: [
-                "Changed the HDR flash spring so the room cell inflates first, then settles back, instead of squashing first.",
-                "Kept the OceanKey-style rubber timing while reversing the initial scale direction."
+                "Изменена пружина вспышки HDR, теперь комнатная ячейка сначала надувается, а затем оседает обратно, а не сначала сжимается.",
+                "Сохранена резиновая синхронизация в стиле OceanKey, но изменено исходное направление шкалы."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (30)",
             date: "2026-07-09",
             changes: [
-                "Added the OceanKey-style live-cell rubber spring to the one-shot HDR status flash.",
-                "The HDR flash now squeezes and releases the room cell even when the separate Live Cells setting is off."
+                "К однокадровой статусной вспышке HDR добавлена резиновая пружина с живыми ячейками в стиле OceanKey.",
+                "Вспышка HDR теперь сжимает и отпускает ячейку помещения, даже если отдельная настройка «Живые ячейки» отключена."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (29)",
             date: "2026-07-09",
             changes: [
-                "Moved one-shot HDR status pulses to an explicit room-status event emitted after the real status transition.",
-                "Made the flash hold briefly before fading so it cannot disappear in the same SwiftUI render cycle."
+                "Одноразовые импульсы состояния HDR перемещены на явное событие состояния комнаты, создаваемое после реального перехода статуса.",
+                "Сделано, чтобы вспышка ненадолго удерживалась перед исчезновением, чтобы она не могла исчезнуть в одном и том же цикле рендеринга SwiftUI."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (28)",
             date: "2026-07-09",
             changes: [
-                "Fixed HDR status pulses so long-press room status changes start the one-shot flash immediately.",
-                "Added a visible same-color brightness fallback under the EDR layer so the pulse is noticeable even when the display grants little HDR headroom."
+                "Исправлены импульсы статуса HDR, поэтому при длительном нажатии на изменение статуса комнаты сразу же запускается однократная вспышка.",
+                "Под слоем EDR добавлен видимый запас яркости того же цвета, поэтому импульс заметен, даже если дисплей обеспечивает небольшой запас HDR."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (27)",
             date: "2026-07-09",
             changes: [
-                "Added a Settings toggle for one-shot HDR status pulses after room status changes.",
-                "The pulse reuses the cell's new status color, jumps to EDR brightness, then fades out in about one second."
+                "Добавлен переключатель настроек для однократных импульсов состояния HDR после изменения статуса комнаты.",
+                "Импульс повторно использует новый цвет состояния ячейки, переходит в яркость EDR, а затем затухает примерно через одну секунду."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (26)",
             date: "2026-07-09",
             changes: [
-                "Changed VIP HDR from a white moving glare into a full-cell Extended Dynamic Range status fill.",
-                "VIP green, red, yellow, blue, and scheduled cells now boost their own status color instead of drawing a white highlight over the room number."
+                "VIP HDR изменен с белого движущегося блика на полноразмерную заливку статуса расширенного динамического диапазона.",
+                "VIP-зеленые, красные, желтые, синие и запланированные ячейки теперь выделяют свой собственный цвет статуса вместо выделения белого цвета над номером комнаты."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (25)",
             date: "2026-07-09",
             changes: [
-                "Added a Settings toggle for VIP HDR light so VIP room cells can request Extended Dynamic Range brightness separately from the rest of the interface.",
-                "Kept the existing VIP jelly deformation and layered the new HDR glow on top only for active VIP cells."
+                "Добавлен переключатель настроек для освещения VIP HDR, чтобы ячейки VIP-комнаты могли запрашивать яркость расширенного динамического диапазона отдельно от остального интерфейса.",
+                "Сохранена существующая деформация VIP-желе и наложено новое свечение HDR поверх только для активных VIP-ячеек."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (24)",
             date: "2026-07-02",
             changes: [
-                "Made Margaritaville main-screen gestures more deliberate so vertical scrolling no longer triggers room or housekeeper feedback.",
-                "Restored the room swipe action menu for the four-column grid with a compact right-swipe threshold sized for small room tiles.",
-                "Kept the reset action available in the room menu whenever the room is no longer in the yellow pending state."
+                "Жесты главного экрана уточнены: вертикальная прокрутка больше не запускает действия уборщицы или комнаты.",
+                "Для четырёхколоночной сетки восстановлено меню действий по свайпу вправо с порогом, рассчитанным на компактные ячейки.",
+                "Действие сброса оставалось доступным в меню комнаты всякий раз, когда комната больше не находилась в желтом состоянии ожидания."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (23)",
             date: "2026-07-02",
             changes: [
-                "Restored the Expanded room-size mode to the same four-column room grid as Standard.",
-                "Changed Expanded mode so a long press opens a smooth full-screen room zoom instead of changing the grid width.",
-                "The zoomed room now stays open after the finger is released and collapses back with a long press on the enlarged card."
+                "Режим расширенного размера комнаты восстановлен в той же сетке комнат из четырех столбцов, что и стандартный.",
+                "Изменен расширенный режим: долгое нажатие открывает плавное полноэкранное масштабирование комнаты вместо изменения ширины сетки.",
+                "Увеличенная комната теперь остается открытой после отпускания пальца и сворачивается при длительном нажатии на увеличенную карту."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (22)",
             date: "2026-07-01",
             changes: [
-                "Renamed the Margaritaville room-size setting to Standard and Expanded.",
-                "Changed Expanded mode on the main Margaritaville summary from compact four-column tiles into two wider room cards per row.",
-                "Kept the expanded cards at the same visual height so the screen gains horizontal room without becoming a tall square grid."
+                "Параметр размера комнаты в Маргаритавилле переименован в «Стандартный» и «Расширенный».",
+                "Расширенный режим основного описания Маргаритавилля изменен с компактных плиток с четырьмя столбцами на две более широкие карты комнат в ряду.",
+                "Развернутые карточки остались на той же визуальной высоте, чтобы экран получил пространство по горизонтали, не превращаясь в высокую квадратную сетку."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (21)",
             date: "2026-06-15",
             changes: [
-                "Removed the remaining drag/swipe recognizer from the cart consumable Matrix ruler so vertical scrolling cannot be interrupted by the quantity control.",
-                "Changed consumable quantity editing to explicit minus/plus Matrix buttons while keeping the 0-to-10 ruler as a passive level indicator.",
-                "Kept the red 5-second warning before a consumable quantity is committed to zero."
+                "Из расходуемой матричной линейки тележки удален оставшийся распознаватель перетаскивания/смахивания, чтобы вертикальная прокрутка не могла быть прервана контролем количества.",
+                "Редактирование количества расходных материалов изменено на явные кнопки «минус/плюс матрицы», сохраняя при этом линейку от 0 до 10 в качестве индикатора пассивного уровня.",
+                "Сохранялось красное предупреждение за 5 секунд до того, как количество расходных материалов достигнет нуля."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (20)",
             date: "2026-06-15",
             changes: [
-                "Removed the per-housekeeper consumable slider table from the main Margaritaville summary so the main screen keeps only the readable total-needed supply statistics.",
-                "Locked Margaritaville housekeeper menu entry to long press only and removed the visible tap/swipe setting from Settings.",
-                "Reworked the Matrix consumable ruler so the whole ruler owns horizontal quantity dragging, the visual handle no longer steals touches, vertical scroll stays available, and zero still waits for the red 5-second warning."
+                "Из основной сводки удалена таблица расходников по каждой уборщице; на главном экране осталась читаемая статистика общего необходимого запаса.",
+                "Пункт меню «Экономка Маргаритавилля» заблокирован только для длительного нажатия и удалена видимая настройка касания / пролистывания из настроек.",
+                "Переработана расходуемая линейка Matrix: теперь вся линейка поддерживает перетаскивание по горизонтали, визуальный маркер больше не крадет прикосновения, вертикальная прокрутка остается доступной, а ноль по-прежнему ожидает красного 5-секундного предупреждения."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (19)",
             date: "2026-06-15",
             changes: [
-                "Adapted the OceanKey puzzle-pull header handle for Margaritaville so returning to the setup screen requires a deliberate right-to-left pull instead of a simple tap.",
-                "Changed Margaritaville room status changes, setup selection controls, and cart supply completion checks to deliberate long-press actions to reduce accidental input.",
-                "Moved the Margaritaville room media/VIP/schedule menu off the long-press path and onto a deliberate horizontal room swipe so it no longer conflicts with long-press status changes.",
-                "Restored safe horizontal swiping on Matrix consumable rulers while preserving vertical scroll and the 5-second zero warning."
+                "Адаптирована ручка заголовка головоломки OceanKey для Маргаритавилля, поэтому для возврата на экран настройки требуется намеренное нажатие справа налево, а не простое нажатие.",
+                "Изменены изменения статуса комнаты в Маргаритавилле, элементы управления выбором настроек и проверки завершения поставки корзины, чтобы преднамеренно выполнять действия при длительном нажатии, чтобы уменьшить случайный ввод.",
+                "Меню мультимедиа/VIP/расписания комнаты Маргаритавилля перенесено с пути длительного нажатия на намеренное горизонтальное смахивание по комнате, чтобы оно больше не конфликтовало с изменениями статуса при длительном нажатии.",
+                "Восстановлено безопасное горизонтальное пролистывание расходуемых линеек Matrix с сохранением вертикальной прокрутки и 5-секундного предупреждения об нуле."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (18)",
             date: "2026-06-15",
             changes: [
-                "Removed direct gestures from the wide Matrix consumable ruler so vertical scrolling can pass through the list without competing with the quantity control.",
-                "Moved consumable quantity editing into a separate Matrix bottom sheet opened from the small ruler handle.",
-                "Kept the red blinking 5-second zero warning while making the in-list ruler a passive visual indicator."
+                "Из широкой расходуемой линейки Matrix удалены прямые жесты, поэтому вертикальная прокрутка может проходить по списку, не конкурируя с контролем количества.",
+                "Редактирование количества расходных материалов перенесено на отдельный нижний лист матрицы, открываемый с помощью маленькой ручки линейки.",
+                "Оставлено красное мигающее 5-секундное нулевое предупреждение, а линейка в списке стала пассивным визуальным индикатором."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (17)",
             date: "2026-06-14",
             changes: [
-                "Changed Matrix consumable sliders to require a deliberate long press before dragging so vertical scrolling no longer fights the control.",
-                "Restored the red blinking 5-second warning before a supply quantity is committed to zero and hidden from active summary totals.",
-                "Cancelling the warning by holding the slider again keeps the previous quantity instead of deleting the supply immediately."
+                "Изменены ползунки расходных материалов Matrix: теперь перед перетаскиванием требуется намеренное длительное нажатие, поэтому вертикальная прокрутка больше не мешает управлению.",
+                "Восстановлено мигание красным 5-секундным предупреждением перед тем, как количество запасов будет зафиксировано на нулевом уровне и скрыто от активных сводных итогов.",
+                "Отмена предупреждения путем повторного удержания ползунка сохраняет предыдущее количество вместо немедленного удаления запаса."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (16)",
             date: "2026-06-14",
             changes: [
-                "Restyled the consumables summary and housekeeper supply controls into a flat Matrix HUD with black panels, neon green outlines, and large readable totals.",
-                "Reworked the 0-to-10 consumable slider into a Matrix ruler with tick marks, numeric stops, and a glowing drag handle.",
-                "Applied the same Matrix consumable style to cart detail supply rows so editing and summary views match visually."
+                "Сводку расходных материалов и средства управления расходными материалами переделали в плоский матричный интерфейс с черными панелями, неоново-зелеными контурами и крупными читаемыми итоговыми данными.",
+                "Ползунок расходных материалов от 0 до 10 был переработан в матричную линейку с делениями, цифровыми ограничителями и светящимся маркером для перетаскивания.",
+                "Применен тот же стиль расходных материалов Matrix к строкам с подробными сведениями о корзине, чтобы представления редактирования и сводки визуально соответствовали друг другу."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (15)",
             date: "2026-06-14",
             changes: [
-                "Ported the OceanKey equalizer-style consumable quantity control into Margaritaville.",
-                "Cart details now use the same 0-to-10 bar slider instead of plus/minus quantity buttons.",
-                "The main summary consumables breakdown now lets each housekeeper supply row be adjusted with the equalizer slider while totals stay aggregated above.",
-                "Editable supply names now behave as a global persisted catalog: additions, renames, and deletions apply across every cart."
+                "В Margaritaville перенесен контроль количества расходных материалов в стиле эквалайзера OceanKey.",
+                "В сведениях о корзине теперь используется тот же ползунок от 0 до 10 вместо кнопок плюс/минус количества.",
+                "Основная сводная разбивка расходных материалов теперь позволяет корректировать каждую строку расходных материалов с помощью ползунка эквалайзера, в то время как общие суммы остаются агрегированными выше.",
+                "Редактируемые названия расходных материалов теперь ведут себя как глобальный сохраняемый каталог: добавления, переименования и удаления применяются ко всем корзинам."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (14)",
             date: "2026-06-13",
             changes: [
-                "Marked rooms already assigned to another housekeeper as reserved on the Margaritaville setup screen.",
-                "Reserved setup rooms are disabled, greyed out, and show the owning housekeeper so the same room cannot be assigned twice by mistake."
+                "На экране настройки Маргаритавилля комнаты, уже назначенные другой уборщице, помечены как зарезервированные.",
+                "Зарезервированные комнаты для настройки отключены, выделены серым цветом и показывают уборщицу, владеющую ею, поэтому одну и ту же комнату нельзя назначить дважды по ошибке."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (13)",
             date: "2026-06-13",
             changes: [
-                "Added a Margaritaville summary consumables report below the room grid with total needed supplies and a per-housekeeper breakdown.",
-                "Added a per-housekeeper running supply ticker between the name and work locations whenever that housekeeper has active uncompleted supplies.",
-                "Changed the top-right summary edit button to require a long press so accidental taps cannot reopen the setup screen."
+                "Под сеткой комнат добавлен сводный отчет о расходных материалах в Маргаритавилле с указанием общего количества необходимых расходных материалов и разбивкой по каждой уборщице.",
+                "Добавлен бегунок запасов для каждой уборщицы между именем и местом работы, когда у этой уборщицы есть активные незавершенные запасы.",
+                "Изменена кнопка редактирования сводки в правом верхнем углу, теперь она требует длительного нажатия, чтобы случайное нажатие не могло повторно открыть экран настройки."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (12)",
             date: "2026-06-13",
             changes: [
-                "Restored safe horizontal margins on the Margaritaville summary grid so four large room tiles no longer press into or clip past the screen edges.",
-                "Kept the larger summary room numbers while constraining the grid columns to stable one-handed tile widths."
+                "В сводной сетке восстановлены безопасные боковые поля, поэтому четыре крупные ячейки больше не прижимаются к краям экрана и не обрезаются.",
+                "Крупные номера комнат сохранены, а ширина колонок ограничена стабильным размером для управления одной рукой."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (11)",
             date: "2026-06-13",
             changes: [
-                "Made Margaritaville summary housekeeper names larger for faster reading on the move.",
-                "Applied each housekeeper's assigned palette color to the summary name pill while keeping room tiles status-colored.",
-                "Replaced the summary progress fraction with separate total, completed, and remaining counters: yellow total, green ready, red remaining.",
-                "Merged Margaritaville summary rooms by housekeeper so one person working multiple buildings or floors appears once with all assigned locations listed."
+                "Сводные имена уборщиц в Маргаритавилле увеличены для более быстрого чтения на ходу.",
+                "Применен цвет палитры, назначенный каждой домоправительнице, к таблетке сводного имени, сохраняя при этом цвет плиток комнат.",
+                "Сводная доля прогресса заменена отдельными счетчиками общего количества, завершенных и оставшихся: желтый итог, зеленый уровень готовности, красный остаток.",
+                "Комнаты сводки Маргаритавилля объединены экономкой, поэтому один человек, работающий в нескольких зданиях или этажах, появляется один раз со всеми назначенными местоположениями."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (10)",
             date: "2026-06-13",
             changes: [
-                "Removed the cart supply radial quantity picker and returned supply quantities to the classic inline minus/count/plus controls.",
-                "Removed the hidden long-press gesture from supply rows so moving between different supply items cannot leave a previous item selected or stuck.",
-                "Kept supply completion and quantity controls independent for each row."
+                "Удален радиальный выбор количества поставок тележки и возвращены количества поставок в классические встроенные элементы управления минус/счет/плюс.",
+                "Удален скрытый жест длительного нажатия из рядов припасов, поэтому при перемещении между различными предметами припасов предыдущий предмет не может остаться выбранным или зависшим.",
+                "Сохранялись независимые средства контроля завершения поставок и количества для каждой строки."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (9)",
             date: "2026-06-13",
             changes: [
-                "Changed the cart supply radial quantity picker into a large full-screen control so the visible circle is also the active touch target.",
-                "Removed the old row-bound hold-and-drag gesture that could leave the picker feeling stuck after it appeared.",
-                "Added direct tap, drag-to-select, cancel, and commit behavior for one-handed quantity entry."
+                "Изменен радиальный выбор количества товаров в корзине на большой полноэкранный элемент управления, поэтому видимый круг также является активной целью касания.",
+                "Удален старый жест удержания и перетаскивания, связанный с строками, из-за которого средство выбора могло застрять после его появления.",
+                "Добавлено поведение прямого касания, перетаскивания для выбора, отмены и подтверждения для ввода количества одной рукой."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (8)",
             date: "2026-06-13",
             changes: [
-                "Added configurable housekeeper-name actions on the Margaritaville summary screen: tap, long press, or right-to-left swipe can open the housekeeper cart menu.",
-                "Reused the native cart details flow for housekeeper menus, including voice notes, speech transcription, photo/video capture, and local media viewing.",
-                "Added editable cart supply catalog settings so supply names can be added, renamed, and deleted without losing selected cart quantities.",
-                "Added a quick hold-and-drag radial quantity picker for cart supplies and kept plus/minus controls for precise adjustments.",
-                "Changed setup-screen selected room buttons to use the assigned housekeeper palette; summary room tiles remain status-colored only."
+                "Добавлены настраиваемые действия по имени уборщицы на сводном экране Маргаритавилля: нажатие, длительное нажатие или смахивание справа налево могут открыть меню корзины уборщицы.",
+                "Повторно использован собственный поток сведений о корзине для меню экономки, включая голосовые заметки, транскрипцию речи, захват фото/видео и просмотр локальных мультимедиа.",
+                "Добавлены редактируемые настройки каталога поставок корзины, позволяющие добавлять, переименовывать и удалять названия поставок без потери выбранного количества в корзине.",
+                "Добавлен быстрый радиальный выбор количества товаров в тележке, удерживая и перетаскивая его, и сохранили элементы управления «плюс/минус» для точной настройки.",
+                "Выбранные комнаты на экране настройки используют палитру назначенной уборщицы; в сводке ячейки по-прежнему окрашиваются только по статусу."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (7)",
             date: "2026-06-13",
             changes: [
-                "Restored Margaritaville scheduled rooms and status filter chips to the pink scheduled color instead of purple.",
-                "Increased Margaritaville summary room numbers and time labels while preserving the square tile layout.",
-                "Removed the crown badge from VIP summary tiles; VIP is now indicated by the live jelly visual effect only.",
-                "Moved room media indicators into a lower-right corner flag so media is visible without covering the room number.",
-                "Made selected housekeeper chips toggle off when tapped again from the setup screen."
+                "Запланированным комнатам Маргаритавилля и чипам фильтров статуса возвращен розовый запланированный цвет вместо фиолетового.",
+                "Увеличены номера комнат и временные метки Маргаритавилля при сохранении квадратного расположения плиток.",
+                "Удален значок короны из сводных плиток VIP; VIP теперь обозначается только визуальным эффектом живого желе.",
+                "Индикаторы мультимедиа в комнате перемещены в флажок в правом нижнем углу, чтобы медиа были видны, не закрывая номер комнаты.",
+                "Повторное нажатие на выбранную уборщицу на экране настройки теперь снимает выбор."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (6)",
             date: "2026-06-13",
             changes: [
-                "Changed Margaritaville setup to start from housekeeper names instead of visible cart numbers.",
-                "Removed cart-number labels from Margaritaville setup cards and summary sections; cart IDs now stay internal.",
-                "Simplified Margaritaville summary group headers to show the housekeeper and territory only, without the confusing room-count number beside A/B floor labels.",
-                "Redesigned the Margaritaville setup cards for one-handed use with larger housekeeper chips, building/floor controls, and room-number buttons."
+                "Изменена настройка Маргаритавилля: теперь она начинается с имен уборщиц, а не с видимых номеров тележек.",
+                "Удалены метки с номерами тележек из карточек настроек Margaritaville и разделов сводки; Идентификаторы корзин теперь остаются внутренними.",
+                "Упрощенные заголовки сводных групп Маргаритавилля, чтобы отображать только уборщицу и территорию, без сбивающего с толку количества комнат рядом с метками этажей A/B.",
+                "Карточки настроек Маргаритавилля переработаны для использования одной рукой: добавлены более крупные чипы экономки, элементы управления зданием/этажом и кнопки номера комнаты."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (5)",
             date: "2026-06-13",
             changes: [
-                "Removed the setup-screen room catalog regex hotspot that made rapid room selection stall the main thread.",
-                "Moved interaction sound playback work off the main thread and deferred feedback one UI turn so tap state changes can paint immediately.",
-                "Kept the full native haptic/audio feedback behavior without using the temporary diagnostics-only feedback bypass."
+                "Удалена горячая точка регулярного выражения каталога комнат на экране настройки, из-за которой быстрый выбор комнаты останавливался в основном потоке.",
+                "Воспроизведение звука взаимодействия перемещено вне основного потока, а обратная связь отложена на один поворот пользовательского интерфейса, поэтому изменения состояния касания можно отобразить немедленно.",
+                "Сохранено полное поведение тактильной/аудио обратной связи без использования временного обхода обратной связи только для диагностики."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (4)",
             date: "2026-06-12",
             changes: [
-                "Reduced tap-frame work by debouncing work-session persistence after rapid room/status changes and flushing pending saves when the app leaves active state.",
-                "Changed history snapshots to keep only the affected cart for normal room/selection events instead of copying the full workday on every tap.",
-                "Reworked interaction sounds through a small preloaded AVAudioPlayer pool so fast taps do not cut off or lose feedback sounds.",
-                "Moved haptic generator preparation out of the synchronous tap path while keeping strong native iPhone feedback."
+                "Сокращена работа с сенсорными кадрами за счет устранения зависания рабочего сеанса после быстрых изменений комнаты/статуса и очистки ожидающих сохранений, когда приложение выходит из активного состояния.",
+                "Изменены снимки истории, чтобы для обычных событий комнаты/выбора сохранялась только затронутая корзина, вместо копирования всего рабочего дня при каждом нажатии.",
+                "Переработаны звуки взаимодействия через небольшой предварительно загруженный пул AVAudioPlayer, поэтому быстрые нажатия не обрезаются и не теряют звуки обратной связи.",
+                "Подготовка тактильного генератора убрана из пути синхронного касания, сохранив при этом сильную обратную связь с iPhone."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (3)",
             date: "2026-06-12",
             changes: [
-                "Rebuilt Margaritaville setup around cart, housekeeper, section, floor, and room selection, removing day-category/time clutter from the first screen.",
-                "Added editable housekeeper names and individual color palettes in Settings, with assignments persisted per cart.",
-                "Made summary status chips tappable filters and enlarged square room numbers/times for on-the-move readability.",
-                "Strengthened native iPhone haptic feedback for confirmations, warnings, invalid actions, and hold commits."
+                "Переработана настройка Маргаритавилля с выбором тележки, экономки, секции, этажа и комнаты, убран беспорядок по дням, категориям и времени с первого экрана.",
+                "В настройках добавлены редактируемые имена уборщиц и отдельные цветовые палитры, при этом назначения сохраняются для каждой корзины.",
+                "Сделаны чипы сводного статуса с нажимаемыми фильтрами и увеличены квадратные номера/время для удобства чтения на ходу.",
+                "Усиленная тактильная обратная связь iPhone для подтверждений, предупреждений, недопустимых действий и удержания коммитов."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (2)",
             date: "2026-06-12",
             changes: [
-                "Hardened Margaritaville runtime identity so storage, notifications, backup documents, logs, and CloudKit identifiers use Margaritaville-specific values.",
-                "Restored live wallpapers on the Margaritaville square summary screen instead of forcing a black background.",
-                "Added a startup loading gate so the setup screen no longer flashes before a saved locked workday opens."
+                "Усиленная идентификация среды выполнения Margaritaville, поэтому для хранения, уведомлений, резервных документов, журналов и идентификаторов CloudKit используются значения, специфичные для Margaritaville.",
+                "Восстановлены живые обои на сводном экране площади Маргаритавилля вместо принудительного черного фона.",
+                "Добавлен шлюз загрузки при запуске, чтобы экран настройки больше не мигал перед открытием сохраненного заблокированного рабочего дня."
             ]
         ),
         BuildChangelogEntry(
             version: "0.1.0 (1)",
             date: "2026-06-11",
             changes: [
-                "Split Margaritaville into a separate installed iOS app with its own bundle identifier and app storage.",
-                "The app now boots directly into the Margaritaville workflow instead of showing a hotel chooser.",
-                "Simplified the Margaritaville summary header to match the main OceanKey structure: settings, center stats, and a direct edit-entry button."
+                "Margaritaville выделен в отдельное устанавливаемое приложение iOS с собственным идентификатором пакета и хранилищем данных.",
+                "Приложение теперь загружается непосредственно в рабочий процесс Маргаритавилля, а не показывает средство выбора отеля.",
+                "Упрощен заголовок сводки Маргаритавилля, чтобы он соответствовал основной структуре OceanKey: настройки, центральная статистика и кнопка прямого редактирования и ввода."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (121)",
             date: "2026-06-11",
             changes: [
-                "Split WorkSessionStore note/media mutations and shared mutation plumbing into focused extension files.",
-                "Kept work-session behavior unchanged while reducing the central store file size."
+                "Операции заметок и медиа в WorkSessionStore, а также общая инфраструктура изменений разделены по специализированным файлам расширений.",
+                "Поведение рабочего сеанса сохранено без изменений, при этом уменьшен размер файла центрального хранилища."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (120)",
             date: "2026-06-11",
             changes: [
-                "Split AppSettingsStore helper code into focused Swift extension files.",
-                "Kept settings behavior unchanged while reducing the central settings store file size."
+                "Вспомогательный код AppSettingsStore разделён на отдельные файлы расширений Swift.",
+                "Поведение настроек сохранено без изменений, но уменьшен размер файла хранилища центральных настроек."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (119)",
             date: "2026-06-11",
             changes: [
-                "Split build changelog entries into smaller source files.",
-                "Kept the in-app changelog behavior unchanged while reducing the main app file size."
+                "Записи журнала изменений разделены на более компактные исходные файлы.",
+                "Поведение журнала изменений в приложении не изменилось, но размер основного файла приложения был уменьшен."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (118)",
             date: "2026-06-11",
             changes: [
-                "Split DeepSeek Lab visual components out of the main settings section.",
-                "Kept the AI preset generator behavior unchanged while reducing settings file size."
+                "Вынести визуальные компоненты DeepSeek Lab из раздела основных настроек.",
+                "Поведение генератора предустановок AI не изменилось, но размер файла настроек был уменьшен."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (117)",
             date: "2026-06-11",
             changes: [
-                "Replaced room/cart media rows with a shared vertical media grid.",
-                "Stopped thumbnail video previews before opening the full-screen viewer.",
-                "Changed full-screen video playback to a direct AVPlayerLayer lifecycle for more reliable video rendering."
+                "Заменены строки мультимедиа в комнате/корзине на общую вертикальную сетку мультимедиа.",
+                "Остановлен предварительный просмотр миниатюр видео перед открытием полноэкранного просмотра.",
+                "Изменено полноэкранное воспроизведение видео на прямой жизненный цикл AVPlayerLayer для более надежного рендеринга видео."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (116)",
             date: "2026-06-11",
             changes: [
-                "Grouped Margaritaville summary tiles into separate building/floor islands inside a cart.",
-                "Added regression coverage so a multi-territory Margaritaville cart renders A3 and B3 as separate summary groups."
+                "Ячейки сводки сгруппированы в отдельные острова зданий и этажей внутри тележки.",
+                "Добавлено регрессионное покрытие, поэтому корзина Маргаритавилля с несколькими территориями отображает A3 и B3 как отдельные сводные группы."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (115)",
             date: "2026-06-11",
             changes: [
-                "Added a Margaritaville setup summary for rooms already selected in other buildings or floors of the same cart.",
-                "Split setup picker and room tile controls into smaller SwiftUI components to keep the setup screen maintainable."
+                "Добавлена сводка настроек Маргаритавилля для комнат, уже выбранных в других зданиях или этажах той же корзины.",
+                "Панель выбора и элементы управления комнатами разделены на небольшие компоненты SwiftUI для упрощения сопровождения экрана."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (114)",
             date: "2026-06-11",
             changes: [
-                "Reworked full-screen video media playback to use the native iOS player controller.",
-                "Stopped background video thumbnails when opening the media viewer."
+                "Переработано полноэкранное воспроизведение видео для использования встроенного контроллера проигрывателя iOS.",
+                "Остановлены миниатюры фоновых видео при открытии средства просмотра мультимедиа."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (113)",
             date: "2026-06-11",
             changes: [
-                "Added live Margaritaville setup counters for every day category.",
-                "Made the category filter chips show their current selected-room totals."
+                "Добавлены счетчики настроек Маргаритавилля в реальном времени для категории каждого дня.",
+                "Чипы фильтров категорий теперь показывают текущие итоговые значения по выбранным комнатам."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (112)",
             date: "2026-06-11",
             changes: [
-                "Changed Margaritaville setup time controls to Due Out presets: 12 PM, 2 PM, and 5 PM.",
-                "Prevented non-Due-Out setup categories from carrying an accidental time value."
+                "Элементы управления временем установки Маргаритавилля изменены на предустановленные настройки «Срочный выход»: 12:00, 14:00 и 17:00.",
+                "Предотвращено случайное значение времени в категориях настройки, не относящихся к сроку выполнения."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (111)",
             date: "2026-06-11",
             changes: [
-                "Added a regression test proving Margaritaville green rooms do not reset from a normal status tap.",
-                "Documented the guarded simple-cycle reset path so completed Margaritaville rooms only return to yellow through the explicit reset action."
+                "Добавлен регрессионный тест, доказывающий, что зеленые комнаты Маргаритавилля не сбрасываются при обычном нажатии на статус.",
+                "Задокументирован защищенный путь сброса простого цикла, поэтому завершенные комнаты Маргаритавилля возвращаются к желтому цвету только через явное действие сброса."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (110)",
             date: "2026-06-11",
             changes: [
-                "Added Margaritaville square-tile actions for voice/media, VIP, scheduling, and reset.",
-                "Reused the shared media badge on Margaritaville tiles so rooms with audio, photo, or video are visible in the grid.",
-                "Moved VIP jelly and media indicator rendering into shared summary components."
+                "Для квадратных ячеек добавлены действия голос/медиа, VIP, назначение времени и сброс.",
+                "Общий медиа-значок переиспользован в сетке, чтобы комнаты со звуком, фото или видео были заметны сразу.",
+                "Рендеринг VIP-желе и медиа-индикаторов перенесен в общие сводные компоненты."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (109)",
             date: "2026-06-11",
             changes: [
-                "Added a Margaritaville catalog editor in Settings for adding and removing room numbers.",
-                "Catalog changes are stored in the active hotel's SwiftData store and immediately update setup room grids.",
-                "Deletion now refuses rooms that are already part of the active workday."
+                "В настройках добавлен редактор каталога Маргаритавиля для добавления и удаления номеров комнат.",
+                "Изменения каталога сохраняются в хранилище SwiftData активного отеля и немедленно обновляют сетки помещений для настройки.",
+                "При удалении теперь отклоняются комнаты, которые уже являются частью активного рабочего дня."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (108)",
             date: "2026-06-11",
             changes: [
-                "Added optional 15-minute time tagging to Margaritaville setup categories.",
-                "Moved day-category setup controls into their own SwiftUI component to keep setup files smaller and cleaner.",
-                "Selected Margaritaville setup tiles now show both the category badge and its optional time."
+                "В категории настроек Маргаритавилля добавлена дополнительная 15-минутная отметка времени.",
+                "Элементы управления настройкой по категориям дней перенесены в отдельный компонент SwiftUI, чтобы файлы установки были меньше и чище.",
+                "На выбранных ячейках настройки теперь отображаются значок категории и дополнительное время."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (107)",
             date: "2026-06-11",
             changes: [
-                "Added Margaritaville day-category tagging for setup rooms: Due Out, Stayover, Departed, Pick Up, and OOO.",
-                "Persisted room day-category data, optional category time, and update timestamps through SwiftData and visual history.",
-                "Added setup category chips and a category filter for Margaritaville without changing the current OceanKey S/L/B setup flow."
+                "Добавлена маркировка категорий дней в Маргаритавилле для установочных комнат: «Срочно уйти», «Остаться», «Отбыл», «Забрать» и «ООО».",
+                "Сохраняемые данные о категориях дней комнат, дополнительное время категории и временные метки обновления через SwiftData и визуальную историю.",
+                "Добавлены чипы категорий настройки и фильтр категорий для Маргаритавилля без изменения текущего процесса настройки OceanKey S/L/B."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (106)",
             date: "2026-06-11",
             changes: [
-                "Added a confirmation step before switching hotels from Settings so a work session is not changed accidentally.",
-                "Hardened multi-hotel persistence with a regression test that writes OceanKey and Margaritaville into separate physical SwiftData store files.",
-                "Adjusted Margaritaville setup room picking to use fixed 4-column square tiles while keeping the current OceanKey setup layout unchanged."
+                "Добавлен шаг подтверждения перед переключением отелей из настроек, чтобы рабочий сеанс не был случайно изменен.",
+                "Усиленная устойчивость нескольких отелей с помощью регрессионного теста, который записывает OceanKey и Margaritaville в отдельные физические файлы хранилища SwiftData.",
+                "Выбор комнат переведён на фиксированные квадратные ячейки в четыре колонки, при этом существующая компоновка настройки OceanKey не изменилась."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (105)",
             date: "2026-06-11",
             changes: [
-                "Added hotel profiles with a startup hotel selector and persisted hotel switching between OceanKey and Margaritaville.",
-                "Added a Margaritaville 4-column square summary with simple yellow/red/green room cycle, purple scheduled rooms, live status counters, and status-change time labels.",
-                "Moved work-session persistence to hotel-specific SwiftData stores while migrating the existing OceanKey store forward."
+                "Добавлены профили отелей со стартовым селектором отелей и сохранено переключение отелей между OceanKey и Margaritaville.",
+                "Добавлен квадратный обзор Маргаритавилля в 4 столбца с простым циклом желто-красно-зеленых комнат, фиолетовыми запланированными комнатами, счетчиками текущего состояния и метками времени изменения статуса.",
+                "Сохранение рабочих сессий перенесено в хранилища SwiftData для конкретных отелей при переносе существующего хранилища OceanKey."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (104)",
             date: "2026-06-10",
             changes: [
-                "Fixed physical iPhone startup by skipping CloudKit-backed AI preset storage when the installed build has no iCloud entitlement.",
-                "AI/live-wallpaper presets now fall back directly to local storage plus manual Files/iCloud Drive backup on Personal Team builds.",
-                "Removed the last force-unwrap fallback from AI preset store startup so a storage setup failure is shown as state instead of crashing."
+                "Исправлен физический запуск iPhone путем пропуска предустановленного хранилища AI на базе CloudKit, когда установленная сборка не имеет прав iCloud.",
+                "Предварительные настройки искусственного интеллекта и живых обоев теперь возвращаются непосредственно в локальное хранилище, а также ручное резервное копирование файлов или iCloud Drive в сборках Personal Team.",
+                "Удален последний резервный вариант принудительного развертывания при запуске хранилища предустановок AI, поэтому сбой настройки хранилища отображается как состояние, а не сбой."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (103)",
             date: "2026-06-10",
             changes: [
-                "Added a manual preset backup exporter for DeepSeek-generated Matrix/VIP configurations and the current live wallpaper settings.",
-                "The backup is a lightweight configuration document that can be saved through the system Files picker, including iCloud Drive, without CloudKit entitlements.",
-                "Restored physical-device signing to the Personal Team-compatible path while keeping CloudKit entitlements available for simulator/future Developer Program validation."
+                "Добавлен экспортер резервных копий, созданных вручную, для конфигураций Matrix/VIP, созданных DeepSeek, и текущих настроек живых обоев.",
+                "Резервная копия представляет собой упрощенный документ конфигурации, который можно сохранить с помощью средства выбора системных файлов, включая iCloud Drive, без прав CloudKit.",
+                "Восстановлена подпись физического устройства по пути, совместимому с Personal Team, при этом права CloudKit остаются доступными для проверки симулятора или будущей программы разработчика."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (102)",
             date: "2026-06-10",
             changes: [
-                "Made DeepSeek visual presets report their real Apple sync mode instead of silently falling back to temporary memory storage.",
-                "Added an explicit local fallback path for AI presets with a visible warning when CloudKit provisioning is not available.",
-                "Kept generated preset storage isolated in its own SwiftData store so it cannot collide with work-session persistence."
+                "Визуальные пресеты DeepSeek теперь сообщают о своем реальном режиме синхронизации Apple, а не автоматически возвращаются к временному хранилищу памяти.",
+                "Добавлен явный локальный резервный путь для предустановок AI с видимым предупреждением, когда подготовка CloudKit недоступна.",
+                "Сгенерированное хранилище предустановок хранится изолированно в собственном хранилище SwiftData, чтобы оно не могло конфликтовать с сохранением рабочего сеанса."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (101)",
             date: "2026-06-10",
             changes: [
-                "Added a developer DeepSeek Lab for generating lightweight Matrix and VIP visual presets from prompts.",
-                "Stored DeepSeek API keys in iOS Keychain instead of source code and saved generated preset JSON through SwiftData for Apple sync.",
-                "Removed the visible VIP flicker experiment from the cell rendering path so future VIP experiments go through saved AI presets."
+                "Добавлена лаборатория разработчика DeepSeek Lab для создания облегченных визуальных пресетов Matrix и VIP из подсказок.",
+                "Ключи API DeepSeek сохранены в связке ключей iOS вместо исходного кода и сохранены сгенерированные предустановленные JSON через синхронизацию SwiftData для Apple.",
+                "Удален эксперимент с видимым мерцанием VIP из пути рендеринга ячеек, поэтому будущие эксперименты с VIP будут проходить через сохраненные настройки ИИ."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (100)",
             date: "2026-06-10",
             changes: [
-                "Fixed media viewing so video pages only play when the video is the active full-screen item, preventing background video audio while viewing photos.",
-                "Paused looping video thumbnails while the media viewer is open and kept silent loop previews for video thumbnails in room and cart media."
+                "Исправлен просмотр мультимедиа: видеостраницы воспроизводятся только тогда, когда видео является активным полноэкранным элементом, что предотвращает фоновый звук видео при просмотре фотографий.",
+                "Приостановлено циклическое воспроизведение миниатюр видео, пока открыта программа просмотра мультимедиа, и сохранен циклический предварительный просмотр миниатюр видео в комнате и корзине."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (99)",
             date: "2026-06-10",
             changes: [
-                "Fixed setup selection so switching one cart between floors or buildings no longer deletes rooms already picked on another floor.",
-                "Workday cart sections now keep all selected rooms for a cart and summarize multi-floor cart labels like A4/A5."
+                "Исправлен выбор установки: переключение одной тележки между этажами или зданиями больше не удаляет комнаты, уже выбранные на другом этаже.",
+                "В разделах корзины рабочих дней теперь сохраняются все выбранные для тележки помещения и суммируются этикетки многоэтажных тележек, например A4/A5."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (98)",
             date: "2026-06-10",
             changes: [
-                "Made the personal cart marker floor numbers larger and bolder while keeping them inside the compact marker buttons.",
-                "Marked the currently selected floor in the marker picker so reopening a marker shows the active choice."
+                "Номера этажей маркеров личной тележки стали крупнее и жирнее, сохранив их внутри компактных кнопок маркеров.",
+                "Отмечен текущий выбранный этаж в средстве выбора маркеров, поэтому при повторном открытии маркера отображается активный выбор."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (97)",
             date: "2026-06-10",
             changes: [
-                "Removed building letters from the personal cart marker buttons so the floor numbers fit clearly.",
-                "Kept building A markers on the left of the counters and building B markers on the right, using position instead of repeated text."
+                "Удалены буквы зданий из кнопок маркеров личной тележки, чтобы номера этажей четко соответствовали.",
+                "Продолжал строить маркеры A слева от счетчиков и маркеры B справа, используя позицию вместо повторяющегося текста."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (96)",
             date: "2026-06-10",
             changes: [
-                "Moved building A personal cart markers to the left side of the room statistics and building B markers to the right side.",
-                "Widened the marker buttons so floor labels are easier to read without colliding with the statistics or selection handle."
+                "Маркеры личной тележки здания A перемещены в левую часть статистики комнаты, а маркеры здания B — в правую сторону.",
+                "Расширены кнопки маркеров, чтобы метки этажей было легче читать, не сталкиваясь со статистикой или маркером выбора."
             ]
         ),
         BuildChangelogEntry(
             version: "0.2.0 (95)",
             date: "2026-06-10",
             changes: [
-                "Added four personal cart floor markers beside the summary counters: yellow and gray markers for building A and building B.",
-                "Each marker opens a quick floor picker for floors 2-5 and persists the selected cart location in app settings.",
-                "Added settings-store coverage for personal cart marker persistence and reset behavior."
+                "Рядом с итоговыми счетчиками добавлены четыре маркера пола личной тележки: желтые и серые маркеры для здания A и здания B.",
+                "Каждый маркер открывает быстрый выбор этажа для этажей 2–5 и сохраняет выбранное местоположение корзины в настройках приложения.",
+                "Добавлено покрытие хранилища настроек для сохранения маркера личной корзины и поведения сброса."
             ]
         ),
     ]

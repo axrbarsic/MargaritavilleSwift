@@ -19,14 +19,10 @@ enum RoomCellGeometry: String, CaseIterable, Codable, Identifiable {
     var description: String {
         switch self {
         case .roomy:
-            "4 в ряд"
+            "Статус удержанием"
         case .compact:
             "Зум удержанием"
         }
-    }
-
-    var margaritavilleGridColumnCount: Int {
-        4
     }
 
     var margaritavilleGridSpacing: CGFloat {

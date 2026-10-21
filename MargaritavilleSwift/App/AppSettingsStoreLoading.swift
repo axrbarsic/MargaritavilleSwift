@@ -1,11 +1,26 @@
+import BrooklynBackgroundKit
+import BrooklynWebBackgroundKit
 import Foundation
 
 extension AppSettingsStore {
     static func load(userDefaults: UserDefaults = .standard) -> AppSettingsStore {
         let backgroundRawValue = userDefaults.string(forKey: Keys.appBackgroundMode)
         let appBackgroundMode = backgroundRawValue.flatMap(AppBackgroundMode.init(rawValue:)) ?? .matrixRain
+        let brooklynSurfaceStyle = userDefaults.string(forKey: Keys.brooklynSurfaceStyle)
+            .flatMap(BrooklynSurfaceStyle.init(rawValue:))
+            ?? .donorExact
+        let brooklynWebCellScale = userDefaults.object(forKey: Keys.brooklynWebCellScale) as? Double
+            ?? BrooklynWebConfiguration.default.cellScale
+        let brooklynWebHue = userDefaults.object(forKey: Keys.brooklynWebHue) as? Double
+            ?? BrooklynWebConfiguration.default.hue
+        let brooklynWebBrightness = userDefaults.object(forKey: Keys.brooklynWebBrightness) as? Double
+            ?? BrooklynWebConfiguration.default.brightness
+        let brooklynWebContrast = userDefaults.object(forKey: Keys.brooklynWebContrast) as? Double
+            ?? BrooklynWebConfiguration.default.contrast
         let rawValue = userDefaults.string(forKey: Keys.roomCellGeometry)
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
+        let storedGridColumnCount = userDefaults.object(forKey: Keys.margaritavilleGridColumnCount) as? Int
+        let gridColumnCount = storedGridColumnCount.flatMap(MargaritavilleGridColumnCount.init(rawValue:)) ?? .four
         let transparentSurfacesEnabled = userDefaults.object(forKey: Keys.transparentSurfacesEnabled) as? Bool ?? false
         let roomTaskLongPress = userDefaults.object(forKey: Keys.roomTaskLongPress) as? Bool ?? true
         let summaryActionMenuAllowsMultiple = userDefaults.object(forKey: Keys.summaryActionMenuAllowsMultiple) as? Bool ?? false
@@ -34,6 +49,7 @@ extension AppSettingsStore {
             .flatMap(TVStaticNoiseVariant.init(rawValue:))
             ?? TVStaticNoiseConfiguration.default.variant
         let developerCellPhysicsEnabled = userDefaults.object(forKey: Keys.developerCellPhysicsEnabled) as? Bool ?? false
+        let developerLive3DCellsEnabled = userDefaults.object(forKey: Keys.developerLive3DCellsEnabled) as? Bool ?? false
         let developerCellSpringIntensity = userDefaults.object(forKey: Keys.developerCellSpringIntensity) as? Double ?? 0.72
         let developerCellSpringSpeed = userDefaults.object(forKey: Keys.developerCellSpringSpeed) as? Double ?? 0.82
         let deepSeekModelTier = userDefaults.string(forKey: Keys.deepSeekModelTier)
@@ -50,7 +66,13 @@ extension AppSettingsStore {
         let cartConsumableCatalog = Self.loadCartConsumableCatalog(userDefaults: userDefaults)
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
+            brooklynSurfaceStyle: brooklynSurfaceStyle,
+            brooklynWebCellScale: brooklynWebCellScale,
+            brooklynWebHue: brooklynWebHue,
+            brooklynWebBrightness: brooklynWebBrightness,
+            brooklynWebContrast: brooklynWebContrast,
             roomCellGeometry: geometry,
+            margaritavilleGridColumnCount: gridColumnCount,
             transparentSurfacesEnabled: transparentSurfacesEnabled,
             roomTaskLongPress: roomTaskLongPress,
             summaryActionMenuAllowsMultiple: summaryActionMenuAllowsMultiple,
@@ -70,6 +92,7 @@ extension AppSettingsStore {
             tvStaticBrightness: tvStaticBrightness,
             tvStaticGreenTint: tvStaticGreenTint,
             developerCellPhysicsEnabled: developerCellPhysicsEnabled,
+            developerLive3DCellsEnabled: developerLive3DCellsEnabled,
             developerCellSpringIntensity: developerCellSpringIntensity,
             developerCellSpringSpeed: developerCellSpringSpeed,
             deepSeekModelTier: deepSeekModelTier,
@@ -164,6 +187,22 @@ extension AppSettingsStore {
 
     static func normalizedMatrixSpeed(_ value: Double) -> Double {
         min(max(value, 0.08), 3.0)
+    }
+
+    static func normalizedBrooklynWebCellScale(_ value: Double) -> Double {
+        BrooklynWebConfiguration(cellScale: value).cellScale
+    }
+
+    static func normalizedBrooklynWebHue(_ value: Double) -> Double {
+        BrooklynWebConfiguration(hue: value).hue
+    }
+
+    static func normalizedBrooklynWebBrightness(_ value: Double) -> Double {
+        BrooklynWebConfiguration(brightness: value).brightness
+    }
+
+    static func normalizedBrooklynWebContrast(_ value: Double) -> Double {
+        BrooklynWebConfiguration(contrast: value).contrast
     }
 
     static func normalizedBackgroundVideoBlur(_ value: Double) -> Double {

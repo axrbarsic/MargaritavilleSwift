@@ -17,9 +17,12 @@ struct SummaryScreen: View {
     @State private var scheduleRoute: RoomScheduleRoute?
     @State private var isSettingsPresented = false
     @State private var activeSimpleCycleStatusFilter: RoomStatus?
-    @State private var zoomedRoom: RoomCell?
+    @State private var zoomedRoomID: RoomCell.ID?
+    @State private var roomCommandCenterState = RoomCommandCenterStateMachine()
     @State private var roomStatusHDRPulseGeneration = 0
     @State private var roomStatusHDRPulseEvents: [RoomCell.ID: RoomStatusHDRPulseEvent] = [:]
+    @State private var summaryLiveCells = SummaryLiveCellCollection()
+    @State private var summaryLiveCellRendererReady = false
     @Namespace private var roomZoomNamespace
 
     var body: some View {
@@ -40,12 +43,7 @@ struct SummaryScreen: View {
                     onOpenSelection: openSelection
                 )
 
-                ScrollView {
-                    summarySections
-                    .padding(.horizontal, 8)
-                    .padding(.bottom, 28)
-                }
-                .scrollIndicators(.hidden)
+                summaryScrollViewport
             }
             .padding(.top, 18)
 
@@ -54,20 +52,31 @@ struct SummaryScreen: View {
                     room: zoomedRoom,
                     namespace: roomZoomNamespace,
                     statusPaletteSaturation: appSettings.statusPaletteSaturation,
+                    phase: roomCommandCenterState.phase,
+                    onSelectStatus: { status in
+                        selectCommandCenterStatus(status, roomID: zoomedRoom.id)
+                    },
+                    onToggleVIP: { toggleCommandCenterVIP(roomID: zoomedRoom.id) },
+                    onOpenSchedule: { openSchedule(roomID: zoomedRoom.id) },
+                    onOpenDetails: { mode in openRoomDetails(roomID: zoomedRoom.id, mode: mode) },
                     onCollapse: collapseRoomZoom
                 )
                 .zIndex(20)
             }
         }
-        .sheet(item: $roomDetailsRoute, onDismiss: closeActionMenus) { route in
-            RoomDetailsScreen(route: route, workSession: workSession)
+        .sheet(item: $roomDetailsRoute, onDismiss: childFlowDidDismiss) { route in
+            RoomDetailsScreen(
+                route: route,
+                workSession: workSession,
+                onSuccessfulMutation: { completeChildFlowAfterMutation(roomID: route.roomID) }
+            )
                 .preferredColorScheme(.dark)
         }
         .sheet(item: $cartDetailsRoute) { route in
             CartDetailsScreen(route: route, workSession: workSession, appSettings: appSettings)
                 .preferredColorScheme(.dark)
         }
-        .sheet(item: $scheduleRoute) { route in
+        .sheet(item: $scheduleRoute, onDismiss: childFlowDidDismiss) { route in
             RoomScheduleSheet(route: route, onSet: setSchedule, onClear: clearSchedule)
                 .preferredColorScheme(.dark)
         }
@@ -90,6 +99,12 @@ struct SummaryScreen: View {
                 allowsMultiple: allowsMultiple
             )
         }
+        .onChange(of: appSettings.developerLive3DCellsEnabled) { _, isEnabled in
+            if !isEnabled {
+                summaryLiveCells = SummaryLiveCellCollection()
+                summaryLiveCellRendererReady = false
+            }
+        }
         .onReceive(scheduleTimer) { date in
             advanceScheduledRooms(now: date)
         }
@@ -103,6 +118,57 @@ struct SummaryScreen: View {
     private func openSelection() {
         feedback.playEvent(.selectionOpen)
         workSession.unlockWorkdayForEditing()
+    }
+
+    @ViewBuilder
+    private var summaryScrollViewport: some View {
+        if appSettings.developerLive3DCellsEnabled {
+            liveSummaryScrollViewport
+        } else {
+            standardSummaryScrollView
+        }
+    }
+
+    private var standardSummaryScrollView: some View {
+        ScrollView {
+            summarySections
+                .padding(.bottom, 28)
+        }
+        .scrollIndicators(.hidden)
+#if DEBUG
+        .debugSummaryScrollProbe(performanceTelemetry)
+#endif
+    }
+
+    private var liveSummaryScrollViewport: some View {
+        GeometryReader { viewportProxy in
+            ZStack {
+                if !isSettingsPresented {
+                    SummaryLiveCellViewport(
+                        collection: summaryLiveCells,
+                        vipHDREnabled: appSettings.developerVIPHDREnabled,
+                        onRendererAvailabilityChange: { isAvailable in
+                            summaryLiveCellRendererReady = isAvailable
+                        }
+                    )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+
+                standardSummaryScrollView
+                    .environment(
+                        \.experimentalLive3DCellsRendererReady,
+                        summaryLiveCellRendererReady
+                    )
+            }
+            .coordinateSpace(name: SummaryLiveCellCoordinateSpace.name)
+            .clipped()
+            .onPreferenceChange(SummaryLiveCellPreferenceKey.self) { preferences in
+                summaryLiveCells = SummaryLiveCellCollection(
+                    preferences: preferences,
+                    viewportSize: viewportProxy.size
+                )
+            }
+        }
     }
 
     private func toggleOpen(roomID: RoomCell.ID) {
@@ -125,7 +191,8 @@ struct SummaryScreen: View {
                         housekeeper: housekeeper(id: section.housekeeperID),
                         consumableTickerText: consumableTickerTextBySectionID[section.id],
                         geometry: appSettings.roomCellGeometry,
-                        zoomedRoomID: zoomedRoom?.id,
+                        gridColumnCount: appSettings.margaritavilleGridColumnCount,
+                        zoomedRoomID: zoomedRoomID,
                         roomZoomNamespace: roomZoomNamespace,
                         statusPaletteSaturation: appSettings.statusPaletteSaturation,
                         statusHDRPulseEvents: roomStatusHDRPulseEvents,
@@ -134,9 +201,7 @@ struct SummaryScreen: View {
                         },
                         onZoomRoom: zoomRoom,
                         onAdvance: toggleOpen,
-                        onOpenDetails: { roomID, mode in
-                            roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
-                        },
+                        onOpenDetails: openRoomDetails,
                         onVIPToggle: workSession.toggleVIP,
                         onReset: resetSimpleCycle,
                         onSchedule: openSchedule
@@ -144,6 +209,7 @@ struct SummaryScreen: View {
                 }
 
                 SummaryConsumablesTable(report: consumablesReport)
+                    .padding(.horizontal, 8)
             }
         } else {
             LazyVStack(spacing: 18) {
@@ -170,6 +236,7 @@ struct SummaryScreen: View {
                     )
                 }
             }
+            .padding(.horizontal, 8)
         }
     }
 
@@ -207,24 +274,34 @@ struct SummaryScreen: View {
         }
     }
 
+    private var zoomedRoom: RoomCell? {
+        guard let zoomedRoomID else { return nil }
+        return workSession.room(id: zoomedRoomID)
+    }
+
     private func setSimpleCycleStatusFilter(_ status: RoomStatus?) {
         activeSimpleCycleStatusFilter = status
     }
 
     private func zoomRoom(_ room: RoomCell) {
         guard appSettings.roomCellGeometry.margaritavilleHoldZoomEnabled else { return }
+        roomCommandCenterState.reset()
         withAnimation(roomZoomAnimation) {
-            zoomedRoom = room
+            zoomedRoomID = room.id
         }
     }
 
     private func collapseRoomZoom() {
+        roomCommandCenterState.reset()
         withAnimation(roomZoomAnimation) {
-            zoomedRoom = nil
+            zoomedRoomID = nil
         }
     }
 
     private func openSchedule(roomID: RoomCell.ID) {
+        if zoomedRoomID == roomID {
+            guard roomCommandCenterState.begin(.schedule) else { return }
+        }
         scheduleRoute = RoomScheduleRoute(
             roomID: roomID,
             initialDate: workSession.room(id: roomID)?.scheduledTime
@@ -241,6 +318,7 @@ struct SummaryScreen: View {
             handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
             scheduleNotifications.scheduleRoom(roomID, dueAt)
         }
+        completeChildFlowAfterMutation(roomID: roomID)
     }
 
     private func clearSchedule(roomID: RoomCell.ID) {
@@ -249,10 +327,69 @@ struct SummaryScreen: View {
         expandedActionMenuRoomIDs.remove(roomID)
         handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
         scheduleNotifications.cancelRoom(roomID)
+        completeChildFlowAfterMutation(roomID: roomID)
     }
 
-    private func closeActionMenus() {
+    private func childFlowDidDismiss() {
         expandedActionMenuRoomIDs.removeAll()
+        if zoomedRoomID != nil {
+            roomCommandCenterState.childDismissedWithoutMutation()
+        }
+    }
+
+    private func openRoomDetails(roomID: RoomCell.ID, mode: RoomDetailsMode) {
+        if zoomedRoomID == roomID {
+            guard roomCommandCenterState.begin(.details(mode)) else { return }
+        }
+        roomDetailsRoute = RoomDetailsRoute(roomID: roomID, mode: mode)
+    }
+
+    private func selectCommandCenterStatus(_ status: RoomStatus, roomID: RoomCell.ID) {
+        guard roomCommandCenterState.begin(.status(status)) else { return }
+        let previousStatus = statusForSound(roomID: roomID)
+        let hadSchedule = workSession.room(id: roomID)?.scheduledTime != nil
+
+        switch status {
+        case .pending:
+            workSession.resetSimpleCycle(roomId: roomID)
+        case .open, .ready:
+            workSession.setSimpleCycleStatus(status, roomId: roomID)
+        case .scheduled:
+            _ = roomCommandCenterState.finishAtomic(succeeded: false)
+            openSchedule(roomID: roomID)
+            return
+        case .inProgress:
+            _ = roomCommandCenterState.finishAtomic(succeeded: false)
+            return
+        }
+
+        handleRoomStatusChange(roomID: roomID, previousStatus: previousStatus)
+        if hadSchedule, workSession.room(id: roomID)?.scheduledTime == nil {
+            scheduleNotifications.cancelRoom(roomID)
+        }
+        finishAtomicCommand(succeeded: statusForSound(roomID: roomID) == status)
+    }
+
+    private func toggleCommandCenterVIP(roomID: RoomCell.ID) {
+        guard roomCommandCenterState.begin(.vip),
+              let previousValue = workSession.room(id: roomID)?.isVIP
+        else { return }
+        feedback.confirm()
+        workSession.toggleVIP(roomId: roomID)
+        finishAtomicCommand(succeeded: workSession.room(id: roomID)?.isVIP == !previousValue)
+    }
+
+    private func finishAtomicCommand(succeeded: Bool) {
+        if roomCommandCenterState.finishAtomic(succeeded: succeeded) == .collapse {
+            collapseRoomZoom()
+        }
+    }
+
+    private func completeChildFlowAfterMutation(roomID: RoomCell.ID) {
+        guard zoomedRoomID == roomID else { return }
+        if roomCommandCenterState.childDidMutateRoom() == .collapse {
+            collapseRoomZoom()
+        }
     }
 
     private func openCartDetails(cartID: CartSection.ID, subtitle: String? = nil) {
@@ -340,6 +477,30 @@ private let roomZoomAnimation = Animation.spring(
     dampingFraction: 0.82,
     blendDuration: 0.08
 )
+
+#if DEBUG
+private extension View {
+    @ViewBuilder
+    func debugSummaryScrollProbe(
+        _ performanceTelemetry: PerformanceTelemetryStore
+    ) -> some View {
+        if #available(iOS 18.0, *) {
+            onScrollPhaseChange { _, phase in
+                performanceTelemetry.updateDebugSummaryScrollPhase(
+                    isNonIdle: phase != .idle
+                )
+            }
+            .onDisappear {
+                performanceTelemetry.updateDebugSummaryScrollPhase(
+                    isNonIdle: false
+                )
+            }
+        } else {
+            self
+        }
+    }
+}
+#endif
 
 #Preview {
     SummaryScreen(

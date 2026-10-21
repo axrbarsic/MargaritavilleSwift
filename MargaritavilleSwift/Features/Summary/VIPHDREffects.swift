@@ -47,52 +47,83 @@ private struct VIPHDRStatusFillLayer: UIViewRepresentable {
     }
 
     func updateUIView(_ view: VIPHDRStatusFillUIView, context: Context) {
-        view.intensity = intensity
-        view.statusComponents = OceanKeyTheme.statusRGBComponents(
+        let components = OceanKeyTheme.statusRGBComponents(
             for: status,
             saturation: saturation,
             usesPurpleScheduled: usesPurpleScheduled
         )
-        view.seed = seed
-        view.cornerRadius = cornerRadius
-        view.isMenuExpanded = isMenuExpanded
-        view.usesExternalMask = usesExternalMask
+        view.apply(
+            VIPHDRStatusFillConfiguration(
+                display: .init(
+                    intensity: intensity,
+                    red: components.red,
+                    green: components.green,
+                    blue: components.blue,
+                    seed: seed
+                ),
+                mask: .init(
+                    cornerRadius: cornerRadius,
+                    isMenuExpanded: isMenuExpanded,
+                    usesExternalMask: usesExternalMask
+                )
+            )
+        )
     }
 }
 
+struct VIPHDRStatusFillConfiguration: Equatable, Sendable {
+    struct Display: Equatable, Sendable {
+        let intensity: CGFloat
+        let red: CGFloat
+        let green: CGFloat
+        let blue: CGFloat
+        let seed: Double
+    }
+
+    struct Mask: Equatable, Sendable {
+        let cornerRadius: CGFloat
+        let isMenuExpanded: Bool
+        let usesExternalMask: Bool
+    }
+
+    let display: Display
+    let mask: Mask
+
+    func changes(
+        comparedTo previous: VIPHDRStatusFillConfiguration?
+    ) -> VIPHDRStatusFillUpdate {
+        guard let previous else { return [.display, .mask] }
+        var changes: VIPHDRStatusFillUpdate = []
+        if display != previous.display {
+            changes.insert(.display)
+        }
+        if mask != previous.mask {
+            changes.insert(.mask)
+        }
+        return changes
+    }
+}
+
+struct VIPHDRStatusFillUpdate: OptionSet, Equatable, Sendable {
+    let rawValue: Int
+
+    static let display = VIPHDRStatusFillUpdate(rawValue: 1 << 0)
+    static let mask = VIPHDRStatusFillUpdate(rawValue: 1 << 1)
+}
+
 private final class VIPHDRStatusFillUIView: UIView {
-    var intensity: CGFloat = 1 {
-        didSet { setNeedsDisplay() }
-    }
-
-    var statusComponents: (red: CGFloat, green: CGFloat, blue: CGFloat) = (0, 1, 0) {
-        didSet { setNeedsDisplay() }
-    }
-
-    var seed: Double = 0 {
-        didSet { setNeedsDisplay() }
-    }
-
-    var cornerRadius: CGFloat = 16 {
-        didSet {
-            updateMask()
-            setNeedsDisplay()
-        }
-    }
-
-    var isMenuExpanded = false {
-        didSet {
-            updateMask()
-            setNeedsDisplay()
-        }
-    }
-
-    var usesExternalMask = false {
-        didSet {
-            updateMask()
-            setNeedsDisplay()
-        }
-    }
+    private var configuration = VIPHDRStatusFillConfiguration(
+        display: .init(intensity: 1, red: 0, green: 1, blue: 0, seed: 0),
+        mask: .init(
+            cornerRadius: 16,
+            isMenuExpanded: false,
+            usesExternalMask: false
+        )
+    )
+    private var hasAppliedConfiguration = false
+    private let maskLayer = CAShapeLayer()
+    private var appliedMaskConfiguration: VIPHDRStatusFillConfiguration.Mask?
+    private var appliedMaskBounds = CGRect.null
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -113,16 +144,31 @@ private final class VIPHDRStatusFillUIView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateMask()
+        updateMaskIfNeeded()
+    }
+
+    func apply(_ configuration: VIPHDRStatusFillConfiguration) {
+        let previous = hasAppliedConfiguration ? self.configuration : nil
+        let changes = configuration.changes(comparedTo: previous)
+        guard !changes.isEmpty else { return }
+
+        self.configuration = configuration
+        hasAppliedConfiguration = true
+
+        if changes.contains(.display) {
+            configureDynamicRange()
+            setNeedsDisplay()
+        }
+        if changes.contains(.mask) {
+            updateMaskIfNeeded()
+        }
     }
 
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext(), !bounds.isEmpty else { return }
         configureDynamicRange()
 
-        if #available(iOS 18.0, *) {
-            _ = context.setEDRTargetHeadroom(Float(targetHeadroom))
-        }
+        RoomHDRRuntime.configure(context: context, targetHeadroom: targetHeadroom)
 
         context.clear(rect)
         context.setFillColor(extendedStatusColor(alpha: 1))
@@ -131,61 +177,61 @@ private final class VIPHDRStatusFillUIView: UIView {
     }
 
     private var targetHeadroom: CGFloat {
-        let baseHeadroom = min(max(UIScreen.main.potentialEDRHeadroom, 1.65), 4.0)
-        return min(baseHeadroom * max(intensity, 1), 8.0)
+        RoomHDRRuntime.targetHeadroom(intensity: configuration.display.intensity)
     }
 
     private func configureDynamicRange() {
-        if #available(iOS 26.0, *) {
-            layer.preferredDynamicRange = .high
-            layer.contentsHeadroom = targetHeadroom
-        } else if #available(iOS 17.0, *) {
-            layer.wantsExtendedDynamicRangeContent = true
-        }
+        RoomHDRRuntime.configure(layer: layer, targetHeadroom: targetHeadroom)
     }
 
     private func drawSameColorLift(in rect: CGRect, context: CGContext) {
-        guard let gradient = CGGradient(
-            colorsSpace: extendedP3ColorSpace,
-            colors: [
-                extendedStatusColor(alpha: 0.34),
-                extendedStatusColor(alpha: 0.10),
-                extendedStatusColor(alpha: 0)
-            ] as CFArray,
-            locations: [0, 0.46, 1]
-        ) else {
-            return
-        }
-
-        let x = rect.minX + rect.width * CGFloat(0.30 + 0.08 * sin(seed * .pi * 2))
-        let center = CGPoint(x: x, y: rect.minY + rect.height * 0.22)
-        context.saveGState()
-        context.setBlendMode(.plusLighter)
-        context.drawRadialGradient(
-            gradient,
-            startCenter: center,
-            startRadius: 0,
-            endCenter: center,
-            endRadius: max(rect.width, rect.height) * 0.90,
-            options: [.drawsAfterEndLocation]
+        RoomHDRRuntime.drawSameColorLift(
+            in: rect,
+            context: context,
+            components: statusComponents,
+            targetHeadroom: targetHeadroom,
+            seed: configuration.display.seed
         )
-        context.restoreGState()
     }
 
-    private func updateMask() {
-        if usesExternalMask {
-            layer.mask = nil
+    private var statusComponents: (red: CGFloat, green: CGFloat, blue: CGFloat) {
+        (
+            configuration.display.red,
+            configuration.display.green,
+            configuration.display.blue
+        )
+    }
+
+    private func updateMaskIfNeeded() {
+        let maskConfiguration = configuration.mask
+        if maskConfiguration.usesExternalMask {
+            if layer.mask != nil {
+                layer.mask = nil
+            }
+            appliedMaskConfiguration = maskConfiguration
+            appliedMaskBounds = bounds
             return
         }
 
-        let mask = CAShapeLayer()
-        mask.frame = bounds
-        mask.path = staticMaskPath(in: bounds).cgPath
-        layer.mask = mask
+        guard layer.mask !== maskLayer
+                || appliedMaskConfiguration != maskConfiguration
+                || appliedMaskBounds != bounds
+        else {
+            return
+        }
+
+        maskLayer.frame = bounds
+        maskLayer.path = staticMaskPath(in: bounds).cgPath
+        if layer.mask !== maskLayer {
+            layer.mask = maskLayer
+        }
+        appliedMaskConfiguration = maskConfiguration
+        appliedMaskBounds = bounds
     }
 
     private func staticMaskPath(in rect: CGRect) -> UIBezierPath {
-        let bottomRadius = isMenuExpanded ? 0 : cornerRadius
+        let cornerRadius = configuration.mask.cornerRadius
+        let bottomRadius = configuration.mask.isMenuExpanded ? 0 : cornerRadius
         let path = UIBezierPath()
         path.move(to: CGPoint(x: rect.minX + cornerRadius, y: rect.minY))
         path.addLine(to: CGPoint(x: rect.maxX - cornerRadius, y: rect.minY))
@@ -217,23 +263,89 @@ private final class VIPHDRStatusFillUIView: UIView {
     }
 
     private func extendedStatusColor(alpha: CGFloat) -> CGColor {
-        let components = boostedStatusComponents()
-        return CGColor(
-            colorSpace: extendedP3ColorSpace,
-            components: [components.red, components.green, components.blue, alpha]
-        ) ?? UIColor.white.withAlphaComponent(alpha).cgColor
-    }
-
-    private func boostedStatusComponents() -> (red: CGFloat, green: CGFloat, blue: CGFloat) {
-        let maximum = max(statusComponents.red, statusComponents.green, statusComponents.blue, 0.001)
-        let scale = targetHeadroom / maximum
-        return (
-            red: statusComponents.red * scale,
-            green: statusComponents.green * scale,
-            blue: statusComponents.blue * scale
+        RoomHDRRuntime.extendedColor(
+            components: statusComponents,
+            targetHeadroom: targetHeadroom,
+            alpha: alpha
         )
     }
+
 }
 
-private let extendedP3ColorSpace = CGColorSpace(name: CGColorSpace.extendedLinearDisplayP3)
-    ?? CGColorSpaceCreateDeviceRGB()
+@MainActor
+enum RoomHDRRuntime {
+    static let colorSpace = CGColorSpace(name: CGColorSpace.extendedLinearDisplayP3)
+        ?? CGColorSpaceCreateDeviceRGB()
+
+    static func targetHeadroom(intensity: CGFloat) -> CGFloat {
+        let baseHeadroom = min(max(UIScreen.main.potentialEDRHeadroom, 1.65), 4.0)
+        return min(baseHeadroom * max(intensity, 1), 8.0)
+    }
+
+    static func configure(layer: CALayer, targetHeadroom: CGFloat) {
+        if #available(iOS 26.0, *) {
+            layer.preferredDynamicRange = .high
+            layer.contentsHeadroom = targetHeadroom
+        } else if #available(iOS 17.0, *) {
+            layer.wantsExtendedDynamicRangeContent = true
+        }
+    }
+
+    static func configure(context: CGContext, targetHeadroom: CGFloat) {
+        if #available(iOS 18.0, *) {
+            _ = context.setEDRTargetHeadroom(Float(targetHeadroom))
+        }
+    }
+
+    static func drawSameColorLift(
+        in rect: CGRect,
+        context: CGContext,
+        components: (red: CGFloat, green: CGFloat, blue: CGFloat),
+        targetHeadroom: CGFloat,
+        seed: Double
+    ) {
+        guard let gradient = CGGradient(
+            colorsSpace: RoomHDRRuntime.colorSpace,
+            colors: [
+                extendedColor(components: components, targetHeadroom: targetHeadroom, alpha: 0.34),
+                extendedColor(components: components, targetHeadroom: targetHeadroom, alpha: 0.10),
+                extendedColor(components: components, targetHeadroom: targetHeadroom, alpha: 0)
+            ] as CFArray,
+            locations: [0, 0.46, 1]
+        ) else {
+            return
+        }
+
+        let x = rect.minX + rect.width * CGFloat(0.30 + 0.08 * sin(seed * .pi * 2))
+        let center = CGPoint(x: x, y: rect.minY + rect.height * 0.22)
+        context.saveGState()
+        context.setBlendMode(.plusLighter)
+        context.drawRadialGradient(
+            gradient,
+            startCenter: center,
+            startRadius: 0,
+            endCenter: center,
+            endRadius: max(rect.width, rect.height) * 0.90,
+            options: [.drawsAfterEndLocation]
+        )
+        context.restoreGState()
+    }
+
+    static func extendedColor(
+        components: (red: CGFloat, green: CGFloat, blue: CGFloat),
+        targetHeadroom: CGFloat,
+        alpha: CGFloat
+    ) -> CGColor {
+        let maximum = max(components.red, components.green, components.blue, 0.001)
+        let scale = targetHeadroom / maximum
+        return CGColor(
+            colorSpace: colorSpace,
+            components: [
+                components.red * scale,
+                components.green * scale,
+                components.blue * scale,
+                alpha
+            ]
+        ) ?? UIColor.white.withAlphaComponent(alpha).cgColor
+    }
+}

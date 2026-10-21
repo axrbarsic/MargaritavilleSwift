@@ -1,3 +1,4 @@
+import BrooklynBackgroundKit
 import PhotosUI
 import SwiftUI
 
@@ -9,14 +10,14 @@ struct SettingsBackgroundSection: View {
     var body: some View {
         SettingsPanel(
             title: "Фон приложения",
-            subtitle: "Matrix Rain или локальное видео как живая заставка основного экрана."
+            subtitle: "Живые Matrix, TV, Video, Brooklyn и Brooklyn Web фоны для всех экранов приложения."
         ) {
             Picker("Заставка", selection: $appSettings.appBackgroundMode) {
                 ForEach(AppBackgroundMode.allCases) { mode in
                     Text(mode.title).tag(mode)
                 }
             }
-            .pickerStyle(.segmented)
+            .pickerStyle(.menu)
             .onChange(of: appSettings.appBackgroundMode) { _, _ in feedback.confirm() }
 
             SettingsInfoRow(
@@ -33,6 +34,12 @@ struct SettingsBackgroundSection: View {
             }
             if appSettings.appBackgroundMode == .video {
                 videoControls
+            }
+            if appSettings.appBackgroundMode == .brooklyn {
+                brooklynControls
+            }
+            if appSettings.appBackgroundMode == .brooklynWeb {
+                BrooklynWebControls(appSettings: appSettings)
             }
         }
     }
@@ -54,6 +61,28 @@ struct SettingsBackgroundSection: View {
         case .matrixRain: "Matrix Rain как основной живой фон."
         case .tvStaticNoise: "ShaderKit Dynamic Gray Noise: аналоговый телевизионный снег как основной фон."
         case .video: "Видео хранится только локально на устройстве."
+        case .brooklyn: "Нативная Brooklyn сцена с точной геометрией, материалом и автоматической анимацией donor."
+        case .brooklynWeb: "Локальный WebKit renderer исходной Brooklyn сцены, полностью упакованный в приложение и доступный offline."
+        }
+    }
+
+    private var brooklynControls: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Picker("Материал", selection: $appSettings.brooklynSurfaceStyle) {
+                Text("Оригинал").tag(BrooklynSurfaceStyle.donorExact)
+                Text("Блики+").tag(BrooklynSurfaceStyle.enhanced)
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: appSettings.brooklynSurfaceStyle) { _, _ in feedback.confirm() }
+
+            SettingsInfoRow(
+                title: "Материал Brooklyn",
+                value: appSettings.brooklynSurfaceStyle == .donorExact ? "Оригинал" : "Блики+",
+                systemName: "cube.transparent",
+                subtitle: appSettings.brooklynSurfaceStyle == .donorExact
+                    ? "Точный материал donor с оригинальными текстурами и city HDR."
+                    : "Та же сцена и анимация с усиленными отражательными бликами."
+            )
         }
     }
 

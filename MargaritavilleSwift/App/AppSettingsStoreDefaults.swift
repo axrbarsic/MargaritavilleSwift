@@ -1,9 +1,14 @@
+import BrooklynBackgroundKit
+import BrooklynWebBackgroundKit
 import Foundation
 
 extension AppSettingsStore {
     func resetToDefaults() {
         appBackgroundMode = .matrixRain
+        brooklynSurfaceStyle = .donorExact
+        resetBrooklynWebConfiguration()
         roomCellGeometry = .roomy
+        margaritavilleGridColumnCount = .four
         transparentSurfacesEnabled = false
         roomTaskLongPress = true
         summaryActionMenuAllowsMultiple = false
@@ -23,6 +28,7 @@ extension AppSettingsStore {
         tvStaticBrightness = TVStaticNoiseConfiguration.default.brightness
         tvStaticGreenTint = TVStaticNoiseConfiguration.default.greenTint
         developerCellPhysicsEnabled = false
+        developerLive3DCellsEnabled = false
         developerCellSpringIntensity = 0.72
         developerCellSpringSpeed = 0.82
         deepSeekModelTier = .pro
@@ -35,5 +41,12 @@ extension AppSettingsStore {
         selectedHotelID = nil
         housekeepers = MargaritavilleHousekeeperCatalog.defaultHousekeepers
         cartConsumableCatalog = CartConsumableCatalog.defaultCatalog
+    }
+
+    func resetBrooklynWebConfiguration() {
+        brooklynWebCellScale = BrooklynWebConfiguration.default.cellScale
+        brooklynWebHue = BrooklynWebConfiguration.default.hue
+        brooklynWebBrightness = BrooklynWebConfiguration.default.brightness
+        brooklynWebContrast = BrooklynWebConfiguration.default.contrast
     }
 }

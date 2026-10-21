@@ -3,6 +3,7 @@ import SwiftUI
 struct RoomDetailsScreen: View {
     let route: RoomDetailsRoute
     @Bindable var workSession: WorkSessionStore
+    let onSuccessfulMutation: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var draftText = ""
@@ -11,6 +12,16 @@ struct RoomDetailsScreen: View {
     @State private var selectedMedia: MediaAttachment?
     @State private var mediaPreviewPlaybackEnabled = true
     @State private var mediaError: String?
+
+    init(
+        route: RoomDetailsRoute,
+        workSession: WorkSessionStore,
+        onSuccessfulMutation: @escaping () -> Void = {}
+    ) {
+        self.route = route
+        self.workSession = workSession
+        self.onSuccessfulMutation = onSuccessfulMutation
+    }
 
     var body: some View {
         ZStack {
@@ -53,11 +64,15 @@ struct RoomDetailsScreen: View {
         .onAppear(perform: loadDraft)
         .onChange(of: draftText) { _, newValue in
             guard route.mode == .text else { return }
+            guard newValue != (workSession.room(id: route.roomID)?.textNote ?? "") else { return }
             workSession.updateTextNote(newValue, roomId: route.roomID)
+            onSuccessfulMutation()
         }
         .onChange(of: draftVoiceTranscript) { _, newValue in
             guard route.mode == .voice else { return }
+            guard newValue != (workSession.room(id: route.roomID)?.voiceTranscript ?? "") else { return }
             workSession.updateVoiceTranscript(newValue, roomId: route.roomID)
+            onSuccessfulMutation()
         }
         .fullScreenCover(item: $captureKind) { kind in
             CameraCaptureView(
@@ -229,6 +244,7 @@ struct RoomDetailsScreen: View {
             let attachment = try LocalMediaFileStore().save(capturedMedia: capturedMedia)
             workSession.addRoomMedia(attachment, roomId: route.roomID)
             mediaError = nil
+            onSuccessfulMutation()
         } catch {
             mediaError = error.localizedDescription
         }
@@ -243,6 +259,7 @@ struct RoomDetailsScreen: View {
             )
             workSession.addRoomMedia(attachment, roomId: route.roomID)
             mediaError = nil
+            onSuccessfulMutation()
         } catch {
             mediaError = error.localizedDescription
         }
@@ -255,6 +272,7 @@ struct RoomDetailsScreen: View {
         }
         LocalMediaFileStore().delete(attachment)
         workSession.removeRoomMedia(attachment, roomId: route.roomID)
+        onSuccessfulMutation()
     }
 
     private func openMediaAttachment(_ attachment: MediaAttachment) {

@@ -4,6 +4,8 @@ import UIKit
 struct RoomCellView: View {
     @Environment(\.interactionFeedback) private var feedback
     @Environment(\.experimentalCellPhysicsEnabled) private var experimentalCellPhysicsEnabled
+    @Environment(\.experimentalLive3DCellsEnabled) private var experimentalLive3DCellsEnabled
+    @Environment(\.experimentalLive3DCellsRendererReady) private var experimentalLive3DCellsRendererReady
     @Environment(\.experimentalCellSpringIntensity) private var experimentalCellSpringIntensity
     @Environment(\.experimentalCellSpringSpeed) private var experimentalCellSpringSpeed
     @Environment(\.experimentalVIPJellyEnabled) private var experimentalVIPJellyEnabled
@@ -73,27 +75,18 @@ struct RoomCellView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Room \(room.id)")
+        .accessibilityAction(.default, activateOpenToggle)
+        .accessibilityAction(
+            named: "Открыть меню действий",
+            openAccessibilityActionMenu
+        )
     }
 
     private var tileBody: some View {
-        Group {
-            if vipJellyActive || cellPulseStartedAt != nil {
-                TimelineView(.animation(minimumInterval: 1.0 / 120.0)) { timeline in
-                    tileBodyContent(
-                        vipJellyTime: vipJellyActive ? timeline.date.timeIntervalSinceReferenceDate : nil,
-                        pulseHeat: RoomStatusHDRPulseTiming.heat(
-                            startedAt: cellPulseStartedAt,
-                            now: timeline.date
-                        )
-                    )
-                }
-            } else {
-                tileBodyContent(vipJellyTime: nil, pulseHeat: 0)
-            }
-        }
+        tileBodyContent
     }
 
-    private func tileBodyContent(vipJellyTime: TimeInterval?, pulseHeat: CGFloat) -> some View {
+    private var tileBodyContent: some View {
         HStack(spacing: geometry.taskSpacing) {
             HoldActionTarget(
                 enabled: true,
@@ -116,7 +109,7 @@ struct RoomCellView: View {
         .frame(height: geometry.tileHeight)
         .foregroundStyle(OceanKeyTheme.roomForeground)
         .background {
-            cellFill(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+            tileBodyDecoration
         }
         .overlay(alignment: .bottomTrailing) {
             if let scheduleLabel = room.scheduleLabel {
@@ -147,28 +140,6 @@ struct RoomCellView: View {
                     .allowsHitTesting(false)
             }
         }
-        .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
-        .vipJellyUnifiedLayer(
-            enabled: vipJellyActive,
-            time: vipJellyTime,
-            speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed,
-            cornerRadius: geometry.tileCornerRadius
-        )
-        .vipJellyShapeMask(
-            enabled: vipJellyActive,
-            time: vipJellyTime,
-            speed: experimentalVIPJellySpeed,
-            seed: vipJellySeed,
-            cornerRadius: geometry.tileCornerRadius,
-            isMenuExpanded: isActionMenuExpanded
-        )
-        .shadow(color: .black.opacity(geometry.tileShadowOpacity), radius: 5, x: 0, y: 4)
-        .scaleEffect(
-            x: 1 + 0.09 * experimentalCellSpringIntensity * liveCellRubberPulseAmount(pulseHeat: pulseHeat),
-            y: 1 + 0.09 * experimentalCellSpringIntensity * liveCellRubberPulseAmount(pulseHeat: pulseHeat)
-        )
-        .offset(y: -7 * experimentalCellSpringIntensity * liveCellRubberPulseAmount(pulseHeat: pulseHeat))
         .offset(x: swipeProgress * 10)
         .background {
             GeometryReader { proxy in
@@ -190,6 +161,94 @@ struct RoomCellView: View {
                 : .default,
             value: physicsPulse
         )
+    }
+
+    @ViewBuilder
+    private var tileBodyDecoration: some View {
+        switch SummaryLiveCellOverlayContract.bodyMode(
+            isEnabled: experimentalLive3DCellsEnabled,
+            rendererAvailable: experimentalLive3DCellsRendererReady
+        ) {
+        case .swiftUIDecoration:
+            animatedTileDecoration
+        case .metalBody:
+            Color.clear.summaryLiveCellSurface(
+                isEnabled: true,
+                descriptor: liveCellDescriptor
+            )
+        }
+    }
+
+    private var liveCellDescriptor: SummaryLiveCellDescriptor {
+        SummaryLiveCellDescriptor(
+            roomID: room.id,
+            isVIP: room.isVIP,
+            status: room.status,
+            statusPaletteSaturation: statusPaletteSaturation,
+            usesPurpleScheduled: false,
+            cornerRadius: geometry.tileCornerRadius,
+            bottomCornerRadius: isActionMenuExpanded ? 0 : geometry.tileCornerRadius,
+            depth: 18
+        )
+    }
+
+    @ViewBuilder
+    private var animatedTileDecoration: some View {
+        if vipJellyActive || cellPulseStartedAt != nil {
+            TimelineView(.animation(minimumInterval: 1.0 / 120.0)) { timeline in
+                tileDecoration(
+                    vipJellyTime:
+                        vipJellyActive
+                            ? timeline.date.timeIntervalSinceReferenceDate
+                            : nil,
+                    pulseHeat: RoomStatusHDRPulseTiming.heat(
+                        startedAt: cellPulseStartedAt,
+                        now: timeline.date
+                    )
+                )
+            }
+        } else {
+            tileDecoration(vipJellyTime: nil, pulseHeat: 0)
+        }
+    }
+
+    private func tileDecoration(
+        vipJellyTime: TimeInterval?,
+        pulseHeat: CGFloat
+    ) -> some View {
+        cellFill(vipJellyTime: vipJellyTime, pulseHeat: pulseHeat)
+            .roomCellStaticClip(enabled: !vipJellyActive, shape: tileShape)
+            .vipJellyUnifiedLayer(
+                enabled: vipJellyActive,
+                time: vipJellyTime,
+                speed: experimentalVIPJellySpeed,
+                seed: vipJellySeed,
+                cornerRadius: geometry.tileCornerRadius
+            )
+            .vipJellyShapeMask(
+                enabled: vipJellyActive,
+                time: vipJellyTime,
+                speed: experimentalVIPJellySpeed,
+                seed: vipJellySeed,
+                cornerRadius: geometry.tileCornerRadius,
+                isMenuExpanded: isActionMenuExpanded
+            )
+            .shadow(
+                color: .black.opacity(geometry.tileShadowOpacity),
+                radius: 5,
+                x: 0,
+                y: 4
+            )
+            .scaleEffect(
+                x: 1 + 0.09 * experimentalCellSpringIntensity
+                    * liveCellRubberPulseAmount(pulseHeat: pulseHeat),
+                y: 1 + 0.09 * experimentalCellSpringIntensity
+                    * liveCellRubberPulseAmount(pulseHeat: pulseHeat)
+            )
+            .offset(
+                y: -7 * experimentalCellSpringIntensity
+                    * liveCellRubberPulseAmount(pulseHeat: pulseHeat)
+            )
     }
 
     private func taskButton(_ task: RoomTask) -> some View {
@@ -343,6 +402,12 @@ struct RoomCellView: View {
         onVIPToggle()
     }
 
+    private func openAccessibilityActionMenu() {
+        guard !isActionMenuExpanded else { return }
+        feedback.playEvent(.actionMenuOpen)
+        onActionMenuToggle()
+    }
+
     // VIP source must stay rectangular here. The shared jelly mask below creates
     // the animated silhouette; a pre-clip would kill the moving contour.
     @ViewBuilder
@@ -467,8 +532,7 @@ struct RoomCellView: View {
     }
 }
 
-// Кэш формата: body VIP-ячейки пересчитывается каждый кадр (TimelineView),
-// создавать DateFormatter на каждый проход — лишние аллокации.
+// Static labels live outside the decoration TimelineView and share this formatter.
 private let roomScheduleLabelFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "en_US_POSIX")

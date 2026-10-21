@@ -1,3 +1,5 @@
+import BrooklynBackgroundKit
+import BrooklynWebBackgroundKit
 import Foundation
 import Observation
 
@@ -7,6 +9,10 @@ final class AppSettingsStore {
     @ObservationIgnored private let userDefaults: UserDefaults
     private var storedStatusPaletteSaturation: Double
     private var storedMatrixSpeed: Double
+    private var storedBrooklynWebCellScale: Double
+    private var storedBrooklynWebHue: Double
+    private var storedBrooklynWebBrightness: Double
+    private var storedBrooklynWebContrast: Double
     private var storedBackgroundVideoBlur: Double
     private var storedBackgroundVideoBrightness: Double
     private var storedBackgroundVideoGreenTint: Double
@@ -41,9 +47,53 @@ final class AppSettingsStore {
         }
     }
 
+    var brooklynSurfaceStyle: BrooklynSurfaceStyle {
+        didSet {
+            userDefaults.set(brooklynSurfaceStyle.rawValue, forKey: Keys.brooklynSurfaceStyle)
+        }
+    }
+
+    var brooklynWebCellScale: Double {
+        get { storedBrooklynWebCellScale }
+        set {
+            storedBrooklynWebCellScale = Self.normalizedBrooklynWebCellScale(newValue)
+            userDefaults.set(storedBrooklynWebCellScale, forKey: Keys.brooklynWebCellScale)
+        }
+    }
+
+    var brooklynWebHue: Double {
+        get { storedBrooklynWebHue }
+        set {
+            storedBrooklynWebHue = Self.normalizedBrooklynWebHue(newValue)
+            userDefaults.set(storedBrooklynWebHue, forKey: Keys.brooklynWebHue)
+        }
+    }
+
+    var brooklynWebBrightness: Double {
+        get { storedBrooklynWebBrightness }
+        set {
+            storedBrooklynWebBrightness = Self.normalizedBrooklynWebBrightness(newValue)
+            userDefaults.set(storedBrooklynWebBrightness, forKey: Keys.brooklynWebBrightness)
+        }
+    }
+
+    var brooklynWebContrast: Double {
+        get { storedBrooklynWebContrast }
+        set {
+            storedBrooklynWebContrast = Self.normalizedBrooklynWebContrast(newValue)
+            userDefaults.set(storedBrooklynWebContrast, forKey: Keys.brooklynWebContrast)
+        }
+    }
+
     var roomCellGeometry: RoomCellGeometry {
         didSet {
             userDefaults.set(roomCellGeometry.rawValue, forKey: Keys.roomCellGeometry)
+        }
+    }
+
+    var margaritavilleGridColumnCount: MargaritavilleGridColumnCount {
+        didSet {
+            userDefaults.set(margaritavilleGridColumnCount.rawValue, forKey: Keys.margaritavilleGridColumnCount)
         }
     }
 
@@ -201,6 +251,12 @@ final class AppSettingsStore {
         }
     }
 
+    var developerLive3DCellsEnabled: Bool {
+        didSet {
+            userDefaults.set(developerLive3DCellsEnabled, forKey: Keys.developerLive3DCellsEnabled)
+        }
+    }
+
     var developerVIPFlickerEnabled: Bool {
         didSet {
             userDefaults.set(developerVIPFlickerEnabled, forKey: Keys.developerVIPFlickerEnabled)
@@ -271,6 +327,15 @@ final class AppSettingsStore {
         )
     }
 
+    var brooklynWebConfiguration: BrooklynWebConfiguration {
+        BrooklynWebConfiguration(
+            cellScale: brooklynWebCellScale,
+            hue: brooklynWebHue,
+            brightness: brooklynWebBrightness,
+            contrast: brooklynWebContrast
+        )
+    }
+
     var backgroundVideoURL: URL? {
         guard let backgroundVideoRelativePath else { return nil }
         return BackgroundVideoFileStore().url(for: backgroundVideoRelativePath)
@@ -279,7 +344,13 @@ final class AppSettingsStore {
 
     init(
         appBackgroundMode: AppBackgroundMode = .matrixRain,
+        brooklynSurfaceStyle: BrooklynSurfaceStyle = .donorExact,
+        brooklynWebCellScale: Double = BrooklynWebConfiguration.default.cellScale,
+        brooklynWebHue: Double = BrooklynWebConfiguration.default.hue,
+        brooklynWebBrightness: Double = BrooklynWebConfiguration.default.brightness,
+        brooklynWebContrast: Double = BrooklynWebConfiguration.default.contrast,
         roomCellGeometry: RoomCellGeometry = .roomy,
+        margaritavilleGridColumnCount: MargaritavilleGridColumnCount = .four,
         transparentSurfacesEnabled: Bool = false,
         roomTaskLongPress: Bool = true,
         summaryActionMenuAllowsMultiple: Bool = false,
@@ -299,6 +370,7 @@ final class AppSettingsStore {
         tvStaticBrightness: Double = TVStaticNoiseConfiguration.default.brightness,
         tvStaticGreenTint: Double = TVStaticNoiseConfiguration.default.greenTint,
         developerCellPhysicsEnabled: Bool = false,
+        developerLive3DCellsEnabled: Bool = false,
         developerCellSpringIntensity: Double = 0.72,
         developerCellSpringSpeed: Double = 0.82,
         deepSeekModelTier: DeepSeekModelTier = .pro,
@@ -314,7 +386,9 @@ final class AppSettingsStore {
         userDefaults: UserDefaults = .standard
     ) {
         self.appBackgroundMode = appBackgroundMode
+        self.brooklynSurfaceStyle = brooklynSurfaceStyle
         self.roomCellGeometry = roomCellGeometry
+        self.margaritavilleGridColumnCount = margaritavilleGridColumnCount
         self.transparentSurfacesEnabled = transparentSurfacesEnabled
         self.roomTaskLongPress = roomTaskLongPress
         self.summaryActionMenuAllowsMultiple = summaryActionMenuAllowsMultiple
@@ -325,6 +399,10 @@ final class AppSettingsStore {
         self.tvStaticVariant = tvStaticVariant
         self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
         self.storedMatrixSpeed = Self.normalizedMatrixSpeed(matrixSpeed)
+        self.storedBrooklynWebCellScale = Self.normalizedBrooklynWebCellScale(brooklynWebCellScale)
+        self.storedBrooklynWebHue = Self.normalizedBrooklynWebHue(brooklynWebHue)
+        self.storedBrooklynWebBrightness = Self.normalizedBrooklynWebBrightness(brooklynWebBrightness)
+        self.storedBrooklynWebContrast = Self.normalizedBrooklynWebContrast(brooklynWebContrast)
         self.storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(backgroundVideoBlur)
         self.storedBackgroundVideoBrightness = Self.normalizedBackgroundVideoBrightness(backgroundVideoBrightness)
         self.storedBackgroundVideoGreenTint = Self.normalizedBackgroundVideoGreenTint(backgroundVideoGreenTint)
@@ -338,6 +416,7 @@ final class AppSettingsStore {
         self.storedDeveloperVIPFlickerSpeed = Self.normalizedDeveloperVIPFlickerSpeed(developerVIPFlickerSpeed)
         self.storedDeveloperVIPJellySpeed = Self.normalizedDeveloperVIPJellySpeed(developerVIPJellySpeed)
         self.developerCellPhysicsEnabled = developerCellPhysicsEnabled
+        self.developerLive3DCellsEnabled = developerLive3DCellsEnabled
         self.deepSeekModelTier = deepSeekModelTier
         self.developerVIPFlickerEnabled = developerVIPFlickerEnabled
         self.developerVIPJellyEnabled = developerVIPJellyEnabled

@@ -1,6 +1,39 @@
 import Foundation
 
 extension WorkSessionStore {
+    func setSimpleCycleStatus(_ targetStatus: RoomStatus, roomId: RoomCell.ID) {
+        guard targetStatus == .open || targetStatus == .ready else { return }
+        mutateRoom(roomId, history: { before, after, _ in
+            guard before.status(in: .simpleCycle) != after.status(in: .simpleCycle) else { return nil }
+            return (.roomStatusChanged, "\(after.id): \(after.status(in: .simpleCycle).summaryLabel)")
+        }) { room, changedAt in
+            let previousStatus = room.status(in: .simpleCycle)
+            let previousOpened = room.opened
+            let previousTasks = room.completedTasks
+
+            room.opened = true
+            room.openedUpdatedAt = changedAt
+            room.scheduledTime = nil
+            room.scheduledUpdatedAt = changedAt
+            room.completedTasks = targetStatus == .ready ? Set(RoomTask.allCases) : []
+            for task in RoomTask.allCases where previousTasks.contains(task) != room.completedTasks.contains(task) {
+                room.markTaskStateUpdated(task, at: changedAt)
+            }
+            room.timeline = room.timeline.updatedForTransition(
+                previousOpened: previousOpened,
+                nextOpened: room.opened,
+                previousTasks: previousTasks,
+                nextTasks: room.completedTasks,
+                changedAt: changedAt
+            )
+            room.markStatusChangedIfNeeded(
+                from: previousStatus,
+                workflowKind: .simpleCycle,
+                changedAt: changedAt
+            )
+        }
+    }
+
     func advanceSimpleCycle(roomId: RoomCell.ID) {
         mutateRoom(roomId, history: { before, after, _ in
             guard before.status(in: HotelWorkflowKind.simpleCycle) != after.status(in: HotelWorkflowKind.simpleCycle) else { return nil }
