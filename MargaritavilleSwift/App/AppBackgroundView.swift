@@ -1,5 +1,4 @@
 import BrooklynBackgroundKit
-import BrooklynWebBackgroundKit
 import SwiftUI
 
 struct AppBackgroundView: View {
@@ -11,7 +10,7 @@ struct AppBackgroundView: View {
     @Environment(\.appBackgroundVideoGridIntensity) private var appBackgroundVideoGridIntensity
     @Environment(\.tvStaticNoiseConfiguration) private var tvStaticNoiseConfiguration
     @Environment(\.brooklynSurfaceStyle) private var brooklynSurfaceStyle
-    @Environment(\.brooklynWebConfiguration) private var brooklynWebConfiguration
+    @Environment(\.brooklynAppearance) private var brooklynAppearance
 
     var body: some View {
         ZStack {
@@ -31,11 +30,9 @@ struct AppBackgroundView: View {
                     )
                 )
             } else if appBackgroundMode == .brooklyn {
-                BrooklynBackgroundView(configuration: .init(style: brooklynSurfaceStyle))
-            } else if appBackgroundMode == .brooklynWeb {
-                BrooklynWebBackgroundView(configuration: brooklynWebConfiguration)
-            } else if let shaderWallpaper = appBackgroundMode.shaderWallpaper {
-                ShaderWallpaperView(kind: shaderWallpaper)
+                BrooklynBackgroundView(
+                    configuration: .init(style: brooklynSurfaceStyle, appearance: brooklynAppearance)
+                )
             }
         }
         .ignoresSafeArea()

@@ -1,12 +1,11 @@
 import BrooklynBackgroundKit
-import BrooklynWebBackgroundKit
 import Foundation
 
 extension AppSettingsStore {
     func resetToDefaults() {
         appBackgroundMode = .matrixRain
         brooklynSurfaceStyle = .donorExact
-        resetBrooklynWebConfiguration()
+        resetBrooklynAppearance()
         roomCellGeometry = .roomy
         margaritavilleGridColumnCount = .four
         transparentSurfacesEnabled = false
@@ -43,10 +42,10 @@ extension AppSettingsStore {
         cartConsumableCatalog = CartConsumableCatalog.defaultCatalog
     }
 
-    func resetBrooklynWebConfiguration() {
-        brooklynWebCellScale = BrooklynWebConfiguration.default.cellScale
-        brooklynWebHue = BrooklynWebConfiguration.default.hue
-        brooklynWebBrightness = BrooklynWebConfiguration.default.brightness
-        brooklynWebContrast = BrooklynWebConfiguration.default.contrast
+    func resetBrooklynAppearance() {
+        brooklynCellScale = BrooklynAppearance.default.cellScale
+        brooklynHue = BrooklynAppearance.default.hue
+        brooklynBrightness = BrooklynAppearance.default.brightness
+        brooklynContrast = BrooklynAppearance.default.contrast
     }
 }

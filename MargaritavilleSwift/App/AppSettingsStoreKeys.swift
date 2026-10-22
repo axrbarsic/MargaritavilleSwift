@@ -4,10 +4,11 @@ extension AppSettingsStore {
     enum Keys {
         static let appBackgroundMode = "appBackgroundMode"
         static let brooklynSurfaceStyle = "brooklynSurfaceStyle"
-        static let brooklynWebCellScale = "brooklynWebCellScale"
-        static let brooklynWebHue = "brooklynWebHue"
-        static let brooklynWebBrightness = "brooklynWebBrightness"
-        static let brooklynWebContrast = "brooklynWebContrast"
+        // Ключи сохранены от веб-версии Brooklyn, чтобы перенести подобранные значения.
+        static let brooklynCellScale = "brooklynWebCellScale"
+        static let brooklynHue = "brooklynWebHue"
+        static let brooklynBrightness = "brooklynWebBrightness"
+        static let brooklynContrast = "brooklynWebContrast"
         static let roomCellGeometry = "roomCellGeometry"
         static let margaritavilleGridColumnCount = "margaritavilleGridColumnCount"
         static let transparentSurfacesEnabled = "transparentSurfacesEnabled"

@@ -5,16 +5,6 @@ import QuartzCore
 import UIKit
 import simd
 
-private struct BrooklynSceneUniforms {
-    var viewProjection: simd_float4x4
-    var cameraPosition: SIMD4<Float>
-    var viewportSpacingScale: SIMD4<Float>
-    var time: Float
-    var highlightedInstance: UInt32
-    var surfaceStyle: UInt32
-    var environmentMaxMip: Float
-}
-
 private struct BrooklynBloomDownsampleUniforms {
     var applyThreshold: UInt32
     var threshold: Float
@@ -43,6 +33,7 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
     private var configuration: BrooklynBackgroundConfiguration
     private var timeline = BrooklynAnimationTimeline()
     private var targets: BrooklynRenderTargets?
+    private let sceneState: BrooklynSceneState
 
     init?(view: MTKView, configuration: BrooklynBackgroundConfiguration) {
         guard let device = MTLCreateSystemDefaultDevice() else { return nil }
@@ -54,6 +45,7 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
         }
         self.device = device
         self.configuration = configuration
+        sceneState = BrooklynSceneState(device: device)
         let maximumFPS = UIScreen.main.maximumFramesPerSecond
         telemetry = BrooklynPerformanceTelemetry.makeIfRequested(maximumFPS: maximumFPS)
         super.init()
@@ -92,10 +84,12 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
         commandBuffer.label = "Brooklyn frame"
         let elapsedTime = Float(timeline.advance(to: frameStart))
         let style = frameToken?.mode.style ?? configuration.style
-        var sceneUniforms = makeSceneUniforms(
+        var sceneUniforms = sceneState.uniforms(
             viewSizeInPoints: view.bounds.size,
             elapsedTime: elapsedTime,
-            style: style
+            style: style,
+            appearance: configuration.appearance,
+            environmentMaxMip: Float(resources.textures.environment.mipmapLevelCount - 1)
         )
         guard encodeScene(
             commandBuffer: commandBuffer,
@@ -175,7 +169,9 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
         targets: BrooklynRenderTargets,
         uniforms: inout BrooklynSceneUniforms
     ) -> Bool {
-        guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: scenePass) else {
+        guard let instanceBuffer = sceneState.instanceBuffer,
+              let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: scenePass)
+        else {
             return false
         }
         encoder.label = "Brooklyn exact instanced scene"
@@ -189,6 +185,7 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
             length: MemoryLayout<BrooklynSceneUniforms>.stride,
             index: 1
         )
+        encoder.setVertexBuffer(instanceBuffer, offset: 0, index: 2)
         encoder.setFragmentBytes(
             &uniforms,
             length: MemoryLayout<BrooklynSceneUniforms>.stride,
@@ -205,7 +202,7 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
             indexType: .uint16,
             indexBuffer: resources.mesh.indexBuffer,
             indexBufferOffset: 0,
-            instanceCount: BrooklynDonorContract.gridSize * BrooklynDonorContract.gridSize
+            instanceCount: sceneState.instanceCount
         )
         encoder.endEncoding()
         return true
@@ -282,43 +279,15 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
             encoder.setFragmentTexture(targets.bloomA[level], index: level + 1)
         }
         encoder.setFragmentSamplerState(resources.compositeSampler, index: 0)
+        var correction = BrooklynCompositeUniforms(appearance: configuration.appearance)
+        encoder.setFragmentBytes(
+            &correction,
+            length: MemoryLayout<BrooklynCompositeUniforms>.stride,
+            index: 0
+        )
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
         encoder.endEncoding()
         return true
-    }
-
-    private func makeSceneUniforms(
-        viewSizeInPoints: CGSize,
-        elapsedTime: Float,
-        style: BrooklynSurfaceStyle
-    ) -> BrooklynSceneUniforms {
-        let pointSize = SIMD2(
-            max(Float(viewSizeInPoints.width), 1),
-            max(Float(viewSizeInPoints.height), 1)
-        )
-        let viewport = BrooklynDonorContract.viewportSize(for: pointSize)
-        let spacing = BrooklynDonorContract.spacing(for: viewport)
-        let projection = Self.orthographic(
-            left: -viewport.x * 0.5,
-            right: viewport.x * 0.5,
-            bottom: -viewport.y * 0.5,
-            top: viewport.y * 0.5,
-            near: 0.1,
-            far: 1_000
-        )
-        let cameraPosition = SIMD4<Float>(0, 0, 5, 1)
-        return BrooklynSceneUniforms(
-            viewProjection: projection * Self.translation(SIMD3(0, 0, -5)),
-            cameraPosition: cameraPosition,
-            viewportSpacingScale: SIMD4(viewport.x, viewport.y, spacing, spacing * 0.9),
-            time: elapsedTime,
-            highlightedInstance: BrooklynDonorContract.highlightedInstance(
-                viewportSize: viewport,
-                spacing: spacing
-            ),
-            surfaceStyle: style == .donorExact ? 0 : 1,
-            environmentMaxMip: Float(resources.textures.environment.mipmapLevelCount - 1)
-        )
     }
 
     private func dispatch(
@@ -337,36 +306,6 @@ final class BrooklynRenderer: NSObject, MTKViewDelegate {
     private func recordSkipped(_ token: BrooklynPerformanceFrameToken?) {
         guard let telemetry, let token else { return }
         telemetry.recordSkipped(token)
-    }
-
-    private static func translation(_ value: SIMD3<Float>) -> simd_float4x4 {
-        simd_float4x4(
-            SIMD4(1, 0, 0, 0),
-            SIMD4(0, 1, 0, 0),
-            SIMD4(0, 0, 1, 0),
-            SIMD4(value.x, value.y, value.z, 1)
-        )
-    }
-
-    private static func orthographic(
-        left: Float,
-        right: Float,
-        bottom: Float,
-        top: Float,
-        near: Float,
-        far: Float
-    ) -> simd_float4x4 {
-        simd_float4x4(
-            SIMD4(2 / (right - left), 0, 0, 0),
-            SIMD4(0, 2 / (top - bottom), 0, 0),
-            SIMD4(0, 0, 1 / (near - far), 0),
-            SIMD4(
-                -(right + left) / (right - left),
-                -(top + bottom) / (top - bottom),
-                near / (near - far),
-                1
-            )
-        )
     }
 }
 #endif

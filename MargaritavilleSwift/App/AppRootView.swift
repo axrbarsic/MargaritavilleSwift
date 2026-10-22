@@ -38,7 +38,7 @@ struct AppRootView: View {
         }
         .environment(\.appBackgroundMode, appSettings.appBackgroundMode)
         .environment(\.brooklynSurfaceStyle, appSettings.brooklynSurfaceStyle)
-        .environment(\.brooklynWebConfiguration, appSettings.brooklynWebConfiguration)
+        .environment(\.brooklynAppearance, appSettings.brooklynAppearance)
         .environment(\.appBackgroundVideoURL, appSettings.backgroundVideoURL)
         .environment(\.appBackgroundVideoBlur, appSettings.backgroundVideoBlur)
         .environment(\.appBackgroundVideoBrightness, appSettings.backgroundVideoBrightness)

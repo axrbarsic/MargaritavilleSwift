@@ -10,7 +10,7 @@ struct SettingsBackgroundSection: View {
     var body: some View {
         SettingsPanel(
             title: "Фон приложения",
-            subtitle: "Живые фоны для всех экранов: Matrix, TV, видео, Brooklyn и шейдерные обои."
+            subtitle: "Живые Matrix, TV, Video и Brooklyn фоны для всех экранов приложения."
         ) {
             Picker("Заставка", selection: $appSettings.appBackgroundMode) {
                 ForEach(AppBackgroundMode.allCases) { mode in
@@ -37,9 +37,7 @@ struct SettingsBackgroundSection: View {
             }
             if appSettings.appBackgroundMode == .brooklyn {
                 brooklynControls
-            }
-            if appSettings.appBackgroundMode == .brooklynWeb {
-                BrooklynWebControls(appSettings: appSettings)
+                BrooklynAppearanceControls(appSettings: appSettings)
             }
         }
     }
@@ -56,17 +54,12 @@ struct SettingsBackgroundSection: View {
     }
 
     private var backgroundModeSubtitle: String {
-        if let shaderWallpaper = appSettings.appBackgroundMode.shaderWallpaper {
-            return shaderWallpaper.subtitle
-        }
-        return switch appSettings.appBackgroundMode {
+        switch appSettings.appBackgroundMode {
         case .off: "Фон отключён, основной экран остаётся чёрным."
         case .matrixRain: "Matrix Rain как основной живой фон."
         case .tvStaticNoise: "ShaderKit Dynamic Gray Noise: аналоговый телевизионный снег как основной фон."
         case .video: "Видео хранится только локально на устройстве."
-        case .brooklyn: "Нативная Brooklyn сцена с точной геометрией, материалом и автоматической анимацией donor."
-        case .brooklynWeb: "Локальный WebKit renderer исходной Brooklyn сцены, полностью упакованный в приложение и доступный offline."
-        case .aurora, .liquidNeon, .hyperspace, .synthwave: ""
+        case .brooklyn: "Нативная Swift/Metal сцена Brooklyn с точной геометрией, материалом и анимацией исходника."
         }
     }
 

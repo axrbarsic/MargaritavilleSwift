@@ -1,5 +1,4 @@
 import BrooklynBackgroundKit
-import BrooklynWebBackgroundKit
 import Foundation
 import Observation
 
@@ -9,10 +8,10 @@ final class AppSettingsStore {
     @ObservationIgnored private let userDefaults: UserDefaults
     private var storedStatusPaletteSaturation: Double
     private var storedMatrixSpeed: Double
-    private var storedBrooklynWebCellScale: Double
-    private var storedBrooklynWebHue: Double
-    private var storedBrooklynWebBrightness: Double
-    private var storedBrooklynWebContrast: Double
+    private var storedBrooklynCellScale: Double
+    private var storedBrooklynHue: Double
+    private var storedBrooklynBrightness: Double
+    private var storedBrooklynContrast: Double
     private var storedBackgroundVideoBlur: Double
     private var storedBackgroundVideoBrightness: Double
     private var storedBackgroundVideoGreenTint: Double
@@ -53,35 +52,35 @@ final class AppSettingsStore {
         }
     }
 
-    var brooklynWebCellScale: Double {
-        get { storedBrooklynWebCellScale }
+    var brooklynCellScale: Double {
+        get { storedBrooklynCellScale }
         set {
-            storedBrooklynWebCellScale = Self.normalizedBrooklynWebCellScale(newValue)
-            userDefaults.set(storedBrooklynWebCellScale, forKey: Keys.brooklynWebCellScale)
+            storedBrooklynCellScale = Self.normalizedBrooklynCellScale(newValue)
+            userDefaults.set(storedBrooklynCellScale, forKey: Keys.brooklynCellScale)
         }
     }
 
-    var brooklynWebHue: Double {
-        get { storedBrooklynWebHue }
+    var brooklynHue: Double {
+        get { storedBrooklynHue }
         set {
-            storedBrooklynWebHue = Self.normalizedBrooklynWebHue(newValue)
-            userDefaults.set(storedBrooklynWebHue, forKey: Keys.brooklynWebHue)
+            storedBrooklynHue = Self.normalizedBrooklynHue(newValue)
+            userDefaults.set(storedBrooklynHue, forKey: Keys.brooklynHue)
         }
     }
 
-    var brooklynWebBrightness: Double {
-        get { storedBrooklynWebBrightness }
+    var brooklynBrightness: Double {
+        get { storedBrooklynBrightness }
         set {
-            storedBrooklynWebBrightness = Self.normalizedBrooklynWebBrightness(newValue)
-            userDefaults.set(storedBrooklynWebBrightness, forKey: Keys.brooklynWebBrightness)
+            storedBrooklynBrightness = Self.normalizedBrooklynBrightness(newValue)
+            userDefaults.set(storedBrooklynBrightness, forKey: Keys.brooklynBrightness)
         }
     }
 
-    var brooklynWebContrast: Double {
-        get { storedBrooklynWebContrast }
+    var brooklynContrast: Double {
+        get { storedBrooklynContrast }
         set {
-            storedBrooklynWebContrast = Self.normalizedBrooklynWebContrast(newValue)
-            userDefaults.set(storedBrooklynWebContrast, forKey: Keys.brooklynWebContrast)
+            storedBrooklynContrast = Self.normalizedBrooklynContrast(newValue)
+            userDefaults.set(storedBrooklynContrast, forKey: Keys.brooklynContrast)
         }
     }
 
@@ -327,12 +326,12 @@ final class AppSettingsStore {
         )
     }
 
-    var brooklynWebConfiguration: BrooklynWebConfiguration {
-        BrooklynWebConfiguration(
-            cellScale: brooklynWebCellScale,
-            hue: brooklynWebHue,
-            brightness: brooklynWebBrightness,
-            contrast: brooklynWebContrast
+    var brooklynAppearance: BrooklynAppearance {
+        BrooklynAppearance(
+            cellScale: brooklynCellScale,
+            hue: brooklynHue,
+            brightness: brooklynBrightness,
+            contrast: brooklynContrast
         )
     }
 
@@ -345,10 +344,10 @@ final class AppSettingsStore {
     init(
         appBackgroundMode: AppBackgroundMode = .matrixRain,
         brooklynSurfaceStyle: BrooklynSurfaceStyle = .donorExact,
-        brooklynWebCellScale: Double = BrooklynWebConfiguration.default.cellScale,
-        brooklynWebHue: Double = BrooklynWebConfiguration.default.hue,
-        brooklynWebBrightness: Double = BrooklynWebConfiguration.default.brightness,
-        brooklynWebContrast: Double = BrooklynWebConfiguration.default.contrast,
+        brooklynCellScale: Double = BrooklynAppearance.default.cellScale,
+        brooklynHue: Double = BrooklynAppearance.default.hue,
+        brooklynBrightness: Double = BrooklynAppearance.default.brightness,
+        brooklynContrast: Double = BrooklynAppearance.default.contrast,
         roomCellGeometry: RoomCellGeometry = .roomy,
         margaritavilleGridColumnCount: MargaritavilleGridColumnCount = .four,
         transparentSurfacesEnabled: Bool = false,
@@ -399,10 +398,10 @@ final class AppSettingsStore {
         self.tvStaticVariant = tvStaticVariant
         self.storedStatusPaletteSaturation = Self.normalizedStatusPaletteSaturation(statusPaletteSaturation)
         self.storedMatrixSpeed = Self.normalizedMatrixSpeed(matrixSpeed)
-        self.storedBrooklynWebCellScale = Self.normalizedBrooklynWebCellScale(brooklynWebCellScale)
-        self.storedBrooklynWebHue = Self.normalizedBrooklynWebHue(brooklynWebHue)
-        self.storedBrooklynWebBrightness = Self.normalizedBrooklynWebBrightness(brooklynWebBrightness)
-        self.storedBrooklynWebContrast = Self.normalizedBrooklynWebContrast(brooklynWebContrast)
+        self.storedBrooklynCellScale = Self.normalizedBrooklynCellScale(brooklynCellScale)
+        self.storedBrooklynHue = Self.normalizedBrooklynHue(brooklynHue)
+        self.storedBrooklynBrightness = Self.normalizedBrooklynBrightness(brooklynBrightness)
+        self.storedBrooklynContrast = Self.normalizedBrooklynContrast(brooklynContrast)
         self.storedBackgroundVideoBlur = Self.normalizedBackgroundVideoBlur(backgroundVideoBlur)
         self.storedBackgroundVideoBrightness = Self.normalizedBackgroundVideoBrightness(backgroundVideoBrightness)
         self.storedBackgroundVideoGreenTint = Self.normalizedBackgroundVideoGreenTint(backgroundVideoGreenTint)

@@ -1,5 +1,4 @@
 import BrooklynBackgroundKit
-import BrooklynWebBackgroundKit
 import SwiftUI
 
 private struct AppBackgroundModeEnvironmentKey: EnvironmentKey {
@@ -14,8 +13,8 @@ private struct BrooklynSurfaceStyleEnvironmentKey: EnvironmentKey {
     static let defaultValue: BrooklynSurfaceStyle = .donorExact
 }
 
-private struct BrooklynWebConfigurationEnvironmentKey: EnvironmentKey {
-    static let defaultValue: BrooklynWebConfiguration = .default
+private struct BrooklynAppearanceEnvironmentKey: EnvironmentKey {
+    static let defaultValue: BrooklynAppearance = .default
 }
 
 extension EnvironmentValues {
@@ -34,8 +33,8 @@ extension EnvironmentValues {
         set { self[BrooklynSurfaceStyleEnvironmentKey.self] = newValue }
     }
 
-    var brooklynWebConfiguration: BrooklynWebConfiguration {
-        get { self[BrooklynWebConfigurationEnvironmentKey.self] }
-        set { self[BrooklynWebConfigurationEnvironmentKey.self] = newValue }
+    var brooklynAppearance: BrooklynAppearance {
+        get { self[BrooklynAppearanceEnvironmentKey.self] }
+        set { self[BrooklynAppearanceEnvironmentKey.self] = newValue }
     }
 }

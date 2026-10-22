@@ -90,18 +90,18 @@ func appSettingsPersistsBrooklynBackgroundMode() {
 }
 
 @Test
-func appSettingsPersistsBrooklynWebBackgroundMode() {
+func appSettingsMigratesRemovedBrooklynWebModeToNativeBrooklyn() {
     let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defer { defaults.removePersistentDomain(forName: suiteName) }
 
-    let settings = AppSettingsStore(userDefaults: defaults)
-    settings.appBackgroundMode = .brooklynWeb
+    defaults.set("brooklynWeb", forKey: "appBackgroundMode")
+    defaults.set(0.72, forKey: "brooklynWebCellScale")
 
     let loaded = AppSettingsStore.load(userDefaults: defaults)
 
-    #expect(loaded.appBackgroundMode == .brooklynWeb)
-    #expect(defaults.string(forKey: "appBackgroundMode") == "brooklynWeb")
+    #expect(loaded.appBackgroundMode == .brooklyn)
+    #expect(loaded.brooklynCellScale == 0.72)
 }
 
 @Test
@@ -120,43 +120,43 @@ func appSettingsDefaultsToDonorExactAndPersistsBrooklynSurfaceStyle() {
 }
 
 @Test
-func appSettingsPersistsClampsAndResetsBrooklynWebAppearance() {
+func appSettingsPersistsClampsAndResetsBrooklynAppearance() {
     let suiteName = "AppSettingsStoreTests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defer { defaults.removePersistentDomain(forName: suiteName) }
 
     let defaultsLoaded = AppSettingsStore.load(userDefaults: defaults)
-    #expect(defaultsLoaded.brooklynWebCellScale == 1)
-    #expect(abs(defaultsLoaded.brooklynWebHue - 0.950_292_397_660_818_7) < 0.000_000_1)
-    #expect(defaultsLoaded.brooklynWebBrightness == 1)
-    #expect(defaultsLoaded.brooklynWebContrast == 0)
+    #expect(defaultsLoaded.brooklynCellScale == 1)
+    #expect(abs(defaultsLoaded.brooklynHue - 0.950_292_397_660_818_7) < 0.000_000_1)
+    #expect(defaultsLoaded.brooklynBrightness == 1)
+    #expect(defaultsLoaded.brooklynContrast == 0)
 
-    defaultsLoaded.brooklynWebCellScale = 0.72
-    defaultsLoaded.brooklynWebHue = 0.24
-    defaultsLoaded.brooklynWebBrightness = 1.31
-    defaultsLoaded.brooklynWebContrast = -0.27
+    defaultsLoaded.brooklynCellScale = 0.72
+    defaultsLoaded.brooklynHue = 0.24
+    defaultsLoaded.brooklynBrightness = 1.31
+    defaultsLoaded.brooklynContrast = -0.27
 
     let persisted = AppSettingsStore.load(userDefaults: defaults)
-    #expect(persisted.brooklynWebCellScale == 0.72)
-    #expect(persisted.brooklynWebHue == 0.24)
-    #expect(persisted.brooklynWebBrightness == 1.31)
-    #expect(persisted.brooklynWebContrast == -0.27)
+    #expect(persisted.brooklynCellScale == 0.72)
+    #expect(persisted.brooklynHue == 0.24)
+    #expect(persisted.brooklynBrightness == 1.31)
+    #expect(persisted.brooklynContrast == -0.27)
 
-    persisted.brooklynWebCellScale = 10
-    persisted.brooklynWebHue = -10
-    persisted.brooklynWebBrightness = 10
-    persisted.brooklynWebContrast = -10
-    #expect(persisted.brooklynWebCellScale == 1.25)
-    #expect(persisted.brooklynWebHue == 0)
-    #expect(persisted.brooklynWebBrightness == 1.55)
-    #expect(persisted.brooklynWebContrast == -0.5)
+    persisted.brooklynCellScale = 10
+    persisted.brooklynHue = -10
+    persisted.brooklynBrightness = 10
+    persisted.brooklynContrast = -10
+    #expect(persisted.brooklynCellScale == 1.25)
+    #expect(persisted.brooklynHue == 0)
+    #expect(persisted.brooklynBrightness == 1.55)
+    #expect(persisted.brooklynContrast == -0.5)
 
-    persisted.resetBrooklynWebConfiguration()
+    persisted.resetBrooklynAppearance()
     let reset = AppSettingsStore.load(userDefaults: defaults)
-    #expect(reset.brooklynWebCellScale == 1)
-    #expect(abs(reset.brooklynWebHue - 0.950_292_397_660_818_7) < 0.000_000_1)
-    #expect(reset.brooklynWebBrightness == 1)
-    #expect(reset.brooklynWebContrast == 0)
+    #expect(reset.brooklynCellScale == 1)
+    #expect(abs(reset.brooklynHue - 0.950_292_397_660_818_7) < 0.000_000_1)
+    #expect(reset.brooklynBrightness == 1)
+    #expect(reset.brooklynContrast == 0)
 }
 
 @Test
@@ -407,10 +407,10 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
     let settings = AppSettingsStore(userDefaults: defaults)
     settings.appBackgroundMode = .off
     settings.brooklynSurfaceStyle = .enhanced
-    settings.brooklynWebCellScale = 0.58
-    settings.brooklynWebHue = 0.12
-    settings.brooklynWebBrightness = 1.42
-    settings.brooklynWebContrast = 0.38
+    settings.brooklynCellScale = 0.58
+    settings.brooklynHue = 0.12
+    settings.brooklynBrightness = 1.42
+    settings.brooklynContrast = 0.38
     settings.roomCellGeometry = .compact
     settings.margaritavilleGridColumnCount = .three
     settings.roomTaskLongPress = false
@@ -440,10 +440,10 @@ func appSettingsResetRestoresDefaultsAndPersistsThem() {
 
     #expect(loaded.appBackgroundMode == .matrixRain)
     #expect(loaded.brooklynSurfaceStyle == .donorExact)
-    #expect(loaded.brooklynWebCellScale == 1)
-    #expect(abs(loaded.brooklynWebHue - 0.950_292_397_660_818_7) < 0.000_000_1)
-    #expect(loaded.brooklynWebBrightness == 1)
-    #expect(loaded.brooklynWebContrast == 0)
+    #expect(loaded.brooklynCellScale == 1)
+    #expect(abs(loaded.brooklynHue - 0.950_292_397_660_818_7) < 0.000_000_1)
+    #expect(loaded.brooklynBrightness == 1)
+    #expect(loaded.brooklynContrast == 0)
     #expect(loaded.roomCellGeometry == .roomy)
     #expect(loaded.margaritavilleGridColumnCount == .four)
     #expect(loaded.roomTaskLongPress)

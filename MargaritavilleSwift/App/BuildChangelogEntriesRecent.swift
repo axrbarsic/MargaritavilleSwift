@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (66)",
+            date: "2026-10-21",
+            changes: [
+                "Brooklyn полностью переведён на Swift и Metal: веб-версия на WebKit и JavaScript удалена из приложения.",
+                "Размер ячеек с бесконечной сеткой, оттенок, яркость и контраст теперь настраиваются в нативном Brooklyn; ранее подобранные значения сохранены.",
+                "Удалены шейдерные обои «Сияние», «Жидкий неон», «Космос» и «Синтвейв»; выбор «Brooklyn Web» автоматически переключается на Brooklyn."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (65)",
             date: "2026-10-21",
             changes: [

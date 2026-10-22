@@ -2,7 +2,6 @@
 using namespace metal;
 
 constant float brooklynPI = 3.14159265358979323846;
-constant float brooklynGoldenRatio = 0.618033988749895;
 
 struct MeshVertex {
     float3 position [[attribute(0)]];
@@ -14,10 +13,19 @@ struct SceneUniforms {
     float4x4 viewProjection;
     float4 cameraPosition;
     float4 viewportSpacingScale;
+    float4 baseColor;
+    float4 fogColor;
+    float2 highlightGrid;
     float time;
-    uint highlightedInstance;
     uint surfaceStyle;
     float environmentMaxMip;
+};
+
+struct CompositeUniforms {
+    float brightness;
+    float contrast;
+    uint applyCorrection;
+    uint padding;
 };
 
 struct SceneVertexOut {
@@ -28,7 +36,7 @@ struct SceneVertexOut {
     float3 mouseVector;
     float2 uv;
     float viewDepth;
-    uint instanceID [[flat]];
+    float isHighlighted [[flat]];
 };
 
 struct CompositeVertexOut {
@@ -125,9 +133,11 @@ float3 environmentBRDF(float3 specularColor, float roughness, float dotNV) {
 vertex SceneVertexOut brooklynSceneVertex(
     MeshVertex in [[stage_in]],
     constant SceneUniforms& uniforms [[buffer(1)]],
+    constant float4* instances [[buffer(2)]],
     uint instanceID [[instance_id]]
 ) {
-    float seed = fract(float(instanceID) * brooklynGoldenRatio);
+    float4 cell = instances[instanceID];
+    float seed = cell.z;
     float delay = 0.2 + seed * 1.8;
     float duration = brooklynPI * 0.5 + seed * brooklynPI;
     float repeatDelay = 2.0 + seed;
@@ -156,13 +166,7 @@ vertex SceneVertexOut brooklynSceneVertex(
         localNormal = rotateZ(localNormal, turn);
     }
 
-    uint row = instanceID / 16;
-    uint column = instanceID % 16;
-    float3 instanceOrigin = float3(
-        (float(row) - 7.5) * spacing,
-        0.0,
-        (float(column) - 7.5) * spacing
-    );
+    float3 instanceOrigin = float3(cell.x * spacing, 0.0, cell.y * spacing);
     float3 localPosition = instanceOrigin + localVertex;
     float3 worldPosition = rotateX(
         rotateY(localPosition, -brooklynPI * 0.25),
@@ -181,7 +185,7 @@ vertex SceneVertexOut brooklynSceneVertex(
     out.mouseVector = -localVertex;
     out.uv = in.uv;
     out.viewDepth = uniforms.cameraPosition.z - worldPosition.z;
-    out.instanceID = instanceID;
+    out.isHighlighted = all(abs(cell.xy - uniforms.highlightGrid) < 0.01) ? 1.0 : 0.0;
     return out;
 }
 
@@ -194,9 +198,7 @@ fragment float4 brooklynSceneFragment(
     sampler textureSampler [[sampler(0)]],
     sampler environmentSampler [[sampler(1)]]
 ) {
-    float3 diffuseColor = in.instanceID == uniforms.highlightedInstance
-        ? float3(1.0)
-        : srgbToLinear(float3(245.0 / 255.0, 17.0 / 255.0, 85.0 / 255.0));
+    float3 diffuseColor = in.isHighlighted > 0.5 ? float3(1.0) : uniforms.baseColor.rgb;
 
     float2 st = in.uv * 2.0 - 0.5;
     float3 q = in.geometryPosition;
@@ -252,7 +254,7 @@ fragment float4 brooklynSceneFragment(
     }
 
     float fogFactor = 1.0 - exp(-0.08 * 0.08 * in.viewDepth * in.viewDepth);
-    float3 fogColor = srgbToLinear(float3(248.0 / 255.0, 0.0, 168.0 / 255.0));
+    float3 fogColor = uniforms.fogColor.rgb;
     color = mix(color, fogColor, saturate(fogFactor));
     return float4(color, 1.0);
 }
@@ -361,7 +363,8 @@ fragment float4 brooklynCompositeFragment(
     texture2d<float> bloom2 [[texture(3)]],
     texture2d<float> bloom3 [[texture(4)]],
     texture2d<float> bloom4 [[texture(5)]],
-    sampler linearSampler [[sampler(0)]]
+    sampler linearSampler [[sampler(0)]],
+    constant CompositeUniforms& correction [[buffer(0)]]
 ) {
     float2 uv = saturate(in.uv);
     float3 bloom = 0.25 * (
@@ -372,5 +375,14 @@ fragment float4 brooklynCompositeFragment(
         0.96 * bloom4.sample(linearSampler, uv).rgb
     );
     float3 linearColor = scene.sample(linearSampler, uv).rgb + bloom;
-    return float4(linearToSRGB(acesFilmicToneMapping(linearColor)), 1.0);
+    float3 color = linearToSRGB(acesFilmicToneMapping(linearColor));
+    if (correction.applyCorrection != 0) {
+        // Яркость/контраст финальной цветокоррекции (формула BrightnessContrastEffect).
+        color += correction.brightness - 0.5;
+        color = correction.contrast > 0.0
+            ? color / (1.0 - correction.contrast)
+            : color * (1.0 + correction.contrast);
+        color = saturate(color + 0.5);
+    }
+    return float4(color, 1.0);
 }

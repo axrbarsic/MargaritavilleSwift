@@ -1,22 +1,21 @@
 import BrooklynBackgroundKit
-import BrooklynWebBackgroundKit
 import Foundation
 
 extension AppSettingsStore {
     static func load(userDefaults: UserDefaults = .standard) -> AppSettingsStore {
         let backgroundRawValue = userDefaults.string(forKey: Keys.appBackgroundMode)
-        let appBackgroundMode = backgroundRawValue.flatMap(AppBackgroundMode.init(rawValue:)) ?? .matrixRain
+        let appBackgroundMode = Self.migratedBackgroundMode(backgroundRawValue)
         let brooklynSurfaceStyle = userDefaults.string(forKey: Keys.brooklynSurfaceStyle)
             .flatMap(BrooklynSurfaceStyle.init(rawValue:))
             ?? .donorExact
-        let brooklynWebCellScale = userDefaults.object(forKey: Keys.brooklynWebCellScale) as? Double
-            ?? BrooklynWebConfiguration.default.cellScale
-        let brooklynWebHue = userDefaults.object(forKey: Keys.brooklynWebHue) as? Double
-            ?? BrooklynWebConfiguration.default.hue
-        let brooklynWebBrightness = userDefaults.object(forKey: Keys.brooklynWebBrightness) as? Double
-            ?? BrooklynWebConfiguration.default.brightness
-        let brooklynWebContrast = userDefaults.object(forKey: Keys.brooklynWebContrast) as? Double
-            ?? BrooklynWebConfiguration.default.contrast
+        let brooklynCellScale = userDefaults.object(forKey: Keys.brooklynCellScale) as? Double
+            ?? BrooklynAppearance.default.cellScale
+        let brooklynHue = userDefaults.object(forKey: Keys.brooklynHue) as? Double
+            ?? BrooklynAppearance.default.hue
+        let brooklynBrightness = userDefaults.object(forKey: Keys.brooklynBrightness) as? Double
+            ?? BrooklynAppearance.default.brightness
+        let brooklynContrast = userDefaults.object(forKey: Keys.brooklynContrast) as? Double
+            ?? BrooklynAppearance.default.contrast
         let rawValue = userDefaults.string(forKey: Keys.roomCellGeometry)
         let geometry = rawValue.flatMap(RoomCellGeometry.init(rawValue:)) ?? .roomy
         let storedGridColumnCount = userDefaults.object(forKey: Keys.margaritavilleGridColumnCount) as? Int
@@ -67,10 +66,10 @@ extension AppSettingsStore {
         return AppSettingsStore(
             appBackgroundMode: appBackgroundMode,
             brooklynSurfaceStyle: brooklynSurfaceStyle,
-            brooklynWebCellScale: brooklynWebCellScale,
-            brooklynWebHue: brooklynWebHue,
-            brooklynWebBrightness: brooklynWebBrightness,
-            brooklynWebContrast: brooklynWebContrast,
+            brooklynCellScale: brooklynCellScale,
+            brooklynHue: brooklynHue,
+            brooklynBrightness: brooklynBrightness,
+            brooklynContrast: brooklynContrast,
             roomCellGeometry: geometry,
             margaritavilleGridColumnCount: gridColumnCount,
             transparentSurfacesEnabled: transparentSurfacesEnabled,
@@ -189,20 +188,26 @@ extension AppSettingsStore {
         min(max(value, 0.08), 3.0)
     }
 
-    static func normalizedBrooklynWebCellScale(_ value: Double) -> Double {
-        BrooklynWebConfiguration(cellScale: value).cellScale
+    /// Режим «brooklynWeb» удалён: Brooklyn теперь целиком нативный, выбор переходит в `.brooklyn`.
+    static func migratedBackgroundMode(_ rawValue: String?) -> AppBackgroundMode {
+        if rawValue == "brooklynWeb" { return .brooklyn }
+        return rawValue.flatMap(AppBackgroundMode.init(rawValue:)) ?? .matrixRain
     }
 
-    static func normalizedBrooklynWebHue(_ value: Double) -> Double {
-        BrooklynWebConfiguration(hue: value).hue
+    static func normalizedBrooklynCellScale(_ value: Double) -> Double {
+        BrooklynAppearance(cellScale: value).cellScale
     }
 
-    static func normalizedBrooklynWebBrightness(_ value: Double) -> Double {
-        BrooklynWebConfiguration(brightness: value).brightness
+    static func normalizedBrooklynHue(_ value: Double) -> Double {
+        BrooklynAppearance(hue: value).hue
     }
 
-    static func normalizedBrooklynWebContrast(_ value: Double) -> Double {
-        BrooklynWebConfiguration(contrast: value).contrast
+    static func normalizedBrooklynBrightness(_ value: Double) -> Double {
+        BrooklynAppearance(brightness: value).brightness
+    }
+
+    static func normalizedBrooklynContrast(_ value: Double) -> Double {
+        BrooklynAppearance(contrast: value).contrast
     }
 
     static func normalizedBackgroundVideoBlur(_ value: Double) -> Double {

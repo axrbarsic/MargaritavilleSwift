@@ -1,53 +1,53 @@
-import BrooklynWebBackgroundKit
+import BrooklynBackgroundKit
 import SwiftUI
 
-struct BrooklynWebControls: View {
+struct BrooklynAppearanceControls: View {
     @Bindable var appSettings: AppSettingsStore
     @Environment(\.interactionFeedback) private var feedback
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             SettingsInfoRow(
-                title: "Brooklyn Web",
-                value: "WebKit локально",
-                systemName: "safari.fill",
-                subtitle: "Настройки применяются к живой Canvas-сцене сразу, без перезагрузки."
+                title: "Вид Brooklyn",
+                value: "Metal",
+                systemName: "cube.fill",
+                subtitle: "Размер, оттенок, яркость и контраст применяются к живой сцене сразу."
             )
 
             SettingsSliderRow(
                 title: "Размер ячеек",
-                valueLabel: "\(Int((appSettings.brooklynWebCellScale * 100).rounded()))%",
+                valueLabel: "\(Int((appSettings.brooklynCellScale * 100).rounded()))%",
                 systemName: "square.resize",
-                range: BrooklynWebConfiguration.cellScaleRange,
-                defaultValue: BrooklynWebConfiguration.default.cellScale,
-                value: $appSettings.brooklynWebCellScale
+                range: BrooklynAppearance.cellScaleRange,
+                defaultValue: BrooklynAppearance.default.cellScale,
+                value: $appSettings.brooklynCellScale
             )
 
-            BrooklynWebHueWheel(
-                hue: $appSettings.brooklynWebHue,
-                defaultHue: BrooklynWebConfiguration.default.hue
+            BrooklynHueWheel(
+                hue: $appSettings.brooklynHue,
+                defaultHue: BrooklynAppearance.default.hue
             )
 
             SettingsSliderRow(
                 title: "Яркость",
-                valueLabel: "\(Int((appSettings.brooklynWebBrightness * 100).rounded()))%",
+                valueLabel: "\(Int((appSettings.brooklynBrightness * 100).rounded()))%",
                 systemName: "sun.max.fill",
-                range: BrooklynWebConfiguration.brightnessRange,
-                defaultValue: BrooklynWebConfiguration.default.brightness,
-                value: $appSettings.brooklynWebBrightness
+                range: BrooklynAppearance.brightnessRange,
+                defaultValue: BrooklynAppearance.default.brightness,
+                value: $appSettings.brooklynBrightness
             )
 
             SettingsSliderRow(
                 title: "Контраст",
                 valueLabel: contrastLabel,
                 systemName: "circle.lefthalf.filled",
-                range: BrooklynWebConfiguration.contrastRange,
-                defaultValue: BrooklynWebConfiguration.default.contrast,
-                value: $appSettings.brooklynWebContrast
+                range: BrooklynAppearance.contrastRange,
+                defaultValue: BrooklynAppearance.default.contrast,
+                value: $appSettings.brooklynContrast
             )
 
             Button(action: resetAll) {
-                Label("Сбросить Brooklyn Web", systemImage: "arrow.counterclockwise")
+                Label("Сбросить вид Brooklyn", systemImage: "arrow.counterclockwise")
                     .font(.system(size: 15, weight: .black, design: .rounded))
                     .frame(maxWidth: .infinity, minHeight: 44)
                     .foregroundStyle(canReset ? OceanKeyTheme.accent : OceanKeyTheme.secondaryText.opacity(0.42))
@@ -60,21 +60,21 @@ struct BrooklynWebControls: View {
     }
 
     private var canReset: Bool {
-        appSettings.brooklynWebConfiguration != .default
+        appSettings.brooklynAppearance != .default
     }
 
     private var contrastLabel: String {
-        let value = Int((appSettings.brooklynWebContrast * 100).rounded())
+        let value = Int((appSettings.brooklynContrast * 100).rounded())
         return value > 0 ? "+\(value)%" : "\(value)%"
     }
 
     private func resetAll() {
-        appSettings.resetBrooklynWebConfiguration()
+        appSettings.resetBrooklynAppearance()
         feedback.confirm()
     }
 }
 
-private struct BrooklynWebHueWheel: View {
+private struct BrooklynHueWheel: View {
     @Binding var hue: Double
     let defaultHue: Double
 
