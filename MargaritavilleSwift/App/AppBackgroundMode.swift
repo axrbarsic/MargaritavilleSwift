@@ -7,11 +7,27 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
     case video
     case brooklyn
     case brooklynWeb
+    case aurora
+    case liquidNeon
+    case hyperspace
+    case synthwave
 
     var id: String { rawValue }
 
-    var title: String {
+    /// Режимы, которые рисуются общим хостом шейдерных живых обоев.
+    var shaderWallpaper: ShaderWallpaperKind? {
         switch self {
+        case .aurora: .aurora
+        case .liquidNeon: .liquidNeon
+        case .hyperspace: .hyperspace
+        case .synthwave: .synthwave
+        case .off, .matrixRain, .tvStaticNoise, .video, .brooklyn, .brooklynWeb: nil
+        }
+    }
+
+    var title: String {
+        if let shaderWallpaper { return shaderWallpaper.title }
+        return switch self {
         case .off:
             "Выкл"
         case .matrixRain:
@@ -24,11 +40,14 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
             "Brooklyn"
         case .brooklynWeb:
             "Brooklyn Web"
+        case .aurora, .liquidNeon, .hyperspace, .synthwave:
+            ""
         }
     }
 
     var description: String {
-        switch self {
+        if let shaderWallpaper { return shaderWallpaper.description }
+        return switch self {
         case .off:
             "Чёрный фон"
         case .matrixRain:
@@ -41,6 +60,8 @@ enum AppBackgroundMode: String, CaseIterable, Identifiable, Codable {
             "Brooklyn 3D"
         case .brooklynWeb:
             "Brooklyn Web локально"
+        case .aurora, .liquidNeon, .hyperspace, .synthwave:
+            ""
         }
     }
 }

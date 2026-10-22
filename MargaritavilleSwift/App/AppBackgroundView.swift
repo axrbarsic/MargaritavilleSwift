@@ -34,6 +34,8 @@ struct AppBackgroundView: View {
                 BrooklynBackgroundView(configuration: .init(style: brooklynSurfaceStyle))
             } else if appBackgroundMode == .brooklynWeb {
                 BrooklynWebBackgroundView(configuration: brooklynWebConfiguration)
+            } else if let shaderWallpaper = appBackgroundMode.shaderWallpaper {
+                ShaderWallpaperView(kind: shaderWallpaper)
             }
         }
         .ignoresSafeArea()
