@@ -115,6 +115,7 @@
 		87604745603AC6991A02B394 /* BuildChangelogEntriesLegacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326B7C7BE0D4C0C707ED9672 /* BuildChangelogEntriesLegacy.swift */; };
 		8810BE4B1E99E8ECCD3BBA21 /* SettingsBackgroundVideoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFEBB3CD5D42B73F6305FB5 /* SettingsBackgroundVideoPicker.swift */; };
 		895709AC8432B24F031109F2 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C46E679DF2D1D6613364C79 /* VoiceNoteViewModel.swift */; };
+		8A56D471FA6D50F33D6E6185 /* AppBackgroundPresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8624B27BACD3EB28EC2E3322 /* AppBackgroundPresenceTests.swift */; };
 		8A5B1D408C8D5B3AE2A337C9 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E38EBEBF641353B871AF16E /* RoomCellView.swift */; };
 		8BA510D92D5D30CEC1174046 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3825091D9CC5DAC311BBCF1 /* SwiftDataWorkSessionRepository.swift */; };
 		8D41CE216287237ADE6F5E86 /* BuildChangelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A3F2CB75F2A2BCE1619A0 /* BuildChangelog.swift */; };
@@ -156,6 +157,7 @@
 		B22173A01797138D426F0170 /* AppBackgroundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DA7C551FAD4EAEA106D52B /* AppBackgroundMode.swift */; };
 		B27412284AD37C7A0BE913C3 /* WorkSessionMergePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBA806300DF2D88D48477D6 /* WorkSessionMergePolicy.swift */; };
 		B3C59A2B1E1768B35122F543 /* MatrixRainConfigurationEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64AE4DF0581521747F2A5FF2 /* MatrixRainConfigurationEnvironment.swift */; };
+		B4581BFD242F4B6CA3AAF0FB /* AppBackgroundPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = B294D84CB3A64683166E2D15 /* AppBackgroundPresence.swift */; };
 		B47E3E0ADA3CCB9238176303 /* PersonalCartMarkerStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4794B2B9698418399F9BCF5 /* PersonalCartMarkerStrip.swift */; };
 		B48D66D59A08DAB6AB58276C /* LoopingVideoBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68371E9841837E338DD06D16 /* LoopingVideoBackgroundView.swift */; };
 		B51D8394827CA5FE11B571DE /* MediaViewerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EFC680EACBF955053C9436 /* MediaViewerScreen.swift */; };
@@ -365,6 +367,7 @@
 		812538F225A1DC3137D7E2B1 /* MatrixRainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainConfiguration.swift; sourceTree = "<group>"; };
 		82F8AA5F27B0AE3EE7FEA39F /* VideoBackgroundRecoveryStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoBackgroundRecoveryStateTests.swift; sourceTree = "<group>"; };
 		83FC696B8F9AA41524845D56 /* WorkSessionDataSafetyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionDataSafetyTests.swift; sourceTree = "<group>"; };
+		8624B27BACD3EB28EC2E3322 /* AppBackgroundPresenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundPresenceTests.swift; sourceTree = "<group>"; };
 		863B6B3ABED99907FD811084 /* AppleCloudAccountProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCloudAccountProbe.swift; sourceTree = "<group>"; };
 		865565ED53F967D3C426D546 /* CartDetailsRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDetailsRoute.swift; sourceTree = "<group>"; };
 		86F173799160B8EB3595C9C2 /* CartConsumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartConsumables.swift; sourceTree = "<group>"; };
@@ -409,6 +412,7 @@
 		B1B22925EEFC29FFD19C0847 /* BrooklynAppearanceControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrooklynAppearanceControls.swift; sourceTree = "<group>"; };
 		B1ED75A7D470FC87E6CB48A8 /* SummaryConsumablesViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryConsumablesViews.swift; sourceTree = "<group>"; };
 		B27D766CA5098051EBC3DF59 /* SettingsWorkSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWorkSection.swift; sourceTree = "<group>"; };
+		B294D84CB3A64683166E2D15 /* AppBackgroundPresence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundPresence.swift; sourceTree = "<group>"; };
 		B2B7EAF0AB7A383AE3A9106C /* MargaritavilleSwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSwiftApp.swift; sourceTree = "<group>"; };
 		B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogScreen.swift; sourceTree = "<group>"; };
 		B512B523DF50D934102856F7 /* WorkSessionStore+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Catalog.swift"; sourceTree = "<group>"; };
@@ -499,6 +503,7 @@
 			children = (
 				62DA7C551FAD4EAEA106D52B /* AppBackgroundMode.swift */,
 				B98032ED871E3FBA99213BFF /* AppBackgroundModeEnvironment.swift */,
+				B294D84CB3A64683166E2D15 /* AppBackgroundPresence.swift */,
 				B96887E10E81F6FC1E3C9B8C /* AppBackgroundVideoEnvironment.swift */,
 				B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */,
 				CB6F829D189E6A8021ED967A /* AppBuildInfo.swift */,
@@ -795,6 +800,7 @@
 			isa = PBXGroup;
 			children = (
 				09564378AD3EA6BC5209586B /* AIVisualPresetStoreTests.swift */,
+				8624B27BACD3EB28EC2E3322 /* AppBackgroundPresenceTests.swift */,
 				C32C5954A7CEDB001BCDE841 /* AppleSyncEntitlementTests.swift */,
 				4A54ACA4EA81D8F149015ABB /* AppSettingsStoreTests.swift */,
 				1FEC1A8B685A5CD0A52A3462 /* DebugKeepAwakePolicyTests.swift */,
@@ -1129,6 +1135,7 @@
 				9F0BF55AF147F4706F0A5F0D /* AIVisualPresetStore.swift in Sources */,
 				B22173A01797138D426F0170 /* AppBackgroundMode.swift in Sources */,
 				FA960F253BD55E6B86E7AED9 /* AppBackgroundModeEnvironment.swift in Sources */,
+				B4581BFD242F4B6CA3AAF0FB /* AppBackgroundPresence.swift in Sources */,
 				77E1FE4E4D080EF84139B14B /* AppBackgroundVideoEnvironment.swift in Sources */,
 				124B8CE7419E4EFD526F3A09 /* AppBackgroundView.swift in Sources */,
 				EBE82000A7EB5DE59F5D28A7 /* AppBuildInfo.swift in Sources */,
@@ -1296,6 +1303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92FB0B53C819F75D53F66D7B /* AIVisualPresetStoreTests.swift in Sources */,
+				8A56D471FA6D50F33D6E6185 /* AppBackgroundPresenceTests.swift in Sources */,
 				FF7F5F1967A7D50277F49129 /* AppSettingsStoreTests.swift in Sources */,
 				D8E801A984C3B0211D472853 /* AppleSyncEntitlementTests.swift in Sources */,
 				E3B6D1A1CE49362DBD7E9557 /* DebugKeepAwakePolicyTests.swift in Sources */,
@@ -1409,7 +1417,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 67;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1476,7 +1484,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 67;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

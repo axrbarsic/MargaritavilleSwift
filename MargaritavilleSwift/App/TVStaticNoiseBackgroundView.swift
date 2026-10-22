@@ -60,17 +60,18 @@ struct TVStaticNoiseConfiguration: Equatable {
 
 struct TVStaticNoiseBackgroundView: UIViewRepresentable {
     var configuration: TVStaticNoiseConfiguration = .default
+    var isActive = true
 
     func makeUIView(context: Context) -> TVStaticNoiseRenderView {
         let view = TVStaticNoiseRenderView()
         view.configure(configuration)
-        view.start()
+        if isActive { view.start() }
         return view
     }
 
     func updateUIView(_ view: TVStaticNoiseRenderView, context: Context) {
         view.configure(configuration)
-        view.start()
+        if isActive { view.start() } else { view.stop() }
     }
 
     static func dismantleUIView(_ view: TVStaticNoiseRenderView, coordinator: ()) {

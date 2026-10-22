@@ -5,8 +5,14 @@ import UIKit
 
 struct LoopingVideoBackgroundView: UIViewRepresentable {
     let url: URL
+    var isActive = true
     let tuning: VideoBackgroundTuning
     @Environment(\.scenePhase) private var scenePhase
+
+    /// Перекрытый экран ведёт себя как неактивная сцена: видео на паузе.
+    private var effectivePhase: ScenePhase {
+        isActive ? scenePhase : .inactive
+    }
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -16,7 +22,7 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
         let view = VideoBackgroundPlayerView()
         view.isUserInteractionEnabled = false
         context.coordinator.configure(url: url, in: view)
-        context.coordinator.updateScenePhase(scenePhase)
+        context.coordinator.updateScenePhase(effectivePhase)
         context.coordinator.setTuning(tuning)
         view.setTuning(tuning, animated: false)
         return view
@@ -24,7 +30,7 @@ struct LoopingVideoBackgroundView: UIViewRepresentable {
 
     func updateUIView(_ view: VideoBackgroundPlayerView, context: Context) {
         context.coordinator.configure(url: url, in: view)
-        context.coordinator.updateScenePhase(scenePhase)
+        context.coordinator.updateScenePhase(effectivePhase)
         context.coordinator.setTuning(tuning)
         view.setTuning(tuning, animated: false)
     }

@@ -5,15 +5,19 @@ import SwiftUI
 public struct BrooklynBackgroundView: View {
     @Environment(\.scenePhase) private var scenePhase
     private let configuration: BrooklynBackgroundConfiguration
+    private let isActive: Bool
 
-    public init(configuration: BrooklynBackgroundConfiguration = .authorPreset) {
+    /// - Parameter isActive: `false` замораживает сцену на последнем кадре
+    ///   (например, когда экран перекрыт другим экраном или листом).
+    public init(configuration: BrooklynBackgroundConfiguration = .authorPreset, isActive: Bool = true) {
         self.configuration = configuration
+        self.isActive = isActive
     }
 
     public var body: some View {
         BrooklynMetalViewRepresentable(
             configuration: configuration,
-            isActive: scenePhase == .active
+            isActive: isActive && scenePhase == .active
         )
         .background(Color.black)
         .allowsHitTesting(false)

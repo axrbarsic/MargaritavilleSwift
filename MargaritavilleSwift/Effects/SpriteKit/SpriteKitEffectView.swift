@@ -11,13 +11,16 @@ struct SpriteKitEffectView: UIViewRepresentable {
 
     let effect: SpriteKitEffectKind
     let matrixConfiguration: MatrixRainConfiguration?
+    let isActive: Bool
 
     init(
         _ effect: SpriteKitEffectKind,
-        matrixConfiguration: MatrixRainConfiguration? = nil
+        matrixConfiguration: MatrixRainConfiguration? = nil,
+        isActive: Bool = true
     ) {
         self.effect = effect
         self.matrixConfiguration = matrixConfiguration
+        self.isActive = isActive
     }
 
     func makeCoordinator() -> Coordinator {
@@ -34,11 +37,15 @@ struct SpriteKitEffectView: UIViewRepresentable {
         view.shouldCullNonVisibleNodes = true
         view.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
         view.presentScene(context.coordinator.scene)
+        view.isPaused = !isActive
         return view
     }
 
     func updateUIView(_ view: EffectSKView, context: Context) {
         context.coordinator.update(matrixConfiguration: effectiveMatrixConfiguration)
+        if view.isPaused == isActive {
+            view.isPaused = !isActive
+        }
         view.resizeScene()
     }
 

@@ -11,17 +11,21 @@ struct AppBackgroundView: View {
     @Environment(\.tvStaticNoiseConfiguration) private var tvStaticNoiseConfiguration
     @Environment(\.brooklynSurfaceStyle) private var brooklynSurfaceStyle
     @Environment(\.brooklynAppearance) private var brooklynAppearance
+    @State private var presenceID = UUID()
+    private let presence = AppBackgroundPresence.shared
 
     var body: some View {
+        let isActive = presence.isActive(presenceID)
         ZStack {
             Color.black
             if appBackgroundMode == .matrixRain {
-                SpriteKitEffectView(.matrixRain)
+                SpriteKitEffectView(.matrixRain, isActive: isActive)
             } else if appBackgroundMode == .tvStaticNoise {
-                TVStaticNoiseBackgroundView(configuration: tvStaticNoiseConfiguration)
+                TVStaticNoiseBackgroundView(configuration: tvStaticNoiseConfiguration, isActive: isActive)
             } else if appBackgroundMode == .video, let appBackgroundVideoURL {
                 LoopingVideoBackgroundView(
                     url: appBackgroundVideoURL,
+                    isActive: isActive,
                     tuning: VideoBackgroundTuning(
                         blur: appBackgroundVideoBlur,
                         brightness: appBackgroundVideoBrightness,
@@ -31,11 +35,14 @@ struct AppBackgroundView: View {
                 )
             } else if appBackgroundMode == .brooklyn {
                 BrooklynBackgroundView(
-                    configuration: .init(style: brooklynSurfaceStyle, appearance: brooklynAppearance)
+                    configuration: .init(style: brooklynSurfaceStyle, appearance: brooklynAppearance),
+                    isActive: isActive
                 )
             }
         }
         .ignoresSafeArea()
+        .onAppear { presence.register(presenceID) }
+        .onDisappear { presence.unregister(presenceID) }
     }
 }
 
