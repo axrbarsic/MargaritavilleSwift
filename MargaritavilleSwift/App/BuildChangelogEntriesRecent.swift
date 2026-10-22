@@ -3,6 +3,15 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (70)",
+            date: "2026-10-22",
+            changes: [
+                "Добавлены восемь новых эффектов камеры: «ASCII», «1-бит», «Полутон», «Game Boy», «ЭЛТ-телевизор», «Карандаш», «Калейдоскоп» и «Глитч».",
+                "Эффекты выбраны по отзывам сообществ: ASCII-камеры, дизеринг Obra Dinn, фильтры GPUImage и ретро-шейдеры RetroArch.",
+                "Все эффекты считаются одним проходом Metal без лишних копий кадра."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (69)",
             date: "2026-10-22",
             changes: [

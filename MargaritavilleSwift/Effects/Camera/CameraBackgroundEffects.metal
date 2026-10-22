@@ -1,15 +1,8 @@
-#include <metal_stdlib>
-using namespace metal;
+#include "CameraEffectsCommon.h"
+#include "CameraEffectsRetro.h"
 
 // Эффекты фона «Камера». Номера веток совпадают с порядком
 // `CameraBackgroundEffect.allCases`.
-
-struct CameraEffectUniforms {
-    float2 viewSize;
-    float2 textureSize;
-    float time;
-    uint effect;
-};
 
 struct CameraVertexOut {
     float4 position [[position]];
@@ -27,48 +20,7 @@ vertex CameraVertexOut cameraEffectVertex(uint vertexID [[vertex_id]]) {
 
 namespace camfx {
 
-constexpr sampler linearSampler(coord::normalized, address::clamp_to_edge, filter::linear);
-
-float luma(float3 color) {
-    return dot(color, float3(0.299, 0.587, 0.114));
-}
-
-float hash(float2 p) {
-    return fract(sin(dot(p, float2(12.9898, 78.233))) * 43758.5453);
-}
-
-/// Заполнение экрана кадром без искажения пропорций (aspect fill).
-float2 aspectFill(float2 uv, float2 view, float2 texture) {
-    float viewAspect = view.x / view.y;
-    float textureAspect = texture.x / texture.y;
-    if (viewAspect < textureAspect) {
-        uv.x = 0.5 + (uv.x - 0.5) * viewAspect / textureAspect;
-    } else {
-        uv.y = 0.5 + (uv.y - 0.5) * textureAspect / viewAspect;
-    }
-    return uv;
-}
-
-float3 sampleCamera(texture2d<float> camera, float2 uv) {
-    return camera.sample(linearSampler, uv).rgb;
-}
-
-/// Сила контура по оператору Собеля на яркости.
-float sobel(texture2d<float> camera, float2 uv, float2 texel) {
-    float tl = luma(sampleCamera(camera, uv + texel * float2(-1.0, -1.0)));
-    float t = luma(sampleCamera(camera, uv + texel * float2(0.0, -1.0)));
-    float tr = luma(sampleCamera(camera, uv + texel * float2(1.0, -1.0)));
-    float l = luma(sampleCamera(camera, uv + texel * float2(-1.0, 0.0)));
-    float r = luma(sampleCamera(camera, uv + texel * float2(1.0, 0.0)));
-    float bl = luma(sampleCamera(camera, uv + texel * float2(-1.0, 1.0)));
-    float b = luma(sampleCamera(camera, uv + texel * float2(0.0, 1.0)));
-    float br = luma(sampleCamera(camera, uv + texel * float2(1.0, 1.0)));
-    float gx = -tl - 2.0 * l - bl + tr + 2.0 * r + br;
-    float gy = -tl - 2.0 * t - tr + bl + 2.0 * b + br;
-    return length(float2(gx, gy));
-}
-
-float3 thermal(float value) {
+inline float3 thermal(float value) {
     const float3 stops[5] = {
         float3(0.0, 0.0, 0.08),
         float3(0.30, 0.0, 0.62),
@@ -79,10 +31,6 @@ float3 thermal(float value) {
     float t = saturate(value) * 4.0;
     int index = min(int(floor(t)), 3);
     return mix(stops[index], stops[index + 1], t - float(index));
-}
-
-float3 hue(float h) {
-    return saturate(abs(fmod(h * 6.0 + float3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0);
 }
 
 } // namespace camfx
@@ -125,10 +73,9 @@ fragment float4 cameraEffectFragment(
         color = float3(0.18, 1.0, 0.28) * saturate(value + noise) * scanlines * vignette;
         break;
     }
-    case 4: { // Тепловизор.
+    case 4: // Тепловизор.
         color = camfx::thermal(camfx::luma(camfx::sampleCamera(camera, uv)));
         break;
-    }
     case 5: { // Неон-контуры: светящиеся края на тёмном фоне.
         float edge = smoothstep(0.12, 0.55, camfx::sobel(camera, uv, texel * 1.5));
         float3 tint = camfx::hue(fract(in.uv.y * 0.6 + in.uv.x * 0.3 + u.time * 0.08));
@@ -143,12 +90,19 @@ fragment float4 cameraEffectFragment(
     }
     case 7: { // Пиксели: мозаика с тонкими швами.
         float block = u.viewSize.x / 40.0;
-        float2 snapped = (floor(pixel / block) + 0.5) * block / u.viewSize;
-        color = camfx::sampleCamera(camera, camfx::aspectFill(snapped, u.viewSize, u.textureSize));
+        color = camfx::sampleScreen(camera, (floor(pixel / block) + 0.5) * block, u);
         float2 inner = fract(pixel / block);
         color *= 1.0 - step(0.92, max(inner.x, inner.y)) * 0.35;
         break;
     }
+    case 8: color = camfx::ascii(camera, pixel, u); break;
+    case 9: color = camfx::dither1Bit(camera, pixel, u); break;
+    case 10: color = camfx::halftone(camera, pixel, u); break;
+    case 11: color = camfx::gameBoy(camera, pixel, u); break;
+    case 12: color = camfx::crt(camera, pixel, u); break;
+    case 13: color = camfx::sketch(camera, uv, pixel, u); break;
+    case 14: color = camfx::kaleidoscope(camera, pixel, u); break;
+    case 15: color = camfx::glitch(camera, pixel, u); break;
     default: // Обычный.
         color = camfx::sampleCamera(camera, uv);
         break;

@@ -12,6 +12,14 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     case neonEdges
     case comic
     case pixels
+    case ascii
+    case dither
+    case halftone
+    case gameBoy
+    case crt
+    case sketch
+    case kaleidoscope
+    case glitch
 
     static let storageKey = "cameraBackgroundEffect"
 
@@ -27,6 +35,14 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .neonEdges: "Неон-контуры"
         case .comic: "Комикс"
         case .pixels: "Пиксели"
+        case .ascii: "ASCII"
+        case .dither: "1-бит"
+        case .halftone: "Полутон"
+        case .gameBoy: "Game Boy"
+        case .crt: "ЭЛТ-телевизор"
+        case .sketch: "Карандаш"
+        case .kaleidoscope: "Калейдоскоп"
+        case .glitch: "Глитч"
         }
     }
 
@@ -40,6 +56,14 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .neonEdges: "Только светящиеся неоновые контуры на тёмном фоне."
         case .comic: "Плоские цвета и чёрные контуры, как в комиксе."
         case .pixels: "Крупная пиксельная мозаика."
+        case .ascii: "Живое видео из символов, цвет берётся из камеры."
+        case .dither: "Двухцветный дизеринг Байера в стиле игры Return of the Obra Dinn."
+        case .halftone: "Печатный растр CMYK, как в старых газетах и комиксах."
+        case .gameBoy: "Экран Game Boy: крупные пиксели и четыре оттенка зелёного."
+        case .crt: "Выпуклый кинескоп с развёрткой, сдвигом цветов и маской триад."
+        case .sketch: "Карандашная перекрёстная штриховка по теням и контуры."
+        case .kaleidoscope: "Восемь зеркальных секторов, медленно вращаются."
+        case .glitch: "Цифровой сбой: сдвиг полос, разделение каналов и вспышки."
         }
     }
 

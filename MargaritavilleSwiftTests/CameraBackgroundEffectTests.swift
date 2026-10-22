@@ -6,9 +6,10 @@ import Testing
 @Test
 func cameraEffectsKeepStableStorageValuesAndShaderOrder() {
     #expect(CameraBackgroundEffect.allCases.map(\.rawValue) == [
-        "normal", "matte", "grid", "nightVision", "thermal", "neonEdges", "comic", "pixels"
+        "normal", "matte", "grid", "nightVision", "thermal", "neonEdges", "comic", "pixels",
+        "ascii", "dither", "halftone", "gameBoy", "crt", "sketch", "kaleidoscope", "glitch"
     ])
-    #expect(CameraBackgroundEffect.allCases.map(\.shaderIndex) == Array(0..<8))
+    #expect(CameraBackgroundEffect.allCases.map(\.shaderIndex) == Array(0..<16))
     #expect(CameraBackgroundEffect.allCases.filter(\.needsBlur) == [.matte])
     for effect in CameraBackgroundEffect.allCases {
         #expect(!effect.title.isEmpty)

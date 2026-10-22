@@ -278,6 +278,7 @@
 		1BB1098091146B6B73E6FE14 /* MargaritavilleSummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummarySection.swift; sourceTree = "<group>"; };
 		1C1CA4620A505A25C40AE681 /* MatrixRainSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainSpriteScene.swift; sourceTree = "<group>"; };
 		1D48BFB5EDED5F96299AB21A /* BackgroundVideoFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundVideoFileStore.swift; sourceTree = "<group>"; };
+		1EE6FE2C94120C2D8D25699B /* CameraEffectsRetro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraEffectsRetro.h; sourceTree = "<group>"; };
 		1FEC1A8B685A5CD0A52A3462 /* DebugKeepAwakePolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugKeepAwakePolicyTests.swift; sourceTree = "<group>"; };
 		20A5F9B4FBD32A51202CBE11 /* HousekeeperPalette+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HousekeeperPalette+Color.swift"; sourceTree = "<group>"; };
 		2173D3F22AFB14E9E6B54E01 /* AppStorageDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageDirectory.swift; sourceTree = "<group>"; };
@@ -473,6 +474,7 @@
 		E46AAE0061939D159850DA0D /* WorkSessionSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionSnapshot.swift; sourceTree = "<group>"; };
 		E4FA8E89CE6C63D0C66CC676 /* VoiceNoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModelTests.swift; sourceTree = "<group>"; };
 		E51B4FE60E28931C8EE6DCC4 /* MargaritavilleSwiftTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MargaritavilleSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA66036A8BDB3FECD91B76AA /* CameraEffectsCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraEffectsCommon.h; sourceTree = "<group>"; };
 		EA7F7C9BEC062DDDD35BC976 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		ED484B471D3B303634E238A3 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		ED941876C1AD586EF8BF8701 /* RoomScheduleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSheet.swift; sourceTree = "<group>"; };
@@ -566,6 +568,8 @@
 				42D28BA754181F3D2A0AC163 /* CameraBackgroundEffect.swift */,
 				123082FC45F27A55F33DB71F /* CameraBackgroundEffects.metal */,
 				9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */,
+				EA66036A8BDB3FECD91B76AA /* CameraEffectsCommon.h */,
+				1EE6FE2C94120C2D8D25699B /* CameraEffectsRetro.h */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -1457,7 +1461,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 69;
+				CURRENT_PROJECT_VERSION = 70;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1524,7 +1528,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 69;
+				CURRENT_PROJECT_VERSION = 70;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;
