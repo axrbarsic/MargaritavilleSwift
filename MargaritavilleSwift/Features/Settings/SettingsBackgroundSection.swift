@@ -10,7 +10,7 @@ struct SettingsBackgroundSection: View {
     var body: some View {
         SettingsPanel(
             title: "Фон приложения",
-            subtitle: "Живые Matrix, TV, Video и Brooklyn фоны для всех экранов приложения."
+            subtitle: "Живые Matrix, TV, Video, Brooklyn и камера как фон для всех экранов приложения."
         ) {
             Picker("Заставка", selection: $appSettings.appBackgroundMode) {
                 ForEach(AppBackgroundMode.allCases) { mode in
@@ -60,6 +60,9 @@ struct SettingsBackgroundSection: View {
         case .tvStaticNoise: "ShaderKit Dynamic Gray Noise: аналоговый телевизионный снег как основной фон."
         case .video: "Видео хранится только локально на устройстве."
         case .brooklyn: "Нативная Swift/Metal сцена Brooklyn с точной геометрией, материалом и анимацией исходника."
+        case .camera: CameraBackgroundSession.isDenied
+            ? "Нет доступа к камере. Разрешите его: Настройки iOS → Margaritaville → Камера."
+            : "Вместо обоев видно изображение задней камеры. Камера выключается, когда приложение свёрнуто или поверх открыт другой экран."
         }
     }
 

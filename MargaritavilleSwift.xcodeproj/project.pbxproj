@@ -110,6 +110,7 @@
 		81651456783FB1669E5E721B /* PersonalCartMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726BB319EA7A0D77D382269D /* PersonalCartMarkers.swift */; };
 		8286E4F0670A238E0099BEBE /* TVStaticNoiseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FFF2E981558A4D75D6A1DB /* TVStaticNoiseBackgroundView.swift */; };
 		83C04518B33C7BBF7A5AE6D6 /* WorkSetupTerritorySelectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957305DB54B9B479B51BB38 /* WorkSetupTerritorySelectionSummary.swift */; };
+		84CFE9D236B5DFD024A41A65 /* CameraBackgroundSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE89B9497BCF3CA4BA63982 /* CameraBackgroundSession.swift */; };
 		858962C1DF9901C5043DBFE9 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7133E84439F24F52881FA6A2 /* Speech.framework */; };
 		8749BE914E5F10C54D84ED6D /* HousekeeperRosterPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B082CA55B8AC62995C6B055E /* HousekeeperRosterPresentation.swift */; };
 		87604745603AC6991A02B394 /* BuildChangelogEntriesLegacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326B7C7BE0D4C0C707ED9672 /* BuildChangelogEntriesLegacy.swift */; };
@@ -144,6 +145,7 @@
 		A5F7EEA7935BDF9AA1ADB347 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C12767830A9F635B402DA /* AppRootView.swift */; };
 		A613E76E0F4A00A2730FDA56 /* WorkSessionStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C47F6F4785A18759A06AB7 /* WorkSessionStore+History.swift */; };
 		A642545AA0F9943AC4194D4B /* VIPHDREffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498F5D242688FEEB1F0BE73A /* VIPHDREffects.swift */; };
+		A68FDF41F8119B8DD2E3EF77 /* CameraBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79294C175E5B9AE97A88B2D0 /* CameraBackgroundView.swift */; };
 		A6BEA9E5743D3BF844C987C3 /* MatrixConsumableStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */; };
 		A6F7B66704ADCE2E5F241C2B /* CartDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3614E48874E7A22359F76 /* CartDetailsScreen.swift */; };
 		A7394992A07FED4FA3B092A6 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C9FEF950BB64C810793ED3 /* GameplayKit.framework */; };
@@ -357,6 +359,7 @@
 		752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettingsStore+Consumables.swift"; sourceTree = "<group>"; };
 		7780F59F0705C3BB8AF81801 /* RoomCatalogCompletenessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalogCompletenessTests.swift; sourceTree = "<group>"; };
 		781BB4468DC4913CBC246D6C /* DebugScrollProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugScrollProbe.swift; sourceTree = "<group>"; };
+		79294C175E5B9AE97A88B2D0 /* CameraBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundView.swift; sourceTree = "<group>"; };
 		7BE897AD21156A1CC1B1C6B3 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7BF703659BD4E4ED1F6182C1 /* WorkSessionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistory.swift; sourceTree = "<group>"; };
 		7C0A3552370CB22A1034D243 /* BrooklynBackgroundKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BrooklynBackgroundKit; path = Packages/BrooklynBackgroundKit; sourceTree = SOURCE_ROOT; };
@@ -440,6 +443,7 @@
 		CBFEBB3CD5D42B73F6305FB5 /* SettingsBackgroundVideoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackgroundVideoPicker.swift; sourceTree = "<group>"; };
 		CCC0557BC247863324B8E0F5 /* LICENSES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSES.md; sourceTree = "<group>"; };
 		CCFD4C0C2D99682017E86B01 /* MediaThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaThumbnailView.swift; sourceTree = "<group>"; };
+		CEE89B9497BCF3CA4BA63982 /* CameraBackgroundSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundSession.swift; sourceTree = "<group>"; };
 		D0F6992833696311166C4687 /* kenney_select_001.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kenney_select_001.wav; sourceTree = "<group>"; };
 		D2B2C5D50144AFF4E83542F1 /* SummaryActionMenuExpansionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansionTests.swift; sourceTree = "<group>"; };
 		D2BA40CE4A2F2FBE035DDCF8 /* VideoBackgroundRecoveryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoBackgroundRecoveryState.swift; sourceTree = "<group>"; };
@@ -520,6 +524,7 @@
 				326B7C7BE0D4C0C707ED9672 /* BuildChangelogEntriesLegacy.swift */,
 				5D995BBCF2F29ECE128B4A14 /* BuildChangelogEntriesMid.swift */,
 				2D4ABFACA0309F88F727C2BD /* BuildChangelogEntriesRecent.swift */,
+				79294C175E5B9AE97A88B2D0 /* CameraBackgroundView.swift */,
 				A04D06A9A7F9018AD1489906 /* DebugKeepAwakeController.swift */,
 				1494F03D3C659689B303BB03 /* ExperimentalAppearanceEnvironment.swift */,
 				68371E9841837E338DD06D16 /* LoopingVideoBackgroundView.swift */,
@@ -742,6 +747,14 @@
 			path = Summary;
 			sourceTree = "<group>";
 		};
+		7D1945776F5A70F86AB6AAAD /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				CEE89B9497BCF3CA4BA63982 /* CameraBackgroundSession.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		8C173CCFD71343D98BCA965F /* Media */ = {
 			isa = PBXGroup;
 			children = (
@@ -855,6 +868,7 @@
 			isa = PBXGroup;
 			children = (
 				EB204E28312C2DCD25CDC575 /* AI */,
+				7D1945776F5A70F86AB6AAAD /* Camera */,
 				6282865276409330F92C02FF /* Diagnostics */,
 				E1254DB211E0DA6318E009E9 /* Interaction */,
 				2872854ECA09F5051CE57A2E /* Notifications */,
@@ -1161,6 +1175,8 @@
 				2AB3809693EAB36DBFCB3895 /* BuildChangelogEntriesMid.swift in Sources */,
 				22572ABFDC6A79E256B5E8B3 /* BuildChangelogEntriesRecent.swift in Sources */,
 				5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */,
+				84CFE9D236B5DFD024A41A65 /* CameraBackgroundSession.swift in Sources */,
+				A68FDF41F8119B8DD2E3EF77 /* CameraBackgroundView.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
 				6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */,
 				E3A77C88833383EC9FA8E68D /* CartConsumableQuantityRuler.swift in Sources */,
@@ -1417,7 +1433,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1484,7 +1500,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

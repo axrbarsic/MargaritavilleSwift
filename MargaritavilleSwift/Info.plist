@@ -23,7 +23,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Margaritaville uses the camera to attach local photos and videos to carts and rooms.</string>
+	<string>Камера нужна для фото и видео к тележкам и номерам и для фона «Камера».</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Margaritaville records audio while capturing local videos.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

@@ -48,3 +48,16 @@ func reappearingBackgroundMovesToTopWithoutDuplicates() {
     #expect(presence.stack == [second, first])
     #expect(presence.isActive(first))
 }
+
+@Test
+func appSettingsPersistsCameraBackgroundMode() {
+    let suiteName = "AppBackgroundPresenceTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let settings = AppSettingsStore(userDefaults: defaults)
+    settings.appBackgroundMode = .camera
+
+    #expect(AppSettingsStore.load(userDefaults: defaults).appBackgroundMode == .camera)
+    #expect(defaults.string(forKey: "appBackgroundMode") == "camera")
+}

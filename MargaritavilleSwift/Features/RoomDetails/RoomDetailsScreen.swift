@@ -81,11 +81,13 @@ struct RoomDetailsScreen: View {
                 onCancel: { captureKind = nil }
             )
             .ignoresSafeArea()
+            .occludesAppBackground()
         }
         .fullScreenCover(item: $selectedMedia, onDismiss: {
             mediaPreviewPlaybackEnabled = true
         }) { attachment in
             MediaViewerScreen(attachments: visualMediaAttachments, initialAttachment: attachment)
+                .occludesAppBackground()
         }
     }
 

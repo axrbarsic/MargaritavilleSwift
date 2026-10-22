@@ -38,6 +38,8 @@ struct AppBackgroundView: View {
                     configuration: .init(style: brooklynSurfaceStyle, appearance: brooklynAppearance),
                     isActive: isActive
                 )
+            } else if appBackgroundMode == .camera {
+                CameraBackgroundView(isActive: isActive)
             }
         }
         .ignoresSafeArea()
