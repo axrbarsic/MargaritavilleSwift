@@ -67,6 +67,7 @@
 		529436F3B9A6793FF8BCBBE1 /* SummaryActionMenuExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61FA926449ECE44FBCD523C /* SummaryActionMenuExpansion.swift */; };
 		54060BE12903DE7DC82BF05C /* PersistentWorkSessionMapper+Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A189BEF138C12C183D52C206 /* PersistentWorkSessionMapper+Catalog.swift */; };
 		5411E04FD741551E3928E8DC /* PersistentWorkSessionMapper+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728366083E24EDB59090D7B6 /* PersistentWorkSessionMapper+History.swift */; };
+		555D54489B8960DA358FA63E /* CameraBackgroundEffectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B1F42E59B7E937899DCA2D /* CameraBackgroundEffectTests.swift */; };
 		566DB942B2FFDCC98ADC194C /* RoomScheduleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29557D6E24C81F76BE9D7727 /* RoomScheduleRoute.swift */; };
 		57770924232FA86DAEC38590 /* CartConsumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F173799160B8EB3595C9C2 /* CartConsumables.swift */; };
 		5A1CBD91235C3348EC848156 /* VIPHDRRenderingUpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EE5966B8E1D8073C15CB8C /* VIPHDRRenderingUpdateTests.swift */; };
@@ -93,6 +94,7 @@
 		6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */; };
 		7144B57BFAC3EF0D274D401C /* SummaryZeroScreenPuzzleHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DAE0FE8025FB13AC4BC7D8 /* SummaryZeroScreenPuzzleHandle.swift */; };
 		72D85D26B069FE77301D08CB /* CellTypographyPresetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B735C52C751B237426654B28 /* CellTypographyPresetStore.swift */; };
+		73FA1F5EADDB508037000FCE /* CameraBackgroundRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */; };
 		7428A12339BD354F950324A1 /* WorkSessionStore+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35D3835B7B9A121C869C2ED /* WorkSessionStore+Selection.swift */; };
 		74CD34FC39F093A3DE0C4861 /* WorkSessionStore+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1219DB5B1565EA2415741F /* WorkSessionStore+Consumables.swift */; };
 		74FBF4327F523FD23A8645E6 /* TestWorkAssignmentGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF01CEA90B61F7124890CF /* TestWorkAssignmentGeneratorTests.swift */; };
@@ -118,6 +120,7 @@
 		895709AC8432B24F031109F2 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C46E679DF2D1D6613364C79 /* VoiceNoteViewModel.swift */; };
 		8A56D471FA6D50F33D6E6185 /* AppBackgroundPresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8624B27BACD3EB28EC2E3322 /* AppBackgroundPresenceTests.swift */; };
 		8A5B1D408C8D5B3AE2A337C9 /* RoomCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E38EBEBF641353B871AF16E /* RoomCellView.swift */; };
+		8B9A85972D9CCE05ABE042E5 /* CameraBackgroundEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D28BA754181F3D2A0AC163 /* CameraBackgroundEffect.swift */; };
 		8BA510D92D5D30CEC1174046 /* SwiftDataWorkSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3825091D9CC5DAC311BBCF1 /* SwiftDataWorkSessionRepository.swift */; };
 		8D41CE216287237ADE6F5E86 /* BuildChangelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A3F2CB75F2A2BCE1619A0 /* BuildChangelog.swift */; };
 		90611C42E9319C6664307F82 /* SummarySwipeCommitPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57BE8EBF8D2A57831E5C299 /* SummarySwipeCommitPolicy.swift */; };
@@ -183,6 +186,7 @@
 		C9388CD0A1FD5B6075E50D53 /* xhotel_ui_menu_open.wav in Resources */ = {isa = PBXBuildFile; fileRef = 51746A870FE32EF3D2D30555 /* xhotel_ui_menu_open.wav */; };
 		CA25A2F1E648677547CB2DE6 /* BrooklynAppearanceControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B22925EEFC29FFD19C0847 /* BrooklynAppearanceControls.swift */; };
 		CA6918F5154C0EF6D640D2D4 /* MargaritavilleSummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB1098091146B6B73E6FE14 /* MargaritavilleSummarySection.swift */; };
+		CB2B43637C01F876A10AAD75 /* CameraBackgroundEffects.metal in Sources */ = {isa = PBXBuildFile; fileRef = 123082FC45F27A55F33DB71F /* CameraBackgroundEffects.metal */; };
 		CC2726E3236DD7F8BE90DB5E /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB404746FF5A9F4CEC4B06B6 /* PhotosUI.framework */; };
 		CC5F8C921EA5B73719068F58 /* CellTypographyLabScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5B7670888FF866C60E0550 /* CellTypographyLabScreen.swift */; };
 		CCEB3EAFB175EB2191D64B36 /* HousekeeperCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3824B81E67ADEE1DD80DD608 /* HousekeeperCatalog.swift */; };
@@ -264,6 +268,7 @@
 		0F5D1474B882395BE293F19D /* VoiceTranscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionService.swift; sourceTree = "<group>"; };
 		0FA8009600BBC5EAFA5E2642 /* AppleSyncConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSyncConfiguration.swift; sourceTree = "<group>"; };
 		11F564791DCE7D80B11F6A48 /* kenney_confirmation_003.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kenney_confirmation_003.wav; sourceTree = "<group>"; };
+		123082FC45F27A55F33DB71F /* CameraBackgroundEffects.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CameraBackgroundEffects.metal; sourceTree = "<group>"; };
 		147C808E88696B5035D32889 /* RoomDetailsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsMode.swift; sourceTree = "<group>"; };
 		1494F03D3C659689B303BB03 /* ExperimentalAppearanceEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentalAppearanceEnvironment.swift; sourceTree = "<group>"; };
 		14DA05CC83B4745C23D5CF2B /* LocalWorkSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkSessionRepository.swift; sourceTree = "<group>"; };
@@ -313,6 +318,7 @@
 		3E71287F6A17D24D49088446 /* WorkSetupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupScreen.swift; sourceTree = "<group>"; };
 		3ECF3996F49BECE30B0FF23F /* HousekeeperRosterPresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousekeeperRosterPresentationTests.swift; sourceTree = "<group>"; };
 		4017AC014F696E3B792DE33C /* kenney_confirmation_001.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kenney_confirmation_001.wav; sourceTree = "<group>"; };
+		42D28BA754181F3D2A0AC163 /* CameraBackgroundEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundEffect.swift; sourceTree = "<group>"; };
 		43AA91C16BE0BBB911F2F72E /* SettingsCategorySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCategorySelector.swift; sourceTree = "<group>"; };
 		4540DA0126A89D0BE159B580 /* xhotel_ui_click_bright.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_click_bright.wav; sourceTree = "<group>"; };
 		498F5D242688FEEB1F0BE73A /* VIPHDREffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPHDREffects.swift; sourceTree = "<group>"; };
@@ -352,6 +358,7 @@
 		723C049411A0B1EEFE19190D /* MargaritavilleSummaryRoomGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleSummaryRoomGrouping.swift; sourceTree = "<group>"; };
 		726BB319EA7A0D77D382269D /* PersonalCartMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCartMarkers.swift; sourceTree = "<group>"; };
 		728366083E24EDB59090D7B6 /* PersistentWorkSessionMapper+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistentWorkSessionMapper+History.swift"; sourceTree = "<group>"; };
+		72B1F42E59B7E937899DCA2D /* CameraBackgroundEffectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundEffectTests.swift; sourceTree = "<group>"; };
 		72EE5966B8E1D8073C15CB8C /* VIPHDRRenderingUpdateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPHDRRenderingUpdateTests.swift; sourceTree = "<group>"; };
 		72F62A96DC6CBE334A51427F /* MargaritavilleCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleCatalogEditorSection.swift; sourceTree = "<group>"; };
 		74A213E357A08B0F7BDDA6FF /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
@@ -387,6 +394,7 @@
 		9980AB86A0BFF03B29C30E90 /* LiveCellRendererKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LiveCellRendererKit; path = Packages/LiveCellRendererKit; sourceTree = SOURCE_ROOT; };
 		9A1D0DE39DBFDEB763EB0973 /* front_desk_bell_real.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = front_desk_bell_real.wav; sourceTree = "<group>"; };
 		9BC2349C5B21BAC36A5EE068 /* DebugScrollProbeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugScrollProbeTests.swift; sourceTree = "<group>"; };
+		9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundRenderer.swift; sourceTree = "<group>"; };
 		A04D06A9A7F9018AD1489906 /* DebugKeepAwakeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugKeepAwakeController.swift; sourceTree = "<group>"; };
 		A0B9BF6660BF1B2A8F11AAC3 /* OceanKeyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanKeyTheme.swift; sourceTree = "<group>"; };
 		A12D408C01FF9BD002978EA6 /* SettingsTestDataSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTestDataSection.swift; sourceTree = "<group>"; };
@@ -552,6 +560,16 @@
 			path = WorkSetup;
 			sourceTree = "<group>";
 		};
+		10C27EECE438E5BA7E8D4F42 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				42D28BA754181F3D2A0AC163 /* CameraBackgroundEffect.swift */,
+				123082FC45F27A55F33DB71F /* CameraBackgroundEffects.metal */,
+				9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		2749A6CF88034C42B81D7B7E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -687,6 +705,7 @@
 			isa = PBXGroup;
 			children = (
 				373D877FD48E600E498E2AD1 /* VIPJellyContentWarp.metal */,
+				10C27EECE438E5BA7E8D4F42 /* Camera */,
 				E4D1574D55645B1B42014F41 /* SpriteKit */,
 			);
 			path = Effects;
@@ -816,6 +835,7 @@
 				8624B27BACD3EB28EC2E3322 /* AppBackgroundPresenceTests.swift */,
 				C32C5954A7CEDB001BCDE841 /* AppleSyncEntitlementTests.swift */,
 				4A54ACA4EA81D8F149015ABB /* AppSettingsStoreTests.swift */,
+				72B1F42E59B7E937899DCA2D /* CameraBackgroundEffectTests.swift */,
 				1FEC1A8B685A5CD0A52A3462 /* DebugKeepAwakePolicyTests.swift */,
 				9BC2349C5B21BAC36A5EE068 /* DebugScrollProbeTests.swift */,
 				3ECF3996F49BECE30B0FF23F /* HousekeeperRosterPresentationTests.swift */,
@@ -1175,6 +1195,9 @@
 				2AB3809693EAB36DBFCB3895 /* BuildChangelogEntriesMid.swift in Sources */,
 				22572ABFDC6A79E256B5E8B3 /* BuildChangelogEntriesRecent.swift in Sources */,
 				5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */,
+				8B9A85972D9CCE05ABE042E5 /* CameraBackgroundEffect.swift in Sources */,
+				CB2B43637C01F876A10AAD75 /* CameraBackgroundEffects.metal in Sources */,
+				73FA1F5EADDB508037000FCE /* CameraBackgroundRenderer.swift in Sources */,
 				84CFE9D236B5DFD024A41A65 /* CameraBackgroundSession.swift in Sources */,
 				A68FDF41F8119B8DD2E3EF77 /* CameraBackgroundView.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
@@ -1322,6 +1345,7 @@
 				8A56D471FA6D50F33D6E6185 /* AppBackgroundPresenceTests.swift in Sources */,
 				FF7F5F1967A7D50277F49129 /* AppSettingsStoreTests.swift in Sources */,
 				D8E801A984C3B0211D472853 /* AppleSyncEntitlementTests.swift in Sources */,
+				555D54489B8960DA358FA63E /* CameraBackgroundEffectTests.swift in Sources */,
 				E3B6D1A1CE49362DBD7E9557 /* DebugKeepAwakePolicyTests.swift in Sources */,
 				5A8EB80DF98DB958CD007B01 /* DebugScrollProbeTests.swift in Sources */,
 				D88E05530AED459E23ED0D8F /* HousekeeperRosterPresentationTests.swift in Sources */,
@@ -1433,7 +1457,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1500,7 +1524,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

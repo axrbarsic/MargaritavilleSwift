@@ -6,6 +6,7 @@ struct SettingsBackgroundSection: View {
     @Bindable var appSettings: AppSettingsStore
     @Environment(\.interactionFeedback) private var feedback
     @State private var selectedBackgroundVideoItem: PhotosPickerItem?
+    @AppStorage(CameraBackgroundEffect.storageKey) private var cameraEffect: CameraBackgroundEffect = .normal
 
     var body: some View {
         SettingsPanel(
@@ -39,6 +40,9 @@ struct SettingsBackgroundSection: View {
                 brooklynControls
                 BrooklynAppearanceControls(appSettings: appSettings)
             }
+            if appSettings.appBackgroundMode == .camera {
+                cameraControls
+            }
         }
     }
 
@@ -51,6 +55,25 @@ struct SettingsBackgroundSection: View {
             defaultValue: MatrixRainConfiguration.default.speed,
             value: $appSettings.matrixSpeed
         )
+    }
+
+    private var cameraControls: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Picker("Эффект камеры", selection: $cameraEffect) {
+                ForEach(CameraBackgroundEffect.allCases) { effect in
+                    Text(effect.title).tag(effect)
+                }
+            }
+            .pickerStyle(.menu)
+            .onChange(of: cameraEffect) { _, _ in feedback.confirm() }
+
+            SettingsInfoRow(
+                title: "Эффект камеры",
+                value: cameraEffect.title,
+                systemName: "camera.filters",
+                subtitle: cameraEffect.subtitle
+            )
+        }
     }
 
     private var backgroundModeSubtitle: String {

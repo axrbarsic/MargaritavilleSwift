@@ -11,6 +11,7 @@ struct AppBackgroundView: View {
     @Environment(\.tvStaticNoiseConfiguration) private var tvStaticNoiseConfiguration
     @Environment(\.brooklynSurfaceStyle) private var brooklynSurfaceStyle
     @Environment(\.brooklynAppearance) private var brooklynAppearance
+    @AppStorage(CameraBackgroundEffect.storageKey) private var cameraEffect: CameraBackgroundEffect = .normal
     @State private var presenceID = UUID()
     private let presence = AppBackgroundPresence.shared
 
@@ -39,7 +40,7 @@ struct AppBackgroundView: View {
                     isActive: isActive
                 )
             } else if appBackgroundMode == .camera {
-                CameraBackgroundView(isActive: isActive)
+                CameraBackgroundView(isActive: isActive, effect: cameraEffect)
             }
         }
         .ignoresSafeArea()

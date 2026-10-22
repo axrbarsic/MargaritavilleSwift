@@ -1,65 +1,80 @@
-import AVFoundation
+import Metal
+import QuartzCore
 import SwiftUI
 import UIKit
 
-/// Фон «Камера»: полноэкранный предпросмотр задней камеры вместо живых обоев.
-/// Камера включена только пока экран верхний и приложение активно.
+/// Фон «Камера»: кадры задней камеры с выбранным эффектом рисуются Metal
+/// прямо в слой этого вида. Камера работает только пока экран верхний и
+/// приложение активно; неактивный экран замирает на последнем кадре.
 struct CameraBackgroundView: UIViewRepresentable {
     var isActive = true
+    var effect: CameraBackgroundEffect = .normal
     @Environment(\.scenePhase) private var scenePhase
 
-    func makeUIView(context: Context) -> CameraPreviewView {
-        let view = CameraPreviewView()
-        view.isUserInteractionEnabled = false
+    func makeUIView(context: Context) -> CameraMetalView {
+        let view = CameraMetalView()
         update(view)
         return view
     }
 
-    func updateUIView(_ view: CameraPreviewView, context: Context) {
+    func updateUIView(_ view: CameraMetalView, context: Context) {
         update(view)
     }
 
-    static func dismantleUIView(_ view: CameraPreviewView, coordinator: ()) {
+    static func dismantleUIView(_ view: CameraMetalView, coordinator: ()) {
         view.setLive(false)
     }
 
-    private func update(_ view: CameraPreviewView) {
+    private func update(_ view: CameraMetalView) {
+        view.renderTarget.effect = effect
         view.setLive(isActive && scenePhase == .active)
     }
 }
 
-final class CameraPreviewView: UIView {
-    private static var liveView: CameraPreviewView?
+final class CameraMetalView: UIView {
+    /// 2× хватает для кадра 1080p и экономит заполнение пикселей на 3× экранах.
+    private static let renderScale = min(UIScreen.main.scale, 2)
 
-    override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
+    override class var layerClass: AnyClass { CAMetalLayer.self }
 
-    private var previewLayer: AVCaptureVideoPreviewLayer {
-        layer as! AVCaptureVideoPreviewLayer
+    private var metalLayer: CAMetalLayer {
+        layer as! CAMetalLayer
     }
+
+    private(set) lazy var renderTarget = CameraRenderTarget(layer: metalLayer)
+    private var isLive = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
-        previewLayer.videoGravity = .resizeAspectFill
+        isOpaque = true
+        isUserInteractionEnabled = false
+        metalLayer.device = MTLCreateSystemDefaultDevice()
+        metalLayer.pixelFormat = .bgra8Unorm
+        metalLayer.framebufferOnly = true
+        metalLayer.contentsScale = Self.renderScale
+        metalLayer.isOpaque = true
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Сессия подключена ровно к одному слою — активного экрана. Когда активных
-    /// экранов нет, камера останавливается.
-    func setLive(_ isLive: Bool) {
-        if isLive {
-            guard Self.liveView !== self else { return }
-            Self.liveView?.previewLayer.session = nil
-            Self.liveView = self
-            previewLayer.session = CameraBackgroundSession.shared.session
-            CameraBackgroundSession.shared.start()
-        } else if Self.liveView === self {
-            Self.liveView = nil
-            previewLayer.session = nil
-            CameraBackgroundSession.shared.stop()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        metalLayer.drawableSize = CGSize(
+            width: max(1, bounds.width * Self.renderScale),
+            height: max(1, bounds.height * Self.renderScale)
+        )
+    }
+
+    func setLive(_ live: Bool) {
+        guard live != isLive else { return }
+        isLive = live
+        if live {
+            CameraBackgroundSession.shared.attach(renderTarget)
+        } else {
+            CameraBackgroundSession.shared.detach(renderTarget)
         }
     }
 }
