@@ -1,5 +1,6 @@
 #include "CameraEffectsCommon.h"
 #include "CameraEffectsRetro.h"
+#include "CameraEffectsToy.h"
 
 // Эффекты фона «Камера». Номера веток совпадают с порядком
 // `CameraBackgroundEffect.allCases`.
@@ -103,6 +104,8 @@ fragment float4 cameraEffectFragment(
     case 13: color = camfx::sketch(camera, uv, pixel, u); break;
     case 14: color = camfx::kaleidoscope(camera, pixel, u); break;
     case 15: color = camfx::glitch(camera, pixel, u); break;
+    case 16: color = camfx::cartoon(camera, uv, texel); break;
+    case 17: color = camfx::lego(camera, pixel, u); break;
     default: // Обычный.
         color = camfx::sampleCamera(camera, uv);
         break;

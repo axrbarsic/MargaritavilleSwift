@@ -7,10 +7,12 @@ import Testing
 func cameraEffectsKeepStableStorageValuesAndShaderOrder() {
     #expect(CameraBackgroundEffect.allCases.map(\.rawValue) == [
         "normal", "matte", "grid", "nightVision", "thermal", "neonEdges", "comic", "pixels",
-        "ascii", "dither", "halftone", "gameBoy", "crt", "sketch", "kaleidoscope", "glitch"
+        "ascii", "dither", "halftone", "gameBoy", "crt", "sketch", "kaleidoscope", "glitch",
+        "cartoon", "lego"
     ])
-    #expect(CameraBackgroundEffect.allCases.map(\.shaderIndex) == Array(0..<16))
-    #expect(CameraBackgroundEffect.allCases.filter(\.needsBlur) == [.matte])
+    #expect(CameraBackgroundEffect.allCases.map(\.shaderIndex) == Array(0..<18))
+    #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .blur } == [.matte])
+    #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .median } == [.cartoon])
     for effect in CameraBackgroundEffect.allCases {
         #expect(!effect.title.isEmpty)
         #expect(!effect.subtitle.isEmpty)

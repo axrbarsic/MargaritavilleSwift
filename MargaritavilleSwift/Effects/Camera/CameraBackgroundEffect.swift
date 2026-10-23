@@ -20,6 +20,8 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     case sketch
     case kaleidoscope
     case glitch
+    case cartoon
+    case lego
 
     static let storageKey = "cameraBackgroundEffect"
 
@@ -43,6 +45,8 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .sketch: "Карандаш"
         case .kaleidoscope: "Калейдоскоп"
         case .glitch: "Глитч"
+        case .cartoon: "Мультфильм"
+        case .lego: "Лего"
         }
     }
 
@@ -64,6 +68,8 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .sketch: "Карандашная перекрёстная штриховка по теням и контуры."
         case .kaleidoscope: "Восемь зеркальных секторов, медленно вращаются."
         case .glitch: "Цифровой сбой: сдвиг полос, разделение каналов и вспышки."
+        case .cartoon: "Мир как в мультфильме: гладкие заливки, сочные цвета и чёткие контуры."
+        case .lego: "Всё вокруг собрано из кубиков Лего с шипами в цветах настоящих деталей."
         }
     }
 
@@ -72,7 +78,20 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         UInt32(Self.allCases.firstIndex(of: self) ?? 0)
     }
 
-    var needsBlur: Bool { self == .matte }
+    /// Предварительный проход MPS перед шейдером эффекта.
+    enum Prefilter: Sendable {
+        case none
+        case blur
+        case median
+    }
+
+    var prefilter: Prefilter {
+        switch self {
+        case .matte: .blur
+        case .cartoon: .median
+        default: .none
+        }
+    }
 }
 
 /// Куда рисовать кадры камеры: слой активного экрана и выбранный эффект.

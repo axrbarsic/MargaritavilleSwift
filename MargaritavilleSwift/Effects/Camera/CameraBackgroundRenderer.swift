@@ -23,6 +23,8 @@ final class CameraBackgroundRenderer {
     private let pipeline: MTLRenderPipelineState
     private let textureCache: CVMetalTextureCache
     private let blur: MPSImageGaussianBlur
+    /// Медиана сглаживает, сохраняя края — основа «Мультфильма».
+    private let median: MPSImageMedian
     private let device: MTLDevice
     private let startTime = CACurrentMediaTime()
     /// Не больше двух кадров в работе у GPU: лишние кадры камеры отбрасываются.
@@ -59,6 +61,8 @@ final class CameraBackgroundRenderer {
         textureCache = cache
         blur = MPSImageGaussianBlur(device: device, sigma: 22)
         blur.edgeMode = .clamp
+        median = MPSImageMedian(device: device, kernelDiameter: 7)
+        median.edgeMode = .clamp
     }
 
     func render(_ pixelBuffer: CVPixelBuffer, to target: CameraRenderTarget) {
@@ -79,9 +83,10 @@ final class CameraBackgroundRenderer {
 
         let effect = target.effect
         var sampled = source
-        if effect.needsBlur, let blurred = blurTarget(width: width, height: height) {
-            blur.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: blurred)
-            sampled = blurred
+        if effect.prefilter != .none, let filtered = blurTarget(width: width, height: height) {
+            let kernel: MPSUnaryImageKernel = effect.prefilter == .blur ? blur : median
+            kernel.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: filtered)
+            sampled = filtered
         }
 
         let pass = MTLRenderPassDescriptor()
