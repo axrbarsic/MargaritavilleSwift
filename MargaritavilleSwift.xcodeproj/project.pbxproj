@@ -54,6 +54,7 @@
 		44A924056A88C8FCA7D56426 /* WorkSessionStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A6F5CAB3F17F3703EAF1B3 /* WorkSessionStore+Persistence.swift */; };
 		451770AEE2D8C966487CED28 /* SummarySwipeCommitPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F5D7EA34CBAC9995CB4DDE /* SummarySwipeCommitPolicyTests.swift */; };
 		45202B6A6675212ADED49E1E /* RoomDayCategoryTimePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E7F40601F232AE595FD8F /* RoomDayCategoryTimePreset.swift */; };
+		458454C7D7E03418CE42D280 /* CameraBackgroundPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582F625D37C61066341678F2 /* CameraBackgroundPosition.swift */; };
 		45F2BDBE1B2046CA796054DE /* kenney_select_004.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2E9D64C9C4FE79AC10BD9016 /* kenney_select_004.wav */; };
 		45F414B1F7BEA5D43C2106BA /* KeychainSecretStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260D3F39DAB28CD8F1C0ADAF /* KeychainSecretStore.swift */; };
 		48445FB3B0DF2857653B2BA4 /* MatrixRainSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1CA4620A505A25C40AE681 /* MatrixRainSpriteScene.swift */; };
@@ -332,6 +333,7 @@
 		500155013123DCA396D6B0A2 /* RoomScheduleSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScheduleSelection.swift; sourceTree = "<group>"; };
 		51746A870FE32EF3D2D30555 /* xhotel_ui_menu_open.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_menu_open.wav; sourceTree = "<group>"; };
 		572F782765D50BE3F3214748 /* WorkSessionHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionHistoryScreen.swift; sourceTree = "<group>"; };
+		582F625D37C61066341678F2 /* CameraBackgroundPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundPosition.swift; sourceTree = "<group>"; };
 		5A25BA24E124A1929ED1F4AB /* MargaritavilleSwift.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MargaritavilleSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C3A52C2D0194E4284467824 /* AppSettingsStoreLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreLoading.swift; sourceTree = "<group>"; };
 		5CB7A732CA2C1250A664F900 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
@@ -568,6 +570,7 @@
 			children = (
 				42D28BA754181F3D2A0AC163 /* CameraBackgroundEffect.swift */,
 				123082FC45F27A55F33DB71F /* CameraBackgroundEffects.metal */,
+				582F625D37C61066341678F2 /* CameraBackgroundPosition.swift */,
 				9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */,
 				EA66036A8BDB3FECD91B76AA /* CameraEffectsCommon.h */,
 				1EE6FE2C94120C2D8D25699B /* CameraEffectsRetro.h */,
@@ -1203,6 +1206,7 @@
 				5A58AB8131B0D9336DC00176 /* BuildChangelogScreen.swift in Sources */,
 				8B9A85972D9CCE05ABE042E5 /* CameraBackgroundEffect.swift in Sources */,
 				CB2B43637C01F876A10AAD75 /* CameraBackgroundEffects.metal in Sources */,
+				458454C7D7E03418CE42D280 /* CameraBackgroundPosition.swift in Sources */,
 				73FA1F5EADDB508037000FCE /* CameraBackgroundRenderer.swift in Sources */,
 				84CFE9D236B5DFD024A41A65 /* CameraBackgroundSession.swift in Sources */,
 				A68FDF41F8119B8DD2E3EF77 /* CameraBackgroundView.swift in Sources */,
@@ -1463,7 +1467,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1530,7 +1534,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

@@ -24,6 +24,11 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
     private var target: CameraRenderTarget?
     private var generation = 0
     private var isConfigured = false
+    /// Камера, которую последней запросил экран (читается под замком на главном).
+    private var requestedPosition: CameraBackgroundPosition = .back
+    /// Камера, подключённая к сессии сейчас (только на очереди сессии).
+    private var activePosition: CameraBackgroundPosition = .back
+    private var currentInput: AVCaptureDeviceInput?
     private lazy var renderer: CameraBackgroundRenderer? = CameraBackgroundRenderer()
 
     static var isDenied: Bool {
@@ -46,6 +51,23 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
                 guard isConfigured, !session.isRunning else { return }
                 session.startRunning()
             }
+        }
+    }
+
+    /// Переключает камеру без перезапуска сессии: меняется только вход.
+    func setPosition(_ position: CameraBackgroundPosition) {
+        let changed: Bool = locked {
+            guard requestedPosition != position else { return false }
+            requestedPosition = position
+            return true
+        }
+        guard changed else { return }
+        sessionQueue.async { [self] in
+            guard isConfigured else {
+                activePosition = position
+                return
+            }
+            switchInput(to: position)
         }
     }
 
@@ -91,9 +113,7 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
 
     private func configureIfNeeded() {
         guard !isConfigured else { return }
-        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
-              let input = try? AVCaptureDeviceInput(device: camera)
-        else {
+        guard let input = Self.makeInput(for: activePosition) else {
             Self.logger.error("camera.background.unavailable")
             return
         }
@@ -110,12 +130,51 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
         }
         session.addInput(input)
         session.addOutput(output)
-        if let connection = output.connection(with: .video), connection.isVideoRotationAngleSupported(90) {
+        currentInput = input
+        applyConnectionSettings()
+        session.commitConfiguration()
+        Self.selectSmoothFormat(for: input.device)
+        isConfigured = true
+    }
+
+    private func switchInput(to position: CameraBackgroundPosition) {
+        guard position != activePosition, let input = Self.makeInput(for: position) else { return }
+        session.beginConfiguration()
+        if let currentInput {
+            session.removeInput(currentInput)
+        }
+        if session.canAddInput(input) {
+            session.addInput(input)
+            currentInput = input
+            activePosition = position
+        } else if let currentInput {
+            session.addInput(currentInput)
+            Self.logger.error("camera.background.switch-failed")
+        }
+        applyConnectionSettings()
+        session.commitConfiguration()
+        if let device = currentInput?.device {
+            Self.selectSmoothFormat(for: device)
+        }
+    }
+
+    /// Портретная ориентация кадра и зеркало для передней камеры.
+    private func applyConnectionSettings() {
+        guard let connection = output.connection(with: .video) else { return }
+        if connection.isVideoRotationAngleSupported(90) {
             connection.videoRotationAngle = 90
         }
-        session.commitConfiguration()
-        Self.selectSmoothFormat(for: camera)
-        isConfigured = true
+        if connection.isVideoMirroringSupported {
+            connection.automaticallyAdjustsVideoMirroring = false
+            connection.isVideoMirrored = activePosition.isMirrored
+        }
+    }
+
+    private static func makeInput(for position: CameraBackgroundPosition) -> AVCaptureDeviceInput? {
+        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position.devicePosition) else {
+            return nil
+        }
+        return try? AVCaptureDeviceInput(device: camera)
     }
 
     /// 1080p на 60 кадрах. Форматы замедленной съёмки (120–240 кадров)

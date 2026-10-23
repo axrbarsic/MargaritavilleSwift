@@ -9,6 +9,7 @@ import UIKit
 struct CameraBackgroundView: UIViewRepresentable {
     var isActive = true
     var effect: CameraBackgroundEffect = .normal
+    var position: CameraBackgroundPosition = .back
     @Environment(\.scenePhase) private var scenePhase
 
     func makeUIView(context: Context) -> CameraMetalView {
@@ -27,6 +28,7 @@ struct CameraBackgroundView: UIViewRepresentable {
 
     private func update(_ view: CameraMetalView) {
         view.renderTarget.effect = effect
+        CameraBackgroundSession.shared.setPosition(position)
         view.setLive(isActive && scenePhase == .active)
     }
 }

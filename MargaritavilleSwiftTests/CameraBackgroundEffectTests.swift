@@ -1,3 +1,4 @@
+import AVFoundation
 import Foundation
 import QuartzCore
 import Testing
@@ -31,4 +32,12 @@ func cameraRenderTargetStoresSelectedEffect() {
     #expect(target.effect == .normal)
     target.effect = .thermal
     #expect(target.effect == .thermal)
+}
+
+@Test
+func cameraPositionKeepsStableValuesAndMirrorsOnlyFront() {
+    #expect(CameraBackgroundPosition.allCases.map(\.rawValue) == ["back", "front"])
+    #expect(CameraBackgroundPosition.back.devicePosition == .back)
+    #expect(CameraBackgroundPosition.front.devicePosition == .front)
+    #expect(CameraBackgroundPosition.allCases.filter(\.isMirrored) == [.front])
 }

@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (75)",
+            date: "2026-10-23",
+            changes: [
+                "В фоне «Камера» можно выбрать заднюю или переднюю камеру: Настройки → «Фон приложения» → «Камера».",
+                "Камера переключается на лету без перезапуска, передняя показывается зеркально, как в селфи; все эффекты работают с обеими."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (74)",
             date: "2026-10-23",
             changes: [

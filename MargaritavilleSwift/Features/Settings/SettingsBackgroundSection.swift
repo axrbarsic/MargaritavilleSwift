@@ -7,6 +7,7 @@ struct SettingsBackgroundSection: View {
     @Environment(\.interactionFeedback) private var feedback
     @State private var selectedBackgroundVideoItem: PhotosPickerItem?
     @AppStorage(CameraBackgroundEffect.storageKey) private var cameraEffect: CameraBackgroundEffect = .normal
+    @AppStorage(CameraBackgroundPosition.storageKey) private var cameraPosition: CameraBackgroundPosition = .back
 
     var body: some View {
         SettingsPanel(
@@ -59,6 +60,14 @@ struct SettingsBackgroundSection: View {
 
     private var cameraControls: some View {
         VStack(alignment: .leading, spacing: 12) {
+            Picker("Камера", selection: $cameraPosition) {
+                ForEach(CameraBackgroundPosition.allCases) { position in
+                    Text(position.title).tag(position)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: cameraPosition) { _, _ in feedback.confirm() }
+
             Picker("Эффект камеры", selection: $cameraEffect) {
                 ForEach(CameraBackgroundEffect.allCases) { effect in
                     Text(effect.title).tag(effect)
