@@ -1,6 +1,5 @@
 #include "CameraEffectsCommon.h"
 #include "CameraEffectsRetro.h"
-#include "CameraEffectsViral.h"
 
 // Эффекты фона «Камера». Номера веток совпадают с порядком
 // `CameraBackgroundEffect.allCases`.
@@ -36,30 +35,9 @@ inline float3 thermal(float value) {
 
 } // namespace camfx
 
-/// Обновление истории кадров для эффектов с памятью (скан времени, шлейф).
-fragment float4 cameraHistoryFragment(
-    CameraVertexOut in [[stage_in]],
-    texture2d<float> camera [[texture(0)]],
-    texture2d<float> history [[texture(1)]],
-    constant CameraEffectUniforms& u [[buffer(0)]]
-) {
-    float3 live = camfx::sampleCamera(camera, camfx::aspectFill(in.uv, u.viewSize, u.textureSize));
-    if (u.resetHistory != 0) {
-        return float4(live, 1.0);
-    }
-    float3 previous = history.sample(camfx::linearSampler, in.uv).rgb;
-    if (u.effect == 16) {
-        float y = in.uv.y;
-        bool frozen = y < u.previousScanLine;
-        return float4(frozen ? previous : live, 1.0);
-    }
-    return float4(mix(live, previous * float3(0.97, 0.9, 1.0), 0.8), 1.0);
-}
-
 fragment float4 cameraEffectFragment(
     CameraVertexOut in [[stage_in]],
     texture2d<float> camera [[texture(0)]],
-    texture2d<float> history [[texture(1)]],
     constant CameraEffectUniforms& u [[buffer(0)]]
 ) {
     float2 uv = camfx::aspectFill(in.uv, u.viewSize, u.textureSize);
@@ -125,14 +103,6 @@ fragment float4 cameraEffectFragment(
     case 13: color = camfx::sketch(camera, uv, pixel, u); break;
     case 14: color = camfx::kaleidoscope(camera, pixel, u); break;
     case 15: color = camfx::glitch(camera, pixel, u); break;
-    case 16: color = camfx::timeScan(history, in.uv, u); break;
-    case 17: color = history.sample(camfx::linearSampler, in.uv).rgb; break;
-    case 18: color = camfx::matrixRain(camera, pixel, u); break;
-    case 19: color = camfx::anaglyph(camera, uv); break;
-    case 20: color = camfx::xray(camera, uv, texel); break;
-    case 21: color = camfx::vaporwave(camera, uv, pixel); break;
-    case 22: color = camfx::mirror(camera, in.uv, u); break;
-    case 23: color = camfx::hologram(camera, uv, pixel, texel, u); break;
     default: // Обычный.
         color = camfx::sampleCamera(camera, uv);
         break;
