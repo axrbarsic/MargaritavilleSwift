@@ -18,7 +18,7 @@ inline float asciiGlyph(int bits, float2 p) {
 }
 
 inline float3 ascii(texture2d<float> camera, float2 pixel, CameraEffectUniforms u) {
-    float cellSize = u.viewSize.x / 56.0;
+    float cellSize = u.viewSize.x / 56.0 * u.detailScale;
     float2 cellOrigin = floor(pixel / cellSize) * cellSize;
     float3 color = sampleScreen(camera, cellOrigin + cellSize * 0.5, u);
     float gray = luma(color);
@@ -36,7 +36,7 @@ inline float3 ascii(texture2d<float> camera, float2 pixel, CameraEffectUniforms 
 
 /// 1-бит: упорядоченный дизеринг Байера, стабильный рисунок как у Obra Dinn.
 inline float3 dither1Bit(texture2d<float> camera, float2 pixel, CameraEffectUniforms u) {
-    const float dotSize = 3.0;
+    float dotSize = 3.0 * u.detailScale;
     float2 cell = floor(pixel / dotSize);
     float value = luma(sampleScreen(camera, (cell + 0.5) * dotSize, u));
     value = saturate((value - 0.5) * 1.35 + 0.5);
@@ -58,7 +58,7 @@ inline float halftoneDot(texture2d<float> camera, float2 pixel, CameraEffectUnif
 }
 
 inline float3 halftone(texture2d<float> camera, float2 pixel, CameraEffectUniforms u) {
-    float cellSize = u.viewSize.x / 64.0;
+    float cellSize = u.viewSize.x / 64.0 * u.detailScale;
     float c = halftoneDot(camera, pixel, u, 0.2618, 0, cellSize);
     float m = halftoneDot(camera, pixel, u, 1.3090, 1, cellSize);
     float y = halftoneDot(camera, pixel, u, 0.0, 2, cellSize);
@@ -69,7 +69,7 @@ inline float3 halftone(texture2d<float> camera, float2 pixel, CameraEffectUnifor
 
 /// Экран Game Boy: крупные пиксели, 4 оттенка зелёного и дизеринг.
 inline float3 gameBoy(texture2d<float> camera, float2 pixel, CameraEffectUniforms u) {
-    float block = u.viewSize.x / 128.0;
+    float block = u.viewSize.x / 128.0 * u.detailScale;
     float2 cell = floor(pixel / block);
     float value = luma(sampleScreen(camera, (cell + 0.5) * block, u));
     value = saturate((value - 0.5) * 1.2 + 0.5);
@@ -117,13 +117,13 @@ inline float hatchLine(float2 pixel, float spacing, float direction, float offse
 /// Карандаш: перекрёстная штриховка по тёмным зонам и контуры.
 inline float3 sketch(texture2d<float> camera, float2 uv, float2 pixel, CameraEffectUniforms u) {
     float value = luma(sampleCamera(camera, uv));
-    const float spacing = 9.0;
+    float spacing = 9.0 * u.detailScale;
     float ink = 0.0;
     if (value < 0.85) ink = max(ink, hatchLine(pixel, spacing, 1.0, 0.0));
     if (value < 0.60) ink = max(ink, hatchLine(pixel, spacing, -1.0, 0.0));
     if (value < 0.40) ink = max(ink, hatchLine(pixel, spacing, 1.0, spacing * 0.5));
     if (value < 0.22) ink = max(ink, hatchLine(pixel, spacing, -1.0, spacing * 0.5));
-    float edge = smoothstep(0.25, 0.7, sobel(camera, uv, 1.5 / u.textureSize));
+    float edge = smoothstep(0.25, 0.7, sobel(camera, uv, 1.5 / u.textureSize, u.edgeSensitivity));
     ink = max(ink * 0.85, edge);
     return mix(float3(0.95, 0.93, 0.87), float3(0.16, 0.16, 0.20), ink);
 }

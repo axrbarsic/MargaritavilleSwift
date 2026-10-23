@@ -174,6 +174,7 @@
 		B8DCB761C2A5C4905FD1E616 /* VIPJellyEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD993F5D122A09028FEDE5EE /* VIPJellyEffects.swift */; };
 		B979550CE1E97EDDF7B0809C /* RoomCellTypographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A166DBE68ADB1868AAA361 /* RoomCellTypographyTests.swift */; };
 		BA597DC5700A27AACC313C22 /* PersistentAIVisualPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50C6C89DEFAEA30480095D0 /* PersistentAIVisualPreset.swift */; };
+		BC7E14F54B65649DDB018181 /* CameraEffectTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46041C9CA5062462383814F0 /* CameraEffectTuning.swift */; };
 		BD0CEBFEF8659B3BF733D7A0 /* SettingsCategorySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AA91C16BE0BBB911F2F72E /* SettingsCategorySelector.swift */; };
 		C0B93CAF658F914BDA2B95D7 /* WorkSetupSelectionHDRFlash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB477483749E0D86D99AB3D /* WorkSetupSelectionHDRFlash.swift */; };
 		C1124C1B7153C116C0012804 /* WorkSessionStore+Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B512B523DF50D934102856F7 /* WorkSessionStore+Catalog.swift */; };
@@ -182,6 +183,7 @@
 		C26D077B5C9D7269C281EA0D /* HousekeeperPalette+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5F9B4FBD32A51202CBE11 /* HousekeeperPalette+Color.swift */; };
 		C3F8298388E810A68B8DEBA3 /* RoomScheduleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500155013123DCA396D6B0A2 /* RoomScheduleSelection.swift */; };
 		C4685BCC85C9AF80907B9CD7 /* xhotel_ui_switch_light.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0845AC8B0E2FAF221B45D903 /* xhotel_ui_switch_light.wav */; };
+		C5A060631BD42F6E501B3368 /* CameraEffectControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE7E5D6214D9EE838514CA /* CameraEffectControls.swift */; };
 		C66F3197C0E7AC3729D81D4B /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED484B471D3B303634E238A3 /* AppSettingsStore.swift */; };
 		C78DA3701B2EDCACA9000557 /* WorkSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EF295087355147852E6B91 /* WorkSessionStore.swift */; };
 		C9388CD0A1FD5B6075E50D53 /* xhotel_ui_menu_open.wav in Resources */ = {isa = PBXBuildFile; fileRef = 51746A870FE32EF3D2D30555 /* xhotel_ui_menu_open.wav */; };
@@ -323,6 +325,7 @@
 		42D28BA754181F3D2A0AC163 /* CameraBackgroundEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundEffect.swift; sourceTree = "<group>"; };
 		43AA91C16BE0BBB911F2F72E /* SettingsCategorySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCategorySelector.swift; sourceTree = "<group>"; };
 		4540DA0126A89D0BE159B580 /* xhotel_ui_click_bright.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_click_bright.wav; sourceTree = "<group>"; };
+		46041C9CA5062462383814F0 /* CameraEffectTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEffectTuning.swift; sourceTree = "<group>"; };
 		498F5D242688FEEB1F0BE73A /* VIPHDREffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPHDREffects.swift; sourceTree = "<group>"; };
 		4A54ACA4EA81D8F149015ABB /* AppSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStoreTests.swift; sourceTree = "<group>"; };
 		4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCatalogOverride.swift; sourceTree = "<group>"; };
@@ -388,6 +391,7 @@
 		89917CE612922887A91E731A /* VoiceTranscriptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTranscriptionContracts.swift; sourceTree = "<group>"; };
 		8B96EE57A187E2FCB22119A1 /* WorkSetupComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSetupComponents.swift; sourceTree = "<group>"; };
 		8BBA806300DF2D88D48477D6 /* WorkSessionMergePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionMergePolicy.swift; sourceTree = "<group>"; };
+		8EFE7E5D6214D9EE838514CA /* CameraEffectControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEffectControls.swift; sourceTree = "<group>"; };
 		91543A13E13DF645E957659C /* InteractionSoundRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSoundRouting.swift; sourceTree = "<group>"; };
 		944352C5844AC7EC1FB32321 /* TestWorkAssignmentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWorkAssignmentGenerator.swift; sourceTree = "<group>"; };
 		95639B910F5BD49944085B73 /* WorkSessionStore+SimpleCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+SimpleCycle.swift"; sourceTree = "<group>"; };
@@ -579,6 +583,7 @@
 				B6E33FA7ADC8D0D109FF0333 /* CameraEffectsRelief.h */,
 				1EE6FE2C94120C2D8D25699B /* CameraEffectsRetro.h */,
 				A25188BE655CFEBA358CBB93 /* CameraEffectsToy.h */,
+				46041C9CA5062462383814F0 /* CameraEffectTuning.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -803,6 +808,7 @@
 			children = (
 				B1B22925EEFC29FFD19C0847 /* BrooklynAppearanceControls.swift */,
 				B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */,
+				8EFE7E5D6214D9EE838514CA /* CameraEffectControls.swift */,
 				6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */,
 				69EE8059B980719D44C9D0AB /* CellTypographyLabPreview.swift */,
 				6F5B7670888FF866C60E0550 /* CellTypographyLabScreen.swift */,
@@ -1215,6 +1221,8 @@
 				84CFE9D236B5DFD024A41A65 /* CameraBackgroundSession.swift in Sources */,
 				A68FDF41F8119B8DD2E3EF77 /* CameraBackgroundView.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
+				C5A060631BD42F6E501B3368 /* CameraEffectControls.swift in Sources */,
+				BC7E14F54B65649DDB018181 /* CameraEffectTuning.swift in Sources */,
 				6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */,
 				E3A77C88833383EC9FA8E68D /* CartConsumableQuantityRuler.swift in Sources */,
 				3441312F9ABC1A51B2265DC3 /* CartConsumableQuantitySlider.swift in Sources */,
@@ -1471,7 +1479,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 79;
+				CURRENT_PROJECT_VERSION = 80;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1538,7 +1546,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 79;
+				CURRENT_PROJECT_VERSION = 80;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

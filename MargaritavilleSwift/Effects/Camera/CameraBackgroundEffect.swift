@@ -142,6 +142,7 @@ final class CameraRenderTarget: @unchecked Sendable {
     let layer: CAMetalLayer
     private let lock = NSLock()
     private var storedEffect: CameraBackgroundEffect = .normal
+    private var storedTuning = CameraEffectTuning.default
 
     init(layer: CAMetalLayer) {
         self.layer = layer
@@ -150,5 +151,10 @@ final class CameraRenderTarget: @unchecked Sendable {
     var effect: CameraBackgroundEffect {
         get { lock.lock(); defer { lock.unlock() }; return storedEffect }
         set { lock.lock(); storedEffect = newValue; lock.unlock() }
+    }
+
+    var tuning: CameraEffectTuning {
+        get { lock.lock(); defer { lock.unlock() }; return storedTuning }
+        set { lock.lock(); storedTuning = newValue.clamped; lock.unlock() }
     }
 }

@@ -6,8 +6,6 @@ struct SettingsBackgroundSection: View {
     @Bindable var appSettings: AppSettingsStore
     @Environment(\.interactionFeedback) private var feedback
     @State private var selectedBackgroundVideoItem: PhotosPickerItem?
-    @AppStorage(CameraBackgroundEffect.storageKey) private var cameraEffect: CameraBackgroundEffect = .normal
-    @AppStorage(CameraBackgroundPosition.storageKey) private var cameraPosition: CameraBackgroundPosition = .back
 
     var body: some View {
         SettingsPanel(
@@ -42,7 +40,7 @@ struct SettingsBackgroundSection: View {
                 BrooklynAppearanceControls(appSettings: appSettings)
             }
             if appSettings.appBackgroundMode == .camera {
-                cameraControls
+                CameraEffectControls()
             }
         }
     }
@@ -56,33 +54,6 @@ struct SettingsBackgroundSection: View {
             defaultValue: MatrixRainConfiguration.default.speed,
             value: $appSettings.matrixSpeed
         )
-    }
-
-    private var cameraControls: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Picker("Камера", selection: $cameraPosition) {
-                ForEach(CameraBackgroundPosition.allCases) { position in
-                    Text(position.title).tag(position)
-                }
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: cameraPosition) { _, _ in feedback.confirm() }
-
-            Picker("Эффект камеры", selection: $cameraEffect) {
-                ForEach(CameraBackgroundEffect.allCases) { effect in
-                    Text(effect.title).tag(effect)
-                }
-            }
-            .pickerStyle(.menu)
-            .onChange(of: cameraEffect) { _, _ in feedback.confirm() }
-
-            SettingsInfoRow(
-                title: "Эффект камеры",
-                value: cameraEffect.title,
-                systemName: "camera.filters",
-                subtitle: cameraEffect.subtitle
-            )
-        }
     }
 
     private var backgroundModeSubtitle: String {

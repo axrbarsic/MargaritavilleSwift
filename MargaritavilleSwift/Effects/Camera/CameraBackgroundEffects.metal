@@ -67,7 +67,7 @@ fragment float4 cameraEffectFragment(
     }
     case 2: { // Сетка: неоновые линии и бегущая строка сканирования.
         color = camfx::sampleCamera(camera, uv) * 0.82;
-        float cell = u.viewSize.x / 12.0;
+        float cell = u.viewSize.x / 12.0 * u.detailScale;
         float2 offset = abs(fract(pixel / cell + 0.5) - 0.5) * cell;
         float distanceToLine = min(offset.x, offset.y);
         float line = 1.0 - smoothstep(0.0, 1.6, distanceToLine);
@@ -89,19 +89,19 @@ fragment float4 cameraEffectFragment(
         color = camfx::thermal(camfx::luma(camfx::sampleCamera(camera, uv)));
         break;
     case 5: { // Неон-контуры: светящиеся края на тёмном фоне.
-        float edge = smoothstep(0.12, 0.55, camfx::sobel(camera, uv, texel * 1.5));
+        float edge = smoothstep(0.12, 0.55, camfx::sobel(camera, uv, texel * 1.5, u.edgeSensitivity));
         float3 tint = camfx::hue(fract(in.uv.y * 0.6 + in.uv.x * 0.3 + u.time * 0.08));
         color = camfx::sampleCamera(camera, uv) * 0.06 + tint * edge * 1.2;
         break;
     }
     case 6: { // Комикс: постеризация и чёрные контуры.
         float3 base = floor(camfx::sampleCamera(camera, uv) * 5.0 + 0.5) / 5.0;
-        float edge = step(0.35, camfx::sobel(camera, uv, texel * 1.8));
+        float edge = step(0.35, camfx::sobel(camera, uv, texel * 1.8, u.edgeSensitivity));
         color = mix(base * 1.08, float3(0.02), edge);
         break;
     }
     case 7: { // Пиксели: мозаика с тонкими швами.
-        float block = u.viewSize.x / 40.0;
+        float block = u.viewSize.x / 40.0 * u.detailScale;
         color = camfx::sampleScreen(camera, (floor(pixel / block) + 0.5) * block, u);
         float2 inner = fract(pixel / block);
         color *= 1.0 - step(0.92, max(inner.x, inner.y)) * 0.35;
@@ -115,25 +115,27 @@ fragment float4 cameraEffectFragment(
     case 13: color = camfx::sketch(camera, uv, pixel, u); break;
     case 14: color = camfx::kaleidoscope(camera, pixel, u); break;
     case 15: color = camfx::glitch(camera, pixel, u); break;
-    case 16: color = camfx::cartoon(camera, uv, texel); break;
+    case 16: color = camfx::cartoon(camera, uv, texel, u.edgeSensitivity); break;
     case 17: color = camfx::lego(camera, pixel, u); break;
     case 18: color = camfx::neonShadow(camera, uv, texel, u); break;
     case 19: color = camfx::neonGlow(camera, uv, texel, u); break;
     case 20: color = camfx::tron(camera, uv, pixel, texel, u); break;
     case 21: color = camfx::blueprint(camera, uv, pixel, texel, u); break;
-    case 22: color = camfx::chalk(camera, uv, pixel, texel); break;
+    case 22: color = camfx::chalk(camera, uv, pixel, texel, u.edgeSensitivity); break;
     case 23: color = camfx::electric(camera, uv, texel, u); break;
-    case 24: color = camfx::emboss(camera, uv, texel); break;
-    case 25: color = camfx::goldRelief(camera, uv, texel); break;
-    case 26: color = camfx::silverRelief(camera, uv, texel); break;
-    case 27: color = camfx::copperRelief(camera, uv, texel); break;
-    case 28: color = camfx::stoneRelief(camera, uv, pixel, texel); break;
-    case 29: color = camfx::paperRelief(camera, uv, pixel, texel); break;
-    case 30: color = camfx::woodRelief(camera, uv, pixel, texel); break;
+    case 24: color = camfx::emboss(camera, uv, texel, u); break;
+    case 25: color = camfx::goldRelief(camera, uv, texel, u); break;
+    case 26: color = camfx::silverRelief(camera, uv, texel, u); break;
+    case 27: color = camfx::copperRelief(camera, uv, texel, u); break;
+    case 28: color = camfx::stoneRelief(camera, uv, pixel, texel, u); break;
+    case 29: color = camfx::paperRelief(camera, uv, pixel, texel, u); break;
+    case 30: color = camfx::woodRelief(camera, uv, pixel, texel, u); break;
     case 31: color = camfx::liveRelief(camera, uv, texel, u); break;
     default: // Обычный.
         color = camfx::sampleCamera(camera, uv);
         break;
     }
+    // Сила эффекта смешивает его с исходным кадром, яркость — общая.
+    color = mix(camfx::sampleCamera(camera, uv), color, saturate(u.amount)) * u.brightness;
     return float4(saturate(color), 1.0);
 }

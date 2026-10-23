@@ -13,6 +13,12 @@ struct AppBackgroundView: View {
     @Environment(\.brooklynAppearance) private var brooklynAppearance
     @AppStorage(CameraBackgroundEffect.storageKey) private var cameraEffect: CameraBackgroundEffect = .normal
     @AppStorage(CameraBackgroundPosition.storageKey) private var cameraPosition: CameraBackgroundPosition = .back
+    @AppStorage(CameraEffectTuning.Keys.amount) private var cameraAmount = CameraEffectTuning.default.amount
+    @AppStorage(CameraEffectTuning.Keys.brightness) private var cameraBrightness = CameraEffectTuning.default.brightness
+    @AppStorage(CameraEffectTuning.Keys.reliefDepth) private var cameraReliefDepth = CameraEffectTuning.default.reliefDepth
+    @AppStorage(CameraEffectTuning.Keys.lightAngle) private var cameraLightAngle = CameraEffectTuning.default.lightAngle
+    @AppStorage(CameraEffectTuning.Keys.edgeSensitivity) private var cameraEdgeSensitivity = CameraEffectTuning.default.edgeSensitivity
+    @AppStorage(CameraEffectTuning.Keys.detailScale) private var cameraDetailScale = CameraEffectTuning.default.detailScale
     @State private var presenceID = UUID()
     private let presence = AppBackgroundPresence.shared
 
@@ -41,7 +47,19 @@ struct AppBackgroundView: View {
                     isActive: isActive
                 )
             } else if appBackgroundMode == .camera {
-                CameraBackgroundView(isActive: isActive, effect: cameraEffect, position: cameraPosition)
+                CameraBackgroundView(
+                    isActive: isActive,
+                    effect: cameraEffect,
+                    position: cameraPosition,
+                    tuning: CameraEffectTuning(
+                        amount: cameraAmount,
+                        brightness: cameraBrightness,
+                        reliefDepth: cameraReliefDepth,
+                        lightAngle: cameraLightAngle,
+                        edgeSensitivity: cameraEdgeSensitivity,
+                        detailScale: cameraDetailScale
+                    )
+                )
             }
         }
         .ignoresSafeArea()

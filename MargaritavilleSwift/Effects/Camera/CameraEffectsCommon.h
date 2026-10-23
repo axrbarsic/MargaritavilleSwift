@@ -9,6 +9,15 @@ struct CameraEffectUniforms {
     float2 textureSize;
     float time;
     uint effect;
+    /// Смешивание эффекта с исходным кадром, 0…1.
+    float amount;
+    float brightness;
+    float reliefDepth;
+    /// Направление света в радианах (ось y вниз).
+    float lightAngle;
+    float edgeSensitivity;
+    /// Множитель размера ячеек, пикселей, символов и кубиков.
+    float detailScale;
 };
 
 namespace camfx {
@@ -44,8 +53,8 @@ inline float3 sampleScreen(texture2d<float> camera, float2 pixel, CameraEffectUn
     return sampleCamera(camera, aspectFill(pixel / u.viewSize, u.viewSize, u.textureSize));
 }
 
-/// Сила контура по оператору Собеля на яркости.
-inline float sobel(texture2d<float> camera, float2 uv, float2 texel) {
+/// Сила контура по оператору Собеля на яркости; `gain` — чувствительность.
+inline float sobel(texture2d<float> camera, float2 uv, float2 texel, float gain = 1.0) {
     float tl = luma(sampleCamera(camera, uv + texel * float2(-1.0, -1.0)));
     float t = luma(sampleCamera(camera, uv + texel * float2(0.0, -1.0)));
     float tr = luma(sampleCamera(camera, uv + texel * float2(1.0, -1.0)));
@@ -56,7 +65,7 @@ inline float sobel(texture2d<float> camera, float2 uv, float2 texel) {
     float br = luma(sampleCamera(camera, uv + texel * float2(1.0, 1.0)));
     float gx = -tl - 2.0 * l - bl + tr + 2.0 * r + br;
     float gy = -tl - 2.0 * t - tr + bl + 2.0 * b + br;
-    return length(float2(gx, gy));
+    return length(float2(gx, gy)) * gain;
 }
 
 inline float3 hue(float h) {

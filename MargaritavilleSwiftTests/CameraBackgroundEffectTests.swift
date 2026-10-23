@@ -24,8 +24,8 @@ func cameraEffectsKeepStableStorageValuesAndShaderOrder() {
 
 @Test
 func cameraEffectUniformsMatchMetalStructLayout() {
-    // float2 viewSize, float2 textureSize, float time, uint effect = 24 байта.
-    #expect(MemoryLayout<CameraEffectUniforms>.stride == 24)
+    // float2, float2, float, uint и шесть float настроек = 48 байт.
+    #expect(MemoryLayout<CameraEffectUniforms>.stride == 48)
 }
 
 @Test
@@ -42,4 +42,29 @@ func cameraPositionKeepsStableValuesAndMirrorsOnlyFront() {
     #expect(CameraBackgroundPosition.back.devicePosition == .back)
     #expect(CameraBackgroundPosition.front.devicePosition == .front)
     #expect(CameraBackgroundPosition.allCases.filter(\.isMirrored) == [.front])
+}
+
+@Test
+func cameraEffectTuningClampsValuesAndConvertsLightToRadians() {
+    let wild = CameraEffectTuning(amount: 7, brightness: -1, reliefDepth: .nan, lightAngle: 400, edgeSensitivity: 0, detailScale: 9)
+    let clamped = wild.clamped
+    #expect(clamped.amount == 1)
+    #expect(clamped.brightness == CameraEffectTuning.brightnessRange.lowerBound)
+    #expect(clamped.reliefDepth == CameraEffectTuning.reliefDepthRange.lowerBound)
+    #expect(clamped.lightAngle == 360)
+    #expect(clamped.edgeSensitivity == CameraEffectTuning.edgeSensitivityRange.lowerBound)
+    #expect(clamped.detailScale == CameraEffectTuning.detailScaleRange.upperBound)
+
+    let uniforms = CameraEffectUniforms(viewSize: .zero, textureSize: .zero, time: 0, effect: 0, tuning: .default)
+    #expect(abs(uniforms.lightAngle - Float(225.0 * .pi / 180)) < 0.0001)
+}
+
+@Test
+func cameraEffectSlidersMatchTheEffectsTheyChange() {
+    #expect(CameraBackgroundEffect.goldRelief.usesRelief)
+    #expect(CameraBackgroundEffect.emboss.usesLightAngle)
+    #expect(!CameraBackgroundEffect.liveRelief.usesLightAngle)
+    #expect(CameraBackgroundEffect.neonEdges.usesEdges)
+    #expect(CameraBackgroundEffect.lego.usesDetailScale)
+    #expect(!CameraBackgroundEffect.normal.usesRelief && !CameraBackgroundEffect.normal.usesEdges && !CameraBackgroundEffect.normal.usesDetailScale)
 }

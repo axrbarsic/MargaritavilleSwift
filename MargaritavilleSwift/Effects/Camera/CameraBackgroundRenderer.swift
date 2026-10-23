@@ -9,6 +9,26 @@ struct CameraEffectUniforms {
     var textureSize: SIMD2<Float>
     var time: Float
     var effect: UInt32
+    var amount: Float = 1
+    var brightness: Float = 1
+    var reliefDepth: Float = 1
+    /// Направление света в радианах, ось y вниз.
+    var lightAngle: Float = Float(CameraEffectTuning.defaultLightAngle * .pi / 180)
+    var edgeSensitivity: Float = 1
+    var detailScale: Float = 1
+
+    init(viewSize: SIMD2<Float>, textureSize: SIMD2<Float>, time: Float, effect: UInt32, tuning: CameraEffectTuning = .default) {
+        self.viewSize = viewSize
+        self.textureSize = textureSize
+        self.time = time
+        self.effect = effect
+        amount = Float(tuning.amount)
+        brightness = Float(tuning.brightness)
+        reliefDepth = Float(tuning.reliefDepth)
+        lightAngle = Float(tuning.lightAngle * .pi / 180)
+        edgeSensitivity = Float(tuning.edgeSensitivity)
+        detailScale = Float(tuning.detailScale)
+    }
 }
 
 /// Отрисовка кадров камеры с эффектом прямо в `CAMetalLayer` активного экрана.
@@ -126,7 +146,8 @@ final class CameraBackgroundRenderer {
             viewSize: SIMD2(Float(drawable.texture.width), Float(drawable.texture.height)),
             textureSize: SIMD2(Float(width), Float(height)),
             time: Float(CACurrentMediaTime() - startTime),
-            effect: effect.shaderIndex
+            effect: effect.shaderIndex,
+            tuning: target.tuning
         )
         encoder.setRenderPipelineState(pipeline)
         encoder.setFragmentTexture(sampled, index: 0)

@@ -8,7 +8,7 @@
 namespace camfx {
 
 /// Мультфильм: кадр уже прошёл медианный фильтр MPS (сглаживание с краями).
-inline float3 cartoon(texture2d<float> smoothed, float2 uv, float2 texel) {
+inline float3 cartoon(texture2d<float> smoothed, float2 uv, float2 texel, float gain) {
     float3 color = sampleCamera(smoothed, uv);
     float value = max(luma(color), 0.001);
     // Квантование яркости на 4 заметные ступени с узким сглаженным переходом.
@@ -21,7 +21,7 @@ inline float3 cartoon(texture2d<float> smoothed, float2 uv, float2 texel) {
     // Сочнее цвета.
     color = saturate(mix(float3(luma(color)), color, 1.6));
     // Толстые мягкие контуры.
-    float edge = smoothstep(0.08, 0.22, sobel(smoothed, uv, texel * 2.5));
+    float edge = smoothstep(0.08, 0.22, sobel(smoothed, uv, texel * 2.5, gain));
     return mix(color, float3(0.04, 0.03, 0.05), edge);
 }
 
@@ -49,7 +49,7 @@ inline float3 legoColor(float3 color) {
 
 /// Лего: каждый блок — кубик 1×1 с фаской и шипом, свет сверху слева.
 inline float3 lego(texture2d<float> camera, float2 pixel, CameraEffectUniforms u) {
-    float block = u.viewSize.x / 28.0;
+    float block = u.viewSize.x / 28.0 * u.detailScale;
     float2 cell = floor(pixel / block);
     float3 base = legoColor(sampleScreen(camera, (cell + 0.5) * block, u));
     float2 local = fract(pixel / block) - 0.5;
