@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (78)",
+            date: "2026-10-23",
+            changes: [
+                "Добавлены семь эффектов камеры в духе «Неон-контуров»: «Неоновая тень» из TikTok, «Неон-свечение», «Трон», «Чертёж», «Мел», «Электричество» и «Тиснение».",
+                "Все они строятся на контурах изображения и работают с задней и передней камерой."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (77)",
             date: "2026-10-23",
             changes: [

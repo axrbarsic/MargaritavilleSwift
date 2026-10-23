@@ -364,6 +364,7 @@
 		72B1F42E59B7E937899DCA2D /* CameraBackgroundEffectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBackgroundEffectTests.swift; sourceTree = "<group>"; };
 		72EE5966B8E1D8073C15CB8C /* VIPHDRRenderingUpdateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPHDRRenderingUpdateTests.swift; sourceTree = "<group>"; };
 		72F62A96DC6CBE334A51427F /* MargaritavilleCatalogEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MargaritavilleCatalogEditorSection.swift; sourceTree = "<group>"; };
+		73D68C4CF273AE011576CA45 /* CameraEffectsEdges.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraEffectsEdges.h; sourceTree = "<group>"; };
 		74A213E357A08B0F7BDDA6FF /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		74D4A8BD592F917A71D05A45 /* SummaryLiveCellRendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryLiveCellRendering.swift; sourceTree = "<group>"; };
 		752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettingsStore+Consumables.swift"; sourceTree = "<group>"; };
@@ -573,6 +574,7 @@
 				582F625D37C61066341678F2 /* CameraBackgroundPosition.swift */,
 				9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */,
 				EA66036A8BDB3FECD91B76AA /* CameraEffectsCommon.h */,
+				73D68C4CF273AE011576CA45 /* CameraEffectsEdges.h */,
 				1EE6FE2C94120C2D8D25699B /* CameraEffectsRetro.h */,
 				A25188BE655CFEBA358CBB93 /* CameraEffectsToy.h */,
 			);
@@ -1467,7 +1469,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 77;
+				CURRENT_PROJECT_VERSION = 78;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1534,7 +1536,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 77;
+				CURRENT_PROJECT_VERSION = 78;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

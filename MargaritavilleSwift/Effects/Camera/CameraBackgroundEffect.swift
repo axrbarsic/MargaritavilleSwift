@@ -22,6 +22,13 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     case glitch
     case cartoon
     case lego
+    case neonShadow
+    case neonGlow
+    case tron
+    case blueprint
+    case chalk
+    case electric
+    case emboss
 
     static let storageKey = "cameraBackgroundEffect"
 
@@ -47,6 +54,13 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .glitch: "Глитч"
         case .cartoon: "Мультфильм"
         case .lego: "Лего"
+        case .neonShadow: "Неоновая тень"
+        case .neonGlow: "Неон-свечение"
+        case .tron: "Трон"
+        case .blueprint: "Чертёж"
+        case .chalk: "Мел"
+        case .electric: "Электричество"
+        case .emboss: "Тиснение"
         }
     }
 
@@ -70,6 +84,13 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .glitch: "Цифровой сбой: сдвиг полос, разделение каналов и вспышки."
         case .cartoon: "Мир как в мультфильме: гладкие заливки, сочные цвета и чёткие контуры."
         case .lego: "Всё вокруг собрано из кубиков Лего с шипами в цветах настоящих деталей."
+        case .neonShadow: "Вирусный эффект TikTok: розовая, голубая и жёлтая копии контура расходятся и сходятся."
+        case .neonGlow: "Переливающиеся неоновые линии с широким светящимся ореолом."
+        case .tron: "Голубые и оранжевые световые контуры на тёмной сетке, как в «Троне»."
+        case .blueprint: "Белые линии на синем листе с миллиметровой сеткой, как технический чертёж."
+        case .chalk: "Рваные меловые штрихи по контурам на школьной доске."
+        case .electric: "Дрожащие фиолетовые разряды с белой сердцевиной."
+        case .emboss: "Рельеф, будто изображение выдавлено в металле."
         }
     }
 
