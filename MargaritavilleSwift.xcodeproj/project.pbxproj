@@ -434,6 +434,7 @@
 		B512B523DF50D934102856F7 /* WorkSessionStore+Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSessionStore+Catalog.swift"; sourceTree = "<group>"; };
 		B57BE8EBF8D2A57831E5C299 /* SummarySwipeCommitPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySwipeCommitPolicy.swift; sourceTree = "<group>"; };
 		B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixConsumableStyle.swift; sourceTree = "<group>"; };
+		B6E33FA7ADC8D0D109FF0333 /* CameraEffectsRelief.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraEffectsRelief.h; sourceTree = "<group>"; };
 		B735C52C751B237426654B28 /* CellTypographyPresetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTypographyPresetStore.swift; sourceTree = "<group>"; };
 		B78D580A5B6E6CE9DEFE8144 /* AppBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundView.swift; sourceTree = "<group>"; };
 		B83360CE4510D5320737420A /* SummaryConsumablesReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryConsumablesReport.swift; sourceTree = "<group>"; };
@@ -575,6 +576,7 @@
 				9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */,
 				EA66036A8BDB3FECD91B76AA /* CameraEffectsCommon.h */,
 				73D68C4CF273AE011576CA45 /* CameraEffectsEdges.h */,
+				B6E33FA7ADC8D0D109FF0333 /* CameraEffectsRelief.h */,
 				1EE6FE2C94120C2D8D25699B /* CameraEffectsRetro.h */,
 				A25188BE655CFEBA358CBB93 /* CameraEffectsToy.h */,
 			);
@@ -1469,7 +1471,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 78;
+				CURRENT_PROJECT_VERSION = 79;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1536,7 +1538,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 78;
+				CURRENT_PROJECT_VERSION = 79;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

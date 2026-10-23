@@ -29,6 +29,13 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     case chalk
     case electric
     case emboss
+    case goldRelief
+    case silverRelief
+    case copperRelief
+    case stoneRelief
+    case paperRelief
+    case woodRelief
+    case liveRelief
 
     static let storageKey = "cameraBackgroundEffect"
 
@@ -61,6 +68,13 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .chalk: "Мел"
         case .electric: "Электричество"
         case .emboss: "Тиснение"
+        case .goldRelief: "Золото"
+        case .silverRelief: "Серебряная монета"
+        case .copperRelief: "Медь"
+        case .stoneRelief: "Барельеф"
+        case .paperRelief: "Тиснение на бумаге"
+        case .woodRelief: "Резьба по дереву"
+        case .liveRelief: "Живой рельеф"
         }
     }
 
@@ -91,6 +105,13 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .chalk: "Рваные меловые штрихи по контурам на школьной доске."
         case .electric: "Дрожащие фиолетовые разряды с белой сердцевиной."
         case .emboss: "Рельеф, будто изображение выдавлено в металле."
+        case .goldRelief: "Рельеф из полированного золота с тёплыми бликами."
+        case .silverRelief: "Чеканка на серебре, как на монете."
+        case .copperRelief: "Медная чеканка с красноватым отливом."
+        case .stoneRelief: "Изображение высечено в шершавом песчанике."
+        case .paperRelief: "Слепое тиснение белым по белому, как на дорогой открытке."
+        case .woodRelief: "Резьба по доске с годичными волокнами."
+        case .liveRelief: "Серебряный рельеф, по которому по кругу ходит свет."
         }
     }
 

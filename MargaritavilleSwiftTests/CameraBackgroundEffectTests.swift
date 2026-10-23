@@ -10,9 +10,10 @@ func cameraEffectsKeepStableStorageValuesAndShaderOrder() {
         "normal", "matte", "grid", "nightVision", "thermal", "neonEdges", "comic", "pixels",
         "ascii", "dither", "halftone", "gameBoy", "crt", "sketch", "kaleidoscope", "glitch",
         "cartoon", "lego",
-        "neonShadow", "neonGlow", "tron", "blueprint", "chalk", "electric", "emboss"
+        "neonShadow", "neonGlow", "tron", "blueprint", "chalk", "electric", "emboss",
+        "goldRelief", "silverRelief", "copperRelief", "stoneRelief", "paperRelief", "woodRelief", "liveRelief"
     ])
-    #expect(CameraBackgroundEffect.allCases.map(\.shaderIndex) == Array(0..<25))
+    #expect(CameraBackgroundEffect.allCases.map(\.shaderIndex) == Array(0..<32))
     #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .blur } == [.matte])
     #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .median } == [.cartoon])
     for effect in CameraBackgroundEffect.allCases {
