@@ -21,6 +21,10 @@ final class CameraBackgroundRenderer {
 
     private let commandQueue: MTLCommandQueue
     private let pipeline: MTLRenderPipelineState
+    /// Поворот альбомного кадра в портрет: передняя камера присылает кадры
+    /// 1920×1080, хотя соединению задан поворот на 90°.
+    private let rotatePipeline: MTLRenderPipelineState
+    private var portraitTexture: MTLTexture?
     private let textureCache: CVMetalTextureCache
     private let blur: MPSImageGaussianBlur
     /// Медиана сглаживает, сохраняя края — основа «Мультфильма». Два прохода
@@ -38,7 +42,8 @@ final class CameraBackgroundRenderer {
               let commandQueue = device.makeCommandQueue(),
               let library = device.makeDefaultLibrary(),
               let vertex = library.makeFunction(name: "cameraEffectVertex"),
-              let fragment = library.makeFunction(name: "cameraEffectFragment")
+              let fragment = library.makeFunction(name: "cameraEffectFragment"),
+              let rotateFragment = library.makeFunction(name: "cameraRotateFragment")
         else {
             Self.logger.error("camera.renderer.metal-unavailable")
             return nil
@@ -54,6 +59,9 @@ final class CameraBackgroundRenderer {
         descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         do {
             pipeline = try device.makeRenderPipelineState(descriptor: descriptor)
+            descriptor.label = "Camera background portrait rotation"
+            descriptor.fragmentFunction = rotateFragment
+            rotatePipeline = try device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             Self.logger.error("camera.renderer.pipeline \(error.localizedDescription, privacy: .public)")
             return nil
@@ -72,16 +80,23 @@ final class CameraBackgroundRenderer {
         var didCommit = false
         defer { if !didCommit { inFlight.signal() } }
 
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let bufferWidth = CVPixelBufferGetWidth(pixelBuffer)
+        let bufferHeight = CVPixelBufferGetHeight(pixelBuffer)
         var cvTexture: CVMetalTexture?
-        CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, .bgra8Unorm, width, height, 0, &cvTexture)
+        CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, .bgra8Unorm, bufferWidth, bufferHeight, 0, &cvTexture)
         guard let cvTexture,
-              let source = CVMetalTextureGetTexture(cvTexture),
+              let cameraTexture = CVMetalTextureGetTexture(cvTexture),
               let drawable = target.layer.nextDrawable(),
               let commandBuffer = commandQueue.makeCommandBuffer()
         else { return }
         commandBuffer.label = "Camera background frame"
+
+        var source = cameraTexture
+        if bufferWidth > bufferHeight, let portrait = rotateToPortrait(cameraTexture, commandBuffer: commandBuffer) {
+            source = portrait
+        }
+        let width = source.width
+        let height = source.height
 
         let effect = target.effect
         var sampled = source
@@ -128,6 +143,34 @@ final class CameraBackgroundRenderer {
         commandBuffer.present(drawable)
         commandBuffer.commit()
         didCommit = true
+    }
+
+    /// Поворачивает альбомный кадр на 90° по часовой стрелке в портретную текстуру.
+    private func rotateToPortrait(_ texture: MTLTexture, commandBuffer: MTLCommandBuffer) -> MTLTexture? {
+        let width = texture.height
+        let height = texture.width
+        if portraitTexture?.width != width || portraitTexture?.height != height {
+            let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+                pixelFormat: .bgra8Unorm,
+                width: width,
+                height: height,
+                mipmapped: false
+            )
+            descriptor.usage = [.renderTarget, .shaderRead]
+            descriptor.storageMode = .private
+            portraitTexture = device.makeTexture(descriptor: descriptor)
+        }
+        guard let portraitTexture else { return nil }
+        let pass = MTLRenderPassDescriptor()
+        pass.colorAttachments[0].texture = portraitTexture
+        pass.colorAttachments[0].loadAction = .dontCare
+        pass.colorAttachments[0].storeAction = .store
+        guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: pass) else { return nil }
+        encoder.setRenderPipelineState(rotatePipeline)
+        encoder.setFragmentTexture(texture, index: 0)
+        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
+        encoder.endEncoding()
+        return portraitTexture
     }
 
     private func scratchTexture(_ slot: inout MTLTexture?, width: Int, height: Int) -> MTLTexture? {

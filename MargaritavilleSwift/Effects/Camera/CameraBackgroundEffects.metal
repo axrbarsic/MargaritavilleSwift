@@ -36,6 +36,15 @@ inline float3 thermal(float value) {
 
 } // namespace camfx
 
+/// Поворот альбомного кадра на 90° по часовой стрелке: точка портрета (u, v)
+/// берётся из исходника в (v, 1 − u).
+fragment float4 cameraRotateFragment(
+    CameraVertexOut in [[stage_in]],
+    texture2d<float> camera [[texture(0)]]
+) {
+    return float4(camfx::sampleCamera(camera, float2(in.uv.y, 1.0 - in.uv.x)), 1.0);
+}
+
 fragment float4 cameraEffectFragment(
     CameraVertexOut in [[stage_in]],
     texture2d<float> camera [[texture(0)]],

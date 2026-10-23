@@ -29,6 +29,9 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
     /// Камера, подключённая к сессии сейчас (только на очереди сессии).
     private var activePosition: CameraBackgroundPosition = .back
     private var currentInput: AVCaptureDeviceInput?
+#if DEBUG
+    private var lastFrameSignature = ""
+#endif
     private lazy var renderer: CameraBackgroundRenderer? = CameraBackgroundRenderer()
 
     static var isDenied: Bool {
@@ -94,6 +97,13 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
         guard let target = locked({ self.target }),
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         else { return }
+#if DEBUG
+        let signature = "\(CVPixelBufferGetWidth(pixelBuffer))x\(CVPixelBufferGetHeight(pixelBuffer)) angle=\(connection.videoRotationAngle) mirrored=\(connection.isVideoMirrored) position=\(locked { requestedPosition })"
+        if signature != lastFrameSignature {
+            lastFrameSignature = signature
+            print("CAMERA_FRAME \(signature)")
+        }
+#endif
         renderer?.render(pixelBuffer, to: target)
     }
 
