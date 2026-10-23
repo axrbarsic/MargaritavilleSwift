@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (74)",
+            date: "2026-10-23",
+            changes: [
+                "Исправлен эффект «Мультфильм»: раньше он почти не менял картинку.",
+                "Теперь сглаживание вдвое сильнее, цвета сводятся к плоским заливкам, а контуры стали толстыми и чёткими."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (73)",
             date: "2026-10-23",
             changes: [

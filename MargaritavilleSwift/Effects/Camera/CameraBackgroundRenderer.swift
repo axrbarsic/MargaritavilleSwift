@@ -23,13 +23,15 @@ final class CameraBackgroundRenderer {
     private let pipeline: MTLRenderPipelineState
     private let textureCache: CVMetalTextureCache
     private let blur: MPSImageGaussianBlur
-    /// Медиана сглаживает, сохраняя края — основа «Мультфильма».
+    /// Медиана сглаживает, сохраняя края — основа «Мультфильма». Два прохода
+    /// диаметром 9: один проход на кадре 1080p почти не заметен.
     private let median: MPSImageMedian
     private let device: MTLDevice
     private let startTime = CACurrentMediaTime()
     /// Не больше двух кадров в работе у GPU: лишние кадры камеры отбрасываются.
     private let inFlight = DispatchSemaphore(value: 2)
     private var blurTexture: MTLTexture?
+    private var medianScratch: MTLTexture?
 
     init?() {
         guard let device = MTLCreateSystemDefaultDevice(),
@@ -61,7 +63,7 @@ final class CameraBackgroundRenderer {
         textureCache = cache
         blur = MPSImageGaussianBlur(device: device, sigma: 22)
         blur.edgeMode = .clamp
-        median = MPSImageMedian(device: device, kernelDiameter: 7)
+        median = MPSImageMedian(device: device, kernelDiameter: 9)
         median.edgeMode = .clamp
     }
 
@@ -83,10 +85,21 @@ final class CameraBackgroundRenderer {
 
         let effect = target.effect
         var sampled = source
-        if effect.prefilter != .none, let filtered = blurTarget(width: width, height: height) {
-            let kernel: MPSUnaryImageKernel = effect.prefilter == .blur ? blur : median
-            kernel.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: filtered)
-            sampled = filtered
+        switch effect.prefilter {
+        case .none:
+            break
+        case .blur:
+            if let filtered = scratchTexture(&blurTexture, width: width, height: height) {
+                blur.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: filtered)
+                sampled = filtered
+            }
+        case .median:
+            if let scratch = scratchTexture(&medianScratch, width: width, height: height),
+               let filtered = scratchTexture(&blurTexture, width: width, height: height) {
+                median.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: scratch)
+                median.encode(commandBuffer: commandBuffer, sourceTexture: scratch, destinationTexture: filtered)
+                sampled = filtered
+            }
         }
 
         let pass = MTLRenderPassDescriptor()
@@ -117,9 +130,9 @@ final class CameraBackgroundRenderer {
         didCommit = true
     }
 
-    private func blurTarget(width: Int, height: Int) -> MTLTexture? {
-        if let blurTexture, blurTexture.width == width, blurTexture.height == height {
-            return blurTexture
+    private func scratchTexture(_ slot: inout MTLTexture?, width: Int, height: Int) -> MTLTexture? {
+        if let texture = slot, texture.width == width, texture.height == height {
+            return texture
         }
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: .bgra8Unorm,
@@ -129,7 +142,7 @@ final class CameraBackgroundRenderer {
         )
         descriptor.usage = [.shaderRead, .shaderWrite]
         descriptor.storageMode = .private
-        blurTexture = device.makeTexture(descriptor: descriptor)
-        return blurTexture
+        slot = device.makeTexture(descriptor: descriptor)
+        return slot
     }
 }

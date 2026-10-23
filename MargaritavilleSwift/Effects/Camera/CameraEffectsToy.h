@@ -11,15 +11,18 @@ namespace camfx {
 inline float3 cartoon(texture2d<float> smoothed, float2 uv, float2 texel) {
     float3 color = sampleCamera(smoothed, uv);
     float value = max(luma(color), 0.001);
-    // Мягкое квантование яркости на 5 уровней, без резких ступенек.
-    const float levels = 5.0;
+    // Квантование яркости на 4 заметные ступени с узким сглаженным переходом.
+    const float levels = 4.0;
     float nearest = floor(value * levels + 0.5) / levels;
-    float quantized = nearest + tanh((value - nearest) * 18.0) / (2.0 * levels);
-    color *= quantized / value;
-    // Сочнее цвета, как в анимации.
-    color = mix(float3(luma(color)), color, 1.35);
-    float edge = smoothstep(0.22, 0.45, sobel(smoothed, uv, texel * 1.4));
-    return mix(color, float3(0.05, 0.04, 0.06), edge);
+    float quantized = nearest + tanh((value - nearest) * 60.0) / (2.0 * levels);
+    color = saturate(color * (max(quantized, 0.08) / value));
+    // Заливки как в анимации: оттенок упрощается до 8 уровней на канал.
+    color = floor(color * 8.0 + 0.5) / 8.0;
+    // Сочнее цвета.
+    color = saturate(mix(float3(luma(color)), color, 1.6));
+    // Толстые мягкие контуры.
+    float edge = smoothstep(0.08, 0.22, sobel(smoothed, uv, texel * 2.5));
+    return mix(color, float3(0.04, 0.03, 0.05), edge);
 }
 
 /// Ближайший цвет из палитры стандартных Лего-деталей.
