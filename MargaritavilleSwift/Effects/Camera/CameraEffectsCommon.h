@@ -9,6 +9,12 @@ struct CameraEffectUniforms {
     float2 textureSize;
     float time;
     uint effect;
+    /// Скан времени: текущая и прошлая позиция линии (0…1 сверху вниз).
+    float scanLine;
+    float previousScanLine;
+    /// 1 — история кадров недействительна и заполняется живым кадром.
+    uint resetHistory;
+    float padding;
 };
 
 namespace camfx {

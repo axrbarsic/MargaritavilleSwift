@@ -20,6 +20,14 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     case sketch
     case kaleidoscope
     case glitch
+    case timeScan
+    case echo
+    case matrixRain
+    case anaglyph
+    case xray
+    case vaporwave
+    case mirror
+    case hologram
 
     static let storageKey = "cameraBackgroundEffect"
 
@@ -43,6 +51,14 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .sketch: "Карандаш"
         case .kaleidoscope: "Калейдоскоп"
         case .glitch: "Глитч"
+        case .timeScan: "Скан времени"
+        case .echo: "Призрачный шлейф"
+        case .matrixRain: "Матрица"
+        case .anaglyph: "3D-анаглиф"
+        case .xray: "Рентген"
+        case .vaporwave: "Вейпорвейв"
+        case .mirror: "Зеркало"
+        case .hologram: "Голограмма"
         }
     }
 
@@ -64,6 +80,14 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .sketch: "Карандашная перекрёстная штриховка по теням и контуры."
         case .kaleidoscope: "Восемь зеркальных секторов, медленно вращаются."
         case .glitch: "Цифровой сбой: сдвиг полос, разделение каналов и вспышки."
+        case .timeScan: "Вирусная «синяя линия» из TikTok: линия идёт вниз и замораживает всё над собой."
+        case .echo: "Движение оставляет за собой цветные призрачные следы."
+        case .matrixRain: "Камера проступает сквозь зелёный цифровой дождь."
+        case .anaglyph: "Красно-голубое 3D, как для картонных очков."
+        case .xray: "Инверсия в холодных тонах со светящимися контурами."
+        case .vaporwave: "Фиолетово-розово-бирюзовая эстетика 80-х и 90-х."
+        case .mirror: "Правая половина зеркально повторяет левую."
+        case .hologram: "Синяя мерцающая голограмма с бегущими строками."
         }
     }
 
@@ -73,6 +97,9 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     }
 
     var needsBlur: Bool { self == .matte }
+
+    /// Эффекты с памятью кадров: рендер ведёт для них историю экрана.
+    var needsHistory: Bool { self == .timeScan || self == .echo }
 }
 
 /// Куда рисовать кадры камеры: слой активного экрана и выбранный эффект.
