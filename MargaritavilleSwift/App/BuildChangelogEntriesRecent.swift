@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (76)",
+            date: "2026-10-23",
+            changes: [
+                "Исправлено: передняя камера в фоне «Камера» показывала изображение боком.",
+                "Поворот и зеркало теперь выставляются уже после переключения камеры, поэтому обе камеры показывают картинку правильно."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (75)",
             date: "2026-10-23",
             changes: [

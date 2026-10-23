@@ -131,8 +131,8 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
         session.addInput(input)
         session.addOutput(output)
         currentInput = input
-        applyConnectionSettings()
         session.commitConfiguration()
+        applyConnectionSettings()
         Self.selectSmoothFormat(for: input.device)
         isConfigured = true
     }
@@ -151,8 +151,10 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
             session.addInput(currentInput)
             Self.logger.error("camera.background.switch-failed")
         }
-        applyConnectionSettings()
         session.commitConfiguration()
+        // Соединение пересоздаётся при смене входа, поэтому поворот и зеркало
+        // выставляются уже после commitConfiguration.
+        applyConnectionSettings()
         if let device = currentInput?.device {
             Self.selectSmoothFormat(for: device)
         }
@@ -161,6 +163,7 @@ final class CameraBackgroundSession: NSObject, AVCaptureVideoDataOutputSampleBuf
     /// Портретная ориентация кадра и зеркало для передней камеры.
     private func applyConnectionSettings() {
         guard let connection = output.connection(with: .video) else { return }
+        // Интерфейс всегда портретный: обе камеры поворачиваются на 90°.
         if connection.isVideoRotationAngleSupported(90) {
             connection.videoRotationAngle = 90
         }
