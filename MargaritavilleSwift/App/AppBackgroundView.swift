@@ -19,6 +19,10 @@ struct AppBackgroundView: View {
     @AppStorage(CameraEffectTuning.Keys.lightAngle) private var cameraLightAngle = CameraEffectTuning.default.lightAngle
     @AppStorage(CameraEffectTuning.Keys.edgeSensitivity) private var cameraEdgeSensitivity = CameraEffectTuning.default.edgeSensitivity
     @AppStorage(CameraEffectTuning.Keys.detailScale) private var cameraDetailScale = CameraEffectTuning.default.detailScale
+    @AppStorage(CameraEffectTuning.Keys.metalHue) private var cameraMetalHue = CameraEffectTuning.default.metalHue
+    @AppStorage(CameraEffectTuning.Keys.metalSaturation) private var cameraMetalSaturation = CameraEffectTuning.default.metalSaturation
+    @AppStorage(CameraEffectTuning.Keys.liveLight) private var cameraLiveLight = CameraEffectTuning.default.liveLight
+    @AppStorage(CameraEffectTuning.Keys.glowAmount) private var cameraGlowAmount = CameraEffectTuning.default.glowAmount
     @State private var presenceID = UUID()
     private let presence = AppBackgroundPresence.shared
 
@@ -57,7 +61,11 @@ struct AppBackgroundView: View {
                         reliefDepth: cameraReliefDepth,
                         lightAngle: cameraLightAngle,
                         edgeSensitivity: cameraEdgeSensitivity,
-                        detailScale: cameraDetailScale
+                        detailScale: cameraDetailScale,
+                        metalHue: cameraMetalHue,
+                        metalSaturation: cameraMetalSaturation,
+                        liveLight: cameraLiveLight,
+                        glowAmount: cameraGlowAmount
                     )
                 )
             }

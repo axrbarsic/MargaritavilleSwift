@@ -23,6 +23,7 @@ struct MargaritavilleSwiftApp: App {
     private let scheduleNotifications = LocalScheduleNotificationService()
 
     init() {
+        CameraEffectMigration.migrate()
         let settings = AppSettingsStore.load()
         let bootProfile = HotelProfile.margaritaville
         settings.selectedHotelID = bootProfile.id

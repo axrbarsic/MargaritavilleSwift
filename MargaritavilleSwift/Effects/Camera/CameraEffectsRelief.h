@@ -2,8 +2,8 @@
 #include "CameraEffectsCommon.h"
 
 // Семейство «Тиснения»: яркость кадра — высота поверхности. Из неё строится
-// нормаль, поверхность освещается сверху слева и получает материал:
-// золото, серебро, медь, камень, бумага, дерево и рельеф с бегущим светом.
+// нормаль, поверхность освещается и получает материал: металл любого цвета,
+// камень, бумага или дерево. Свет можно направить или пустить по кругу.
 
 namespace camfx {
 
@@ -28,24 +28,23 @@ inline float3 reliefLight(float3 normal, float3 lightDirection, float3 base, flo
 
 /// Направление света из угла настроек (ось y вниз), под 40° к поверхности.
 inline float3 reliefLightFrom(CameraEffectUniforms u) {
-    return float3(cos(u.lightAngle) * 0.78, sin(u.lightAngle) * 0.78, 0.65);
+    float angle = u.liveLight > 0.5 ? u.time * 0.9 : u.lightAngle;
+    return float3(cos(angle) * 0.78, sin(angle) * 0.78, 0.65);
 }
 
-inline float3 goldRelief(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
-    float3 n = reliefNormal(camera, uv, texel, 9.0 * u.reliefDepth);
-    float3 base = mix(float3(0.55, 0.36, 0.1), float3(0.95, 0.76, 0.32), luma(sampleCamera(camera, uv)));
-    return reliefLight(n, reliefLightFrom(u), base, float3(1.0, 0.92, 0.65), 36.0, 0.9);
-}
-
-inline float3 silverRelief(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
-    float3 n = reliefNormal(camera, uv, texel, 11.0 * u.reliefDepth);
-    return reliefLight(n, reliefLightFrom(u), float3(0.68, 0.7, 0.74), float3(1.0), 60.0, 1.0);
-}
-
-inline float3 copperRelief(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
-    float3 n = reliefNormal(camera, uv, texel, 9.0 * u.reliefDepth);
-    float3 base = mix(float3(0.42, 0.18, 0.08), float3(0.85, 0.48, 0.28), luma(sampleCamera(camera, uv)));
-    return reliefLight(n, reliefLightFrom(u), base, float3(1.0, 0.72, 0.52), 30.0, 0.8);
+/// Металл любого цвета: насыщенность 0 — серебро, дальше оттенок задаёт
+/// золото, медь, латунь, синюю сталь и т. д.
+inline float3 metalRelief(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
+    float saturation = saturate(u.metalSaturation);
+    float3 n = reliefNormal(camera, uv, texel, mix(11.0, 9.0, saturation) * u.reliefDepth);
+    float3 tint = hue(fract(u.metalHue));
+    float3 silverDark = float3(0.5, 0.52, 0.56);
+    float3 silverLight = float3(0.78, 0.8, 0.84);
+    float3 dark = mix(silverDark, tint * 0.45 + 0.05, saturation);
+    float3 light = mix(silverLight, mix(tint, float3(1.0), 0.35), saturation);
+    float3 base = mix(dark, light, luma(sampleCamera(camera, uv)));
+    float3 specular = mix(float3(1.0), mix(tint, float3(1.0), 0.6), saturation);
+    return reliefLight(n, reliefLightFrom(u), base, specular, mix(60.0, 34.0, saturation), mix(1.0, 0.85, saturation));
 }
 
 /// Камень: барельеф на шершавом песчанике.
@@ -71,12 +70,5 @@ inline float3 woodRelief(texture2d<float> camera, float2 uv, float2 pixel, float
     return reliefLight(n, reliefLightFrom(u), base, float3(0.5, 0.4, 0.3), 20.0, 0.3);
 }
 
-/// Живой рельеф: серебро, по которому по кругу ходит источник света.
-inline float3 liveRelief(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
-    float3 n = reliefNormal(camera, uv, texel, 11.0 * u.reliefDepth);
-    float angle = u.time * 0.9;
-    float3 light = float3(cos(angle) * 0.7, sin(angle) * 0.7, 0.6);
-    return reliefLight(n, light, float3(0.66, 0.68, 0.74), float3(1.0, 0.97, 0.9), 50.0, 1.1);
-}
 
 } // namespace camfx

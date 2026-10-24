@@ -16,6 +16,10 @@ struct CameraEffectUniforms {
     var lightAngle: Float = Float(CameraEffectTuning.defaultLightAngle * .pi / 180)
     var edgeSensitivity: Float = 1
     var detailScale: Float = 1
+    var metalHue: Float = 42.0 / 360
+    var metalSaturation: Float = 0.75
+    var liveLight: Float = 0
+    var glowAmount: Float = 0.5
 
     init(viewSize: SIMD2<Float>, textureSize: SIMD2<Float>, time: Float, effect: UInt32, tuning: CameraEffectTuning = .default) {
         self.viewSize = viewSize
@@ -28,6 +32,10 @@ struct CameraEffectUniforms {
         lightAngle = Float(tuning.lightAngle * .pi / 180)
         edgeSensitivity = Float(tuning.edgeSensitivity)
         detailScale = Float(tuning.detailScale)
+        metalHue = Float(tuning.metalHue / 360)
+        metalSaturation = Float(tuning.metalSaturation)
+        liveLight = tuning.liveLight ? 1 : 0
+        glowAmount = Float(tuning.glowAmount)
     }
 }
 

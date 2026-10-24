@@ -132,6 +132,7 @@
 		96431D362B72149E9FFB7932 /* BuildChangelogEntriesArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4FC0D2D5A5B8B44E36C668 /* BuildChangelogEntriesArchive.swift */; };
 		979CD20E7C20BFFF9286D055 /* MediaThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD4C0C2D99682017E86B01 /* MediaThumbnailView.swift */; };
 		97E38557C7F80F3DC044300D /* AppSettingsStore+Consumables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752502C60EECE5AC7A79CE89 /* AppSettingsStore+Consumables.swift */; };
+		97F5D4D521F8C3D93343FDAB /* CameraEffectPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85162EB56B05296C88D0983 /* CameraEffectPicker.swift */; };
 		9B20D346245F6466A491660E /* AppStorageDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173D3F22AFB14E9E6B54E01 /* AppStorageDirectory.swift */; };
 		9C6C58ED482ED2B45EA44E36 /* PersistentWorkSessionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40C0C481DF98EE976B8212F /* PersistentWorkSessionModels.swift */; };
 		9C7FA9CAB65E9FE7042F4BAD /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD7D041F1C24E096F847BB53 /* SwiftData.framework */; };
@@ -153,6 +154,7 @@
 		A6BEA9E5743D3BF844C987C3 /* MatrixConsumableStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C6380BC3DEFDA553AD4C22 /* MatrixConsumableStyle.swift */; };
 		A6F7B66704ADCE2E5F241C2B /* CartDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3614E48874E7A22359F76 /* CartDetailsScreen.swift */; };
 		A7394992A07FED4FA3B092A6 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C9FEF950BB64C810793ED3 /* GameplayKit.framework */; };
+		A7C69F505E6F17EB1FB0FDE1 /* CameraEffectCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADEA8B3B75D0E3A87F18825 /* CameraEffectCategory.swift */; };
 		A7CAFEC98171EB88717C2296 /* kenney_confirmation_004.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA7EE3D77A9B0D701812A684 /* kenney_confirmation_004.wav */; };
 		AA0024805A82FF29FBC23365 /* RoomCatalogOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8B3E69F9398C99CCA5F448 /* RoomCatalogOverride.swift */; };
 		AA49001001C7EF949271B8B4 /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722D20ACC6304E5369C4044 /* SummaryScreen.swift */; };
@@ -457,6 +459,7 @@
 		C4037F7F53F3633F64EEFCC5 /* pressed.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pressed.wav; sourceTree = "<group>"; };
 		C5C9FEF950BB64C810793ED3 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		C61FA926449ECE44FBCD523C /* SummaryActionMenuExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryActionMenuExpansion.swift; sourceTree = "<group>"; };
+		CADEA8B3B75D0E3A87F18825 /* CameraEffectCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEffectCategory.swift; sourceTree = "<group>"; };
 		CB6F829D189E6A8021ED967A /* AppBuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBuildInfo.swift; sourceTree = "<group>"; };
 		CBFEBB3CD5D42B73F6305FB5 /* SettingsBackgroundVideoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackgroundVideoPicker.swift; sourceTree = "<group>"; };
 		CCC0557BC247863324B8E0F5 /* LICENSES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSES.md; sourceTree = "<group>"; };
@@ -472,6 +475,7 @@
 		D722D20ACC6304E5369C4044 /* SummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
 		D76F6B0655D80E6EF5A62FC6 /* xhotel_ui_confirm_glass.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xhotel_ui_confirm_glass.wav; sourceTree = "<group>"; };
 		D83CA46C3A8C280C5339339B /* AppSettingsStore+Housekeepers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettingsStore+Housekeepers.swift"; sourceTree = "<group>"; };
+		D85162EB56B05296C88D0983 /* CameraEffectPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEffectPicker.swift; sourceTree = "<group>"; };
 		D92BDA0BB89A7752A0E96EDE /* WorkSessionLoadFailureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSessionLoadFailureScreen.swift; sourceTree = "<group>"; };
 		DA1E24318FCCCD616C3CC0E5 /* RoomDayCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDayCategory.swift; sourceTree = "<group>"; };
 		DA4FC0D2D5A5B8B44E36C668 /* BuildChangelogEntriesArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChangelogEntriesArchive.swift; sourceTree = "<group>"; };
@@ -578,6 +582,7 @@
 				123082FC45F27A55F33DB71F /* CameraBackgroundEffects.metal */,
 				582F625D37C61066341678F2 /* CameraBackgroundPosition.swift */,
 				9E7D88C678B48746CAF27AC2 /* CameraBackgroundRenderer.swift */,
+				CADEA8B3B75D0E3A87F18825 /* CameraEffectCategory.swift */,
 				EA66036A8BDB3FECD91B76AA /* CameraEffectsCommon.h */,
 				73D68C4CF273AE011576CA45 /* CameraEffectsEdges.h */,
 				B6E33FA7ADC8D0D109FF0333 /* CameraEffectsRelief.h */,
@@ -809,6 +814,7 @@
 				B1B22925EEFC29FFD19C0847 /* BrooklynAppearanceControls.swift */,
 				B4D9AFD1950ABAC20DEAF004 /* BuildChangelogScreen.swift */,
 				8EFE7E5D6214D9EE838514CA /* CameraEffectControls.swift */,
+				D85162EB56B05296C88D0983 /* CameraEffectPicker.swift */,
 				6639B8C82B292B751E88F608 /* CartConsumableCatalogEditorSection.swift */,
 				69EE8059B980719D44C9D0AB /* CellTypographyLabPreview.swift */,
 				6F5B7670888FF866C60E0550 /* CellTypographyLabScreen.swift */,
@@ -1221,7 +1227,9 @@
 				84CFE9D236B5DFD024A41A65 /* CameraBackgroundSession.swift in Sources */,
 				A68FDF41F8119B8DD2E3EF77 /* CameraBackgroundView.swift in Sources */,
 				0C741372460A1512644497E2 /* CameraCaptureView.swift in Sources */,
+				A7C69F505E6F17EB1FB0FDE1 /* CameraEffectCategory.swift in Sources */,
 				C5A060631BD42F6E501B3368 /* CameraEffectControls.swift in Sources */,
+				97F5D4D521F8C3D93343FDAB /* CameraEffectPicker.swift in Sources */,
 				BC7E14F54B65649DDB018181 /* CameraEffectTuning.swift in Sources */,
 				6FD02D9E66787EEFD52A0E1E /* CartConsumableCatalogEditorSection.swift in Sources */,
 				E3A77C88833383EC9FA8E68D /* CartConsumableQuantityRuler.swift in Sources */,
@@ -1479,7 +1487,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 81;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1546,7 +1554,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 81;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J6MW4855LU;
 				ENABLE_NS_ASSERTIONS = NO;

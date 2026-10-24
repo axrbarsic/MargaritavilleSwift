@@ -18,6 +18,13 @@ struct CameraEffectUniforms {
     float edgeSensitivity;
     /// Множитель размера ячеек, пикселей, символов и кубиков.
     float detailScale;
+    /// Цвет металла: оттенок 0…1 и насыщенность (0 — серебро).
+    float metalHue;
+    float metalSaturation;
+    /// 1 — свет рельефа ходит по кругу.
+    float liveLight;
+    /// Сила ореола неона.
+    float glowAmount;
 };
 
 namespace camfx {

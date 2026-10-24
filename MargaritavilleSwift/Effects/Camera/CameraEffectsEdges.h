@@ -37,10 +37,11 @@ inline float3 neonShadow(texture2d<float> camera, float2 uv, float2 texel, Camer
     return color;
 }
 
-/// Неон-свечение: чёткая линия и широкий ореол из контуров крупного масштаба.
+/// Неон: переливающаяся линия и ореол из контуров крупного масштаба (сила — glowAmount).
 inline float3 neonGlow(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
     float core = edgeMask(camera, uv, texel, 1.5, 0.12, 0.5, u.edgeSensitivity);
-    float halo = edgeMask(camera, uv, texel, 5.0, 0.1, 0.6, u.edgeSensitivity) * 0.5 + edgeMask(camera, uv, texel, 12.0, 0.1, 0.7, u.edgeSensitivity) * 0.3;
+    float halo = (edgeMask(camera, uv, texel, 5.0, 0.1, 0.6, u.edgeSensitivity) * 0.5
+        + edgeMask(camera, uv, texel, 12.0, 0.1, 0.7, u.edgeSensitivity) * 0.3) * u.glowAmount * 2.0;
     float3 tint = hue(fract(uv.x * 0.4 + uv.y * 0.25 + u.time * 0.05));
     return tint * (core * 1.3 + halo) + float3(1.0) * core * 0.35;
 }

@@ -12,6 +12,10 @@ struct CameraEffectControls: View {
     @AppStorage(CameraEffectTuning.Keys.lightAngle) private var lightAngle = CameraEffectTuning.default.lightAngle
     @AppStorage(CameraEffectTuning.Keys.edgeSensitivity) private var edgeSensitivity = CameraEffectTuning.default.edgeSensitivity
     @AppStorage(CameraEffectTuning.Keys.detailScale) private var detailScale = CameraEffectTuning.default.detailScale
+    @AppStorage(CameraEffectTuning.Keys.metalHue) private var metalHue = CameraEffectTuning.default.metalHue
+    @AppStorage(CameraEffectTuning.Keys.metalSaturation) private var metalSaturation = CameraEffectTuning.default.metalSaturation
+    @AppStorage(CameraEffectTuning.Keys.liveLight) private var liveLight = CameraEffectTuning.default.liveLight
+    @AppStorage(CameraEffectTuning.Keys.glowAmount) private var glowAmount = CameraEffectTuning.default.glowAmount
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -23,13 +27,7 @@ struct CameraEffectControls: View {
             .pickerStyle(.segmented)
             .onChange(of: position) { _, _ in feedback.confirm() }
 
-            Picker("Эффект камеры", selection: $effect) {
-                ForEach(CameraBackgroundEffect.allCases) { effect in
-                    Text(effect.title).tag(effect)
-                }
-            }
-            .pickerStyle(.menu)
-            .onChange(of: effect) { _, _ in feedback.confirm() }
+            CameraEffectPicker(effect: $effect)
 
             SettingsInfoRow(
                 title: "Эффект камеры",
@@ -42,11 +40,25 @@ struct CameraEffectControls: View {
                 slider("Сила эффекта", percent(amount), "slider.horizontal.3", CameraEffectTuning.amountRange, CameraEffectTuning.default.amount, $amount)
             }
             slider("Яркость", percent(brightness), "sun.max.fill", CameraEffectTuning.brightnessRange, CameraEffectTuning.default.brightness, $brightness)
+            if effect.usesMetalColor {
+                slider("Цвет металла", "\(CameraEffectTuning.metalName(hue: metalHue, saturation: metalSaturation)) · \(Int(metalHue.rounded()))°", "paintpalette.fill", CameraEffectTuning.metalHueRange, CameraEffectTuning.default.metalHue, $metalHue)
+                slider("Насыщенность металла", metalSaturation < 0.12 ? "серебро" : percent(metalSaturation), "drop.fill", CameraEffectTuning.metalSaturationRange, CameraEffectTuning.default.metalSaturation, $metalSaturation)
+            }
             if effect.usesRelief {
                 slider("Глубина рельефа", multiplier(reliefDepth), "mountain.2.fill", CameraEffectTuning.reliefDepthRange, CameraEffectTuning.default.reliefDepth, $reliefDepth)
+                Toggle(isOn: $liveLight) {
+                    Label("Свет по кругу", systemImage: "rays")
+                        .font(.system(size: 17, weight: .black, design: .rounded))
+                        .foregroundStyle(.white)
+                }
+                .tint(OceanKeyTheme.accent)
+                .onChange(of: liveLight) { _, _ in feedback.confirm() }
+                if !liveLight {
+                    slider("Направление света", "\(Int(lightAngle.rounded()))°", "light.max", CameraEffectTuning.lightAngleRange, CameraEffectTuning.defaultLightAngle, $lightAngle)
+                }
             }
-            if effect.usesLightAngle {
-                slider("Направление света", "\(Int(lightAngle.rounded()))°", "light.max", CameraEffectTuning.lightAngleRange, CameraEffectTuning.defaultLightAngle, $lightAngle)
+            if effect.usesGlow {
+                slider("Ореол", percent(glowAmount), "sparkles", CameraEffectTuning.glowAmountRange, CameraEffectTuning.default.glowAmount, $glowAmount)
             }
             if effect.usesEdges {
                 slider("Чувствительность контуров", multiplier(edgeSensitivity), "scribble.variable", CameraEffectTuning.edgeSensitivityRange, CameraEffectTuning.default.edgeSensitivity, $edgeSensitivity)
@@ -75,7 +87,11 @@ struct CameraEffectControls: View {
             reliefDepth: reliefDepth,
             lightAngle: lightAngle,
             edgeSensitivity: edgeSensitivity,
-            detailScale: detailScale
+            detailScale: detailScale,
+            metalHue: metalHue,
+            metalSaturation: metalSaturation,
+            liveLight: liveLight,
+            glowAmount: glowAmount
         )
     }
 
@@ -89,6 +105,10 @@ struct CameraEffectControls: View {
         lightAngle = defaults.lightAngle
         edgeSensitivity = defaults.edgeSensitivity
         detailScale = defaults.detailScale
+        metalHue = defaults.metalHue
+        metalSaturation = defaults.metalSaturation
+        liveLight = defaults.liveLight
+        glowAmount = defaults.glowAmount
         feedback.confirm()
     }
 

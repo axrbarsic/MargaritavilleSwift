@@ -88,12 +88,6 @@ fragment float4 cameraEffectFragment(
     case 4: // Тепловизор.
         color = camfx::thermal(camfx::luma(camfx::sampleCamera(camera, uv)));
         break;
-    case 5: { // Неон-контуры: светящиеся края на тёмном фоне.
-        float edge = smoothstep(0.12, 0.55, camfx::sobel(camera, uv, texel * 1.5, u.edgeSensitivity));
-        float3 tint = camfx::hue(fract(in.uv.y * 0.6 + in.uv.x * 0.3 + u.time * 0.08));
-        color = camfx::sampleCamera(camera, uv) * 0.06 + tint * edge * 1.2;
-        break;
-    }
     case 6: { // Комикс: постеризация и чёрные контуры.
         float3 base = floor(camfx::sampleCamera(camera, uv) * 5.0 + 0.5) / 5.0;
         float edge = step(0.35, camfx::sobel(camera, uv, texel * 1.8, u.edgeSensitivity));
@@ -124,13 +118,10 @@ fragment float4 cameraEffectFragment(
     case 22: color = camfx::chalk(camera, uv, pixel, texel, u.edgeSensitivity); break;
     case 23: color = camfx::electric(camera, uv, texel, u); break;
     case 24: color = camfx::emboss(camera, uv, texel, u); break;
-    case 25: color = camfx::goldRelief(camera, uv, texel, u); break;
-    case 26: color = camfx::silverRelief(camera, uv, texel, u); break;
-    case 27: color = camfx::copperRelief(camera, uv, texel, u); break;
+    case 25: color = camfx::metalRelief(camera, uv, texel, u); break;
     case 28: color = camfx::stoneRelief(camera, uv, pixel, texel, u); break;
     case 29: color = camfx::paperRelief(camera, uv, pixel, texel, u); break;
     case 30: color = camfx::woodRelief(camera, uv, pixel, texel, u); break;
-    case 31: color = camfx::liveRelief(camera, uv, texel, u); break;
     default: // Обычный.
         color = camfx::sampleCamera(camera, uv);
         break;
