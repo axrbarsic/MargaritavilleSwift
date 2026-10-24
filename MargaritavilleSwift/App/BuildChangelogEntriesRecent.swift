@@ -3,6 +3,14 @@ import Foundation
 extension BuildChangelog {
     static let recentEntries = [
         BuildChangelogEntry(
+            version: "0.1.0 (83)",
+            date: "2026-10-24",
+            changes: [
+                "Исправлена «Таблица металлов»: в тусклой или бесцветной сцене кадр больше не становится одним металлом.",
+                "Основа теперь по яркости — железо, синий титан, медь, бронза, золото и серебро, а насыщенные предметы получают металл своего цвета."
+            ]
+        ),
+        BuildChangelogEntry(
             version: "0.1.0 (82)",
             date: "2026-10-24",
             changes: [
