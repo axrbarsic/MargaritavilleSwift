@@ -30,6 +30,7 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     case electric
     case emboss
     case metal
+    case periodicMetals
     case stoneRelief
     case paperRelief
     case woodRelief
@@ -65,6 +66,7 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .electric: "Электричество"
         case .emboss: "Тиснение"
         case .metal: "Металл"
+        case .periodicMetals: "Таблица металлов"
         case .stoneRelief: "Камень"
         case .paperRelief: "Бумага"
         case .woodRelief: "Дерево"
@@ -98,6 +100,7 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .electric: "Дрожащие фиолетовые разряды с белой сердцевиной."
         case .emboss: "Серый рельеф, будто изображение выдавлено в листе."
         case .metal: "Чеканка на металле любого цвета: от серебра до золота, меди и синей стали."
+        case .periodicMetals: "Каждый участок кадра становится металлом своего цвета: медь, золото, патина, титан, висмут, серебро и другие."
         case .stoneRelief: "Изображение высечено в шершавом песчанике."
         case .paperRelief: "Слепое тиснение белым по белому, как на дорогой открытке."
         case .woodRelief: "Резьба по доске с годичными волокнами."
@@ -132,6 +135,7 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
         case .electric: 23
         case .emboss: 24
         case .metal: 25
+        case .periodicMetals: 26
         case .stoneRelief: 28
         case .paperRelief: 29
         case .woodRelief: 30
@@ -148,7 +152,7 @@ enum CameraBackgroundEffect: String, CaseIterable, Identifiable, Sendable {
     var prefilter: Prefilter {
         switch self {
         case .matte: .blur
-        case .cartoon: .median
+        case .cartoon, .periodicMetals: .median
         default: .none
         }
     }

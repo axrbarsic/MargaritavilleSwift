@@ -25,7 +25,8 @@ func cameraEffectsKeepStoredValuesOfUnmergedEffects() {
         #expect(CameraBackgroundEffect(rawValue: raw) != nil)
     }
     #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .blur } == [.matte])
-    #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .median } == [.cartoon])
+    #expect(CameraBackgroundEffect.allCases.filter { $0.prefilter == .median } == [.cartoon, .periodicMetals])
+    #expect(CameraBackgroundEffect.periodicMetals.category == .relief && CameraBackgroundEffect.periodicMetals.usesRelief)
 }
 
 @Test

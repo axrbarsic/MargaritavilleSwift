@@ -72,3 +72,69 @@ inline float3 woodRelief(texture2d<float> camera, float2 uv, float2 pixel, float
 
 
 } // namespace camfx
+
+namespace camfx {
+
+/// Тон, насыщенность и яркость цвета (тон 0…1).
+inline float3 rgbToHsv(float3 c) {
+    float4 k = float4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    float4 p = mix(float4(c.bg, k.wz), float4(c.gb, k.xy), step(c.b, c.g));
+    float4 q = mix(float4(p.xyw, c.r), float4(c.r, p.yzx), step(p.x, c.r));
+    float d = q.x - min(q.w, q.y);
+    return float3(abs(q.z + (q.w - q.y) / (6.0 * d + 1e-10)), d / (q.x + 1e-10), q.x);
+}
+
+/// Таблица металлов: каждый участок кадра становится металлом своего цвета —
+/// медь, бронза, золото, латунь, патина, висмут, титан, кобальт, розовое
+/// золото, а бесцветные — серебро, платина и железо. Переходы плавные.
+inline float3 periodicMetals(texture2d<float> camera, float2 uv, float2 texel, CameraEffectUniforms u) {
+    float3 color = sampleCamera(camera, uv);
+    float3 hsv = rgbToHsv(color);
+    float3 n = reliefNormal(camera, uv, texel, 9.0 * u.reliefDepth);
+
+    // Цветные металлы: центр тона в градусах, цвет и цвет блика.
+    const float centers[9] = { 15.0, 32.0, 48.0, 70.0, 140.0, 182.0, 220.0, 280.0, 340.0 };
+    const float3 bases[9] = {
+        float3(0.85, 0.45, 0.30), float3(0.70, 0.48, 0.25), float3(0.95, 0.75, 0.30),
+        float3(0.82, 0.75, 0.38), float3(0.35, 0.62, 0.50), float3(0.5, 0.5, 0.5),
+        float3(0.30, 0.45, 0.80), float3(0.55, 0.35, 0.75), float3(0.90, 0.55, 0.55)
+    };
+    const float3 speculars[9] = {
+        float3(1.0, 0.75, 0.6), float3(1.0, 0.85, 0.6), float3(1.0, 0.93, 0.65),
+        float3(1.0, 0.97, 0.7), float3(0.8, 1.0, 0.9), float3(1.0),
+        float3(0.8, 0.9, 1.0), float3(0.9, 0.85, 1.0), float3(1.0, 0.85, 0.85)
+    };
+    float hueDegrees = hsv.x * 360.0;
+    float3 colorBase = float3(0.0);
+    float3 colorSpecular = float3(0.0);
+    float weightSum = 0.0;
+    for (int index = 0; index < 9; index++) {
+        float distance = abs(hueDegrees - centers[index]);
+        distance = min(distance, 360.0 - distance);
+        float weight = exp(-pow(distance / 22.0, 2.0));
+        float3 base = bases[index];
+        if (index == 5) {
+            // Висмут переливается радугой в зависимости от наклона поверхности.
+            base = hue(fract(dot(n.xy, float2(0.6, 0.4)) * 1.5 + 0.55)) * 0.75 + 0.18;
+        }
+        colorBase += base * weight;
+        colorSpecular += speculars[index] * weight;
+        weightSum += weight;
+    }
+    colorBase /= max(weightSum, 1e-4);
+    colorSpecular /= max(weightSum, 1e-4);
+
+    // Бесцветные участки: железо в тенях, платина в середине, серебро в светах.
+    float3 iron = float3(0.32, 0.33, 0.35);
+    float3 platinum = float3(0.62, 0.63, 0.66);
+    float3 silver = float3(0.84, 0.85, 0.88);
+    float3 greyBase = hsv.z < 0.5 ? mix(iron, platinum, smoothstep(0.15, 0.5, hsv.z)) : mix(platinum, silver, smoothstep(0.5, 0.85, hsv.z));
+
+    float colored = smoothstep(0.12, 0.3, hsv.y) * smoothstep(0.08, 0.2, hsv.z);
+    float3 base = mix(greyBase, colorBase, colored) * (0.7 + 0.45 * luma(color));
+    float3 specular = mix(float3(1.0), colorSpecular, colored);
+    float shininess = mix(mix(18.0, 70.0, hsv.z), 38.0, colored);
+    return reliefLight(n, reliefLightFrom(u), base, specular, shininess, 0.9);
+}
+
+} // namespace camfx

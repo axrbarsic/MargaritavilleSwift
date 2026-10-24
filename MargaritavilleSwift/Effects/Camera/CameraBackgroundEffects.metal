@@ -119,6 +119,7 @@ fragment float4 cameraEffectFragment(
     case 23: color = camfx::electric(camera, uv, texel, u); break;
     case 24: color = camfx::emboss(camera, uv, texel, u); break;
     case 25: color = camfx::metalRelief(camera, uv, texel, u); break;
+    case 26: color = camfx::periodicMetals(camera, uv, texel, u); break;
     case 28: color = camfx::stoneRelief(camera, uv, pixel, texel, u); break;
     case 29: color = camfx::paperRelief(camera, uv, pixel, texel, u); break;
     case 30: color = camfx::woodRelief(camera, uv, pixel, texel, u); break;

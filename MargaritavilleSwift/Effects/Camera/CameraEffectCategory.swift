@@ -44,7 +44,7 @@ enum CameraEffectCategory: String, CaseIterable, Identifiable, Sendable {
         case .retro: [.crt, .dither, .halftone]
         case .drawing: [.comic, .cartoon, .sketch, .blueprint, .chalk]
         case .neon: [.neon, .neonShadow, .tron, .electric]
-        case .relief: [.emboss, .metal, .stoneRelief, .paperRelief, .woodRelief]
+        case .relief: [.emboss, .metal, .periodicMetals, .stoneRelief, .paperRelief, .woodRelief]
         }
     }
 }

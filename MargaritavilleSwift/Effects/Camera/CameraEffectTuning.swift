@@ -81,7 +81,7 @@ extension CameraBackgroundEffect {
     /// Рельефные эффекты: глубина, направление и движение света.
     var usesRelief: Bool {
         switch self {
-        case .emboss, .metal, .stoneRelief, .paperRelief, .woodRelief: true
+        case .emboss, .metal, .periodicMetals, .stoneRelief, .paperRelief, .woodRelief: true
         default: false
         }
     }
