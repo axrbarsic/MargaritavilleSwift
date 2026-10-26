@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Проверка рендера эффектов</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font: 12px system-ui, sans-serif; }
+    #grid { display: grid; grid-template-columns: repeat(8, 120px); gap: 6px; padding: 8px; }
+    figure { margin: 0; }
+    figcaption { margin-top: 2px; }
+    canvas { display: block; }
+    #stage { position: absolute; left: -9999px; }
+    pre { padding: 8px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <canvas id="stage" width="240" height="426"></canvas>
+  <div id="grid"></div>
+  <pre id="report">Проверка…</pre>
+  <script type="module">
+    // Рисует каждый эффект сайта на демо-сцене напрямую через Renderer,
+    // проверяет ошибки WebGL и что кадр не пустой. Не публикуется.
+    import { Renderer } from "../public/js/renderer.js";
+    import { EFFECTS, CATEGORIES, TUNING_DEFAULTS } from "../public/js/effects.js";
+    import { createDemoScene } from "../public/js/demo.js";
+
+    const stage = document.getElementById("stage");
+    const lines = [];
+    try {
+      const renderer = new Renderer(stage);
+      const gl = renderer.gl;
+      const demo = createDemoScene();
+      demo.draw(3);
+      for (const category of CATEGORIES) {
+        for (const id of category.effects) {
+          const effect = EFFECTS[id];
+          renderer.render(demo.canvas, false, { shader: effect.shader, prefilter: effect.prefilter, tuning: { ...TUNING_DEFAULTS } }, 3);
+          const pixels = new Uint8Array(stage.width * stage.height * 4);
+          gl.readPixels(0, 0, stage.width, stage.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+          let sum = 0, distinct = new Set();
+          for (let i = 0; i < pixels.length; i += 4 * 97) { sum += pixels[i] + pixels[i + 1] + pixels[i + 2]; distinct.add(pixels[i] >> 4 | (pixels[i + 1] >> 4) << 4 | (pixels[i + 2] >> 4) << 8); }
+          const error = gl.getError();
+          lines.push(`${category.title} / ${effect.title}: gl=${error} яркость=${Math.round(sum / (pixels.length / (4 * 97)) / 3)} цветов=${distinct.size}`);
+          const figure = document.createElement("figure");
+          const thumb = document.createElement("canvas");
+          thumb.width = 120; thumb.height = 213;
+          thumb.getContext("2d").drawImage(stage, 0, 0, 120, 213);
+          const caption = document.createElement("figcaption");
+          caption.textContent = effect.title;
+          figure.append(thumb, caption);
+          document.getElementById("grid").append(figure);
+        }
+      }
+      lines.unshift(`Всего эффектов: ${lines.length}`);
+    } catch (error) {
+      lines.push("ОШИБКА: " + error.message);
+    }
+    document.getElementById("report").textContent = lines.join("\n");
+    window.renderCheckDone = true;
+  </script>
+</body>
+</html>
