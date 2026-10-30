@@ -29,9 +29,13 @@ export function openCartDetails(app, cartID, title, subtitle) {
 
     const voice = voicePanel(tr("Голосовая заметка"), feedback, async ({ blob, transcript }) => {
       try {
-        const attachment = await saveAttachment("audio", blob, transcript);
-        store.addCartMedia(cartID, attachment);
-        if (transcript) store.updateCartNote(cartID, transcript);
+        // Без аудио (режим «только текст») сохраняется одна расшифровка.
+        if (blob) {
+          const attachment = await saveAttachment("audio", blob, transcript);
+          store.addCartMedia(cartID, attachment);
+        }
+        // Без аудио текст дописывается к заметке тележки, а не заменяет её.
+        if (transcript) store.updateCartNote(cartID, blob ? transcript : [store.cart(cartID)?.note, transcript].filter(Boolean).join("\n"));
         showError(null);
       } catch (e) {
         showError(e?.message || tr("Не удалось сохранить голос"));

@@ -75,9 +75,14 @@ export function openRoomDetails(app, roomID, mode, onMutation = () => {}) {
     } else {
       voice = mode === "voice" ? voicePanel(tr("Новая голосовая заметка"), feedback, async ({ blob, transcript }) => {
         try {
-          const attachment = await saveAttachment("audio", blob, transcript);
-          store.addRoomMedia(roomID, attachment);
+          // Без аудио (режим «только текст») сохраняется одна расшифровка.
+          if (blob) {
+            const attachment = await saveAttachment("audio", blob, transcript);
+            store.addRoomMedia(roomID, attachment);
+          }
           if (transcript) store.updateVoiceTranscript(roomID, transcript);
+          // Без аудио пузыря нет — текст дописывается в заметку комнаты, чтобы его было видно.
+          if (!blob && transcript) store.updateTextNote(roomID, [room()?.textNote, transcript].filter(Boolean).join("\n"));
           showError(null);
           onMutation();
         } catch (e) {

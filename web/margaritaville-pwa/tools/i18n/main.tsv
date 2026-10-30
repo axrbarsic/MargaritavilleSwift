@@ -130,3 +130,7 @@ VIP включить	Turn VIP on	Увімкнути VIP	Activar VIP	Limen VIP	Tu
 Воспроизвести	Play	Відтворити	Reproducir	Jwe	Play
 Не удалось воспроизвести голос	Couldn't play the voice note	Не вдалося відтворити голос	No se pudo reproducir la voz	Pa t ka jwe vwa a	Cyaan play di voice
 Удалить голосовую заметку	Delete voice note	Видалити голосову нотатку	Eliminar nota de voz	Efase nòt vokal la	Delete di voice note
+Телефон не даёт микрофон записи и расшифровке сразу. Следующие заметки будут только текстом.	This phone can't share the mic between recording and transcription. Next notes will be text only.	Телефон не дає мікрофон запису й розшифруванню одночасно. Наступні нотатки будуть лише текстом.	Este teléfono no comparte el micrófono entre grabación y transcripción. Las próximas notas serán solo texto.	Telefòn sa a pa ka bay mikwo a pou anrejistreman ak transkripsyon an menm tan. Pwochen nòt yo ap tèks sèlman.	Dis phone cyaan share di mic fi record an transcribe same time. Next note dem a go be text one.
+Речь не распознана	No speech recognized	Мовлення не розпізнано	No se reconoció voz	Pa t rekonèt okenn pawòl	Nuh hear no talk
+Голос сохранён без расшифровки ({error})	Voice saved without transcription ({error})	Голос збережено без розшифрування ({error})	Voz guardada sin transcripción ({error})	Vwa a anrejistre san transkripsyon ({error})	Voice save widout transcription ({error})
+Текст добавлен в заметку	Text added to the note	Текст додано до нотатки	Texto añadido a la nota	Tèks la ajoute nan nòt la	Text add to di note
