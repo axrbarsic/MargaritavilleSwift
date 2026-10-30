@@ -151,15 +151,10 @@ button:focus-visible, [role="button"]:focus-visible, textarea:focus-visible, inp
 .media-flag-count { position: absolute; left: -2px; top: 4px; height: 15px; padding: 0 4px; border-radius: 999px; background: rgba(var(--accent-rgb), 0.92); color: #fff; font-size: 9px; font-weight: 900; line-height: 15px; }
 
 /* Живые эффекты ячеек: VIP-желе, VIP HDR, HDR-всплеск, пружина, 3D */
-.tile.vip-jelly .tile-body { animation: jelly calc(4.2s / var(--jelly-speed, 0.75)) ease-in-out infinite; animation-delay: calc(var(--seed) * -0.07s); }
-@keyframes jelly {
-  0%, 100% { border-radius: 16px 18px 14px 20px / 18px 14px 20px 16px; transform: scale(1, 1); }
-  25% { border-radius: 22px 12px 20px 14px / 14px 22px 12px 20px; transform: scale(1.025, 0.975); }
-  50% { border-radius: 14px 22px 16px 18px / 22px 16px 18px 12px; transform: scale(0.98, 1.03); }
-  75% { border-radius: 20px 14px 22px 12px / 16px 20px 14px 22px; transform: scale(1.015, 0.985); }
-}
-.tile.vip-hdr .tile-body { filter: brightness(1.25) saturate(1.3); box-shadow: 0 0 18px color-mix(in srgb, var(--fill) 80%, white); animation-name: jelly, vipGlow; animation-duration: calc(4.2s / var(--jelly-speed, 0.75)), 2.4s; animation-iteration-count: infinite; }
-.tile.vip-hdr:not(.vip-jelly) .tile-body { animation: vipGlow 2.4s ease-in-out infinite; }
+/* VIP-желе: тело шире ячейки на 20 px, форму задаёт живой clip-path из vip-jelly.js. */
+.tile.vip-jelly .tile-body { inset: -20px; border-radius: 0; clip-path: inset(20px round calc(16px * var(--s, 1))); will-change: clip-path, transform; }
+.tile.vip-hdr .tile-body { animation: vipGlow 2.4s ease-in-out infinite; }
+.tile.vip-hdr:not(.vip-jelly) .tile-body { box-shadow: 0 0 18px color-mix(in srgb, var(--fill) 80%, white); }
 @keyframes vipGlow { 0%, 100% { filter: brightness(1.15) saturate(1.25); } 50% { filter: brightness(1.5) saturate(1.45); } }
 .tile.hdr-pulse .tile-body { animation: hdrPulse 2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .tile.hdr-pulse { animation: rubber 0.9s cubic-bezier(0.3, 1.6, 0.4, 1) both; }

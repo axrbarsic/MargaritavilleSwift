@@ -6,6 +6,7 @@
 import { h, formatTime } from "./dom.js";
 import { icon } from "./icons.js";
 import { roomStatus } from "../domain/room.js";
+import { attachVIPJelly } from "./vip-jelly.js";
 
 const HOLD_STATUS_MS = 460;
 const HOLD_ZOOM_MS = 520;
@@ -33,17 +34,17 @@ export function roomTile(app, room, { tileWidth, onAdvance, onZoom, onActions })
   const seed = [...room.id].reduce((a, c) => a + c.charCodeAt(0), 0) % 97;
 
   const element = h("div", {
-    class: `tile status-${status}${vipJelly ? " vip-jelly" : ""}${vipHDR ? " vip-hdr" : ""}`,
+    class: `tile status-${status}${vipHDR ? " vip-hdr" : ""}`,
     role: "button",
     tabindex: "0",
     "aria-label": `Комната ${room.id}`,
     "data-room": room.id,
-    style: { "--seed": seed, "--jelly-speed": settings.get("developerVIPJellySpeed") }
   },
   h("span", { class: "tile-body" }),
   h("span", { class: "tile-number" }, room.id),
   h("span", { class: "tile-time" }, tileTime(room)),
   mediaIndicator(room));
+  if (vipJelly) attachVIPJelly(element, seed / 97, () => settings.get("developerVIPJellySpeed"));
 
   let timer = null;
   let start = null;

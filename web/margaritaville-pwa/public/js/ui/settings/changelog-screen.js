@@ -6,6 +6,14 @@ import { backButton, pushScreen } from "../screen-stack.js";
 
 export const PWA_CHANGELOG = [
   {
+    version: "PWA 1.0.0 (3)",
+    date: "2026-10-29",
+    changes: [
+      "Исправлено: VIP-ячейка теперь заметно оживает — её контур волнуется и дышит, как VIP-желе в iOS-приложении.",
+      "Все VIP-ячейки анимируются одним общим циклом, который останавливается, когда приложение свёрнуто."
+    ]
+  },
+  {
     version: "PWA 1.0.0 (2)",
     date: "2026-10-29",
     changes: [

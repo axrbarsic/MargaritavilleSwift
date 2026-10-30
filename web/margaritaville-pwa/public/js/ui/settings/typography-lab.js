@@ -5,6 +5,7 @@
 import { h } from "../dom.js";
 import { backButton, pushScreen } from "../screen-stack.js";
 import { segmented, settingsPanel, sliderRow, infoRow } from "./settings-controls.js";
+import { attachVIPJelly } from "../vip-jelly.js";
 
 const KEY = "margaritaville.typographyPreset.v1";
 const PRODUCTION = { roomNumberSize: 45, roomNumberWeight: 900, roomNumberOffset: 7, timeSize: 12, timeWeight: 400, timeOffset: 1 };
@@ -23,7 +24,12 @@ export function openTypographyLab(app) {
     const savedBox = h("div");
     const columns = app.settings.get("gridColumnCount");
 
-    const tile = (status, number, extra = "") => h("div", {
+    const tile = (status, number, extra = "") => {
+      const element = makeTile(status, number, extra.replace("vip-jelly", ""));
+      if (extra.includes("vip-jelly")) attachVIPJelly(element, (Number(number) % 97) / 97, () => app.settings.get("developerVIPJellySpeed"));
+      return element;
+    };
+    const makeTile = (status, number, extra) => h("div", {
       class: `tile lab-tile status-${status} ${extra}`,
       style: {
         "--number-size": `${t.roomNumberSize}px`, "--number-weight": t.roomNumberWeight, "--number-offset": `${t.roomNumberOffset}px`,
