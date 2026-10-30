@@ -51,6 +51,16 @@ function priority(event) {
 
 const HAPTIC = { tap: 8, confirm: 14, longPress: 18, holdStart: 6, holdWarning: [6, 30, 6], holdCommit: 22, select: 10, deselect: 8, invalid: [20, 40, 20], detent: 4 };
 
+/// Длительность тишины в начале звука (порог −34 дБ), минус 3 мс запаса.
+function leadingSilence(buffer) {
+  const data = buffer.getChannelData(0);
+  const limit = Math.min(data.length, Math.round(buffer.sampleRate * 0.4));
+  for (let i = 0; i < limit; i += 1) {
+    if (Math.abs(data[i]) > 0.02) return Math.max(0, i / buffer.sampleRate - 0.003);
+  }
+  return 0;
+}
+
 export function assetFor(assignments, event) {
   const key = assignmentEvent(event);
   const asset = assignments?.[key];
@@ -62,39 +72,66 @@ export class FeedbackService {
     this.settings = settings;
     this.context = null;
     this.buffers = new Map();
+    this.ready = new Map();
     this.lastPlay = { at: 0, priority: 0 };
+    // Разблокировка звука на первом касании (iOS требует жест пользователя) и предзагрузка всех звуков,
+    // чтобы в момент нажатия не ждать сеть и декодирование.
     const unlock = () => this.unlock();
-    window.addEventListener("pointerdown", unlock, { once: true, capture: true });
+    ["pointerdown", "touchend", "click", "keydown"].forEach((name) => window.addEventListener(name, unlock, { capture: true, passive: true }));
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) this.resume(); });
   }
 
   unlock() {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) return;
-    this.context ??= new AudioContext();
-    if (this.context.state === "suspended") this.context.resume().catch(() => {});
+    if (!this.context) {
+      this.context = new AudioContext({ latencyHint: "interactive" });
+      this.preloadAll();
+    }
+    this.resume();
   }
 
-  async buffer(file) {
+  resume() {
+    const state = this.context?.state;
+    if (state === "suspended" || state === "interrupted") this.context.resume().catch(() => {});
+  }
+
+  preloadAll() {
+    for (const asset of Object.values(SOUND_ASSETS)) if (asset.file) this.buffer(asset.file);
+  }
+
+  buffer(file) {
     if (!this.buffers.has(file)) {
       this.buffers.set(file, fetch(`sounds/${file}.wav`)
         .then((r) => r.arrayBuffer())
         .then((data) => new Promise((resolve, reject) => this.context.decodeAudioData(data, resolve, reject)))
+        .then((buffer) => { this.ready.set(file, { buffer, offset: leadingSilence(buffer) }); return buffer; })
         .catch(() => null));
     }
     return this.buffers.get(file);
   }
 
-  async playAsset(asset) {
+  /// Проигрывает сразу из готового буфера, пропуская тишину в начале файла.
+  playAsset(asset) {
     const file = SOUND_ASSETS[asset]?.file;
     if (!file) return;
     this.unlock();
     if (!this.context) return;
-    const buffer = await this.buffer(file);
-    if (!buffer) return;
+    const ready = this.ready.get(file);
+    if (ready) return this.start(ready);
+    // Звук ещё грузится: сыграть, только если успеет почти сразу, иначе он уже не к месту.
+    const requested = performance.now();
+    this.buffer(file).then(() => {
+      const late = this.ready.get(file);
+      if (late && performance.now() - requested < 150) this.start(late);
+    });
+  }
+
+  start({ buffer, offset }) {
     const source = this.context.createBufferSource();
     source.buffer = buffer;
     source.connect(this.context.destination);
-    source.start();
+    source.start(0, offset);
   }
 
   haptic(event) {
