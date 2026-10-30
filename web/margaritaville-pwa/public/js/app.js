@@ -12,7 +12,7 @@ import { AppBackground } from "./ui/background/app-background.js";
 import { h } from "./ui/dom.js";
 
 export const APP_VERSION = "1.0.0";
-export const APP_BUILD = 4;
+export const APP_BUILD = 5;
 
 const root = document.getElementById("app");
 const settings = new SettingsStore();

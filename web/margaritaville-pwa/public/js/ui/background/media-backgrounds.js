@@ -79,13 +79,39 @@ export class CameraBackground {
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } } });
       if (!this.running) return this.closeCamera();
+      // Пользователь остановил камеру через значок iOS (Dynamic Island) или система забрала её:
+      // помечаем поток мёртвым и включаем снова на следующем касании экрана.
+      const stream = this.stream;
+      stream.getVideoTracks().forEach((track) => track.addEventListener("ended", () => this.cameraLost(stream)));
       this.video.srcObject = this.stream;
       await this.video.play();
       this.say(null);
     } catch (error) {
       const denied = error?.name === "NotAllowedError" || error?.name === "SecurityError";
-      this.say(denied ? "Нет доступа к камере. Разрешите камеру для этого сайта в настройках браузера." : "Камера не запустилась.");
+      this.say(denied ? "Нет доступа к камере. Коснитесь экрана, чтобы попробовать снова, или разрешите камеру в настройках." : "Камера не запустилась. Коснитесь экрана, чтобы попробовать снова.");
+      this.stream = null;
+      if (this.running) this.waitForTouch();
     }
+  }
+
+  cameraLost(stream) {
+    if (this.stream !== stream) return;
+    this.stream = null;
+    this.video.srcObject = null;
+    if (!this.running) return;
+    this.say("Камера остановлена. Коснитесь экрана, чтобы включить её снова.");
+    this.waitForTouch();
+  }
+
+  /// Перезапуск камеры по касанию: iOS разрешает доступ к камере только после жеста.
+  waitForTouch() {
+    if (this.touchWaiter) return;
+    this.touchWaiter = () => {
+      window.removeEventListener("pointerdown", this.touchWaiter, true);
+      this.touchWaiter = null;
+      if (this.running && !this.stream) this.openCamera();
+    };
+    window.addEventListener("pointerdown", this.touchWaiter, true);
   }
 
   closeCamera() {
@@ -108,7 +134,10 @@ export class CameraBackground {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const w = Math.round(window.innerWidth * dpr), h = Math.round(window.innerHeight * dpr);
       if (this.canvas.width !== w || this.canvas.height !== h) { this.canvas.width = w; this.canvas.height = h; }
-      if (this.video.readyState >= 2) this.renderer.render(this.video, this.facing === "user", this.effectSettings(), (t - this.started) / 1000);
+      // Подстраховка: Safari не всегда шлёт «ended», поэтому проверяем состояние дорожки каждый кадр.
+      if (this.stream && this.stream.getVideoTracks().every((track) => track.readyState === "ended")) this.cameraLost(this.stream);
+      if (this.stream && this.video.paused) this.video.play().catch(() => {});
+      if (this.video.readyState >= 2 && this.stream) this.renderer.render(this.video, this.facing === "user", this.effectSettings(), (t - this.started) / 1000);
       this.raf = requestAnimationFrame(loop);
     };
     this.raf = requestAnimationFrame(loop);
