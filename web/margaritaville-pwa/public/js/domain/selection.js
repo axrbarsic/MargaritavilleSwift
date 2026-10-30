@@ -1,5 +1,8 @@
 // Выбор смены: тележки, их зоны, горничные и номера. Источник: Domain/WorkSessionSelection.swift.
 import { PREFERRED_TERRITORY_BY_CART, TERRITORIES, compareRoomIDs, normalizeRoomID, territoryById, territorySummaryLabel } from "./catalog.js";
+
+const CART_RANGE = Array.from({ length: 100 }, (_, i) => i + 1);
+export const firstAvailableCart = (s) => CART_RANGE.find((c) => !s.cartBindings[c]) ?? null;
 import { makeRoom } from "./room.js";
 
 export function emptySelection() {
@@ -79,7 +82,7 @@ export function unlockWorkday(s, now) {
 
 /// Пересобирает тележки из выбора, сохраняя состояние комнат и данные тележек
 /// (WorkSessionBuilder.makeCarts).
-export function makeCarts(s, previousCarts, now) {
+export function makeCarts(s, previousCarts, now, catalog = TERRITORIES) {
   const roomsByID = new Map();
   const cartsByID = new Map();
   for (const cart of previousCarts) {
@@ -92,10 +95,12 @@ export function makeCarts(s, previousCarts, now) {
     const existing = cartsByID.get(cartNumber);
     return {
       id: cartNumber,
-      building: territorySummaryLabel(rooms.map((r) => r.id), fallback),
+      building: territorySummaryLabel(rooms.map((r) => r.id), fallback, catalog),
       rooms,
       note: existing?.note ?? null,
-      noteUpdatedAt: existing?.noteUpdatedAt ?? null
+      noteUpdatedAt: existing?.noteUpdatedAt ?? null,
+      mediaAttachments: existing?.mediaAttachments ?? null,
+      consumables: existing?.consumables ?? null
     };
   });
 }

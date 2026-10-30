@@ -55,8 +55,36 @@ function compareTerritoryLabels(left, right) {
 }
 
 /// Подпись зон для набора номеров, например «A1/B1» (territorySummaryLabel).
-export function territorySummaryLabel(rooms, fallback) {
-  const labels = [...new Set(rooms.map((room) => territoryForRoom(room)?.label).filter(Boolean))];
+export function territorySummaryLabel(rooms, fallback, catalog = TERRITORIES) {
+  const labels = [...new Set(rooms.map((room) => catalog.find((t) => t.rooms.includes(room))?.label).filter(Boolean))];
   if (!labels.length) return fallback;
   return labels.sort(compareTerritoryLabels).join("/");
+}
+
+/// Каталог с учётом добавленных и удалённых номеров (RoomCatalog.effectiveTerritories).
+export function effectiveCatalog(overrides = []) {
+  if (!overrides.length) return TERRITORIES;
+  const sets = new Map(TERRITORIES.map((t) => [t.id, new Set(t.rooms)]));
+  for (const o of overrides) {
+    const set = sets.get(o.territoryID);
+    if (!set) continue;
+    if (o.isRemoved) set.delete(o.roomID);
+    else set.add(o.roomID);
+  }
+  return TERRITORIES.map((t) => ({ ...t, rooms: [...sets.get(t.id)].sort(compareRoomIDs) }));
+}
+
+/// Зона для нового номера по этажу: B — начиная с первого номера B-крыла, иначе A.
+export function inferredTerritory(room) {
+  const existing = territoryForRoom(room);
+  if (existing) return existing;
+  const parsed = parseRoomID(room);
+  if (!parsed) return null;
+  const floor = Math.floor(parsed.number / 100);
+  const sameFloor = TERRITORIES.filter((t) => t.floor === floor);
+  if (!sameFloor.length) return null;
+  const b = sameFloor.find((t) => t.building === "b");
+  const bStart = b ? Math.min(...b.rooms.map((r) => parseRoomID(r)?.number ?? Infinity)) : Infinity;
+  if (b && parsed.number >= bStart) return b;
+  return sameFloor.find((t) => t.building === "a") ?? sameFloor[0];
 }

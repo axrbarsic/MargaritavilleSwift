@@ -1,27 +1,48 @@
-// Точка входа PWA Margaritaville: загрузка смены, выбор экрана, таймер назначенного
-// времени и сервис-воркер для работы без сети. Источник: App/AppRootView.swift.
+// Точка входа PWA Margaritaville: загрузка смены, выбор экрана, живой фон, таймер
+// назначенного времени и сервис-воркер для работы без сети. Источник: App/AppRootView.swift.
 import { SessionStore } from "./store/session-store.js";
+import { SettingsStore } from "./store/settings-store.js";
+import { FeedbackService } from "./infra/feedback.js";
+import { ScheduleNotifications } from "./infra/notifications.js";
 import { renderSetup } from "./ui/setup-view.js";
 import { renderSummary } from "./ui/summary-view.js";
-import { openRoomActions, openSheet } from "./ui/sheets.js";
+import { refreshScreens } from "./ui/screen-stack.js";
+import { openSettings } from "./ui/settings/settings-screen.js";
+import { AppBackground } from "./ui/background/app-background.js";
 import { h } from "./ui/dom.js";
 
-export const APP_VERSION = "0.1.0 (PWA этап 1)";
+export const APP_VERSION = "1.0.0";
+export const APP_BUILD = 2;
 
 const root = document.getElementById("app");
-const store = new SessionStore();
+const settings = new SettingsStore();
+const store = new SessionStore(settings);
+const feedback = new FeedbackService(settings);
+const notifications = new ScheduleNotifications();
+const background = new AppBackground(document.getElementById("background"), settings);
 
-const ui = {
-  openRoomActions: (roomID) => openRoomActions(store, roomID, ui),
-  openSettings: () => openSheet((close) => h("div", { class: "actions" },
-    h("div", { class: "sheet-title" }, "Настройки"),
-    h("div", { class: "sheet-subtitle" }, `Margaritaville ${APP_VERSION}`),
-    h("p", { class: "sheet-text" }, "Смена хранится только на этом телефоне. Фоны, медиа, голос и остальные настройки переносятся на следующих этапах."),
-    h("button", { class: "action cancel", onclick: close }, "Закрыть")
-  ))
+const app = {
+  store, settings, feedback, notifications, background,
+  ui: {},
+  version: APP_VERSION,
+  build: APP_BUILD,
+  render: () => render(),
+  openSettings: () => openSettings(app)
 };
 
+function applySettings() {
+  document.documentElement.classList.toggle("transparent-surfaces", settings.get("transparentSurfacesEnabled"));
+  document.documentElement.classList.toggle("vivid-palette", settings.vividStatusPaletteEnabled);
+  document.documentElement.classList.toggle("live-3d", settings.get("developerLive3DCellsEnabled"));
+}
+
+let frame = null;
 function render() {
+  if (frame) return;
+  frame = requestAnimationFrame(() => { frame = null; draw(); });
+}
+
+function draw() {
   if (!store.loaded) {
     root.replaceChildren(h("main", { class: "screen loading" }, h("div", { class: "spinner", "aria-label": "Загрузка" })));
     return;
@@ -31,25 +52,35 @@ function render() {
       h("div", { class: "failure-title" }, "Смена не загрузилась"),
       h("p", {}, "Сохранённые данные не изменены. Изменения не сохраняются, пока загрузка не пройдёт."),
       h("p", { class: "failure-detail" }, store.loadFailure),
-      h("button", { class: "start-button", onclick: () => { store.loaded = false; render(); store.load(); } }, "Повторить")
+      h("button", { class: "start-button", onclick: () => { store.loaded = false; draw(); store.load(); } }, "Повторить")
     ));
     return;
   }
   const scrollTop = root.querySelector(".setup-scroll, .summary-scroll")?.scrollTop ?? 0;
-  if (store.selection.workdayLocked) renderSummary(root, store, ui);
-  else renderSetup(root, store, ui);
+  const active = document.activeElement;
+  if (active?.classList?.contains("search-input")) return;
+  if (store.selection.workdayLocked) renderSummary(root, app);
+  else renderSetup(root, app);
   const scroller = root.querySelector(".setup-scroll, .summary-scroll");
   if (scroller) scroller.scrollTop = scrollTop;
 }
 
-store.subscribe(render);
-render();
-store.load().then(() => store.advanceScheduledRooms());
+store.subscribe(() => { render(); refreshScreens(); });
+settings.subscribe(() => { applySettings(); background.update(); render(); refreshScreens(); });
+window.addEventListener("resize", render);
+applySettings();
+background.update();
+draw();
+store.load().then(() => {
+  store.advanceScheduledRooms();
+  notifications.restore(store.carts);
+});
 
 setInterval(() => store.advanceScheduledRooms(), 15000);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) store.flush();
   else store.advanceScheduledRooms();
+  background.setVisible(!document.hidden);
 });
 window.addEventListener("pagehide", () => store.flush());
 

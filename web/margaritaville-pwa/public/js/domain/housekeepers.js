@@ -32,3 +32,55 @@ export const DEFAULT_HOUSEKEEPERS = [
 export function housekeeperById(id, list = DEFAULT_HOUSEKEEPERS) {
   return id ? list.find((h) => h.id === id) ?? null : null;
 }
+
+// ——— редактирование списка (MargaritavilleHousekeeperCatalog) ———
+const PALETTES = Object.keys(PALETTE_RGB);
+const DUPLICATE_GROUPS = [
+  ["ana", "anazine", "anazline"], ["bebita", "bebitha"], ["gurlene", "gurline"],
+  ["kerlange", "kerlande"], ["milodene", "omelenepm"], ["rosaire", "rosalie", "rosario"]
+];
+const NAME_BY_ID = { anazline: "Ana", bebitha: "Bebita", gurline: "Gurlene", "omelene-pm": "Omelene PM", rosalie: "Rosaire" };
+const NAME_BY_KEY = { "ana|anazine|anazline": "Ana", "bebita|bebitha": "Bebita", "gurlene|gurline": "Gurlene", "kerlande|kerlange": "Kerlange", "milodene|omelenepm": "Omelene PM", "rosaire|rosalie|rosario": "Rosaire" };
+
+const fold = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const token = (name) => fold(name).replace(/[^\p{L}\p{N}]/gu, "");
+const candidates = (name) => { const t = token(name); return (t.endsWith("pm") ? [t, t.slice(0, -2)] : [t]).filter(Boolean); };
+function duplicateKey(name) {
+  const set = new Set(candidates(name));
+  const group = DUPLICATE_GROUPS.find((g) => g.some((x) => set.has(x)));
+  return group ? [...group].sort().join("|") : [...set].sort()[0] ?? token(name);
+}
+const stableID = (name) => fold(name).replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "") || "housekeeper";
+function uniqueID(preferred, used) {
+  let id = preferred;
+  for (let n = 2; used.has(id); n += 1) id = `${preferred}-${n}`;
+  used.add(id);
+  return id;
+}
+
+export function makeHousekeeper(displayName, existing) {
+  const name = String(displayName ?? "").trim();
+  if (!name) return null;
+  const id = uniqueID(stableID(name), new Set(existing.map((h) => h.id)));
+  return { id, displayName: name, palette: PALETTES[existing.length % PALETTES.length] };
+}
+
+/// Нормализация как в canonicalHousekeepers: печатные имена, без дублей листа, Kerlange всегда есть.
+export function canonicalHousekeepers(list) {
+  const used = new Set();
+  let canonical = list.flatMap((h) => {
+    const name = String(h.displayName ?? "").trim();
+    if (!name) return [];
+    const id = uniqueID(String(h.id ?? "").trim() || stableID(name), used);
+    return [{ id, displayName: NAME_BY_ID[id] ?? NAME_BY_KEY[duplicateKey(name)] ?? name, palette: h.palette }];
+  });
+  if (!canonical.length) return DEFAULT_HOUSEKEEPERS;
+  const seen = new Set();
+  canonical = canonical.filter((h) => { const key = duplicateKey(h.displayName); if (seen.has(key)) return false; seen.add(key); return true; });
+  const hasKerlange = canonical.some((h) => candidates(h.displayName).some((c) => ["kerlange"].includes(c)));
+  if (!hasKerlange) {
+    const k = makeHousekeeper("Kerlange", canonical);
+    if (k) canonical.unshift(k);
+  }
+  return canonical;
+}

@@ -19,7 +19,10 @@ export function makeRoom(id, now) {
     dayCategoryTime: null,
     timeline: { selectedAt: now, openedAt: null, completedAt: null },
     textNote: null,
-    textNoteUpdatedAt: null
+    textNoteUpdatedAt: null,
+    voiceTranscript: null,
+    voiceTranscriptUpdatedAt: null,
+    mediaAttachments: null
   };
 }
 
