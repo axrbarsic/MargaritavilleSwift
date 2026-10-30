@@ -142,7 +142,7 @@ button:focus-visible, [role="button"]:focus-visible, textarea:focus-visible, inp
 .tile.status-scheduled { --fill: var(--scheduled); }
 .tile-body { position: absolute; inset: 0; z-index: -1; border-radius: calc(16px * var(--s)); background: var(--fill); }
 .tile.holding { transform: scale(0.96); }
-.tile-number { font-size: calc(var(--number-size) * var(--s)); font-weight: var(--number-weight); font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap; transform: translateY(calc(var(--number-offset) * var(--s))); letter-spacing: -0.5px; }
+.tile-number { font-size: calc(var(--number-size) * var(--s) * var(--fit, 1)); font-weight: var(--number-weight); font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap; transform: translateY(calc(var(--number-offset) * var(--s))); letter-spacing: -0.5px; }
 .tile-time { font-size: calc(var(--time-size) * var(--s)); font-weight: var(--time-weight); font-variant-numeric: tabular-nums; line-height: 1.2; white-space: nowrap; transform: translateY(calc(var(--time-offset) * var(--s))); }
 .tile.zoom-source { opacity: 0; }
 .media-flag { position: absolute; right: 0; bottom: 0; width: calc(34px * var(--s)); height: calc(34px * var(--s)); }

@@ -10,10 +10,11 @@ import { refreshScreens } from "./ui/screen-stack.js";
 import { openSettings } from "./ui/settings/settings-screen.js";
 import { AppBackground } from "./ui/background/app-background.js";
 import { h } from "./ui/dom.js";
+import { keepUpdated } from "./infra/updates.js";
 import { tr } from "./i18n/i18n.js";
 
 export const APP_VERSION = "1.0.0";
-export const APP_BUILD = 6;
+export const APP_BUILD = 7;
 
 const root = document.getElementById("app");
 const settings = new SettingsStore();
@@ -85,6 +86,4 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", () => store.flush());
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(() => {});
-}
+keepUpdated();

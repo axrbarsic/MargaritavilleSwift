@@ -4,7 +4,9 @@
 
 function fullHeight() {
   const portrait = window.innerHeight >= window.innerWidth;
-  if (!navigator.standalone && !matchMedia("(display-mode: standalone)").matches) return window.innerHeight;
+  // Только iOS-PWA (navigator.standalone): на Android экран включает системные панели,
+  // и такая высота спрятала бы низ приложения под панель навигации.
+  if (navigator.standalone !== true) return window.innerHeight;
   const side = portrait ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height);
   return Math.max(side, window.innerHeight);
 }

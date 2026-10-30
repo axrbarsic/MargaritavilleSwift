@@ -8,6 +8,7 @@ import { housekeeperSections } from "../domain/summary-grouping.js";
 import { consumablesReport } from "../domain/consumables.js";
 import { summaryHeader } from "./summary-header.js";
 import { gridMetrics, roomTile } from "./room-tile.js";
+import { fitTileNumbers } from "./number-fit.js";
 import { roomZoomOverlay } from "./room-zoom.js";
 import { consumableTicker, consumablesTable } from "./consumables-view.js";
 import { openRoomActions, openSchedule } from "./sheets.js";
@@ -37,6 +38,7 @@ export function renderSummary(root, app) {
   const zoomed = view.zoomedRoomID ? store.room(view.zoomedRoomID) : null;
   if (!zoomed) view.zoomedRoomID = null;
   root.replaceChildren(h("main", { class: "screen summary" }, header, list, zoomed ? roomZoomOverlay(zoomed, actions.zoom(zoomed.id)) : null));
+  fitTileNumbers(list, ".room-rows");
 }
 
 function sectionView(app, section, tickerText, metrics, actions) {

@@ -1,6 +1,6 @@
 // Сервис-воркер: держит оболочку приложения в кэше, чтобы оно открывалось без сети.
 // При обновлении версии старый кэш удаляется. Данные смены живут в IndexedDB.
-const CACHE = "margaritaville-pwa-v6";
+const CACHE = "margaritaville-pwa-v7";
 const SHELL = [
   "./",
   "brooklyn/BrooklynDonorMesh.bin",
@@ -36,6 +36,7 @@ const SHELL = [
   "js/infra/media-files.js",
   "js/infra/notifications.js",
   "js/infra/viewport.js",
+  "js/infra/updates.js",
   "js/infra/voice.js",
   "js/store/db.js",
   "js/store/session-store-carts.js",
@@ -52,6 +53,7 @@ const SHELL = [
   "js/ui/dom.js",
   "js/ui/icons.js",
   "js/ui/media-views.js",
+  "js/ui/number-fit.js",
   "js/ui/room-details.js",
   "js/ui/room-tile.js",
   "js/ui/room-zoom.js",
@@ -115,7 +117,9 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    fetch(event.request)
+    // no-cache: всегда сверяемся с сервером, а не с HTTP-кэшем браузера
+    // (запрос навигации пересоздать нельзя, у index.html и так заголовок no-cache).
+    fetch(event.request.mode === "navigate" ? event.request : new Request(event.request, { cache: "no-cache" }))
       .then((response) => {
         const copy = response.clone();
         caches.open(CACHE).then((cache) => cache.put(event.request, copy));

@@ -6,6 +6,7 @@ import { h } from "../dom.js";
 import { backButton, pushScreen } from "../screen-stack.js";
 import { segmented, settingsPanel, sliderRow, infoRow } from "./settings-controls.js";
 import { attachVIPJelly } from "../vip-jelly.js";
+import { fitTileNumbers } from "../number-fit.js";
 import { currentLanguage, tr } from "../../i18n/i18n.js";
 
 const KEY = "margaritaville.typographyPreset.v1";
@@ -39,11 +40,15 @@ export function openTypographyLab(app) {
     }, h("span", { class: "tile-body" }), h("span", { class: "tile-number" }, number), h("span", { class: "tile-time" }, "9:41 AM"));
     const group = (title, extra) => h("div", { class: "lab-group" }, h("div", { class: "lab-group-title" }, title),
       h("div", { class: "lab-row", style: { "--cols": columns } }, SAMPLES.slice(0, columns).map(([s, n]) => tile(s, n, extra))));
-    const paint = () => preview.replaceChildren(
-      h("div", { class: "lab-heading" }, tr("Production-ячейки")),
-      h("div", { class: "info-subtitle" }, tr("То же выбранное число колонок, размеры и геометрия, что на главном экране.")),
-      group(tr("Обычные статусы"), ""), group(tr("HDR-всплеск + rubber"), "hdr-pulse lab-loop"), group(tr("VIP-желе"), "vip-jelly"),
-      group("VIP HDR", "vip-hdr"), group(tr("VIP-желе + HDR"), "vip-jelly vip-hdr"));
+    const paint = () => {
+      preview.replaceChildren(
+        h("div", { class: "lab-heading" }, tr("Production-ячейки")),
+        h("div", { class: "info-subtitle" }, tr("То же выбранное число колонок, размеры и геометрия, что на главном экране.")),
+        group(tr("Обычные статусы"), ""), group(tr("HDR-всплеск + rubber"), "hdr-pulse lab-loop"), group(tr("VIP-желе"), "vip-jelly"),
+        group("VIP HDR", "vip-hdr"), group(tr("VIP-желе + HDR"), "vip-jelly vip-hdr"));
+      // Тот же резиновый размер номера, что на главном экране.
+      fitTileNumbers(preview, ".lab-row");
+    };
 
     const paintSaved = () => {
       const p = loadPreset();
