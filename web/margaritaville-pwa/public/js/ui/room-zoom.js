@@ -6,17 +6,18 @@ import { icon } from "./icons.js";
 import { roomStatus } from "../domain/room.js";
 import { tileTime } from "./room-tile.js";
 import { formatTime } from "./dom.js";
+import { tr } from "../i18n/i18n.js";
 
 const STATUS = {
-  pending: { title: "Жёлтый", icon: "reset" },
-  open: { title: "Красный", icon: "door" },
-  ready: { title: "Зелёный", icon: "check" },
-  scheduled: { title: "Розовый", icon: "clock" }
+  pending: { title: tr("Жёлтый"), icon: "reset" },
+  open: { title: tr("Красный"), icon: "door" },
+  ready: { title: tr("Зелёный"), icon: "check" },
+  scheduled: { title: tr("Розовый"), icon: "clock" }
 };
 const FLOWS = {
-  voice: { title: "Голос / аудио", icon: "waveform" },
-  media: { title: "Фото, видео, галерея", icon: "photo" },
-  text: { title: "Текстовая заметка", icon: "note" }
+  voice: { title: tr("Голос / аудио"), icon: "waveform" },
+  media: { title: tr("Фото, видео, галерея"), icon: "photo" },
+  text: { title: tr("Текстовая заметка"), icon: "note" }
 };
 
 /// actions: { setStatus(status), toggleVIP(), openSchedule(), openDetails(mode), collapse() }
@@ -52,24 +53,24 @@ export function roomZoomOverlay(room, actions) {
       h("div", { class: "zoom-badges" },
         badge(STATUS[status].title, STATUS[status].icon),
         room.isVIP ? badge("VIP", "diamond") : null,
-        media.length ? badge(`Медиа ${media.length}`, "paperclip") : null)
+        media.length ? badge(tr("Медиа {count}", { count: media.length }), "paperclip") : null)
     ),
     h("div", { class: "zoom-scroll" },
-      section("Быстрый статус", "Выбор применяется к живой комнате и закрывает центр после commit.",
+      section(tr("Быстрый статус"), tr("Выбор применяется к живой комнате и закрывает центр после commit."),
         h("div", { class: "zoom-status-grid" }, ["pending", "open", "ready", "scheduled"].map(statusButton))),
-      section("VIP и время", room.scheduledTime == null
-        ? "Время не назначено. Штатный экран поддерживает назначение, изменение и очистку."
-        : `Назначено: ${formatTime(room.scheduledTime)}. Нажми для изменения или очистки.`,
+      section(tr("VIP и время"), room.scheduledTime == null
+        ? tr("Время не назначено. Штатный экран поддерживает назначение, изменение и очистку.")
+        : tr("Назначено: {time}. Нажми для изменения или очистки.", { time: formatTime(room.scheduledTime) }),
       h("div", { class: "zoom-row" },
-        command(room.isVIP ? "VIP включён" : "Включить VIP", "diamond", room.isVIP ? "Выключить" : null, actions.toggleVIP),
-        command(room.scheduledTime == null ? "Назначить время" : "Изменить время", "clock", room.scheduledTime == null ? null : formatTime(room.scheduledTime), actions.openSchedule))),
-      section("Заметки и медиа", "Capture и редакторы закрывают увеличенную ячейку только после успешного сохранения.",
+        command(room.isVIP ? tr("VIP включён") : tr("Включить VIP"), "diamond", room.isVIP ? tr("Выключить") : null, actions.toggleVIP),
+        command(room.scheduledTime == null ? tr("Назначить время") : tr("Изменить время"), "clock", room.scheduledTime == null ? null : formatTime(room.scheduledTime), actions.openSchedule))),
+      section(tr("Заметки и медиа"), tr("Capture и редакторы закрывают увеличенную ячейку только после успешного сохранения."),
         h("div", { class: "zoom-row" },
-          command(FLOWS.voice.title, FLOWS.voice.icon, audio ? `Аудио ${audio}` : null, () => actions.openDetails("voice")),
-          command(FLOWS.media.title, FLOWS.media.icon, visual ? `Файлов ${visual}` : null, () => actions.openDetails("media"))),
-        command(FLOWS.text.title, FLOWS.text.icon, room.textNote?.trim() ? "Есть текст" : null, () => actions.openDetails("text")))
+          command(FLOWS.voice.title, FLOWS.voice.icon, audio ? tr("Аудио {count}", { count: audio }) : null, () => actions.openDetails("voice")),
+          command(FLOWS.media.title, FLOWS.media.icon, visual ? tr("Файлов {count}", { count: visual }) : null, () => actions.openDetails("media"))),
+        command(FLOWS.text.title, FLOWS.text.icon, room.textNote?.trim() ? tr("Есть текст") : null, () => actions.openDetails("text")))
     )
   );
 
-  return h("div", { class: "zoom-layer", "aria-label": `Командный центр комнаты ${room.id}`, onclick: actions.collapse }, card);
+  return h("div", { class: "zoom-layer", "aria-label": tr("Командный центр комнаты {room}", { room: room.id }), onclick: actions.collapse }, card);
 }

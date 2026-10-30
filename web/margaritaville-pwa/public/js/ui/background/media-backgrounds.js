@@ -5,6 +5,8 @@
 import { loadFile } from "../../store/db.js";
 import { Renderer } from "../../camera/renderer.js";
 import { EFFECTS, TUNING_DEFAULTS } from "../../camera/effects.js";
+import { tr } from "../../i18n/i18n.js";
+import { viewportHeight } from "../../infra/viewport.js";
 
 export const BACKGROUND_VIDEO_KEY = "backgroundVideo";
 
@@ -62,7 +64,7 @@ export class CameraBackground {
     try {
       this.renderer = new Renderer(this.canvas);
     } catch {
-      this.say("Эффекты камеры требуют WebGL 2, а он недоступен.");
+      this.say(tr("Эффекты камеры требуют WebGL 2, а он недоступен."));
     }
     this.running = false;
     this.started = performance.now();
@@ -75,7 +77,7 @@ export class CameraBackground {
     if (this.stream && this.facing === facing) return;
     this.closeCamera();
     this.facing = facing;
-    if (!navigator.mediaDevices?.getUserMedia) return this.say("Браузер не даёт доступ к камере.");
+    if (!navigator.mediaDevices?.getUserMedia) return this.say(tr("Браузер не даёт доступ к камере."));
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } } });
       if (!this.running) return this.closeCamera();
@@ -88,7 +90,7 @@ export class CameraBackground {
       this.say(null);
     } catch (error) {
       const denied = error?.name === "NotAllowedError" || error?.name === "SecurityError";
-      this.say(denied ? "Нет доступа к камере. Коснитесь экрана, чтобы попробовать снова, или разрешите камеру в настройках." : "Камера не запустилась. Коснитесь экрана, чтобы попробовать снова.");
+      this.say(denied ? tr("Нет доступа к камере. Коснитесь экрана, чтобы попробовать снова, или разрешите камеру в настройках.") : tr("Камера не запустилась. Коснитесь экрана, чтобы попробовать снова."));
       this.stream = null;
       if (this.running) this.waitForTouch();
     }
@@ -99,7 +101,7 @@ export class CameraBackground {
     this.stream = null;
     this.video.srcObject = null;
     if (!this.running) return;
-    this.say("Камера остановлена. Коснитесь экрана, чтобы включить её снова.");
+    this.say(tr("Камера остановлена. Коснитесь экрана, чтобы включить её снова."));
     this.waitForTouch();
   }
 
@@ -132,7 +134,7 @@ export class CameraBackground {
     const loop = (t) => {
       if (!this.running) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = Math.round(window.innerWidth * dpr), h = Math.round(window.innerHeight * dpr);
+      const w = Math.round(window.innerWidth * dpr), h = Math.round(viewportHeight() * dpr);
       if (this.canvas.width !== w || this.canvas.height !== h) { this.canvas.width = w; this.canvas.height = h; }
       // Подстраховка: Safari не всегда шлёт «ended», поэтому проверяем состояние дорожки каждый кадр.
       if (this.stream && this.stream.getVideoTracks().every((track) => track.readyState === "ended")) this.cameraLost(this.stream);

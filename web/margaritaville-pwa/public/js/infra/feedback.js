@@ -1,32 +1,33 @@
 // Звуки и вибрация интерфейса через Web Audio: события, назначения из настроек,
 // приоритеты одновременных звуков. Источник: Infrastructure/Interaction/
 // InteractionSoundRouting.swift, InteractionFeedbackService.swift.
+import { tr } from "../i18n/i18n.js";
 
 export const SOUND_ASSETS = {
-  none: { title: "Без звука", file: null },
-  hotelBell: { title: "Старый колокольчик", file: "room_complete_hotel_bell" },
-  frontDeskBell: { title: "Звонок стойки", file: "front_desk_bell_real" },
-  kenneyConfirmation3: { title: "Плотное подтверждение", file: "kenney_confirmation_003" },
-  kenneyBong1: { title: "Низкий бонг", file: "kenney_bong_001" },
-  uiClickBright: { title: "Яркий клик", file: "xhotel_ui_click_bright" },
-  uiClickSoft: { title: "Мягкий клик", file: "xhotel_ui_click_soft" },
-  uiRolloverTick: { title: "Короткий тик", file: "xhotel_ui_rollover_tick" },
-  uiSwitchLight: { title: "Лёгкий переключатель", file: "xhotel_ui_switch_light" },
-  uiSwitchDeep: { title: "Глубокий переключатель", file: "xhotel_ui_switch_deep" },
-  uiConfirmPop: { title: "Сочный поп", file: "xhotel_ui_confirm_pop" },
-  uiConfirmGlass: { title: "Стеклянное подтверждение", file: "xhotel_ui_confirm_glass" },
-  uiAlertSnap: { title: "Резкий сигнал", file: "xhotel_ui_alert_snap" },
-  uiErrorLow: { title: "Низкий отказ", file: "xhotel_ui_error_low" },
-  uiMenuOpen: { title: "Открытие меню", file: "xhotel_ui_menu_open" }
+  none: { title: tr("Без звука"), file: null },
+  hotelBell: { title: tr("Старый колокольчик"), file: "room_complete_hotel_bell" },
+  frontDeskBell: { title: tr("Звонок стойки"), file: "front_desk_bell_real" },
+  kenneyConfirmation3: { title: tr("Плотное подтверждение"), file: "kenney_confirmation_003" },
+  kenneyBong1: { title: tr("Низкий бонг"), file: "kenney_bong_001" },
+  uiClickBright: { title: tr("Яркий клик"), file: "xhotel_ui_click_bright" },
+  uiClickSoft: { title: tr("Мягкий клик"), file: "xhotel_ui_click_soft" },
+  uiRolloverTick: { title: tr("Короткий тик"), file: "xhotel_ui_rollover_tick" },
+  uiSwitchLight: { title: tr("Лёгкий переключатель"), file: "xhotel_ui_switch_light" },
+  uiSwitchDeep: { title: tr("Глубокий переключатель"), file: "xhotel_ui_switch_deep" },
+  uiConfirmPop: { title: tr("Сочный поп"), file: "xhotel_ui_confirm_pop" },
+  uiConfirmGlass: { title: tr("Стеклянное подтверждение"), file: "xhotel_ui_confirm_glass" },
+  uiAlertSnap: { title: tr("Резкий сигнал"), file: "xhotel_ui_alert_snap" },
+  uiErrorLow: { title: tr("Низкий отказ"), file: "xhotel_ui_error_low" },
+  uiMenuOpen: { title: tr("Открытие меню"), file: "xhotel_ui_menu_open" }
 };
 
 export const SETTINGS_PALETTE = ["none", "uiClickBright", "uiClickSoft", "uiRolloverTick", "uiSwitchLight", "uiSwitchDeep", "uiConfirmPop", "uiConfirmGlass", "kenneyConfirmation3", "uiAlertSnap", "uiErrorLow", "uiMenuOpen", "kenneyBong1", "frontDeskBell"];
 
 /// Видимые в настройках назначения и их подписи.
 export const SETTINGS_EVENTS = [
-  { id: "tap", title: "Все остальные действия", subtitle: "Любые действия, которые не касаются ячеек." },
-  { id: "roomOpen", title: "Ячейка", subtitle: "Любое взаимодействие с ячейкой, кроме финального зелёного статуса." },
-  { id: "roomReady", title: "Зелёная ячейка", subtitle: "Когда ячейка становится зелёной." }
+  { id: "tap", title: tr("Все остальные действия"), subtitle: tr("Любые действия, которые не касаются ячеек.") },
+  { id: "roomOpen", title: tr("Ячейка"), subtitle: tr("Любое взаимодействие с ячейкой, кроме финального зелёного статуса.") },
+  { id: "roomReady", title: tr("Зелёная ячейка"), subtitle: tr("Когда ячейка становится зелёной.") }
 ];
 
 const DEFAULT_ASSET = {

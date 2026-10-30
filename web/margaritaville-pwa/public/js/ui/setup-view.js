@@ -7,6 +7,7 @@ import { icon } from "./icons.js";
 import { compareRoomIDs } from "../domain/catalog.js";
 import { paletteColor } from "../domain/housekeepers.js";
 import { roomOwnerCart, roomsForCart, selectedCartNumbers, selectedRooms } from "../domain/selection.js";
+import { tr } from "../i18n/i18n.js";
 
 const view = { focusedCart: null, query: "", searchOpen: false };
 const fold = (s) => s.trim().normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -22,14 +23,14 @@ export function renderSetup(root, app) {
   const hkForCart = (cart) => settings.housekeeper(s.cartHousekeeperIDs[cart]);
   const focusedHK = hkForCart(view.focusedCart);
 
-  const settingsButton = h("button", { class: "icon-button", "aria-label": "Открыть настройки" }, icon("gear", 26, 2.4));
+  const settingsButton = h("button", { class: "icon-button", "aria-label": tr("Открыть настройки") }, icon("gear", 26, 2.4));
   onHold(settingsButton, 460, () => app.openSettings());
-  const start = h("button", { class: "start-button", disabled: total === 0 }, "Начать");
+  const start = h("button", { class: "start-button", disabled: total === 0 }, tr("Начать"));
   start.addEventListener("click", () => { if (total) { feedback.confirm(); store.lockWorkday(); } });
 
   const header = h("header", { class: "setup-header" },
     settingsButton,
-    h("div", { class: "title-block" }, h("div", { class: "title setup-title" }, "Рабочий список"), h("div", { class: "subtitle" }, `Выбрано: ${total}`)),
+    h("div", { class: "title-block" }, h("div", { class: "title setup-title" }, tr("Рабочий список")), h("div", { class: "subtitle" }, tr("Выбрано: {count}", { count: total }))),
     start
   );
 
@@ -52,15 +53,15 @@ export function renderSetup(root, app) {
 
   const body = h("div", { class: "setup-scroll" },
     housekeeperPicker(app, sortRoster(housekeepers), new Set(carts.map((c) => s.cartHousekeeperIDs[c]).filter(Boolean)), focusedHK?.id, activate),
-    carts.length ? carts.map((cart) => cartCard(app, cart, hkForCart(cart))) : h("div", { class: "empty-hint", onclick: () => { view.searchOpen = false; app.render(); } }, "Выбери уборщицу сверху.")
+    carts.length ? carts.map((cart) => cartCard(app, cart, hkForCart(cart))) : h("div", { class: "empty-hint", onclick: () => { view.searchOpen = false; app.render(); } }, tr("Выбери уборщицу сверху."))
   );
   root.replaceChildren(h("main", { class: "screen setup" }, header, body));
 }
 
 function housekeeperPicker(app, roster, selectedIDs, focusedID, activate) {
-  const input = h("input", { class: "search-input", type: "text", placeholder: "Имя уборщицы", autocapitalize: "words", autocomplete: "off", spellcheck: "false", "aria-label": "Поиск уборщицы по началу имени" });
+  const input = h("input", { class: "search-input", type: "text", placeholder: tr("Имя уборщицы"), autocapitalize: "words", autocomplete: "off", spellcheck: "false", "aria-label": tr("Поиск уборщицы по началу имени") });
   input.value = view.query;
-  const suggestions = h("div", { class: "suggestions", "aria-label": "Подсказки уборщиц" });
+  const suggestions = h("div", { class: "suggestions", "aria-label": tr("Подсказки уборщиц") });
   const renderSuggestions = () => {
     const prefix = fold(view.query);
     const list = prefix ? roster.filter((hk) => fold(hk.displayName).startsWith(prefix)) : [];
@@ -81,7 +82,7 @@ function housekeeperPicker(app, roster, selectedIDs, focusedID, activate) {
       }
     }, h("span", { class: "dot" }), h("span", { class: "suggestion-name" }, hk.displayName), focusedID === hk.id ? icon("checkCircle", 18, 2.6) : null)));
   };
-  const clear = h("button", { class: "search-clear", "aria-label": "Очистить имя и закрыть подсказки", hidden: !view.query }, icon("close", 16, 3));
+  const clear = h("button", { class: "search-clear", "aria-label": tr("Очистить имя и закрыть подсказки"), hidden: !view.query }, icon("close", 16, 3));
   clear.addEventListener("click", () => { view.query = ""; view.searchOpen = false; input.value = ""; clear.hidden = true; renderSuggestions(); });
   input.addEventListener("focus", () => { view.searchOpen = true; field.classList.add("focused"); renderSuggestions(); });
   input.addEventListener("blur", () => { view.searchOpen = false; field.classList.remove("focused"); renderSuggestions(); });
@@ -121,15 +122,15 @@ function cartCard(app, cart, hk) {
   };
   const chip = (label, selected, onclick) => h("button", { class: `zone-chip${selected ? " selected" : ""}`, onclick }, label);
   const picker = h("div", { class: "zone-picker", style: { "--sel": color, "--sel-soft": hk ? paletteColor(hk.palette, 0.26) : "rgba(30,255,90,0.26)", "--sel-line": hk ? paletteColor(hk.palette, 0.48) : "rgba(30,255,90,0.48)" } },
-    h("div", { class: "zone-row" }, h("span", { class: "zone-label" }, "Здание"), buildings.map((b) => chip(b.toUpperCase(), territory.building === b, () => update(b, territory.floor)))),
-    h("div", { class: "zone-row" }, h("span", { class: "zone-label" }, "Этаж"), floors.map((f) => chip(String(f), territory.floor === f, () => update(territory.building, f))))
+    h("div", { class: "zone-row" }, h("span", { class: "zone-label" }, tr("Здание")), buildings.map((b) => chip(b.toUpperCase(), territory.building === b, () => update(b, territory.floor)))),
+    h("div", { class: "zone-row" }, h("span", { class: "zone-label" }, tr("Этаж")), floors.map((f) => chip(String(f), territory.floor === f, () => update(territory.building, f))))
   );
 
   const groups = catalog.filter((t) => t.id !== territory.id)
     .map((t) => ({ label: t.label, rooms: t.rooms.filter((r) => mine.has(r)).sort(compareRoomIDs) }))
     .filter((g) => g.rooms.length);
   const summary = groups.length ? h("div", { class: "off-zones" },
-    h("div", { class: "off-zones-title" }, "Уже выбрано в других зонах"),
+    h("div", { class: "off-zones-title" }, tr("Уже выбрано в других зонах")),
     h("div", { class: "off-zones-row" }, groups.map((g) => h("div", { class: "off-zone" },
       h("span", { class: "off-zone-label" }, g.label),
       h("span", {}, g.rooms.slice(0, 3).join(", ") + (g.rooms.length > 3 ? ` +${g.rooms.length - 3}` : ""))
@@ -143,7 +144,7 @@ function cartCard(app, cart, hk) {
     return h("button", {
       class: `pick${selected ? " selected" : ""}${reserved ? " reserved" : ""}`,
       style: { "--sel": color, "--owner": ownerHK ? paletteColor(ownerHK.palette, 0.45) : "rgba(155,255,184,0.45)" },
-      "aria-label": `Комната ${room}`,
+      "aria-label": tr("Комната {room}", { room }),
       onclick: (event) => {
         event.stopPropagation();
         if (reserved) return feedback.invalid();
@@ -152,15 +153,15 @@ function cartCard(app, cart, hk) {
         store.toggleRoom(cart, room);
       }
     }, h("span", { class: "pick-number" }, room),
-    reserved ? h("span", { class: "pick-owner" }, icon("lock", 11, 3), h("span", {}, ownerHK?.displayName ?? "Занято")) : null);
+    reserved ? h("span", { class: "pick-owner" }, icon("lock", 11, 3), h("span", {}, ownerHK?.displayName ?? tr("Занято"))) : null);
   }));
 
-  const remove = h("button", { class: "icon-button small", "aria-label": "Убрать уборщицу из смены" }, icon("close", 15, 3.2));
+  const remove = h("button", { class: "icon-button small", "aria-label": tr("Убрать уборщицу из смены") }, icon("close", 15, 3.2));
   remove.addEventListener("click", (e) => { e.stopPropagation(); feedback.deselect(); store.removeCart(cart); });
 
   return h("section", { class: `cart-card${view.focusedCart === cart ? " focused" : ""}`, id: `cart-${cart}`, onclick: focus },
     h("div", { class: "cart-head" },
-      h("div", {}, h("div", { class: "cart-name" }, hk?.displayName ?? "Уборщица"), h("div", { class: "cart-zone" }, territory.label)),
+      h("div", {}, h("div", { class: "cart-name" }, hk?.displayName ?? tr("Уборщица")), h("div", { class: "cart-zone" }, territory.label)),
       remove
     ),
     picker,

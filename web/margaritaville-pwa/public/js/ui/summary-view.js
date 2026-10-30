@@ -13,6 +13,7 @@ import { consumableTicker, consumablesTable } from "./consumables-view.js";
 import { openRoomActions, openSchedule } from "./sheets.js";
 import { openRoomDetails } from "./room-details.js";
 import { openCartDetails } from "./cart-details.js";
+import { tr } from "../i18n/i18n.js";
 
 const ROOM_EVENT = { pending: "roomPending", open: "roomOpen", ready: "roomReady", scheduled: "roomScheduled" };
 const PULSE_MS = 2000;
@@ -43,7 +44,7 @@ function sectionView(app, section, tickerText, metrics, actions) {
   const name = h("span", {
     class: "hk-name", role: "button", tabindex: "0",
     style: { "--hk": hk ? paletteColor(hk.palette) : "var(--accent)", "--hk-soft": hk ? paletteColor(hk.palette, 0.2) : "rgba(30,255,90,0.2)", "--hk-line": hk ? paletteColor(hk.palette, 0.72) : "rgba(30,255,90,0.72)" }
-  }, hk?.displayName ?? "Уборщица");
+  }, hk?.displayName ?? tr("Уборщица"));
   onHold(name, 580, () => {
     app.feedback.longPress();
     openCartDetails(app, section.primaryCartID, hk?.displayName, section.locationLabel);

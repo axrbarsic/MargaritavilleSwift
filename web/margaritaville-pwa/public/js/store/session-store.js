@@ -7,11 +7,12 @@ import * as roomOps from "../domain/room.js";
 import { effectiveCatalog } from "../domain/catalog.js";
 import { sessionCartMethods } from "./session-store-carts.js";
 import { summaryCounts } from "../domain/summary-grouping.js";
+import { tr } from "../i18n/i18n.js";
 
 const SAVE_DELAY = 280;
 const HISTORY_LIMIT = 500;
-const STATUS_LABEL = { pending: "жёлтый", open: "красный", ready: "зелёный", scheduled: "назначено" };
-const MEDIA_LABEL = { photo: "фото", video: "видео", audio: "голос" };
+const STATUS_LABEL = { pending: tr("жёлтый"), open: tr("красный"), ready: tr("зелёный"), scheduled: tr("назначено") };
+const MEDIA_LABEL = { photo: tr("фото"), video: tr("видео"), audio: tr("голос") };
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
 export class SessionStore {
@@ -48,7 +49,7 @@ export class SessionStore {
       }
       this.loadFailure = null;
     } catch (error) {
-      this.loadFailure = error?.message || "Хранилище недоступно";
+      this.loadFailure = error?.message || tr("Хранилище недоступно");
     }
     this.loaded = true;
     this.emit();
@@ -108,7 +109,7 @@ export class SessionStore {
 
   afterSelectionChange() {
     this.rebuildCarts();
-    this.record("selectionChanged", "Выбор тележек изменён");
+    this.record("selectionChanged", tr("Выбор тележек изменён"));
     this.commit();
   }
 
@@ -121,20 +122,20 @@ export class SessionStore {
     const result = selection.toggleRoom(this.selection, cart, room);
     if (result !== "changed") return result;
     this.rebuildCarts();
-    this.record("selectionChanged", `Тележка ${cart}: выбор комнат изменён`);
+    this.record("selectionChanged", tr("Тележка {cart}: выбор комнат изменён", { cart }));
     this.commit();
     return result;
   }
 
   lockWorkday() {
     if (!selection.lockWorkday(this.selection, Date.now())) return;
-    this.record("workdayLocked", "Рабочий день зафиксирован");
+    this.record("workdayLocked", tr("Рабочий день зафиксирован"));
     this.commit(true);
   }
 
   unlockWorkday() {
     if (!selection.unlockWorkday(this.selection, Date.now())) return;
-    this.record("workdayUnlocked", "Рабочий день открыт для редактирования");
+    this.record("workdayUnlocked", tr("Рабочий день открыт для редактирования"));
     this.commit(true);
   }
 
@@ -175,10 +176,10 @@ export class SessionStore {
   advance(id) { this.mutateRoom(id, roomOps.advance, (b, a) => this.statusEntry(b, a)); }
   setStatus(id, status) { this.mutateRoom(id, (room, now) => roomOps.setStatus(room, status, now), (b, a) => this.statusEntry(b, a)); }
   reset(id) { this.mutateRoom(id, roomOps.reset, (b, a) => this.statusEntry(b, a)); }
-  toggleVIP(id) { this.mutateRoom(id, roomOps.toggleVIP, (b, a) => ["roomVIPChanged", `${a.id}: VIP ${a.isVIP ? "включён" : "выключен"}`]); }
+  toggleVIP(id) { this.mutateRoom(id, roomOps.toggleVIP, (b, a) => ["roomVIPChanged", tr(a.isVIP ? "{room}: VIP включён" : "{room}: VIP выключен", { room: a.id })]); }
   setSchedule(id, time) {
     this.mutateRoom(id, (room, now) => roomOps.setSchedule(room, time, now),
-      (b, a) => ["roomScheduleChanged", `${a.id}: время ${time == null ? "снято" : "назначено"}`]);
+      (b, a) => ["roomScheduleChanged", tr(time == null ? "{room}: время снято" : "{room}: время назначено", { room: a.id })]);
   }
 
   updateTextNote(id, text) {
@@ -186,7 +187,7 @@ export class SessionStore {
       const empty = !text.trim();
       room.textNote = empty ? null : text;
       room.textNoteUpdatedAt = empty ? null : now;
-    }, (b, a) => ["roomTextNoteChanged", `${a.id}: текстовая заметка`]);
+    }, (b, a) => ["roomTextNoteChanged", tr("{room}: текстовая заметка", { room: a.id })]);
   }
 
   updateVoiceTranscript(id, text) {
@@ -194,12 +195,12 @@ export class SessionStore {
       const empty = !text.trim();
       room.voiceTranscript = empty ? null : text;
       room.voiceTranscriptUpdatedAt = empty ? null : now;
-    }, (b, a) => ["roomVoiceTranscriptChanged", `${a.id}: голосовая заметка`]);
+    }, (b, a) => ["roomVoiceTranscriptChanged", tr("{room}: голосовая заметка", { room: a.id })]);
   }
 
   addRoomMedia(id, attachment) {
     this.mutateRoom(id, (room) => { room.mediaAttachments = [attachment, ...(room.mediaAttachments ?? [])]; },
-      (b, a) => ["roomMediaAdded", `${a.id}: добавлено ${MEDIA_LABEL[attachment.kind]}`]);
+      (b, a) => ["roomMediaAdded", tr("{room}: добавлено {media}", { room: a.id, media: MEDIA_LABEL[attachment.kind] })]);
   }
 
   removeRoomMedia(id, attachment) {
@@ -210,7 +211,7 @@ export class SessionStore {
         room.voiceTranscript = null;
         room.voiceTranscriptUpdatedAt = null;
       }
-    }, (b, a) => ["roomMediaAdded", `${a.id}: удалено ${MEDIA_LABEL[attachment.kind]}`]);
+    }, (b, a) => ["roomMediaAdded", tr("{room}: удалено {media}", { room: a.id, media: MEDIA_LABEL[attachment.kind] })]);
   }
 
   /// Открывает комнаты, чьё назначенное время наступило. Возвращает открытые номера.
@@ -224,7 +225,7 @@ export class SessionStore {
         changed = true;
         if (roomOps.advanceIfDue(room, now)) {
           opened.push(room.id);
-          this.record("scheduledRoomAutoOpened", `${room.id}: открыта по времени`, { roomID: room.id });
+          this.record("scheduledRoomAutoOpened", tr("{room}: открыта по времени", { room: room.id }), { roomID: room.id });
         }
       }
     }

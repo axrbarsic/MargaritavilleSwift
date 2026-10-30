@@ -10,9 +10,10 @@ import { refreshScreens } from "./ui/screen-stack.js";
 import { openSettings } from "./ui/settings/settings-screen.js";
 import { AppBackground } from "./ui/background/app-background.js";
 import { h } from "./ui/dom.js";
+import { tr } from "./i18n/i18n.js";
 
 export const APP_VERSION = "1.0.0";
-export const APP_BUILD = 5;
+export const APP_BUILD = 6;
 
 const root = document.getElementById("app");
 const settings = new SettingsStore();
@@ -44,15 +45,15 @@ function render() {
 
 function draw() {
   if (!store.loaded) {
-    root.replaceChildren(h("main", { class: "screen loading" }, h("div", { class: "spinner", "aria-label": "Загрузка" })));
+    root.replaceChildren(h("main", { class: "screen loading" }, h("div", { class: "spinner", "aria-label": tr("Загрузка") })));
     return;
   }
   if (store.loadFailure) {
     root.replaceChildren(h("main", { class: "screen failure" },
-      h("div", { class: "failure-title" }, "Смена не загрузилась"),
-      h("p", {}, "Сохранённые данные не изменены. Изменения не сохраняются, пока загрузка не пройдёт."),
+      h("div", { class: "failure-title" }, tr("Смена не загрузилась")),
+      h("p", {}, tr("Сохранённые данные не изменены. Изменения не сохраняются, пока загрузка не пройдёт.")),
       h("p", { class: "failure-detail" }, store.loadFailure),
-      h("button", { class: "start-button", onclick: () => { store.loaded = false; draw(); store.load(); } }, "Повторить")
+      h("button", { class: "start-button", onclick: () => { store.loaded = false; draw(); store.load(); } }, tr("Повторить"))
     ));
     return;
   }

@@ -5,6 +5,7 @@ import { h, formatTime } from "./dom.js";
 import { icon } from "./icons.js";
 import { pushScreen } from "./screen-stack.js";
 import { attachmentURL, captureWithCamera, saveAttachment } from "../infra/media-files.js";
+import { tr } from "../i18n/i18n.js";
 
 const KIND_ICON = { photo: "photo", video: "video", audio: "waveform" };
 
@@ -19,11 +20,11 @@ export function mediaActions(feedback, onSaved, onError) {
       try {
         onSaved(await saveAttachment(kind, file));
       } catch (error) {
-        onError(error?.message || "Не удалось сохранить медиа");
+        onError(error?.message || tr("Не удалось сохранить медиа"));
       }
     }
   }, icon(iconName, 28, 2.6), h("span", {}, title));
-  return h("div", { class: "media-actions" }, action("photo", "camera", "Фото"), action("video", "video", "Видео"));
+  return h("div", { class: "media-actions" }, action("photo", "camera", tr("Фото")), action("video", "video", tr("Видео")));
 }
 
 function thumbnail(attachment) {
@@ -44,8 +45,8 @@ const badge = (attachment) => h("span", { class: "media-badge" }, icon(KIND_ICON
 
 export function mediaGrid(attachments, { onOpen, onDelete }) {
   return h("div", { class: "media-grid" }, attachments.map((attachment) => h("div", { class: "media-card" },
-    h("button", { class: "media-open", "aria-label": "Открыть медиа", onclick: () => onOpen(attachment) }, thumbnail(attachment)),
-    h("button", { class: "media-delete", "aria-label": "Удалить медиа", onclick: () => onDelete(attachment) }, icon("trash", 13, 2.8))
+    h("button", { class: "media-open", "aria-label": tr("Открыть медиа"), onclick: () => onOpen(attachment) }, thumbnail(attachment)),
+    h("button", { class: "media-delete", "aria-label": tr("Удалить медиа"), onclick: () => onDelete(attachment) }, icon("trash", 13, 2.8))
   )));
 }
 
@@ -78,7 +79,7 @@ export function openMediaViewer(attachments, initial) {
     update();
     return h("div", { class: "viewer" }, track,
       h("div", { class: "viewer-bar" },
-        h("button", { class: "viewer-close", "aria-label": "Закрыть", onclick: close }, icon("close", 18, 3)),
+        h("button", { class: "viewer-close", "aria-label": tr("Закрыть"), onclick: close }, icon("close", 18, 3)),
         h("div", {}, counter, time)
       ));
   }, { className: "black" });

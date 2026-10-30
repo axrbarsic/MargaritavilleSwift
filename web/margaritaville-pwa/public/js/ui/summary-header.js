@@ -4,6 +4,7 @@
 import { h, onHold } from "./dom.js";
 import { icon } from "./icons.js";
 import { roomStatus } from "../domain/room.js";
+import { tr } from "../i18n/i18n.js";
 
 const CHIP_ORDER = ["open", "ready", "scheduled", "pending"];
 const PAD = 18;
@@ -12,7 +13,7 @@ const START_ZONE = 86;
 
 export function summaryHeader(app, { counts, rooms, filter, onFilter }) {
   const { feedback } = app;
-  const menu = h("button", { class: "header-menu", "aria-label": "Открыть настройки" }, icon("menu", 24, 3));
+  const menu = h("button", { class: "header-menu", "aria-label": tr("Открыть настройки") }, icon("menu", 24, 3));
   onHold(menu, 460, () => { feedback.play("settingsOpen"); app.openSettings(); });
 
   const count = (value, color) => h("span", { class: "header-count", style: { color } }, String(value));
@@ -20,7 +21,7 @@ export function summaryHeader(app, { counts, rooms, filter, onFilter }) {
     const active = filter === status;
     return h("button", {
       class: `status-chip status-${status}${active ? " active" : ""}${filter && !active ? " dim" : ""}`,
-      "aria-label": `Фильтр: ${status}`,
+      "aria-label": tr("Фильтр: {status}", { status }),
       onclick: () => { feedback.tap(); onFilter(active ? null : status); }
     }, String(rooms.filter((r) => roomStatus(r) === status).length));
   });
@@ -46,7 +47,7 @@ function puzzleHandle(app, header, menu) {
   const socket = h("div", { class: "puzzle-socket" }, icon("puzzle", 20, 2.4));
   const piece = h("div", { class: "puzzle-piece" }, icon("puzzle", 20, 2.6));
   const zone = h("div", { class: "puzzle-zone" });
-  const hit = h("div", { class: "puzzle-hit", "aria-label": "Открыть выбор комнат", role: "button" });
+  const hit = h("div", { class: "puzzle-hit", "aria-label": tr("Открыть выбор комнат"), role: "button" });
   const layer = h("div", { class: "puzzle-layer" }, socket, piece, zone, hit);
 
   let startX = null;

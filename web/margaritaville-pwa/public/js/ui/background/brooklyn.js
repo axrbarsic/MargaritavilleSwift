@@ -3,6 +3,7 @@
 // Источник: Packages/BrooklynBackgroundKit (BrooklynShaders.metal, BrooklynDonorContract.swift,
 // BrooklynGridLayout.swift, BrooklynSceneState.swift). Свечение (bloom) упрощено.
 import { BROOKLYN_VERTEX, BROOKLYN_FRAGMENT, FOG_VERTEX, FOG_FRAGMENT } from "./brooklyn-shaders.js";
+import { viewportHeight } from "../../infra/viewport.js";
 
 const GRID = 16;
 const STEPS = 15;
@@ -190,7 +191,7 @@ export class Brooklyn {
     const gl = this.gl;
     const s = this.settings;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const width = window.innerWidth, height = window.innerHeight;
+    const width = window.innerWidth, height = viewportHeight();
     if (this.canvas.width !== Math.round(width * dpr) || this.canvas.height !== Math.round(height * dpr)) {
       this.canvas.width = Math.round(width * dpr);
       this.canvas.height = Math.round(height * dpr);

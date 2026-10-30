@@ -1,46 +1,47 @@
 // Эффекты, категории и настройки — копия моделей iOS-приложения:
 // CameraBackgroundEffect.swift, CameraEffectCategory.swift, CameraEffectTuning.swift.
+import { tr } from "../i18n/i18n.js";
 
 export const EFFECTS = {
-  normal: { title: "Обычный", shader: 0, subtitle: "Чистое изображение камеры." },
-  matte: { title: "Матовый", shader: 1, prefilter: "blur", subtitle: "Матовое стекло: сильное размытие с лёгким зерном." },
-  grid: { title: "Сетка", shader: 2, subtitle: "Камера под неоновой сеткой с бегущей строкой сканирования." },
-  kaleidoscope: { title: "Калейдоскоп", shader: 14, subtitle: "Восемь зеркальных секторов, медленно вращаются." },
-  glitch: { title: "Глитч", shader: 15, subtitle: "Цифровой сбой: сдвиг полос, разделение каналов и вспышки." },
-  nightVision: { title: "Ночное видение", shader: 3, subtitle: "Зелёный прибор ночного видения с шумом и виньеткой." },
-  thermal: { title: "Тепловизор", shader: 4, subtitle: "Яркость превращается в тепловую карту." },
-  pixels: { title: "Пиксели", shader: 7, subtitle: "Крупная пиксельная мозаика." },
-  gameBoy: { title: "Game Boy", shader: 11, subtitle: "Экран Game Boy: крупные пиксели и четыре оттенка зелёного." },
-  lego: { title: "Лего", shader: 17, subtitle: "Всё вокруг собрано из кубиков Лего с шипами в цветах настоящих деталей." },
-  ascii: { title: "ASCII", shader: 8, subtitle: "Живое видео из символов, цвет берётся из камеры." },
-  crt: { title: "ЭЛТ-телевизор", shader: 12, subtitle: "Выпуклый кинескоп с развёрткой, сдвигом цветов и маской триад." },
-  dither: { title: "1-бит", shader: 9, subtitle: "Двухцветный дизеринг Байера в стиле игры Return of the Obra Dinn." },
-  halftone: { title: "Полутон", shader: 10, subtitle: "Печатный растр CMYK, как в старых газетах и комиксах." },
-  comic: { title: "Комикс", shader: 6, subtitle: "Плоские цвета и чёрные контуры, как в комиксе." },
-  cartoon: { title: "Мультфильм", shader: 16, prefilter: "median", subtitle: "Мир как в мультфильме: гладкие заливки, сочные цвета и чёткие контуры." },
-  sketch: { title: "Карандаш", shader: 13, subtitle: "Карандашная перекрёстная штриховка по теням и контуры." },
-  blueprint: { title: "Чертёж", shader: 21, subtitle: "Белые линии на синем листе с миллиметровой сеткой, как технический чертёж." },
-  chalk: { title: "Мел", shader: 22, subtitle: "Рваные меловые штрихи по контурам на школьной доске." },
-  neon: { title: "Неон", shader: 19, subtitle: "Переливающиеся неоновые контуры; ползунок «Ореол» добавляет свечение." },
-  neonShadow: { title: "Неоновая тень", shader: 18, subtitle: "Вирусный эффект TikTok: розовая, голубая и жёлтая копии контура расходятся и сходятся." },
-  tron: { title: "Трон", shader: 20, subtitle: "Голубые и оранжевые световые контуры на тёмной сетке, как в «Троне»." },
-  electric: { title: "Электричество", shader: 23, subtitle: "Дрожащие фиолетовые разряды с белой сердцевиной." },
-  emboss: { title: "Тиснение", shader: 24, subtitle: "Серый рельеф, будто изображение выдавлено в листе." },
-  metal: { title: "Металл", shader: 25, subtitle: "Чеканка на металле любого цвета: от серебра до золота, меди и синей стали." },
-  periodicMetals: { title: "Таблица металлов", shader: 26, prefilter: "median", subtitle: "Каждый участок кадра становится металлом своего цвета: медь, золото, патина, титан, висмут, серебро и другие." },
-  stoneRelief: { title: "Камень", shader: 28, subtitle: "Изображение высечено в шершавом песчанике." },
-  paperRelief: { title: "Бумага", shader: 29, subtitle: "Слепое тиснение белым по белому, как на дорогой открытке." },
-  woodRelief: { title: "Дерево", shader: 30, subtitle: "Резьба по доске с годичными волокнами." }
+  normal: { title: tr("Обычный"), shader: 0, subtitle: tr("Чистое изображение камеры.") },
+  matte: { title: tr("Матовый"), shader: 1, prefilter: "blur", subtitle: tr("Матовое стекло: сильное размытие с лёгким зерном.") },
+  grid: { title: tr("Сетка"), shader: 2, subtitle: tr("Камера под неоновой сеткой с бегущей строкой сканирования.") },
+  kaleidoscope: { title: tr("Калейдоскоп"), shader: 14, subtitle: tr("Восемь зеркальных секторов, медленно вращаются.") },
+  glitch: { title: tr("Глитч"), shader: 15, subtitle: tr("Цифровой сбой: сдвиг полос, разделение каналов и вспышки.") },
+  nightVision: { title: tr("Ночное видение"), shader: 3, subtitle: tr("Зелёный прибор ночного видения с шумом и виньеткой.") },
+  thermal: { title: tr("Тепловизор"), shader: 4, subtitle: tr("Яркость превращается в тепловую карту.") },
+  pixels: { title: tr("Пиксели"), shader: 7, subtitle: tr("Крупная пиксельная мозаика.") },
+  gameBoy: { title: "Game Boy", shader: 11, subtitle: tr("Экран Game Boy: крупные пиксели и четыре оттенка зелёного.") },
+  lego: { title: tr("Лего"), shader: 17, subtitle: tr("Всё вокруг собрано из кубиков Лего с шипами в цветах настоящих деталей.") },
+  ascii: { title: "ASCII", shader: 8, subtitle: tr("Живое видео из символов, цвет берётся из камеры.") },
+  crt: { title: tr("ЭЛТ-телевизор"), shader: 12, subtitle: tr("Выпуклый кинескоп с развёрткой, сдвигом цветов и маской триад.") },
+  dither: { title: tr("1-бит"), shader: 9, subtitle: tr("Двухцветный дизеринг Байера в стиле игры Return of the Obra Dinn.") },
+  halftone: { title: tr("Полутон"), shader: 10, subtitle: tr("Печатный растр CMYK, как в старых газетах и комиксах.") },
+  comic: { title: tr("Комикс"), shader: 6, subtitle: tr("Плоские цвета и чёрные контуры, как в комиксе.") },
+  cartoon: { title: tr("Мультфильм"), shader: 16, prefilter: "median", subtitle: tr("Мир как в мультфильме: гладкие заливки, сочные цвета и чёткие контуры.") },
+  sketch: { title: tr("Карандаш"), shader: 13, subtitle: tr("Карандашная перекрёстная штриховка по теням и контуры.") },
+  blueprint: { title: tr("Чертёж"), shader: 21, subtitle: tr("Белые линии на синем листе с миллиметровой сеткой, как технический чертёж.") },
+  chalk: { title: tr("Мел"), shader: 22, subtitle: tr("Рваные меловые штрихи по контурам на школьной доске.") },
+  neon: { title: tr("Неон"), shader: 19, subtitle: tr("Переливающиеся неоновые контуры; ползунок «Ореол» добавляет свечение.") },
+  neonShadow: { title: tr("Неоновая тень"), shader: 18, subtitle: tr("Вирусный эффект TikTok: розовая, голубая и жёлтая копии контура расходятся и сходятся.") },
+  tron: { title: tr("Трон"), shader: 20, subtitle: tr("Голубые и оранжевые световые контуры на тёмной сетке, как в «Троне».") },
+  electric: { title: tr("Электричество"), shader: 23, subtitle: tr("Дрожащие фиолетовые разряды с белой сердцевиной.") },
+  emboss: { title: tr("Тиснение"), shader: 24, subtitle: tr("Серый рельеф, будто изображение выдавлено в листе.") },
+  metal: { title: tr("Металл"), shader: 25, subtitle: tr("Чеканка на металле любого цвета: от серебра до золота, меди и синей стали.") },
+  periodicMetals: { title: tr("Таблица металлов"), shader: 26, prefilter: "median", subtitle: tr("Каждый участок кадра становится металлом своего цвета: медь, золото, патина, титан, висмут, серебро и другие.") },
+  stoneRelief: { title: tr("Камень"), shader: 28, subtitle: tr("Изображение высечено в шершавом песчанике.") },
+  paperRelief: { title: tr("Бумага"), shader: 29, subtitle: tr("Слепое тиснение белым по белому, как на дорогой открытке.") },
+  woodRelief: { title: tr("Дерево"), shader: 30, subtitle: tr("Резьба по доске с годичными волокнами.") }
 };
 
 export const CATEGORIES = [
-  { id: "classic", title: "Классика", icon: "camera", effects: ["normal", "matte", "grid", "kaleidoscope", "glitch"] },
-  { id: "vision", title: "Приборы", icon: "eye", effects: ["nightVision", "thermal"] },
-  { id: "pixels", title: "Пиксели", icon: "grid", effects: ["pixels", "gameBoy", "lego", "ascii"] },
-  { id: "retro", title: "Ретро", icon: "tv", effects: ["crt", "dither", "halftone"] },
-  { id: "drawing", title: "Рисунок", icon: "pencil", effects: ["comic", "cartoon", "sketch", "blueprint", "chalk"] },
-  { id: "neon", title: "Неон", icon: "bolt", effects: ["neon", "neonShadow", "tron", "electric"] },
-  { id: "relief", title: "Рельеф", icon: "mountain", effects: ["emboss", "metal", "periodicMetals", "stoneRelief", "paperRelief", "woodRelief"] }
+  { id: "classic", title: tr("Классика"), icon: "camera", effects: ["normal", "matte", "grid", "kaleidoscope", "glitch"] },
+  { id: "vision", title: tr("Приборы"), icon: "eye", effects: ["nightVision", "thermal"] },
+  { id: "pixels", title: tr("Пиксели"), icon: "grid", effects: ["pixels", "gameBoy", "lego", "ascii"] },
+  { id: "retro", title: tr("Ретро"), icon: "tv", effects: ["crt", "dither", "halftone"] },
+  { id: "drawing", title: tr("Рисунок"), icon: "pencil", effects: ["comic", "cartoon", "sketch", "blueprint", "chalk"] },
+  { id: "neon", title: tr("Неон"), icon: "bolt", effects: ["neon", "neonShadow", "tron", "electric"] },
+  { id: "relief", title: tr("Рельеф"), icon: "mountain", effects: ["emboss", "metal", "periodicMetals", "stoneRelief", "paperRelief", "woodRelief"] }
 ];
 
 export function categoryOf(effectId) {
@@ -87,12 +88,12 @@ export const RANGES = {
 
 /// Понятное имя металла под ползунком цвета (metalName в приложении).
 export function metalName(hue, saturation) {
-  if (saturation < 0.12) return "Серебро";
-  if (hue < 20) return "Медь";
-  if (hue < 50) return "Золото";
-  if (hue < 75) return "Латунь";
-  if (hue < 160) return "Зелёная патина";
-  if (hue < 250) return "Синяя сталь";
-  if (hue < 320) return "Фиолетовый титан";
-  return "Розовое золото";
+  if (saturation < 0.12) return tr("Серебро");
+  if (hue < 20) return tr("Медь");
+  if (hue < 50) return tr("Золото");
+  if (hue < 75) return tr("Латунь");
+  if (hue < 160) return tr("Зелёная патина");
+  if (hue < 250) return tr("Синяя сталь");
+  if (hue < 320) return tr("Фиолетовый титан");
+  return tr("Розовое золото");
 }

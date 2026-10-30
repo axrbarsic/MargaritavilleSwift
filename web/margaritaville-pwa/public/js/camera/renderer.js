@@ -3,13 +3,14 @@
 // один проход эффекта на экран. Повторяет CameraBackgroundRenderer.swift.
 import { VERTEX, COPY_FRAGMENT, BLUR_FRAGMENT, MEDIAN_FRAGMENT } from "./shaders-common.js";
 import { EFFECT_FRAGMENT } from "./shaders-effects.js";
+import { tr } from "../i18n/i18n.js";
 
 const MAX_WORK_SIDE = 1280;
 
 export class Renderer {
   constructor(canvas) {
     const gl = canvas.getContext("webgl2", { antialias: false, alpha: false, powerPreference: "high-performance" });
-    if (!gl) throw new Error("WebGL 2 недоступен");
+    if (!gl) throw new Error(tr("WebGL 2 недоступен"));
     this.gl = gl;
     this.canvas = canvas;
     this.vao = gl.createVertexArray();
@@ -30,7 +31,7 @@ export class Renderer {
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        throw new Error("Ошибка шейдера: " + gl.getShaderInfoLog(shader));
+        throw new Error(tr("Ошибка шейдера: {log}", { log: gl.getShaderInfoLog(shader) }));
       }
       return shader;
     };
@@ -39,7 +40,7 @@ export class Renderer {
     gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      throw new Error("Ошибка сборки шейдера: " + gl.getProgramInfoLog(program));
+      throw new Error(tr("Ошибка сборки шейдера: {log}", { log: gl.getProgramInfoLog(program) }));
     }
     const locations = new Map();
     return {

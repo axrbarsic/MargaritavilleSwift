@@ -2,6 +2,7 @@
 // Экран строится один раз; refresh() вызывается при изменении данных, чтобы не сбивать ввод.
 import { h } from "./dom.js";
 import { icon } from "./icons.js";
+import { tr } from "../i18n/i18n.js";
 
 const stack = [];
 
@@ -39,7 +40,7 @@ export function refreshScreens() {
 export const hasOpenScreens = () => stack.length > 0;
 
 /// Шапка с кнопкой «назад», как в RoomDetailsScreen/CartDetailsScreen.
-export function backButton(close, label = "Назад") {
+export function backButton(close, label = tr("Назад")) {
   return h("button", { class: "back-button", "aria-label": label, onclick: close }, icon("back", 24, 3));
 }
 

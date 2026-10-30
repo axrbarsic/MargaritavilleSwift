@@ -5,16 +5,17 @@ import { MatrixRain } from "./matrix-rain.js";
 import { TVStatic } from "./tv-static.js";
 import { Brooklyn } from "./brooklyn.js";
 import { CameraBackground, VideoBackground } from "./media-backgrounds.js";
+import { tr } from "../../i18n/i18n.js";
 
 const MODES = { matrixRain: MatrixRain, tvStaticNoise: TVStatic, video: VideoBackground, brooklyn: Brooklyn, camera: CameraBackground };
 
 export const BACKGROUND_MODES = [
-  { id: "off", title: "Выкл", description: "Чёрный фон" },
+  { id: "off", title: tr("Выкл"), description: tr("Чёрный фон") },
   { id: "matrixRain", title: "Matrix", description: "Matrix Rain" },
-  { id: "tvStaticNoise", title: "TV", description: "Сломанный телевизор" },
-  { id: "video", title: "Видео", description: "Видео фон" },
+  { id: "tvStaticNoise", title: "TV", description: tr("Сломанный телевизор") },
+  { id: "video", title: tr("Видео"), description: tr("Видео фон") },
   { id: "brooklyn", title: "Brooklyn", description: "Brooklyn 3D" },
-  { id: "camera", title: "Камера", description: "Задняя камера" }
+  { id: "camera", title: tr("Камера"), description: tr("Задняя камера") }
 ];
 
 export class AppBackground {

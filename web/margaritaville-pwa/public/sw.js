@@ -1,6 +1,6 @@
 // Сервис-воркер: держит оболочку приложения в кэше, чтобы оно открывалось без сети.
 // При обновлении версии старый кэш удаляется. Данные смены живут в IndexedDB.
-const CACHE = "margaritaville-pwa-v5";
+const CACHE = "margaritaville-pwa-v6";
 const SHELL = [
   "./",
   "brooklyn/BrooklynDonorMesh.bin",
@@ -8,11 +8,17 @@ const SHELL = [
   "brooklyn/tex0.png",
   "brooklyn/tex1.png",
   "data/ios-changelog.json",
+  "i18n/en.json",
+  "i18n/es.json",
+  "i18n/ht.json",
+  "i18n/jam.json",
+  "i18n/uk.json",
   "icons/icon-180.png",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "index.html",
   "js/app.js",
+  "js/boot.js",
   "js/camera/controls.js",
   "js/camera/effects.js",
   "js/camera/renderer.js",
@@ -25,9 +31,11 @@ const SHELL = [
   "js/domain/room.js",
   "js/domain/selection.js",
   "js/domain/summary-grouping.js",
+  "js/i18n/i18n.js",
   "js/infra/feedback.js",
   "js/infra/media-files.js",
   "js/infra/notifications.js",
+  "js/infra/viewport.js",
   "js/infra/voice.js",
   "js/store/db.js",
   "js/store/session-store-carts.js",
@@ -51,6 +59,7 @@ const SHELL = [
   "js/ui/settings/changelog-screen.js",
   "js/ui/settings/settings-background.js",
   "js/ui/settings/settings-controls.js",
+  "js/ui/settings/settings-language.js",
   "js/ui/settings/settings-screen.js",
   "js/ui/settings/settings-work.js",
   "js/ui/settings/typography-lab.js",

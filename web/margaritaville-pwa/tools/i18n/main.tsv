@@ -1,0 +1,132 @@
+ru	en	uk	es	ht	jam
+Загрузка	Loading	Завантаження	Cargando	Chajman	A load
+Смена не загрузилась	The shift didn't load	Зміна не завантажилася	El turno no se cargó	Woulman an pa chaje	Di shift neva load
+Сохранённые данные не изменены. Изменения не сохраняются, пока загрузка не пройдёт.	Saved data is unchanged. Changes aren't saved until loading succeeds.	Збережені дані не змінено. Зміни не зберігаються, доки завантаження не пройде.	Los datos guardados no cambiaron. Los cambios no se guardan hasta que la carga funcione.	Done ki anrejistre yo pa chanje. Chanjman pa anrejistre toutotan chajman an pa reyisi.	Di save data nuh change. Change dem nah save till di load work.
+Повторить	Try again	Повторити	Reintentar	Eseye ankò	Try again
+Полотенца банные	Bath towels	Банні рушники	Toallas de baño	Sèvyèt beny	Bath towel dem
+Полотенца ручные	Hand towels	Рушники для рук	Toallas de mano	Sèvyèt men	Hand towel dem
+Салфетки	Washcloths	Серветки	Toallitas	Ti sèvyèt	Rag dem
+Коврики	Bath mats	Килимки	Alfombrillas	Tapi beny	Bath mat dem
+Простыни	Sheets	Простирадла	Sábanas	Dra	Sheet dem
+Наволочки	Pillowcases	Наволочки	Fundas de almohada	Tèt zòrye	Pillowcase dem
+Уборщица	Housekeeper	Покоївка	Camarista	Fanm menaj	Housekeeper
+Запись голоса в этом браузере недоступна	Voice recording isn't available in this browser	Запис голосу в цьому браузері недоступний	La grabación de voz no está disponible en este navegador	Anrejistreman vwa pa disponib nan navigatè sa a	Voice recording cyaan work inna dis browser
+Проверяю доступ...	Checking access...	Перевіряю доступ...	Comprobando acceso...	M ap verifye aksè...	A check access...
+Нет доступа к микрофону	No microphone access	Немає доступу до мікрофона	Sin acceso al micrófono	Pa gen aksè mikwo	Nuh access to di mic
+Запускаю микрофон...	Starting microphone...	Запускаю мікрофон...	Iniciando micrófono...	M ap lanse mikwo a...	A start di mic...
+Идёт запись...	Recording...	Іде запис...	Grabando...	Ap anrejistre...	A record...
+Сохраняю запись...	Saving recording...	Зберігаю запис...	Guardando grabación...	M ap anrejistre odyo a...	A save di recording...
+Готово к записи	Ready to record	Готово до запису	Listo para grabar	Pare pou anrejistre	Ready fi record
+Голос сохранён без расшифровки	Voice saved without transcription	Голос збережено без розшифрування	Voz guardada sin transcripción	Vwa a anrejistre san transkripsyon	Voice save widout transcription
+Расшифровка в этом браузере недоступна	Transcription isn't available in this browser	Розшифрування в цьому браузері недоступне	La transcripción no está disponible en este navegador	Transkripsyon pa disponib nan navigatè sa a	Transcription cyaan work inna dis browser
+фото	photo	фото	foto	foto	photo
+видео	video	відео	vídeo	videyo	video
+голос	voice	голос	voz	vwa	voice
+Тележка {cart}: заметка	Cart {cart}: note	Візок {cart}: нотатка	Carrito {cart}: nota	Charyo {cart}: nòt	Cart {cart}: note
+Тележка {cart}: добавлено {media}	Cart {cart}: {media} added	Візок {cart}: додано {media}	Carrito {cart}: {media} añadido	Charyo {cart}: {media} ajoute	Cart {cart}: {media} add
+Тележка {cart}: удалено {media}	Cart {cart}: {media} removed	Візок {cart}: видалено {media}	Carrito {cart}: {media} eliminado	Charyo {cart}: {media} retire	Cart {cart}: {media} tek out
+Тележка {cart}: {item} {count}	Cart {cart}: {item} {count}	Візок {cart}: {item} {count}	Carrito {cart}: {item} {count}	Charyo {cart}: {item} {count}	Cart {cart}: {item} {count}
+Расходник	Supply	Витратний матеріал	Suministro	Pwovizyon	Supply
+Тележка {cart}: {item} выполнено	Cart {cart}: {item} done	Візок {cart}: {item} виконано	Carrito {cart}: {item} hecho	Charyo {cart}: {item} fini	Cart {cart}: {item} done
+Тележка {cart}: {item} снова в работе	Cart {cart}: {item} back in progress	Візок {cart}: {item} знову в роботі	Carrito {cart}: {item} otra vez pendiente	Charyo {cart}: {item} ankò an kou	Cart {cart}: {item} back pon di list
+Уборщица удалена из назначений	Housekeeper removed from assignments	Покоївку видалено з призначень	Camarista eliminada de las asignaciones	Fanm menaj la retire nan travay yo	Housekeeper tek off di assignment dem
+Тест: все номера случайно распределены	Test: all rooms randomly assigned	Тест: усі номери розподілено випадково	Prueba: todas las habitaciones asignadas al azar	Tès: tout chanm yo separe o aza	Test: all di room dem share out random
+жёлтый	yellow	жовтий	amarillo	jòn	yellow
+красный	red	червоний	rojo	wouj	red
+зелёный	green	зелений	verde	vèt	green
+назначено	scheduled	призначено	programado	pwograme	schedule
+Хранилище недоступно	Storage unavailable	Сховище недоступне	Almacenamiento no disponible	Depo a pa disponib	Storage nuh available
+Выбор тележек изменён	Cart selection changed	Вибір візків змінено	Selección de carritos cambiada	Chwa charyo yo chanje	Cart selection change
+Тележка {cart}: выбор комнат изменён	Cart {cart}: room selection changed	Візок {cart}: вибір номерів змінено	Carrito {cart}: selección de habitaciones cambiada	Charyo {cart}: chwa chanm yo chanje	Cart {cart}: room selection change
+Рабочий день зафиксирован	Workday locked	Робочий день зафіксовано	Jornada fijada	Jounen travay la fikse	Workday lock
+Рабочий день открыт для редактирования	Workday open for editing	Робочий день відкрито для редагування	Jornada abierta para editar	Jounen travay la louvri pou modifye	Workday open fi edit
+{room}: VIP включён	{room}: VIP on	{room}: VIP увімкнено	{room}: VIP activado	{room}: VIP limen	{room}: VIP on
+{room}: VIP выключен	{room}: VIP off	{room}: VIP вимкнено	{room}: VIP desactivado	{room}: VIP etenn	{room}: VIP off
+{room}: время снято	{room}: time cleared	{room}: час знято	{room}: hora quitada	{room}: lè a retire	{room}: time clear
+{room}: время назначено	{room}: time set	{room}: час призначено	{room}: hora fijada	{room}: lè a mete	{room}: time set
+{room}: текстовая заметка	{room}: text note	{room}: текстова нотатка	{room}: nota de texto	{room}: nòt ekri	{room}: text note
+{room}: голосовая заметка	{room}: voice note	{room}: голосова нотатка	{room}: nota de voz	{room}: nòt vokal	{room}: voice note
+{room}: добавлено {media}	{room}: {media} added	{room}: додано {media}	{room}: {media} añadido	{room}: {media} ajoute	{room}: {media} add
+{room}: удалено {media}	{room}: {media} removed	{room}: видалено {media}	{room}: {media} eliminado	{room}: {media} retire	{room}: {media} tek out
+{room}: открыта по времени	{room}: opened on schedule	{room}: відкрито за часом	{room}: abierta a la hora programada	{room}: louvri a lè pwograme a	{room}: open pon time
+Голосовая заметка	Voice note	Голосова нотатка	Nota de voz	Nòt vokal	Voice note
+Не удалось сохранить голос	Couldn't save the voice note	Не вдалося зберегти голос	No se pudo guardar la voz	Pa t ka anrejistre vwa a	Cyaan save di voice
+Обновлено: {time}	Updated: {time}	Оновлено: {time}	Actualizado: {time}	Mizajou: {time}	Update: {time}
+Голосовые заметки по тележке появятся здесь пузырями после записи.	Cart voice notes will appear here as bubbles after recording.	Голосові нотатки візка з'являться тут бульбашками після запису.	Las notas de voz del carrito aparecerán aquí como burbujas después de grabar.	Nòt vokal charyo a ap parèt isit kòm ti boul apre anrejistreman.	Cart voice note dem wi show up yah so like bubble afta yuh record.
+Фото и видео сохраняются только локально на устройстве.	Photos and videos are stored only on this device.	Фото й відео зберігаються лише локально на пристрої.	Las fotos y vídeos se guardan solo en este dispositivo.	Foto ak videyo rete sèlman sou aparèy sa a.	Photo an video stay pon dis phone one.
+Тележка {cart}	Cart {cart}	Візок {cart}	Carrito {cart}	Charyo {cart}	Cart {cart}
+Заметка	Note	Нотатка	Nota	Nòt	Note
+Расходники	Supplies	Витратні матеріали	Suministros	Pwovizyon	Supplies
+Медиа	Media	Медіа	Multimedia	Medya	Media
+{item} выполнено	{item} done	{item} виконано	{item} hecho	{item} fini	{item} done
+Выполнено {time}	Done {time}	Виконано {time}	Hecho {time}	Fini {time}	Done {time}
+Обновлено {time}	Updated {time}	Оновлено {time}	Actualizado {time}	Mizajou {time}	Update {time}
+Не задано	Not set	Не задано	Sin definir	Pa defini	Nuh set
+Больше	More	Більше	Más	Plis	More
+Меньше	Less	Менше	Menos	Mwens	Less
+Количество	Quantity	Кількість	Cantidad	Kantite	How much
+ВНИМАНИЕ • 5 сек до скрытия	ATTENTION • hides in 5 sec	УВАГА • 5 с до приховування	ATENCIÓN • se oculta en 5 s	ATANSYON • ap kache nan 5 s	LISTEN UP • gone inna 5 sec
+Нужны расходники: {list}	Supplies needed: {list}	Потрібні витратні матеріали: {list}	Se necesitan suministros: {list}	Bezwen pwovizyon: {list}	Need supplies: {list}
+Не удалось сохранить медиа	Couldn't save the media	Не вдалося зберегти медіа	No se pudo guardar el archivo	Pa t ka anrejistre medya a	Cyaan save di media
+Фото	Photo	Фото	Foto	Foto	Photo
+Открыть медиа	Open media	Відкрити медіа	Abrir archivo	Louvri medya	Open media
+Удалить медиа	Delete media	Видалити медіа	Eliminar archivo	Efase medya	Delete media
+Закрыть	Close	Закрити	Cerrar	Fèmen	Close
+Заметки	Notes	Нотатки	Notas	Nòt	Note dem
+Голос/медиа	Voice/media	Голос/медіа	Voz/multimedia	Vwa/medya	Voice/media
+Голосовые заметки появятся здесь пузырями после записи.	Voice notes will appear here as bubbles after recording.	Голосові нотатки з'являться тут бульбашками після запису.	Las notas de voz aparecerán aquí como burbujas después de grabar.	Nòt vokal yo ap parèt isit kòm ti boul apre anrejistreman.	Voice note dem wi show up yah so like bubble afta yuh record.
+Фото и видео сохраняются локально и не синхронизируются.	Photos and videos stay on the device and aren't synced.	Фото й відео зберігаються локально й не синхронізуються.	Las fotos y vídeos se guardan en el dispositivo y no se sincronizan.	Foto ak videyo rete sou aparèy la, yo pa senkronize.	Photo an video stay pon di phone, dem nuh sync.
+Текстовая заметка	Text note	Текстова нотатка	Nota de texto	Nòt ekri	Text note
+Новая голосовая заметка	New voice note	Нова голосова нотатка	Nueva nota de voz	Nouvo nòt vokal	New voice note
+Комната {room}	Room {room}	Номер {room}	Habitación {room}	Chanm {room}	Room {room}
+Жёлтый	Yellow	Жовтий	Amarillo	Jòn	Yellow
+Красный	Red	Червоний	Rojo	Wouj	Red
+Зелёный	Green	Зелений	Verde	Vèt	Green
+Розовый	Pink	Рожевий	Rosa	Woz	Pink
+Голос / аудио	Voice / audio	Голос / аудіо	Voz / audio	Vwa / odyo	Voice / audio
+Фото, видео, галерея	Photo, video, gallery	Фото, відео, галерея	Foto, vídeo, galería	Foto, videyo, galri	Photo, video, gallery
+Медиа {count}	Media {count}	Медіа {count}	Multimedia {count}	Medya {count}	Media {count}
+Быстрый статус	Quick status	Швидкий статус	Estado rápido	Estati rapid	Quick status
+Выбор применяется к живой комнате и закрывает центр после commit.	The choice applies to the live room and closes the center after commit.	Вибір застосовується до живого номера й закриває центр після commit.	La elección se aplica a la habitación en vivo y cierra el centro tras el commit.	Chwa a aplike sou chanm an dirèk la epi li fèmen sant lan apre commit.	Wha yuh pick go straight pon di room an close di center afta commit.
+VIP и время	VIP and time	VIP і час	VIP y hora	VIP ak lè	VIP an time
+Время не назначено. Штатный экран поддерживает назначение, изменение и очистку.	No time set. The standard screen lets you set, change and clear it.	Час не призначено. Штатний екран дозволяє призначати, змінювати й очищати його.	Sin hora fijada. La pantalla estándar permite fijarla, cambiarla y quitarla.	Pa gen lè ki mete. Ekran nòmal la pèmèt ou mete l, chanje l ak efase l.	No time set. Di regular screen mek yuh set it, change it an clear it.
+Назначено: {time}. Нажми для изменения или очистки.	Scheduled: {time}. Tap to change or clear.	Призначено: {time}. Натисни, щоб змінити або очистити.	Programado: {time}. Toca para cambiar o quitar.	Pwograme: {time}. Peze pou chanje oswa efase.	Schedule: {time}. Tap fi change or clear it.
+VIP включён	VIP on	VIP увімкнено	VIP activado	VIP limen	VIP on
+Включить VIP	Turn on VIP	Увімкнути VIP	Activar VIP	Limen VIP	Turn on VIP
+Выключить	Turn off	Вимкнути	Desactivar	Etenn	Turn off
+Назначить время	Set time	Призначити час	Fijar hora	Mete lè	Set time
+Изменить время	Change time	Змінити час	Cambiar hora	Chanje lè	Change time
+Заметки и медиа	Notes and media	Нотатки й медіа	Notas y multimedia	Nòt ak medya	Note an media
+Capture и редакторы закрывают увеличенную ячейку только после успешного сохранения.	Capture and editors close the zoomed cell only after a successful save.	Capture і редактори закривають збільшену комірку лише після успішного збереження.	La captura y los editores cierran la celda ampliada solo tras guardar con éxito.	Kaptire ak editè yo fèmen selil agrandi a sèlman apre yo anrejistre byen.	Capture an di editor dem close di big cell only afta it save good.
+Аудио {count}	Audio {count}	Аудіо {count}	Audio {count}	Odyo {count}	Audio {count}
+Файлов {count}	Files {count}	Файлів {count}	Archivos {count}	Fichye {count}	Files {count}
+Есть текст	Has text	Є текст	Tiene texto	Gen tèks	Text deh yah
+Командный центр комнаты {room}	Room {room} command center	Командний центр номера {room}	Centro de control de la habitación {room}	Sant kòmand chanm {room}	Room {room} command center
+Назад	Back	Назад	Atrás	Retounen	Back
+Открыть настройки	Open settings	Відкрити налаштування	Abrir ajustes	Louvri paramèt	Open settings
+Начать	Start	Почати	Empezar	Kòmanse	Start
+Рабочий список	Work list	Робочий список	Lista de trabajo	Lis travay	Work list
+Выбрано: {count}	Selected: {count}	Вибрано: {count}	Seleccionadas: {count}	Chwazi: {count}	Pick: {count}
+Выбери уборщицу сверху.	Pick a housekeeper above.	Обери покоївку вгорі.	Elige una camarista arriba.	Chwazi yon fanm menaj anlè a.	Pick a housekeeper up top.
+Имя уборщицы	Housekeeper name	Ім'я покоївки	Nombre de la camarista	Non fanm menaj la	Housekeeper name
+Поиск уборщицы по началу имени	Search housekeepers by first letters	Пошук покоївки за початком імені	Buscar camarista por el inicio del nombre	Chèche fanm menaj pa kòmansman non li	Search housekeeper by di first letter dem
+Подсказки уборщиц	Housekeeper suggestions	Підказки покоївок	Sugerencias de camaristas	Sijesyon fanm menaj	Housekeeper suggestion dem
+Очистить имя и закрыть подсказки	Clear name and close suggestions	Очистити ім'я й закрити підказки	Borrar nombre y cerrar sugerencias	Efase non an epi fèmen sijesyon yo	Clear di name an close di suggestion dem
+Здание	Building	Будівля	Edificio	Bilding	Building
+Этаж	Floor	Поверх	Piso	Etaj	Floor
+Уже выбрано в других зонах	Already selected in other zones	Уже вибрано в інших зонах	Ya seleccionadas en otras zonas	Deja chwazi nan lòt zòn	Pick aready inna nedda zone
+Занято	Taken	Зайнято	Ocupada	Okipe	Tek aready
+Убрать уборщицу из смены	Remove housekeeper from shift	Прибрати покоївку зі зміни	Quitar camarista del turno	Retire fanm menaj la nan woulman an	Tek housekeeper off di shift
+VIP выключить	Turn VIP off	Вимкнути VIP	Desactivar VIP	Etenn VIP	Turn VIP off
+VIP включить	Turn VIP on	Увімкнути VIP	Activar VIP	Limen VIP	Turn VIP on
+Вернуть в жёлтый	Back to yellow	Повернути в жовтий	Volver a amarillo	Remete l jòn	Sen back to yellow
+Время открытия	Opening time	Час відкриття	Hora de apertura	Lè ouvèti	Opening time
+Очистить	Clear	Очистити	Quitar	Efase	Clear
+Установить	Set	Встановити	Fijar	Mete	Set
+Фильтр: {status}	Filter: {status}	Фільтр: {status}	Filtro: {status}	Filt: {status}	Filter: {status}
+Открыть выбор комнат	Open room selection	Відкрити вибір номерів	Abrir selección de habitaciones	Louvri chwa chanm yo	Open room selection
+Говори на языке интерфейса. Текст появится после остановки записи.	Speak in the app language. Text appears after you stop recording.	Говори мовою інтерфейсу. Текст з'явиться після зупинки запису.	Habla en el idioma de la app. El texto aparecerá al detener la grabación.	Pale nan lang aplikasyon an. Tèks la ap parèt lè ou kanpe anrejistreman an.	Talk inna di app language. Di text show up when yuh stop di recording.
+Остановить	Stop	Зупинити	Detener	Kanpe	Stop
+Воспроизвести	Play	Відтворити	Reproducir	Jwe	Play
+Не удалось воспроизвести голос	Couldn't play the voice note	Не вдалося відтворити голос	No se pudo reproducir la voz	Pa t ka jwe vwa a	Cyaan play di voice
+Удалить голосовую заметку	Delete voice note	Видалити голосову нотатку	Eliminar nota de voz	Efase nòt vokal la	Delete di voice note

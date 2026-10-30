@@ -7,6 +7,7 @@ import { h, formatTime } from "./dom.js";
 import { icon } from "./icons.js";
 import { roomStatus } from "../domain/room.js";
 import { attachVIPJelly } from "./vip-jelly.js";
+import { tr } from "../i18n/i18n.js";
 
 const HOLD_STATUS_MS = 460;
 const HOLD_ZOOM_MS = 520;
@@ -37,7 +38,7 @@ export function roomTile(app, room, { tileWidth, onAdvance, onZoom, onActions })
     class: `tile status-${status}${vipHDR ? " vip-hdr" : ""}`,
     role: "button",
     tabindex: "0",
-    "aria-label": `Комната ${room.id}`,
+    "aria-label": tr("Комната {room}", { room: room.id }),
     "data-room": room.id,
   },
   h("span", { class: "tile-body" }),

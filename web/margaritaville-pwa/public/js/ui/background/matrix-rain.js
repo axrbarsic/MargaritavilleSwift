@@ -1,5 +1,6 @@
 // Matrix Rain: 80 капель символов, голова яркая, хвост гаснет, символы мерцают.
 // Источник: Effects/SpriteKit/MatrixRainSpriteScene.swift (те же скорости, прозрачности, шрифт).
+import { viewportHeight } from "../../infra/viewport.js";
 const GLYPHS = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃ日田大木本山川空海風火水金土月星"];
 const DROPS = 80;
 const FONT = 18;
@@ -33,7 +34,7 @@ export class MatrixRain {
   fit() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    this.height = viewportHeight();
     this.canvas.width = Math.round(this.width * dpr);
     this.canvas.height = Math.round(this.height * dpr);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

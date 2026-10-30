@@ -3,8 +3,9 @@
 import * as selection from "../domain/selection.js";
 import * as consumables from "../domain/consumables.js";
 import { compareRoomIDs, inferredTerritory, normalizeRoomID } from "../domain/catalog.js";
+import { tr } from "../i18n/i18n.js";
 
-const MEDIA_LABEL = { photo: "фото", video: "видео", audio: "голос" };
+const MEDIA_LABEL = { photo: tr("фото"), video: tr("видео"), audio: tr("голос") };
 
 export const sessionCartMethods = {
   // ——— тележки ———
@@ -22,12 +23,12 @@ export const sessionCartMethods = {
       const empty = !text.trim();
       cart.note = empty ? null : text;
       cart.noteUpdatedAt = empty ? null : now;
-    }, (cart) => ["cartNoteChanged", `Тележка ${cart.id}: заметка`]);
+    }, (cart) => ["cartNoteChanged", tr("Тележка {cart}: заметка", { cart: cart.id })]);
   },
 
   addCartMedia(id, attachment) {
     this.mutateCart(id, (cart) => { cart.mediaAttachments = [attachment, ...(cart.mediaAttachments ?? [])]; },
-      (cart) => ["cartMediaAdded", `Тележка ${cart.id}: добавлено ${MEDIA_LABEL[attachment.kind]}`]);
+      (cart) => ["cartMediaAdded", tr("Тележка {cart}: добавлено {media}", { cart: cart.id, media: MEDIA_LABEL[attachment.kind] })]);
   },
 
   removeCartMedia(id, attachment) {
@@ -38,19 +39,19 @@ export const sessionCartMethods = {
         cart.note = null;
         cart.noteUpdatedAt = null;
       }
-    }, (cart) => ["cartMediaAdded", `Тележка ${cart.id}: удалено ${MEDIA_LABEL[attachment.kind]}`]);
+    }, (cart) => ["cartMediaAdded", tr("Тележка {cart}: удалено {media}", { cart: cart.id, media: MEDIA_LABEL[attachment.kind] })]);
   },
 
   setConsumableQuantity(cartID, itemID, title, quantity) {
     const catalog = this.settings.get("cartConsumableCatalog");
     this.mutateCart(cartID, (cart, now) => consumables.setQuantity(cart, itemID, title, quantity, catalog, now),
-      (cart, item) => ["cartConsumablesChanged", `Тележка ${cart.id}: ${item?.title ?? title ?? "Расходник"} ${consumables.clampQuantity(quantity)}`]);
+      (cart, item) => ["cartConsumablesChanged", tr("Тележка {cart}: {item} {count}", { cart: cart.id, item: tr(item?.title ?? title ?? "Расходник"), count: consumables.clampQuantity(quantity) })]);
   },
 
   toggleConsumableCompletion(cartID, itemID, title) {
     const catalog = this.settings.get("cartConsumableCatalog");
     this.mutateCart(cartID, (cart, now) => consumables.toggleCompletion(cart, itemID, title, catalog, now),
-      (cart, item) => ["cartConsumablesChanged", `Тележка ${cart.id}: ${item?.title ?? title ?? "Расходник"} ${item?.completedAt != null ? "выполнено" : "снова в работе"}`]);
+      (cart, item) => ["cartConsumablesChanged", tr(item?.completedAt != null ? "Тележка {cart}: {item} выполнено" : "Тележка {cart}: {item} снова в работе", { cart: cart.id, item: tr(item?.title ?? title ?? "Расходник") })]);
   },
 
   // ——— каталог номеров ———
@@ -93,7 +94,7 @@ export const sessionCartMethods = {
     if (!carts.length) return;
     carts.forEach((c) => delete this.selection.cartHousekeeperIDs[c]);
     this.rebuildCarts();
-    this.record("selectionChanged", "Уборщица удалена из назначений");
+    this.record("selectionChanged", tr("Уборщица удалена из назначений"));
     this.commit();
   },
 
@@ -117,7 +118,7 @@ export const sessionCartMethods = {
     });
     this.selection = next;
     this.rebuildCarts();
-    this.record("selectionChanged", "Тест: все номера случайно распределены");
+    this.record("selectionChanged", tr("Тест: все номера случайно распределены"));
     this.commit(true);
     return { housekeeperCount: active.length, roomCount: rooms.length };
   }

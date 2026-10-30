@@ -1,6 +1,7 @@
 // Голосовая заметка: запись микрофона (MediaRecorder) и расшифровка на русском
 // (Web Speech API, если браузер её даёт). Текст выдаётся после остановки записи.
 // Источник: Infrastructure/Speech/VoiceTranscriptionService.swift, VoiceNoteViewModel.swift.
+import { currentLanguage, tr } from "../i18n/i18n.js";
 
 const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -37,32 +38,32 @@ export class VoiceRecorder {
 
   async start(onCompletion) {
     if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-      this.setPhase("failed", "Запись голоса в этом браузере недоступна");
+      this.setPhase("failed", tr("Запись голоса в этом браузере недоступна"));
       return;
     }
     this.onCompletion = onCompletion;
-    this.setPhase("requestingPermission", "Проверяю доступ...");
+    this.setPhase("requestingPermission", tr("Проверяю доступ..."));
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch {
-      this.setPhase("failed", "Нет доступа к микрофону");
+      this.setPhase("failed", tr("Нет доступа к микрофону"));
       return;
     }
-    this.setPhase("starting", "Запускаю микрофон...");
+    this.setPhase("starting", tr("Запускаю микрофон..."));
     const mimeType = pickMimeType();
     this.recorder = new MediaRecorder(this.stream, mimeType ? { mimeType } : undefined);
     this.recorder.ondataavailable = (event) => { if (event.data.size) this.chunks.push(event.data); };
     this.recorder.onstop = () => this.finish();
     this.recorder.start();
     this.startRecognition();
-    this.setPhase("recording", "Идёт запись...");
+    this.setPhase("recording", tr("Идёт запись..."));
   }
 
   startRecognition() {
     if (!Recognition) return;
     try {
       const recognition = new Recognition();
-      recognition.lang = "ru-RU";
+      recognition.lang = currentLanguage().speech;
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.onresult = (event) => {
@@ -90,7 +91,7 @@ export class VoiceRecorder {
 
   stop() {
     if (!this.isRecording) return;
-    this.setPhase("finishing", "Сохраняю запись...");
+    this.setPhase("finishing", tr("Сохраняю запись..."));
     const recognition = this.recognition;
     this.recognition = null;
     try { recognition?.stop(); } catch { /* уже остановлено */ }
@@ -104,7 +105,7 @@ export class VoiceRecorder {
     const transcript = `${this.finalText} ${this.interimText}`.replace(/\s+/g, " ").trim();
     const completion = this.onCompletion;
     this.reset();
-    this.setPhase("idle", transcript ? "Готово к записи" : Recognition ? "Голос сохранён без расшифровки" : "Расшифровка в этом браузере недоступна");
+    this.setPhase("idle", transcript ? tr("Готово к записи") : Recognition ? tr("Голос сохранён без расшифровки") : tr("Расшифровка в этом браузере недоступна"));
     if (blob.size) completion?.({ blob, transcript: transcript || null });
   }
 

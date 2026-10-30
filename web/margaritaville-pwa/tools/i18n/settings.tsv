@@ -1,0 +1,193 @@
+ru	en	uk	es	ht	jam
+Без звука	No sound	Без звуку	Sin sonido	San son	No sound
+Старый колокольчик	Old bell	Старий дзвіночок	Campanilla antigua	Ansyen klòch	Ole bell
+Звонок стойки	Front desk bell	Дзвінок стійки	Timbre de recepción	Klòch resepsyon	Front desk bell
+Плотное подтверждение	Solid confirm	Щільне підтвердження	Confirmación firme	Konfimasyon solid	Solid confirm
+Низкий бонг	Low bong	Низький бонг	Bong grave	Bong ba	Low bong
+Яркий клик	Bright click	Яскравий клік	Clic brillante	Klik klè	Bright click
+Мягкий клик	Soft click	М'який клік	Clic suave	Klik dous	Soft click
+Короткий тик	Short tick	Короткий тік	Tic corto	Ti tik kout	Short tick
+Лёгкий переключатель	Light switch	Легкий перемикач	Interruptor ligero	Switch lejè	Light switch
+Глубокий переключатель	Deep switch	Глибокий перемикач	Interruptor profundo	Switch fon	Deep switch
+Сочный поп	Juicy pop	Соковитий поп	Pop jugoso	Pop ki ji	Juicy pop
+Стеклянное подтверждение	Glass confirm	Скляне підтвердження	Confirmación de cristal	Konfimasyon vè	Glass confirm
+Резкий сигнал	Sharp alert	Різкий сигнал	Alerta aguda	Siyal sèk	Sharp alert
+Низкий отказ	Low error	Низька відмова	Error grave	Refi ba	Low error
+Открытие меню	Menu open	Відкриття меню	Abrir menú	Louvri meni	Menu open
+Все остальные действия	All other actions	Усі інші дії	Todas las demás acciones	Tout lòt aksyon yo	All di odda action dem
+Любые действия, которые не касаются ячеек.	Any actions that don't involve cells.	Будь-які дії, що не стосуються комірок.	Cualquier acción que no tenga que ver con las celdas.	Nenpòt aksyon ki pa gen pou wè ak selil yo.	Any action weh nuh touch di cell dem.
+Ячейка	Cell	Комірка	Celda	Selil	Cell
+Любое взаимодействие с ячейкой, кроме финального зелёного статуса.	Any interaction with a cell except the final green status.	Будь-яка взаємодія з коміркою, крім фінального зеленого статусу.	Cualquier interacción con una celda, excepto el estado verde final.	Nenpòt aksyon sou yon selil, eksepte dènye estati vèt la.	Anyting yuh do wid a cell, cept di final green status.
+Зелёная ячейка	Green cell	Зелена комірка	Celda verde	Selil vèt	Green cell
+Когда ячейка становится зелёной.	When a cell turns green.	Коли комірка стає зеленою.	Cuando una celda se vuelve verde.	Lè yon selil vin vèt.	When a cell turn green.
+Выкл	Off	Вимк	No	Etenn	Off
+Чёрный фон	Black background	Чорний фон	Fondo negro	Fon nwa	Black background
+Сломанный телевизор	Broken TV	Зламаний телевізор	Televisor roto	Televizyon kase	Mash-up TV
+Видео	Video	Відео	Vídeo	Videyo	Video
+Видео фон	Video background	Відеофон	Fondo de vídeo	Fon videyo	Video background
+Камера	Camera	Камера	Cámara	Kamera	Camera
+Задняя камера	Back camera	Задня камера	Cámara trasera	Kamera dèyè	Back camera
+Эффекты камеры требуют WebGL 2, а он недоступен.	Camera effects need WebGL 2, which isn't available.	Ефекти камери потребують WebGL 2, а він недоступний.	Los efectos de cámara necesitan WebGL 2 y no está disponible.	Efè kamera yo bezwen WebGL 2, men li pa disponib.	Camera effect dem need WebGL 2, an it nuh available.
+Браузер не даёт доступ к камере.	The browser doesn't allow camera access.	Браузер не дає доступу до камери.	El navegador no permite acceder a la cámara.	Navigatè a pa bay aksè kamera.	Di browser nah gi access to di camera.
+Нет доступа к камере. Коснитесь экрана, чтобы попробовать снова, или разрешите камеру в настройках.	No camera access. Tap the screen to try again, or allow the camera in Settings.	Немає доступу до камери. Торкніться екрана, щоб спробувати знову, або дозвольте камеру в налаштуваннях.	Sin acceso a la cámara. Toca la pantalla para reintentar o permite la cámara en Ajustes.	Pa gen aksè kamera. Touche ekran an pou eseye ankò, oswa pèmèt kamera a nan Paramèt.	No camera access. Touch di screen fi try again, or allow di camera inna Settings.
+Камера не запустилась. Коснитесь экрана, чтобы попробовать снова.	The camera didn't start. Tap the screen to try again.	Камера не запустилася. Торкніться екрана, щоб спробувати знову.	La cámara no se inició. Toca la pantalla para reintentar.	Kamera a pa demare. Touche ekran an pou eseye ankò.	Di camera neva start. Touch di screen fi try again.
+Камера остановлена. Коснитесь экрана, чтобы включить её снова.	The camera was stopped. Tap the screen to turn it back on.	Камеру зупинено. Торкніться екрана, щоб увімкнути її знову.	La cámara se detuvo. Toca la pantalla para volver a encenderla.	Kamera a kanpe. Touche ekran an pou limen l ankò.	Di camera stop. Touch di screen fi turn it back on.
+Классический серый аналоговый снег.	Classic gray analog snow.	Класичний сірий аналоговий сніг.	Nieve analógica gris clásica.	Nèj analòg gri klasik.	Classic grey TV snow.
+Более мелкое плотное зерно.	Finer, denser grain.	Дрібніше щільне зерно.	Grano más fino y denso.	Grenn ki pi piti e pi sere.	Smalla, tighter grain.
+Горизонтальные срывы и полосы.	Horizontal tears and bands.	Горизонтальні зриви й смуги.	Cortes y franjas horizontales.	Dechire ak bann orizontal.	Sideways tear an band dem.
+Зелёный цифровой шум.	Green digital noise.	Зелений цифровий шум.	Ruido digital verde.	Bri dijital vèt.	Green digital noise.
+Жёсткий контрастный снег.	Harsh high-contrast snow.	Жорсткий контрастний сніг.	Nieve dura de alto contraste.	Nèj di ak gwo kontras.	Hard high-contrast snow.
+Фон отключён, основной экран остаётся чёрным.	Background off; the main screen stays black.	Фон вимкнено, основний екран лишається чорним.	Fondo desactivado; la pantalla principal queda negra.	Fon an etenn, ekran prensipal la rete nwa.	Background off, di main screen stay black.
+Matrix Rain как основной живой фон.	Matrix Rain as the main live background.	Matrix Rain як основний живий фон.	Matrix Rain como fondo animado principal.	Matrix Rain kòm fon vivan prensipal.	Matrix Rain as di main live background.
+Аналоговый телевизионный снег как основной фон.	Analog TV snow as the main background.	Аналоговий телевізійний сніг як основний фон.	Nieve de TV analógica como fondo principal.	Nèj televizyon analòg kòm fon prensipal.	Ole TV snow as di main background.
+Видео хранится только локально на устройстве.	The video is stored only on this device.	Відео зберігається лише локально на пристрої.	El vídeo se guarda solo en este dispositivo.	Videyo a rete sèlman sou aparèy sa a.	Di video stay pon dis phone one.
+3D-сцена Brooklyn с геометрией, материалом и анимацией исходника.	Brooklyn 3D scene with the original geometry, material and animation.	3D-сцена Brooklyn з геометрією, матеріалом і анімацією оригіналу.	Escena 3D Brooklyn con la geometría, el material y la animación originales.	Sèn 3D Brooklyn ak jeyometri, materyèl ak animasyon orijinal la.	Brooklyn 3D scene wid di original shape, material an animation.
+Вместо обоев видно изображение камеры. Камера выключается, когда приложение свёрнуто или поверх открыт другой экран.	The camera image replaces the wallpaper. The camera turns off when the app is in the background or another screen is open on top.	Замість шпалер видно зображення камери. Камера вимикається, коли застосунок згорнуто або поверх відкрито інший екран.	La imagen de la cámara sustituye al fondo. La cámara se apaga cuando la app está en segundo plano o hay otra pantalla encima.	Imaj kamera a ranplase fon an. Kamera a etenn lè aplikasyon an an aryè oswa lè yon lòt ekran louvri sou li.	Di camera picture tek di place a di wallpaper. Camera turn off when di app minimize or anodda screen open pon top.
+Скорость	Speed	Швидкість	Velocidad	Vitès	Speed
+Вариант шума	Noise style	Варіант шуму	Tipo de ruido	Kalite bri	Noise style
+Видео фона	Background video	Відео фону	Vídeo de fondo	Videyo fon	Background video
+Выбрано	Selected	Вибрано	Seleccionado	Chwazi	Pick
+Выбрать	Choose	Вибрати	Elegir	Chwazi	Pick
+Видео из галереи хранится только на этом устройстве.	The gallery video is stored only on this device.	Відео з галереї зберігається лише на цьому пристрої.	El vídeo de la galería se guarda solo en este dispositivo.	Videyo galri a rete sèlman sou aparèy sa a.	Di gallery video stay pon dis phone one.
+Матовость	Frost	Матовість	Esmerilado	Mat	Frost
+Оригинал	Original	Оригінал	Original	Orijinal	Original
+Блики+	Highlights+	Відблиски+	Brillos+	Reflè+	Shine+
+Материал Brooklyn	Brooklyn material	Матеріал Brooklyn	Material Brooklyn	Materyèl Brooklyn	Brooklyn material
+Точный материал исходника с текстурами и городским HDR.	The exact original material with textures and city HDR.	Точний матеріал оригіналу з текстурами й міським HDR.	El material original exacto con texturas y HDR urbano.	Materyèl orijinal egzak la ak tekstiti ak HDR vil.	Di exact original material wid texture an city HDR.
+Та же сцена и анимация с усиленными бликами.	The same scene and animation with stronger highlights.	Та сама сцена й анімація з посиленими відблисками.	La misma escena y animación con brillos más intensos.	Menm sèn ak animasyon ak reflè ki pi fò.	Same scene an animation wid more shine.
+Вид Brooklyn	Brooklyn look	Вигляд Brooklyn	Aspecto Brooklyn	Aparans Brooklyn	Brooklyn look
+Размер, оттенок, яркость и контраст применяются к живой сцене сразу.	Size, hue, brightness and contrast apply to the live scene immediately.	Розмір, відтінок, яскравість і контраст застосовуються до живої сцени одразу.	El tamaño, tono, brillo y contraste se aplican a la escena al instante.	Gwosè, nyans, klète ak kontras aplike sou sèn vivan an touswit.	Size, hue, brightness an contrast hit di live scene straight away.
+Размер ячеек	Cell size	Розмір комірок	Tamaño de celdas	Gwosè selil	Cell size
+Оттенок	Hue	Відтінок	Tono	Nyans	Hue
+Контраст	Contrast	Контраст	Contraste	Kontras	Contrast
+Фон приложения	App background	Фон застосунку	Fondo de la app	Fon aplikasyon	App background
+Живые Matrix, TV, Video, Brooklyn и камера как фон для всех экранов приложения.	Live Matrix, TV, Video, Brooklyn and camera as the background for every screen.	Живі Matrix, TV, Video, Brooklyn і камера як фон для всіх екранів застосунку.	Matrix, TV, vídeo, Brooklyn y cámara en vivo como fondo de todas las pantallas.	Matrix, TV, Videyo, Brooklyn ak kamera vivan kòm fon pou tout ekran yo.	Live Matrix, TV, Video, Brooklyn an camera as background fi every screen.
+Заставка	Backdrop	Заставка	Fondo	Fon	Backdrop
+Сбросить настройки эффекта	Reset effect settings	Скинути налаштування ефекту	Restablecer ajustes del efecto	Reyinisyalize paramèt efè a	Reset di effect settings
+Задняя	Back	Задня	Trasera	Dèyè	Back
+Передняя	Front	Передня	Frontal	Devan	Front
+Эффект камеры	Camera effect	Ефект камери	Efecto de cámara	Efè kamera	Camera effect
+Сбросить	Reset	Скинути	Restablecer	Reyinisyalize	Reset
+Вкл	On	Увімк	Sí	Limen	On
+Добавить	Add	Додати	Añadir	Ajoute	Add
+Язык интерфейса	App language	Мова інтерфейсу	Idioma de la app	Lang aplikasyon	App language
+Отмена	Cancel	Скасувати	Cancelar	Anile	Cancel
+Язык	Language	Мова	Idioma	Lang	Language
+Язык всех экранов, подсказок и журнала смены. Расшифровка голоса тоже идёт на этом языке.	Language for every screen, hint and the shift log. Voice transcription uses it too.	Мова всіх екранів, підказок і журналу зміни. Розшифрування голосу теж іде цією мовою.	Idioma de todas las pantallas, sugerencias y el registro del turno. La transcripción de voz también lo usa.	Lang tout ekran, endikasyon ak jounal woulman an. Transkripsyon vwa a sèvi ak li tou.	Language fi every screen, hint an di shift log. Voice transcription use it too.
+Внешний вид	Appearance	Зовнішній вигляд	Apariencia	Aparans	Look
+Фон	Background	Фон	Fondo	Fon	Background
+Работа	Work	Робота	Trabajo	Travay	Work
+Разработчик	Developer	Розробник	Desarrollador	Devlopè	Developer
+Настройки	Settings	Налаштування	Ajustes	Paramèt	Settings
+Зум удержанием	Hold to zoom	Зум утриманням	Mantener para ampliar	Kenbe pou agrandi	Hol fi zoom
+Статус удержанием	Hold for status	Статус утриманням	Mantener para estado	Kenbe pou estati	Hol fi status
+Размер ячеек, палитра статусов и жесты задач на основном экране.	Cell size, status palette and task gestures on the main screen.	Розмір комірок, палітра статусів і жести завдань на основному екрані.	Tamaño de celdas, paleta de estados y gestos de tareas en la pantalla principal.	Gwosè selil, palèt estati ak jès travay sou ekran prensipal la.	Cell size, status colour dem an task gesture pon di main screen.
+Стандартные	Standard	Стандартні	Estándar	Estanda	Standard
+Расширенные	Extended	Розширені	Ampliadas	Elaji	Extended
+Ячейки	Cells	Комірки	Celdas	Selil	Cell dem
+Стандартный режим меняет статус удержанием, расширенный увеличивает комнату почти на весь экран.	Standard mode changes status on hold; extended mode zooms the room to nearly full screen.	Стандартний режим змінює статус утриманням, розширений збільшує номер майже на весь екран.	El modo estándar cambia el estado al mantener; el ampliado agranda la habitación casi a pantalla completa.	Mòd estanda a chanje estati lè w kenbe; mòd elaji a agrandi chanm nan prèske sou tout ekran an.	Standard mode change status when yuh hol it; extended mode mek di room big nearly full screen.
+Ячеек в ряду	Cells per row	Комірок у ряду	Celdas por fila	Selil pa ranje	Cell inna one row
+Меняет только число ячеек в строке главного экрана и стенда.	Changes only the number of cells per row on the main screen and the lab.	Змінює лише кількість комірок у рядку головного екрана й стенда.	Cambia solo el número de celdas por fila en la pantalla principal y el banco de pruebas.	Chanje sèlman kantite selil pa ranje sou ekran prensipal la ak laboratwa a.	Only change how much cell inna row pon di main screen an di test bench.
+Прозрачные панели	Transparent panels	Прозорі панелі	Paneles transparentes	Panno transparan	See-through panel
+Обычные	Regular	Звичайні	Normales	Nòmal	Regular
+Ослабляет плотный чёрный фон у общих панелей, карточек и окон поверх живого фона.	Lightens the solid black behind panels, cards and windows over the live background.	Послаблює щільний чорний фон у панелей, карток і вікон поверх живого фону.	Aclara el negro sólido de paneles, tarjetas y ventanas sobre el fondo animado.	Diminye nwa epè dèyè panno, kat ak fenèt sou fon vivan an.	Mek di heavy black behind panel, card an window lighter over di live background.
+Сочная палитра	Vivid palette	Соковита палітра	Paleta intensa	Palèt vivan	Bright colour dem
+Скриншот	Screenshot	Скриншот	Captura	Kapti ekran	Screenshot
+Обычная	Regular	Звичайна	Normal	Nòmal	Regular
+Второй режим фиксирует яркие цвета ячеек как на твоём скриншоте.	The second mode locks in the bright cell colors from your screenshot.	Другий режим фіксує яскраві кольори комірок як на твоєму скриншоті.	El segundo modo fija los colores vivos de las celdas como en tu captura.	Dezyèm mòd la fikse koulè klè selil yo tankou sou kapti ekran ou a.	Di second mode lock in di bright cell colour like pon yuh screenshot.
+Долгий тап	Long tap	Довгий тап	Toque largo	Peze lontan	Long tap
+Включен	On	Увімкнено	Activado	Limen	On
+Быстрый	Quick	Швидкий	Rápido	Rapid	Quick
+Защищает S, L, B от случайных касаний во время скролла.	Protects S, L, B from accidental taps while scrolling.	Захищає S, L, B від випадкових дотиків під час прокручування.	Protege S, L, B de toques accidentales al desplazarse.	Pwoteje S, L, B kont touche pa aksidan pandan w ap defile.	Protect S, L, B from mistake tap when yuh a scroll.
+Прослушать {sound}	Play {sound}	Прослухати {sound}	Escuchar {sound}	Koute {sound}	Play {sound}
+Звуки	Sounds	Звуки	Sonidos	Son	Sound dem
+Три назначения: общий интерфейс, ячейка и финальная зелёная ячейка.	Three slots: general interface, cell and final green cell.	Три призначення: загальний інтерфейс, комірка й фінальна зелена комірка.	Tres asignaciones: interfaz general, celda y celda verde final.	Twa plas: entèfas jeneral, selil ak dènye selil vèt.	Three slot: general interface, cell an di final green cell.
+Сброс	Reset	Скидання	Restablecer	Reyinisyalize	Reset
+Вернуть визуальные и рабочие параметры к значениям по умолчанию.	Return visual and work settings to their defaults.	Повернути візуальні й робочі параметри до значень за замовчуванням.	Devolver los ajustes visuales y de trabajo a sus valores predeterminados.	Remete paramèt vizyèl ak travay yo jan yo te ye okòmansman.	Put back di look an work settings how dem did start.
+Сброс настроек	Reset settings	Скидання налаштувань	Restablecer ajustes	Reyinisyalize paramèt	Reset settings
+По умолчанию	Defaults	За замовчуванням	Predeterminado	Pa defo	Default
+Не удаляет рабочую смену, но сбрасывает внешний вид и режимы.	Doesn't delete the shift, but resets appearance and modes.	Не видаляє робочу зміну, але скидає вигляд і режими.	No borra el turno, pero restablece la apariencia y los modos.	Li pa efase woulman an, men li reyinisyalize aparans ak mòd yo.	It nuh delete di shift, but it reset di look an di mode dem.
+Сбросить настройки?	Reset settings?	Скинути налаштування?	¿Restablecer ajustes?	Reyinisyalize paramèt yo?	Reset di settings?
+Размер ячеек, режимы меню, палитра и Matrix-настройки вернутся к значениям по умолчанию.	Cell size, menu modes, palette and Matrix settings will return to defaults.	Розмір комірок, режими меню, палітра й налаштування Matrix повернуться до значень за замовчуванням.	El tamaño de celdas, los modos de menú, la paleta y los ajustes de Matrix volverán a sus valores predeterminados.	Gwosè selil, mòd meni, palèt ak paramèt Matrix ap retounen jan yo te ye okòmansman.	Cell size, menu mode, colour dem an Matrix settings a go back to default.
+Экспериментальное	Experimental	Експериментальне	Experimental	Eksperimantal	Experimental
+Только активные режимы, которые можно реально оценить на основном экране.	Only active modes you can actually judge on the main screen.	Лише активні режими, які можна реально оцінити на основному екрані.	Solo modos activos que se pueden valorar en la pantalla principal.	Sèlman mòd aktif ou ka vrèman evalye sou ekran prensipal la.	Only active mode yuh can really check pon di main screen.
+Живые 3D-ячейки	Live 3D cells	Живі 3D-комірки	Celdas 3D animadas	Selil 3D vivan	Live 3D cell dem
+Объёмное тело ячеек с бликом. Текст и все действия остаются обычным интерфейсом.	Cells get a 3D body with a highlight. Text and all actions stay regular interface.	Об'ємне тіло комірок із відблиском. Текст і всі дії лишаються звичайним інтерфейсом.	Cuerpo 3D de las celdas con brillo. El texto y las acciones siguen siendo interfaz normal.	Selil yo gen yon kò 3D ak reflè. Tèks ak tout aksyon rete entèfas nòmal.	Cell get a 3D body wid shine. Text an all action stay regular.
+Живые ячейки	Live cells	Живі комірки	Celdas animadas	Selil vivan	Live cell dem
+Пружинящий отклик ячеек на изменения статуса, задач и VIP.	Springy cell response to status, task and VIP changes.	Пружний відгук комірок на зміни статусу, завдань і VIP.	Respuesta elástica de las celdas a cambios de estado, tareas y VIP.	Selil yo sote tankou resò lè estati, travay oswa VIP chanje.	Cell bounce when status, task an VIP change.
+Сила пружины	Spring strength	Сила пружини	Fuerza del resorte	Fòs resò	Spring strength
+Скорость пружины	Spring speed	Швидкість пружини	Velocidad del resorte	Vitès resò	Spring speed
+Типографика ячеек	Cell typography	Типографіка комірок	Tipografía de celdas	Tipografi selil	Cell typography
+Стенд	Lab	Стенд	Banco de pruebas	Laboratwa	Test bench
+Живой preview ячеек с отдельными настройками номера и времени.	Live cell preview with separate number and time settings.	Живий preview комірок з окремими налаштуваннями номера й часу.	Vista previa en vivo de las celdas con ajustes separados de número y hora.	Apèsi selil vivan ak paramèt apa pou nimewo ak lè.	Live cell preview wid separate number an time settings.
+VIP-желе	VIP jelly	VIP-желе	Gelatina VIP	Jele VIP	VIP jelly
+Живая форма VIP-ячейки: двигается сам контур, а не внутренняя линия.	Live VIP cell shape: the outline itself moves, not an inner line.	Жива форма VIP-комірки: рухається сам контур, а не внутрішня лінія.	Forma viva de la celda VIP: se mueve el contorno, no una línea interior.	Fòm vivan selil VIP: se kontou a menm ki bouje, pa yon liy anndan.	Live VIP cell shape: di outline itself a move, nuh one inside line.
+Скорость желе	Jelly speed	Швидкість желе	Velocidad de la gelatina	Vitès jele	Jelly speed
+VIP HDR-свет	VIP HDR light	VIP HDR-світло	Luz HDR VIP	Limyè HDR VIP	VIP HDR light
+VIP-ячейка светится отдельно от общей яркости интерфейса.	The VIP cell glows separately from the interface brightness.	VIP-комірка світиться окремо від загальної яскравості інтерфейсу.	La celda VIP brilla aparte del brillo general de la interfaz.	Selil VIP la klere apa de klète jeneral entèfas la.	VIP cell shine on it own, apart from di app brightness.
+HDR-всплеск статуса	Status HDR flash	HDR-спалах статусу	Destello HDR de estado	Flach HDR estati	Status HDR flash
+После смены статуса ячейка разгорается и две секунды плавно остывает из максимальной яркости нового цвета.	After a status change the cell flares up and cools down smoothly for two seconds from the new color's peak brightness.	Після зміни статусу комірка спалахує й дві секунди плавно охолоне з максимальної яскравості нового кольору.	Tras cambiar de estado, la celda se enciende y se enfría suavemente durante dos segundos desde el brillo máximo del nuevo color.	Apre estati a chanje, selil la limen fò epi l refwadi dousman pandan de segonn depi klète maksimòm nouvo koulè a.	Afta di status change, di cell light up an cool down smooth fi two second from di new colour full brightness.
+Запустить	Run	Запустити	Ejecutar	Lanse	Run
+Тестовые данные	Test data	Тестові дані	Datos de prueba	Done tès	Test data
+Быстро заполняет рабочий экран полным набором номеров.	Quickly fills the work screen with a full set of rooms.	Швидко заповнює робочий екран повним набором номерів.	Llena rápido la pantalla de trabajo con todas las habitaciones.	Ranpli ekran travay la vit ak tout chanm yo.	Quick fill di work screen wid every room.
+Распределить весь отель	Assign the whole hotel	Розподілити весь готель	Asignar todo el hotel	Separe tout otèl la	Share out di whole hotel
+Случайно и равномерно назначает все номера всем уборщицам из списка.	Randomly and evenly assigns all rooms to every housekeeper on the list.	Випадково й рівномірно призначає всі номери всім покоївкам зі списку.	Asigna todas las habitaciones al azar y por igual a todas las camaristas de la lista.	Separe tout chanm yo o aza e egalman bay tout fanm menaj ki sou lis la.	Share every room random an even to all di housekeeper dem pon di list.
+Только служебный журнал сборок. Остальная диагностика не смешивается с настройками.	Only the build log. Other diagnostics are kept out of settings.	Лише службовий журнал збірок. Решта діагностики не змішується з налаштуваннями.	Solo el registro de versiones. El resto del diagnóstico no se mezcla con los ajustes.	Sèlman jounal vèsyon yo. Lòt dyagnostik pa melanje ak paramèt yo.	Only di build log. Di odda diagnostic dem nuh mix up wid settings.
+Версия PWA {version} ({build})	PWA version {version} ({build})	Версія PWA {version} ({build})	Versión PWA {version} ({build})	Vèsyon PWA {version} ({build})	PWA version {version} ({build})
+Изменения	What's new	Зміни	Novedades	Chanjman	Wah new
+Короткая выжимка по последним сборкам.	A short summary of recent builds.	Короткий підсумок останніх збірок.	Un resumen corto de las últimas versiones.	Yon ti rezime dènye vèsyon yo.	Short rundown a di latest build dem.
+Поведение раздвижного меню ячейки и рабочие жесты на основном экране.	Cell slide-out menu behavior and work gestures on the main screen.	Поведінка висувного меню комірки й робочі жести на основному екрані.	Comportamiento del menú deslizante de la celda y gestos de trabajo en la pantalla principal.	Kijan meni k ap glise selil la aji ak jès travay sou ekran prensipal la.	How di cell slide menu work an di work gesture dem pon di main screen.
+Хранение	Storage	Зберігання	Almacenamiento	Depo	Storage
+Только телефон	Phone only	Лише телефон	Solo el teléfono	Telefòn sèlman	Phone one
+Смена, медиа и настройки хранятся на этом устройстве и никуда не отправляются.	The shift, media and settings are stored on this device and aren't sent anywhere.	Зміна, медіа й налаштування зберігаються на цьому пристрої й нікуди не надсилаються.	El turno, los archivos y los ajustes se guardan en este dispositivo y no se envían a ningún sitio.	Woulman, medya ak paramèt yo rete sou aparèy sa a, yo pa voye yo okenn kote.	Shift, media an settings stay pon dis phone an nuh go nowhere.
+Мульти-меню	Multi-menu	Мультименю	Multimenú	Plizyè meni	Multi-menu
+По умолчанию открыто только одно меню ячейки; этот режим разрешает несколько.	By default only one cell menu is open; this mode allows several.	За замовчуванням відкрито лише одне меню комірки; цей режим дозволяє кілька.	Por defecto solo hay un menú de celda abierto; este modo permite varios.	Pa defo se yon sèl meni selil ki louvri; mòd sa a pèmèt plizyè.	Normally only one cell menu open; dis mode mek nuff open.
+Несколько	Several	Кілька	Varios	Plizyè	Nuff
+Одно	One	Одне	Uno	Youn	One
+Имена идут из свежих листов; список можно менять под смену.	Names come from fresh sheets; you can edit the list for the shift.	Імена беруться зі свіжих листів; список можна змінювати під зміну.	Los nombres vienen de las hojas recientes; puedes cambiar la lista según el turno.	Non yo soti nan fèy ki fèk fèt; ou ka chanje lis la pou woulman an.	Di name dem come from fresh sheet; yuh can change di list fi di shift.
+Цвет	Color	Колір	Color	Koulè	Colour
+Имя	Name	Ім'я	Nombre	Non	Name
+{name} сохранена.	{name} saved.	{name} збережено.	{name} guardada.	{name} anrejistre.	{name} save.
+Удалить	Delete	Видалити	Eliminar	Efase	Delete
+{name} удалена из списка.	{name} removed from the list.	{name} видалено зі списку.	{name} eliminada de la lista.	{name} retire nan lis la.	{name} tek off di list.
+Уборщицы	Housekeepers	Покоївки	Camaristas	Fanm menaj	Housekeeper dem
+Имена, цвета и назначения тележек для первого экрана Margaritaville.	Names, colors and cart assignments for the Margaritaville first screen.	Імена, кольори й призначення візків для першого екрана Margaritaville.	Nombres, colores y asignación de carritos para la primera pantalla de Margaritaville.	Non, koulè ak charyo pou premye ekran Margaritaville la.	Name, colour an cart fi di Margaritaville first screen.
+Напиши имя перед добавлением.	Type a name before adding.	Напиши ім'я перед додаванням.	Escribe un nombre antes de añadir.	Ekri yon non anvan ou ajoute.	Write a name before yuh add.
+{name} добавлена.	{name} added.	{name} додано.	{name} añadida.	{name} ajoute.	{name} add.
+Этот список используется в меню уборщицы для быстрого запроса на тележку.	This list is used in the housekeeper menu for quick cart requests.	Цей список використовується в меню покоївки для швидкого запиту на візок.	Esta lista se usa en el menú de la camarista para pedir rápido al carrito.	Lis sa a sèvi nan meni fanm menaj la pou mande charyo vit.	Dis list deh inna di housekeeper menu fi quick cart request.
+Название	Name	Назва	Nombre	Non	Name
+{name} сохранено.	{name} saved.	{name} збережено.	{name} guardado.	{name} anrejistre.	{name} save.
+{name} удалено.	{name} deleted.	{name} видалено.	{name} eliminado.	{name} efase.	{name} delete.
+Расходники тележки	Cart supplies	Витратні матеріали візка	Suministros del carrito	Pwovizyon charyo	Cart supplies
+Добавляй, удаляй и переименовывай позиции для меню уборщицы.	Add, delete and rename items for the housekeeper menu.	Додавай, видаляй і перейменовуй позиції для меню покоївки.	Añade, elimina y renombra artículos del menú de la camarista.	Ajoute, efase epi chanje non atik pou meni fanm menaj la.	Add, delete an rename item fi di housekeeper menu.
+Напиши название перед добавлением.	Type a name before adding.	Напиши назву перед додаванням.	Escribe un nombre antes de añadir.	Ekri yon non anvan ou ajoute.	Write a name before yuh add.
+{name} добавлено.	{name} added.	{name} додано.	{name} añadido.	{name} ajoute.	{name} add.
+Добавь номер, и корпус/этаж определятся автоматически.	Add a room number and the building/floor are detected automatically.	Додай номер, і корпус/поверх визначаться автоматично.	Añade un número y el edificio/piso se detectan solos.	Ajoute yon nimewo, bilding/etaj la ap detekte otomatikman.	Add a room number an di building/floor sort out itself.
+{room} удалён из каталога.	{room} removed from the catalog.	{room} видалено з каталогу.	{room} eliminada del catálogo.	{room} retire nan katalòg la.	{room} tek out a di catalog.
+{room} сейчас в активной смене, удалить нельзя.	{room} is in the active shift and can't be deleted.	{room} зараз в активній зміні, видалити не можна.	{room} está en el turno activo y no se puede eliminar.	{room} nan woulman aktif la kounye a, ou pa ka efase l.	{room} deh inna di active shift, cyaan delete it.
+Номер {room} не найден в каталоге.	Room {room} isn't in the catalog.	Номер {room} не знайдено в каталозі.	La habitación {room} no está en el catálogo.	Chanm {room} pa nan katalòg la.	Room {room} nuh deh inna di catalog.
+Каталог Margaritaville	Margaritaville catalog	Каталог Margaritaville	Catálogo Margaritaville	Katalòg Margaritaville	Margaritaville catalog
+Добавление и удаление номеров хранится в отдельной базе этого отеля.	Added and removed rooms are stored in this hotel's own database.	Додавання й видалення номерів зберігається в окремій базі цього готелю.	Las habitaciones añadidas y eliminadas se guardan en la base propia de este hotel.	Chanm ou ajoute oswa efase anrejistre nan pwòp baz done otèl sa a.	Room yuh add or delete save inna dis hotel own database.
+Номер	Room	Номер	Habitación	Chanm	Room
+Этот номер уже есть в каталоге.	This room is already in the catalog.	Цей номер уже є в каталозі.	Esta habitación ya está en el catálogo.	Chanm sa a deja nan katalòg la.	Dis room deh inna di catalog aready.
+Не могу определить корпус/этаж для этого номера.	Can't determine the building/floor for this room.	Не можу визначити корпус/поверх для цього номера.	No puedo determinar el edificio/piso de esta habitación.	Mwen pa ka konnen bilding/etaj chanm sa a.	Cyaan figure out di building/floor fi dis room.
+Этот номер сейчас используется в смене.	This room is being used in the shift.	Цей номер зараз використовується в зміні.	Esta habitación se está usando en el turno.	Chanm sa a ap itilize nan woulman an kounye a.	Dis room a use inna di shift right now.
+{room} добавлен.	{room} added.	{room} додано.	{room} añadida.	{room} ajoute.	{room} add.
+Production-ячейки	Production cells	Production-комірки	Celdas de producción	Selil pwodiksyon	Production cell dem
+То же выбранное число колонок, размеры и геометрия, что на главном экране.	Same column count, sizes and geometry as the main screen.	Та сама кількість колонок, розміри й геометрія, що на головному екрані.	El mismo número de columnas, tamaños y geometría que en la pantalla principal.	Menm kantite kolòn, gwosè ak jeyometri ak ekran prensipal la.	Same column count, size an shape as di main screen.
+Обычные статусы	Regular statuses	Звичайні статуси	Estados normales	Estati nòmal	Regular status dem
+HDR-всплеск + rubber	HDR flash + rubber	HDR-спалах + rubber	Destello HDR + rubber	Flach HDR + rubber	HDR flash + rubber
+VIP-желе + HDR	VIP jelly + HDR	VIP-желе + HDR	Gelatina VIP + HDR	Jele VIP + HDR	VIP jelly + HDR
+Сохранённый пресет	Saved preset	Збережений пресет	Ajuste guardado	Preseleksyon anrejistre	Saved preset
+Сохранено {date}	Saved {date}	Збережено {date}	Guardado {date}	Anrejistre {date}	Save {date}
+Основной номер	Main number	Основний номер	Número principal	Nimewo prensipal	Main number
+Время активации	Activation time	Час активації	Hora de activación	Lè aktivasyon	Activation time
+Удалить пресет	Delete preset	Видалити пресет	Eliminar ajuste	Efase preseleksyon an	Delete preset
+Все значения применяются ко всем preview-ячейкам сразу.	All values apply to every preview cell at once.	Усі значення застосовуються до всіх preview-комірок одразу.	Todos los valores se aplican a todas las celdas de vista previa a la vez.	Tout valè yo aplike sou tout selil apèsi yo an menm tan.	All di value dem hit every preview cell one time.
+Размер	Size	Розмір	Tamaño	Gwosè	Size
+Смещение по Y	Y offset	Зсув по Y	Desplazamiento Y	Dekalaj Y	Y offset
+Толщина	Weight	Товщина	Grosor	Epesè	Weight
+Только preview — основной экран не меняется	Preview only — the main screen doesn't change	Лише preview — основний екран не змінюється	Solo vista previa: la pantalla principal no cambia	Apèsi sèlman — ekran prensipal la pa chanje	Preview one — di main screen nuh change
+Сохранение	Saving	Збереження	Guardar	Anrejistreman	Saving
+Пресет хранится только для стенда и не меняет ячейки основного экрана.	The preset is kept only for the lab and doesn't change main screen cells.	Пресет зберігається лише для стенда й не змінює комірки основного екрана.	El ajuste se guarda solo para el banco de pruebas y no cambia las celdas principales.	Preseleksyon an rete pou laboratwa a sèlman, li pa chanje selil ekran prensipal la.	Di preset stay fi di test bench one, it nuh change di main screen cell dem.
+Сохранить пресет	Save preset	Зберегти пресет	Guardar ajuste	Anrejistre preseleksyon	Save preset

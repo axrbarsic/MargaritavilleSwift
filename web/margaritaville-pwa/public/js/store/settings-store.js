@@ -44,11 +44,12 @@ export const DEFAULT_SETTINGS = Object.freeze({
   developerVIPHDREnabled: false,
   developerStatusHDRPulseEnabled: false,
   housekeepers: DEFAULT_HOUSEKEEPERS,
-  cartConsumableCatalog: DEFAULT_CONSUMABLE_CATALOG
+  cartConsumableCatalog: DEFAULT_CONSUMABLE_CATALOG,
+  language: null
 });
 
-/// Ключи, которые сброс настроек не трогает (смена, люди и каталог расходников сбрасываются отдельно).
-const RESET_KEEPS = [];
+/// Ключи, которые сброс настроек не трогает: язык интерфейса остаётся выбранным.
+const RESET_KEEPS = ["language"];
 
 export class SettingsStore {
   constructor(storage = globalThis.localStorage) {

@@ -1,6 +1,7 @@
 // Ползунки эффекта: показываются только те, что меняют выбранный эффект
 // (правила из CameraEffectControls.swift).
 import { RANGES, TUNING_DEFAULTS, metalName, uses } from "./effects.js";
+import { tr } from "../i18n/i18n.js";
 
 const percent = (v) => `${Math.round(v * 100)}%`;
 const times = (v) => `${v.toFixed(2)}×`;
@@ -8,16 +9,16 @@ const times = (v) => `${v.toFixed(2)}×`;
 /// Описание ползунков для эффекта: [ключ, подпись, формат, шаг].
 function slidersFor(effectId, tuning) {
   const list = [];
-  if (uses.amount(effectId)) list.push(["amount", "Сила эффекта", percent, 0.01]);
-  list.push(["brightness", "Яркость", percent, 0.01]);
+  if (uses.amount(effectId)) list.push(["amount", tr("Сила эффекта"), percent, 0.01]);
+  list.push(["brightness", tr("Яркость"), percent, 0.01]);
   if (uses.metalColor(effectId)) {
-    list.push(["metalHue", "Цвет металла", (v) => `${metalName(v, tuning.metalSaturation)} · ${Math.round(v)}°`, 1]);
-    list.push(["metalSaturation", "Насыщенность металла", (v) => (v < 0.12 ? "серебро" : percent(v)), 0.01]);
+    list.push(["metalHue", tr("Цвет металла"), (v) => `${metalName(v, tuning.metalSaturation)} · ${Math.round(v)}°`, 1]);
+    list.push(["metalSaturation", tr("Насыщенность металла"), (v) => (v < 0.12 ? tr("серебро") : percent(v)), 0.01]);
   }
-  if (uses.relief(effectId)) list.push(["reliefDepth", "Глубина рельефа", times, 0.01]);
-  if (uses.edges(effectId)) list.push(["edgeSensitivity", "Чувствительность контуров", times, 0.01]);
-  if (uses.detail(effectId)) list.push(["detailScale", "Размер элементов", times, 0.01]);
-  if (uses.glow(effectId)) list.push(["glowAmount", "Ореол", percent, 0.01]);
+  if (uses.relief(effectId)) list.push(["reliefDepth", tr("Глубина рельефа"), times, 0.01]);
+  if (uses.edges(effectId)) list.push(["edgeSensitivity", tr("Чувствительность контуров"), times, 0.01]);
+  if (uses.detail(effectId)) list.push(["detailScale", tr("Размер элементов"), times, 0.01]);
+  if (uses.glow(effectId)) list.push(["glowAmount", tr("Ореол"), percent, 0.01]);
   return list;
 }
 
@@ -59,7 +60,7 @@ export function renderControls(container, effectId, tuning, onChange) {
     const toggle = document.createElement("label");
     toggle.className = "toggle";
     const text = document.createElement("span");
-    text.textContent = "Свет по кругу";
+    text.textContent = tr("Свет по кругу");
     const input = document.createElement("input");
     input.type = "checkbox";
     input.id = "tuning-liveLight";
@@ -68,7 +69,7 @@ export function renderControls(container, effectId, tuning, onChange) {
     toggle.append(text, input);
     container.append(toggle);
     if (!tuning.liveLight) {
-      addSlider(["lightAngle", "Направление света", (v) => `${Math.round(v)}°`, 1]);
+      addSlider(["lightAngle", tr("Направление света"), (v) => `${Math.round(v)}°`, 1]);
     }
   }
 }

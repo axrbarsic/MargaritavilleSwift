@@ -1,11 +1,13 @@
 // Сломанный телевизор: аналоговый снег пятью вариантами, яркость, зелёный оттенок,
 // строки развёртки. Источник: App/TVStaticNoiseBackgroundView.swift (те же коэффициенты).
+import { tr } from "../../i18n/i18n.js";
+import { viewportHeight } from "../../infra/viewport.js";
 export const TV_VARIANTS = [
-  { id: "classicAnalog", title: "Analog", description: "Классический серый аналоговый снег.", renderScale: 1, contrast: 1.9, bScale: 1.25, bBias: 0, rgb: [1, 1, 1] },
-  { id: "fineSnow", title: "Fine", description: "Более мелкое плотное зерно.", renderScale: 1.75, contrast: 2.18, bScale: 1.05, bBias: -0.04, rgb: [1, 1, 1] },
-  { id: "horizontalTear", title: "Tear", description: "Горизонтальные срывы и полосы.", renderScale: 1.15, contrast: 2.45, bScale: 1.2, bBias: -0.06, rgb: [1, 1, 1], tear: true },
-  { id: "greenTerminal", title: "Green", description: "Зелёный цифровой шум.", renderScale: 1.35, contrast: 2.05, bScale: 1.1, bBias: -0.1, rgb: [0.3, 1.45, 0.22], green: 0.72 },
-  { id: "highContrast", title: "Hard", description: "Жёсткий контрастный снег.", renderScale: 0.82, contrast: 3.15, bScale: 1.45, bBias: -0.02, rgb: [1.08, 1.08, 1.08] }
+  { id: "classicAnalog", title: "Analog", description: tr("Классический серый аналоговый снег."), renderScale: 1, contrast: 1.9, bScale: 1.25, bBias: 0, rgb: [1, 1, 1] },
+  { id: "fineSnow", title: "Fine", description: tr("Более мелкое плотное зерно."), renderScale: 1.75, contrast: 2.18, bScale: 1.05, bBias: -0.04, rgb: [1, 1, 1] },
+  { id: "horizontalTear", title: "Tear", description: tr("Горизонтальные срывы и полосы."), renderScale: 1.15, contrast: 2.45, bScale: 1.2, bBias: -0.06, rgb: [1, 1, 1], tear: true },
+  { id: "greenTerminal", title: "Green", description: tr("Зелёный цифровой шум."), renderScale: 1.35, contrast: 2.05, bScale: 1.1, bBias: -0.1, rgb: [0.3, 1.45, 0.22], green: 0.72 },
+  { id: "highContrast", title: "Hard", description: tr("Жёсткий контрастный снег."), renderScale: 0.82, contrast: 3.15, bScale: 1.45, bBias: -0.02, rgb: [1.08, 1.08, 1.08] }
 ];
 
 export class TVStatic {
@@ -25,7 +27,7 @@ export class TVStatic {
   }
 
   fitSize(v) {
-    const aspect = window.innerHeight / Math.max(window.innerWidth, 1);
+    const aspect = viewportHeight() / Math.max(window.innerWidth, 1);
     const particle = Math.max(this.settings.get("tvStaticParticleSize") ?? 1, 0.5);
     const width = Math.round(Math.min(420, Math.max(80, (180 * v.renderScale) / particle)));
     const height = Math.round(Math.max(240, width * aspect));

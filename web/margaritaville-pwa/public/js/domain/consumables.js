@@ -1,16 +1,17 @@
 // Расходники тележки: каталог по умолчанию, слияние с сохранёнными количествами,
 // сводка по уборщицам. Источник: Domain/CartConsumables.swift,
 // Features/Summary/SummaryConsumablesReport.swift.
+import { tr } from "../i18n/i18n.js";
 
 export const MAX_QUANTITY = 10;
 
 export const DEFAULT_CONSUMABLE_CATALOG = [
-  ["bath_towel", "Полотенца банные"],
-  ["hand_towel", "Полотенца ручные"],
-  ["washcloth", "Салфетки"],
-  ["bath_mat", "Коврики"],
-  ["sheet", "Простыни"],
-  ["pillowcase", "Наволочки"]
+  ["bath_towel", tr("Полотенца банные")],
+  ["hand_towel", tr("Полотенца ручные")],
+  ["washcloth", tr("Салфетки")],
+  ["bath_mat", tr("Коврики")],
+  ["sheet", tr("Простыни")],
+  ["pillowcase", tr("Наволочки")]
 ].map(([id, title]) => ({ id, title }));
 
 export const clampQuantity = (value) => Math.min(Math.max(0, Math.round(value)), MAX_QUANTITY);
@@ -115,11 +116,11 @@ export function consumablesReport(sections, carts, housekeepers, catalog) {
     const hk = housekeepers.find((h) => h.id === section.housekeeperID);
     rows.push({
       id: section.id,
-      displayName: hk?.displayName ?? "Уборщица",
+      displayName: hk?.displayName ?? tr("Уборщица"),
       palette: hk?.palette ?? null,
       locationLabel: section.locationLabel,
       items,
-      tickerText: items.map((i) => `${i.title} ${i.quantity}`).join("  •  ")
+      tickerText: items.map((i) => `${tr(i.title)} ${i.quantity}`).join("  •  ")
     });
   }
   return { totals: [...totals.values()].sort(compareLines), housekeepers: rows };

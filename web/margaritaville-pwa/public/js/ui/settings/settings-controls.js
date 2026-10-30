@@ -2,6 +2,7 @@
 // сегменты и выпадающий список. Источник: Features/Settings/SettingsControls.swift.
 import { h } from "../dom.js";
 import { icon } from "../icons.js";
+import { tr } from "../../i18n/i18n.js";
 
 export function settingsPanel(title, subtitle, ...children) {
   return h("section", { class: "settings-panel" },
@@ -25,7 +26,7 @@ export function sliderRow(opts) {
   const valueLabel = h("span", { class: "info-value" }, label(value));
   const input = h("input", { type: "range", min, max, step, class: "slider" });
   input.value = value;
-  const reset = h("button", { class: "slider-reset", "aria-label": "Сбросить" }, icon("reset", 16, 3));
+  const reset = h("button", { class: "slider-reset", "aria-label": tr("Сбросить") }, icon("reset", 16, 3));
   const sync = (v) => {
     valueLabel.textContent = label(v);
     reset.disabled = Math.abs(v - defaultValue) <= 0.001;
@@ -39,7 +40,7 @@ export function sliderRow(opts) {
     h("div", { class: "slider-line" }, input, reset));
 }
 
-export function toggleRow({ title, iconName, subtitle, value, onLabel = "Вкл", offLabel = "Выкл", onChange, feedback }) {
+export function toggleRow({ title, iconName, subtitle, value, onLabel = tr("Вкл"), offLabel = tr("Выкл"), onChange, feedback }) {
   const input = h("input", { type: "checkbox", class: "switch", role: "switch" });
   input.checked = value;
   const valueLabel = h("span", { class: "info-value" }, value ? onLabel : offLabel);
@@ -76,7 +77,7 @@ export function textInputRow(placeholder, onAdd, { inputMode = "text", autocapit
   const input = h("input", { class: "settings-input", type: "text", placeholder, inputmode: inputMode, autocapitalize, autocomplete: "off" });
   const add = () => { onAdd(input.value, () => { input.value = ""; }); };
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") add(); });
-  return h("div", { class: "input-row" }, input, h("button", { class: "add-button", "aria-label": "Добавить", onclick: add }, icon("plus", 18, 3.2)));
+  return h("div", { class: "input-row" }, input, h("button", { class: "add-button", "aria-label": tr("Добавить"), onclick: add }, icon("plus", 18, 3.2)));
 }
 
 export function messageLine(text) {

@@ -1,0 +1,84 @@
+ru	en	uk	es	ht	jam
+Сила эффекта	Effect strength	Сила ефекту	Intensidad del efecto	Fòs efè a	Effect strength
+Яркость	Brightness	Яскравість	Brillo	Klète	Brightness
+Цвет металла	Metal color	Колір металу	Color del metal	Koulè metal	Metal colour
+Насыщенность металла	Metal saturation	Насиченість металу	Saturación del metal	Satirasyon metal	Metal saturation
+серебро	silver	срібло	plata	ajan	silver
+Глубина рельефа	Relief depth	Глибина рельєфу	Profundidad del relieve	Pwofondè relyèf	Relief depth
+Чувствительность контуров	Edge sensitivity	Чутливість контурів	Sensibilidad de bordes	Sansiblite kontou	Edge sensitivity
+Размер элементов	Element size	Розмір елементів	Tamaño de elementos	Gwosè eleman	Piece size
+Ореол	Glow	Ореол	Halo	Limyè otou	Glow
+Свет по кругу	Rotating light	Світло по колу	Luz giratoria	Limyè k ap vire	Light a spin roun
+Направление света	Light direction	Напрямок світла	Dirección de la luz	Direksyon limyè	Light direction
+Обычный	Normal	Звичайний	Normal	Nòmal	Normal
+Чистое изображение камеры.	Clean camera image.	Чисте зображення камери.	Imagen limpia de la cámara.	Imaj kamera a pwòp.	Clean camera picture.
+Матовый	Frosted	Матовий	Esmerilado	Mat	Frosty
+Матовое стекло: сильное размытие с лёгким зерном.	Frosted glass: heavy blur with light grain.	Матове скло: сильне розмиття з легким зерном.	Vidrio esmerilado: desenfoque fuerte con grano suave.	Vit mat: flou fò ak ti grenn.	Frosty glass: heavy blur wid likkle grain.
+Сетка	Grid	Сітка	Rejilla	Griy	Grid
+Камера под неоновой сеткой с бегущей строкой сканирования.	Camera under a neon grid with a moving scan line.	Камера під неоновою сіткою з біжучою лінією сканування.	Cámara bajo una rejilla de neón con una línea de escaneo en movimiento.	Kamera anba yon griy neyon ak yon liy eskanè k ap kouri.	Camera under a neon grid wid a scan line a run.
+Калейдоскоп	Kaleidoscope	Калейдоскоп	Caleidoscopio	Kalejdoskòp	Kaleidoscope
+Восемь зеркальных секторов, медленно вращаются.	Eight mirrored sectors, slowly rotating.	Вісім дзеркальних секторів, повільно обертаються.	Ocho sectores en espejo que giran lentamente.	Uit sektè miwa k ap vire dousman.	Eight mirror piece a turn slow.
+Глитч	Glitch	Глітч	Glitch	Glitch	Glitch
+Цифровой сбой: сдвиг полос, разделение каналов и вспышки.	Digital glitch: shifting bands, split channels and flashes.	Цифровий збій: зсув смуг, розділення каналів і спалахи.	Fallo digital: franjas desplazadas, canales separados y destellos.	Pann dijital: bann ki deplase, chanèl ki separe ak flach.	Digital glitch: band dem shift, channel split an flash.
+Ночное видение	Night vision	Нічне бачення	Visión nocturna	Vizyon lannwit	Night vision
+Зелёный прибор ночного видения с шумом и виньеткой.	Green night-vision scope with noise and vignette.	Зелений прилад нічного бачення з шумом і віньєткою.	Visor nocturno verde con ruido y viñeta.	Aparèy vizyon lannwit vèt ak bri ak vinyèt.	Green night vision wid noise an dark corner dem.
+Тепловизор	Thermal	Тепловізор	Térmico	Tèmik	Heat camera
+Яркость превращается в тепловую карту.	Brightness turns into a heat map.	Яскравість перетворюється на теплову карту.	El brillo se convierte en un mapa de calor.	Klète a tounen yon kat chalè.	Brightness turn into a heat map.
+Пиксели	Pixels	Пікселі	Píxeles	Piksèl	Pixel dem
+Крупная пиксельная мозаика.	Large pixel mosaic.	Велика піксельна мозаїка.	Mosaico de píxeles grandes.	Gwo mozayik piksèl.	Big pixel mosaic.
+Экран Game Boy: крупные пиксели и четыре оттенка зелёного.	Game Boy screen: big pixels and four shades of green.	Екран Game Boy: великі пікселі й чотири відтінки зеленого.	Pantalla de Game Boy: píxeles grandes y cuatro tonos de verde.	Ekran Game Boy: gwo piksèl ak kat nyans vèt.	Game Boy screen: big pixel an four shade a green.
+Лего	Lego	Лего	Lego	Lego	Lego
+Всё вокруг собрано из кубиков Лего с шипами в цветах настоящих деталей.	Everything is built from studded Lego bricks in real brick colors.	Усе довкола зібрано з кубиків Лего з шипами в кольорах справжніх деталей.	Todo está hecho de piezas de Lego con tetones en colores de piezas reales.	Tout bagay fèt ak brik Lego ak ti bouton nan koulè vrè moso yo.	Everyting build outta Lego brick inna real Lego colour.
+Живое видео из символов, цвет берётся из камеры.	Live video made of characters, colored from the camera.	Живе відео із символів, колір береться з камери.	Vídeo en vivo hecho de caracteres, con el color de la cámara.	Videyo an dirèk fèt ak karaktè, koulè a soti nan kamera a.	Live video mek outta letter dem, colour come from di camera.
+ЭЛТ-телевизор	CRT TV	ЕПТ-телевізор	Televisor CRT	Televizyon CRT	Old-time TV
+Выпуклый кинескоп с развёрткой, сдвигом цветов и маской триад.	Curved picture tube with scanlines, color shift and triad mask.	Опуклий кінескоп із розгорткою, зсувом кольорів і маскою тріад.	Tubo curvo con líneas de barrido, desplazamiento de color y máscara de tríadas.	Tib bonbe ak liy eskanè, koulè ki deplase ak mask triyad.	Curve TV tube wid scanline, colour shift an triad mask.
+1-бит	1-bit	1-біт	1 bit	1 bit	1-bit
+Двухцветный дизеринг Байера в стиле игры Return of the Obra Dinn.	Two-color Bayer dithering in the style of Return of the Obra Dinn.	Двоколірний дизеринг Баєра в стилі гри Return of the Obra Dinn.	Tramado Bayer de dos colores al estilo de Return of the Obra Dinn.	Dithering Bayer de koulè nan stil jwèt Return of the Obra Dinn.	Two-colour Bayer dither inna Return of the Obra Dinn style.
+Полутон	Halftone	Півтон	Semitono	Demi-ton	Halftone
+Печатный растр CMYK, как в старых газетах и комиксах.	CMYK print halftone, like old newspapers and comics.	Друкарський растр CMYK, як у старих газетах і коміксах.	Trama de impresión CMYK, como en periódicos y cómics antiguos.	Pwen enprime CMYK, tankou nan ansyen jounal ak komik.	CMYK print dot dem, like ole newspaper an comic book.
+Комикс	Comic	Комікс	Cómic	Komik	Comic
+Плоские цвета и чёрные контуры, как в комиксе.	Flat colors and black outlines, like a comic book.	Пласкі кольори й чорні контури, як у коміксі.	Colores planos y contornos negros, como en un cómic.	Koulè plat ak kontou nwa, tankou nan yon komik.	Flat colour an black outline, like a comic book.
+Мультфильм	Cartoon	Мультфільм	Dibujos animados	Desen anime	Cartoon
+Мир как в мультфильме: гладкие заливки, сочные цвета и чёткие контуры.	A cartoon world: smooth fills, rich colors and crisp outlines.	Світ як у мультфільмі: гладкі заливки, соковиті кольори й чіткі контури.	Un mundo de dibujos animados: rellenos suaves, colores vivos y contornos nítidos.	Yon mond tankou desen anime: koulè lis, koulè vivan ak kontou klè.	Di world look like cartoon: smooth fill, bright colour an sharp outline.
+Карандаш	Pencil	Олівець	Lápiz	Kreyon	Pencil
+Карандашная перекрёстная штриховка по теням и контуры.	Pencil cross-hatching in the shadows, plus outlines.	Олівцеве перехресне штрихування в тінях і контури.	Sombreado cruzado a lápiz en las sombras y contornos.	Achi kwaze ak kreyon nan lonbraj yo ak kontou.	Pencil cross-hatch inna di shadow dem, plus outline.
+Чертёж	Blueprint	Креслення	Plano	Plan	Blueprint
+Белые линии на синем листе с миллиметровой сеткой, как технический чертёж.	White lines on blue graph paper, like a technical drawing.	Білі лінії на синьому аркуші з міліметровою сіткою, як технічне креслення.	Líneas blancas sobre papel azul milimetrado, como un plano técnico.	Liy blan sou fèy ble ak griy milimèt, tankou yon plan teknik.	White line pon blue graph paper, like a technical drawing.
+Мел	Chalk	Крейда	Tiza	Lakrè	Chalk
+Рваные меловые штрихи по контурам на школьной доске.	Rough chalk strokes along outlines on a blackboard.	Рвані крейдяні штрихи по контурах на шкільній дошці.	Trazos de tiza irregulares sobre los contornos en una pizarra.	Trè lakrè ki pa egal sou kontou yo sou yon tablo.	Rough chalk line pon di outline dem pon a blackboard.
+Неон	Neon	Неон	Neón	Neyon	Neon
+Переливающиеся неоновые контуры; ползунок «Ореол» добавляет свечение.	Shimmering neon outlines; the Glow slider adds a halo.	Переливчасті неонові контури; повзунок «Ореол» додає світіння.	Contornos de neón tornasolados; el control «Halo» añade brillo.	Kontou neyon k ap chatwaye; bouton «Limyè otou» ajoute klète.	Neon outline a shimmer; di Glow slider add more shine.
+Неоновая тень	Neon shadow	Неонова тінь	Sombra de neón	Lonbraj neyon	Neon shadow
+Вирусный эффект TikTok: розовая, голубая и жёлтая копии контура расходятся и сходятся.	The viral TikTok effect: pink, blue and yellow copies of the outline split apart and rejoin.	Вірусний ефект TikTok: рожева, блакитна й жовта копії контуру розходяться й сходяться.	El efecto viral de TikTok: copias rosa, azul y amarilla del contorno se separan y se juntan.	Efè viral TikTok la: kopi woz, ble ak jòn kontou a separe epi rejwenn.	Di viral TikTok effect: pink, blue an yellow copy a di outline split an come back togedda.
+Трон	Tron	Трон	Tron	Tron	Tron
+Голубые и оранжевые световые контуры на тёмной сетке, как в «Троне».	Blue and orange light outlines on a dark grid, like in Tron.	Блакитні й помаранчеві світлові контури на темній сітці, як у «Троні».	Contornos de luz azules y naranjas sobre una rejilla oscura, como en Tron.	Kontou limyè ble ak zoranj sou yon griy fènwa, tankou nan Tron.	Blue an orange light outline pon a dark grid, like inna Tron.
+Электричество	Electricity	Електрика	Electricidad	Elektrisite	Current
+Дрожащие фиолетовые разряды с белой сердцевиной.	Flickering purple bolts with a white core.	Тремтливі фіолетові розряди з білою серцевиною.	Descargas moradas temblorosas con núcleo blanco.	Ekleraj vyolèt k ap tranble ak yon kè blan.	Purple lightning a shake wid a white middle.
+Тиснение	Emboss	Тиснення	Relieve	Relyèf	Emboss
+Серый рельеф, будто изображение выдавлено в листе.	Gray relief, as if the image were pressed into a sheet.	Сірий рельєф, ніби зображення видавлено в аркуші.	Relieve gris, como si la imagen estuviera estampada en una lámina.	Relyèf gri, kòmsi imaj la peze nan yon fèy.	Grey relief, like di picture press inna a sheet.
+Металл	Metal	Метал	Metal	Metal	Metal
+Чеканка на металле любого цвета: от серебра до золота, меди и синей стали.	Embossed metal in any color: from silver to gold, copper and blue steel.	Карбування на металі будь-якого кольору: від срібла до золота, міді й синьої сталі.	Repujado en metal de cualquier color: de plata a oro, cobre y acero azul.	Metal bosle nan nenpòt koulè: soti nan ajan rive nan lò, kwiv ak asye ble.	Metal press inna any colour: from silver to gold, copper an blue steel.
+Таблица металлов	Metal table	Таблиця металів	Tabla de metales	Tablo metal	Metal table
+Каждый участок кадра становится металлом своего цвета: медь, золото, патина, титан, висмут, серебро и другие.	Each part of the frame becomes a metal of its own color: copper, gold, patina, titanium, bismuth, silver and more.	Кожна ділянка кадру стає металом свого кольору: мідь, золото, патина, титан, вісмут, срібло та інші.	Cada zona del encuadre se convierte en un metal de su color: cobre, oro, pátina, titanio, bismuto, plata y más.	Chak pati imaj la tounen yon metal ak pwòp koulè l: kwiv, lò, patin, titàn, bismit, ajan ak lòt ankò.	Every part a di picture turn metal inna it own colour: copper, gold, patina, titanium, bismuth, silver an more.
+Камень	Stone	Камінь	Piedra	Wòch	Stone
+Изображение высечено в шершавом песчанике.	The image is carved into rough sandstone.	Зображення висічене в шорсткому пісковику.	La imagen está tallada en arenisca rugosa.	Imaj la skilte nan grè ki graj.	Di picture carve inna rough sandstone.
+Бумага	Paper	Папір	Papel	Papye	Paper
+Слепое тиснение белым по белому, как на дорогой открытке.	Blind embossing white on white, like an expensive greeting card.	Сліпе тиснення білим по білому, як на дорогій листівці.	Relieve en seco blanco sobre blanco, como en una tarjeta cara.	Relyèf blan sou blan, tankou sou yon bèl kat chè.	White pon white emboss, like a expensive card.
+Дерево	Wood	Дерево	Madera	Bwa	Wood
+Резьба по доске с годичными волокнами.	Carving into a board with tree-ring grain.	Різьба по дошці з річними волокнами.	Talla en una tabla con vetas de anillos.	Skilti sou yon planch ak venn bwa.	Carving pon a board wid di wood grain.
+Классика	Classic	Класика	Clásicos	Klasik	Classic
+Приборы	Devices	Прилади	Dispositivos	Aparèy	Gadget dem
+Ретро	Retro	Ретро	Retro	Retwo	Retro
+Рисунок	Drawing	Малюнок	Dibujo	Desen	Drawing
+Рельеф	Relief	Рельєф	Relieve	Relyèf	Relief
+Серебро	Silver	Срібло	Plata	Ajan	Silver
+Медь	Copper	Мідь	Cobre	Kwiv	Copper
+Золото	Gold	Золото	Oro	Lò	Gold
+Латунь	Brass	Латунь	Latón	Kwiv jòn	Brass
+Зелёная патина	Green patina	Зелена патина	Pátina verde	Patin vèt	Green patina
+Синяя сталь	Blue steel	Синя сталь	Acero azul	Asye ble	Blue steel
+Фиолетовый титан	Purple titanium	Фіолетовий титан	Titanio violeta	Titàn vyolèt	Purple titanium
+Розовое золото	Rose gold	Рожеве золото	Oro rosa	Lò woz	Rose gold
+WebGL 2 недоступен	WebGL 2 is unavailable	WebGL 2 недоступний	WebGL 2 no está disponible	WebGL 2 pa disponib	WebGL 2 nuh available
+Ошибка шейдера: {log}	Shader error: {log}	Помилка шейдера: {log}	Error de shader: {log}	Erè shader: {log}	Shader error: {log}
+Ошибка сборки шейдера: {log}	Shader build error: {log}	Помилка збирання шейдера: {log}	Error al compilar el shader: {log}	Erè konpilasyon shader: {log}	Shader build error: {log}

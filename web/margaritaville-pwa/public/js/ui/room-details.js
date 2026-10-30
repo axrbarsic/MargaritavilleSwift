@@ -5,8 +5,9 @@ import { backButton, pushScreen, updatedLabel } from "./screen-stack.js";
 import { mediaActions, mediaGrid, openMediaViewer } from "./media-views.js";
 import { voiceBubble, voicePanel } from "./voice-panel.js";
 import { deleteAttachment, saveAttachment } from "../infra/media-files.js";
+import { tr } from "../i18n/i18n.js";
 
-const TITLES = { text: "Заметки", voice: "Голос/медиа", media: "Медиа" };
+const TITLES = { text: tr("Заметки"), voice: tr("Голос/медиа"), media: tr("Медиа") };
 
 export function openRoomDetails(app, roomID, mode, onMutation = () => {}) {
   const { store, feedback } = app;
@@ -35,13 +36,13 @@ export function openRoomDetails(app, roomID, mode, onMutation = () => {}) {
         : mode === "voice" ? voices()[0]?.createdAt ?? r.voiceTranscriptUpdatedAt
           : visual()[0]?.createdAt;
       stamp.hidden = date == null;
-      stamp.textContent = date == null ? "" : `Обновлено: ${updatedLabel(date)}`;
+      stamp.textContent = date == null ? "" : tr("Обновлено: {time}", { time: updatedLabel(date) });
       voiceList.replaceChildren(...(voices().length
         ? voices().map((a) => voiceBubble(a, () => remove(a)))
-        : [h("p", { class: "detail-hint dim" }, "Голосовые заметки появятся здесь пузырями после записи.")]));
+        : [h("p", { class: "detail-hint dim" }, tr("Голосовые заметки появятся здесь пузырями после записи."))]));
       mediaBox.replaceChildren(visual().length
         ? mediaGrid(visual(), { onOpen: (a) => openMediaViewer(visual(), a), onDelete: remove })
-        : h("p", { class: "detail-hint" }, "Фото и видео сохраняются локально и не синхронизируются."));
+        : h("p", { class: "detail-hint" }, tr("Фото и видео сохраняются локально и не синхронизируются.")));
     };
     setRefresh(refresh);
 
@@ -54,7 +55,7 @@ export function openRoomDetails(app, roomID, mode, onMutation = () => {}) {
     let body;
     let voice = null;
     if (mode === "text") {
-      const area = h("textarea", { class: "detail-editor", placeholder: "Текстовая заметка", rows: 8 });
+      const area = h("textarea", { class: "detail-editor", placeholder: tr("Текстовая заметка"), rows: 8 });
       area.value = room()?.textNote ?? "";
       let timer = null;
       area.addEventListener("input", () => {
@@ -72,7 +73,7 @@ export function openRoomDetails(app, roomID, mode, onMutation = () => {}) {
       setTimeout(() => area.focus(), 260);
       body = area;
     } else {
-      voice = mode === "voice" ? voicePanel("Новая голосовая заметка", feedback, async ({ blob, transcript }) => {
+      voice = mode === "voice" ? voicePanel(tr("Новая голосовая заметка"), feedback, async ({ blob, transcript }) => {
         try {
           const attachment = await saveAttachment("audio", blob, transcript);
           store.addRoomMedia(roomID, attachment);
@@ -80,7 +81,7 @@ export function openRoomDetails(app, roomID, mode, onMutation = () => {}) {
           showError(null);
           onMutation();
         } catch (e) {
-          showError(e?.message || "Не удалось сохранить голос");
+          showError(e?.message || tr("Не удалось сохранить голос"));
         }
       }) : null;
       body = mode === "voice"

@@ -4,6 +4,7 @@
 import { h } from "./dom.js";
 import { icon } from "./icons.js";
 import { roomStatus } from "../domain/room.js";
+import { tr } from "../i18n/i18n.js";
 
 const HOURS = [8, 9, 10, 11, 12, 1, 2, 3, 4];
 const MINUTES = [0, 15, 30, 45];
@@ -38,13 +39,13 @@ export function openRoomActions(app, roomID, handlers) {
     const action = (label, name, onclick, cls = "") => h("button", { class: `action ${cls}`, onclick: () => { close(); onclick(); } }, icon(name, 20, 2.6), h("span", {}, label));
     return h("div", { class: "actions" },
       h("div", { class: "action-group" },
-        h("div", { class: "action-title" }, `Комната ${room.id}`),
-        action("Голос/медиа", "mic", () => { app.feedback.tap(); handlers.openDetails(roomID, "voice"); }),
-        action(room.isVIP ? "VIP выключить" : "VIP включить", "diamond", () => { app.feedback.confirm(); handlers.toggleVIP(roomID); }),
-        action("Назначить время", "clock", () => { app.feedback.tap(); handlers.openSchedule(roomID); }),
-        roomStatus(room) !== "pending" ? action("Вернуть в жёлтый", "reset", () => { app.feedback.deselect(); handlers.reset(roomID); }) : null
+        h("div", { class: "action-title" }, tr("Комната {room}", { room: room.id })),
+        action(tr("Голос/медиа"), "mic", () => { app.feedback.tap(); handlers.openDetails(roomID, "voice"); }),
+        action(room.isVIP ? tr("VIP выключить") : tr("VIP включить"), "diamond", () => { app.feedback.confirm(); handlers.toggleVIP(roomID); }),
+        action(tr("Назначить время"), "clock", () => { app.feedback.tap(); handlers.openSchedule(roomID); }),
+        roomStatus(room) !== "pending" ? action(tr("Вернуть в жёлтый"), "reset", () => { app.feedback.deselect(); handlers.reset(roomID); }) : null
       ),
-      h("button", { class: "action cancel", onclick: close }, "Отмена")
+      h("button", { class: "action cancel", onclick: close }, tr("Отмена"))
     );
   });
 }
@@ -101,15 +102,15 @@ export function openSchedule(app, roomID, { onSet, onClear, onDismiss }) {
     const changed = () => { pill.textContent = label(choice); };
     return h("div", { class: "schedule" },
       h("div", { class: "schedule-head" },
-        h("div", {}, h("div", { class: "schedule-title" }, "Время открытия"), h("div", { class: "schedule-room" }, `Комната ${room.id}`)),
+        h("div", {}, h("div", { class: "schedule-title" }, tr("Время открытия")), h("div", { class: "schedule-room" }, tr("Комната {room}", { room: room.id }))),
         pill),
       h("div", { class: "wheels" },
         wheel(HOURS, String, choice.hour, (v) => { choice.hour = v; changed(); }, app.feedback),
         wheel(MINUTES, (m) => String(m).padStart(2, "0"), choice.minute, (v) => { choice.minute = v; changed(); }, app.feedback),
         wheel(PERIODS, String, choice.period, (v) => { choice.period = v; changed(); }, app.feedback)),
       h("div", { class: "sheet-buttons" },
-        h("button", { class: "action bordered", onclick: () => { acted = true; app.feedback.deselect(); close(); onClear(); } }, "Очистить"),
-        h("button", { class: "action scheduled", onclick: () => { acted = true; app.feedback.confirm(); close(); onSet(todayAt(choice)); } }, "Установить"))
+        h("button", { class: "action bordered", onclick: () => { acted = true; app.feedback.deselect(); close(); onClear(); } }, tr("Очистить")),
+        h("button", { class: "action scheduled", onclick: () => { acted = true; app.feedback.confirm(); close(); onSet(todayAt(choice)); } }, tr("Установить")))
     );
   }, { onClose: () => { if (!acted) onDismiss?.(); } });
 }
