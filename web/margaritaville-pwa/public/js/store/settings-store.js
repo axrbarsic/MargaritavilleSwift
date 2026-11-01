@@ -1,7 +1,7 @@
 // Настройки приложения на устройстве (localStorage), как AppSettingsStore на UserDefaults.
 // Каждое изменение сразу сохраняется и оповещает подписчиков.
 // Источник: App/AppSettingsStore.swift, AppSettingsStoreDefaults.swift.
-import { DEFAULT_HOUSEKEEPERS } from "../domain/housekeepers.js";
+import { DEFAULT_HOUSEKEEPERS, ROSTER_VERSION, migrateRoster } from "../domain/housekeepers.js";
 import { DEFAULT_CONSUMABLE_CATALOG, normalizedCatalog } from "../domain/consumables.js";
 
 const KEY = "margaritaville.settings.v1";
@@ -44,6 +44,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   developerVIPHDREnabled: false,
   developerStatusHDRPulseEnabled: false,
   housekeepers: DEFAULT_HOUSEKEEPERS,
+  housekeeperRosterVersion: ROSTER_VERSION,
   cartConsumableCatalog: DEFAULT_CONSUMABLE_CATALOG,
   language: null
 });
@@ -55,8 +56,15 @@ export class SettingsStore {
   constructor(storage = globalThis.localStorage) {
     this.storage = storage;
     this.listeners = new Set();
-    this.values = { ...DEFAULT_SETTINGS, ...this.read() };
+    const stored = this.read();
+    this.values = { ...DEFAULT_SETTINGS, ...stored };
     this.values.cartConsumableCatalog = normalizedCatalog(this.values.cartConsumableCatalog);
+    // Старый состав уборщиц с телефона заменяется свежим из графика.
+    if (stored.housekeepers && (stored.housekeeperRosterVersion ?? 1) < ROSTER_VERSION) {
+      this.values.housekeepers = migrateRoster(this.values.housekeepers);
+      this.values.housekeeperRosterVersion = ROSTER_VERSION;
+      this.save();
+    }
   }
 
   read() {

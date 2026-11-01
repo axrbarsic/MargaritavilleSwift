@@ -6,6 +6,15 @@ import { backButton, pushScreen } from "../screen-stack.js";
 
 export const PWA_CHANGELOG = [
   {
+    version: "PWA 1.0.0 (9)",
+    date: "2026-10-31",
+    changes: [
+      "Обновлён список уборщиц по свежему графику: Ritza, Denise, Nadia, Wonderline, Kerlange, Miolene, Gurlene, Anazine, Marie, Vida, Fabiola, Luisa, Francia, Kettia, Miguerline и Amenda.",
+      "Убраны уборщицы, которых больше нет в графике: Bebita, Marie Pierre, Nadia M (DC), Nidia, Omelene PM, Rosaire и Simone.",
+      "Старый список на телефоне заменяется автоматически; цвета и уборщицы, добавленные вручную, сохраняются."
+    ]
+  },
+  {
     version: "PWA 1.0.0 (8)",
     date: "2026-10-30",
     changes: [

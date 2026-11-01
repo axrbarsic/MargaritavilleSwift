@@ -19,15 +19,31 @@ export function paletteColor(palette, alpha = 1) {
   return `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${alpha})`;
 }
 
+// Состав по графику и листам комнат на 30–31 октября 2026. Старые id сохранены,
+// чтобы назначения тележек не потерялись.
 export const DEFAULT_HOUSEKEEPERS = [
-  ["kerlange", "Kerlange", "slate"], ["anazline", "Ana", "aqua"], ["bebitha", "Bebita", "amber"],
-  ["denise", "Denise", "coral"], ["fabiola", "Fabiola", "orchid"], ["francia", "Francia", "sky"],
-  ["gurline", "Gurlene", "mint"], ["ketty", "Ketty", "ruby"], ["luisa", "Luisa", "violet"],
-  ["marie", "Marie", "lime"], ["marie-pierre", "Marie Pierre", "slate"], ["nadia", "Nadia", "aqua"],
-  ["nadia-m-dc", "Nadia M (DC)", "amber"], ["nidia", "Nidia", "coral"], ["omelene-pm", "Omelene PM", "orchid"],
-  ["ritza", "Ritza", "sky"], ["rosalie", "Rosaire", "mint"], ["simone", "Simone", "ruby"],
-  ["vida", "Vida", "violet"], ["wonderline", "Wonderline", "lime"]
+  ["ritza", "Ritza", "sky"], ["denise", "Denise", "coral"], ["nadia", "Nadia", "aqua"],
+  ["wonderline", "Wonderline", "lime"], ["kerlange", "Kerlange", "slate"], ["miolene", "Miolene", "amber"],
+  ["gurline", "Gurlene", "mint"], ["anazline", "Anazine", "orchid"], ["marie", "Marie", "ruby"],
+  ["vida", "Vida", "violet"], ["fabiola", "Fabiola", "coral"], ["luisa", "Luisa", "sky"],
+  ["francia", "Francia", "lime"], ["ketty", "Kettia", "aqua"], ["miguerline", "Miguerline", "amber"],
+  ["amenda", "Amenda", "orchid"]
 ].map(([id, displayName, palette]) => ({ id, displayName, palette }));
+
+/// Версия встроенного состава: при её росте сохранённый на телефоне список заменяется новым.
+export const ROSTER_VERSION = 2;
+const PREVIOUS_DEFAULT_IDS = new Set(["kerlange", "anazline", "bebitha", "denise", "fabiola", "francia", "gurline", "ketty", "luisa",
+  "marie", "marie-pierre", "nadia", "nadia-m-dc", "nidia", "omelene-pm", "ritza", "rosalie", "simone", "vida", "wonderline"]);
+
+/// Переход на новый состав: встроенные имена — из свежего графика (цвет, выбранный вручную, остаётся),
+/// добавленные вручную уборщицы сохраняются в конце списка.
+export function migrateRoster(saved) {
+  const list = Array.isArray(saved) ? saved : [];
+  const palettes = new Map(list.map((h) => [h.id, h.palette]));
+  const fresh = DEFAULT_HOUSEKEEPERS.map((h) => ({ ...h, palette: palettes.get(h.id) ?? h.palette }));
+  const custom = list.filter((h) => !PREVIOUS_DEFAULT_IDS.has(h.id) && !fresh.some((f) => f.id === h.id));
+  return canonicalHousekeepers([...fresh, ...custom]);
+}
 
 export function housekeeperById(id, list = DEFAULT_HOUSEKEEPERS) {
   return id ? list.find((h) => h.id === id) ?? null : null;
@@ -36,11 +52,11 @@ export function housekeeperById(id, list = DEFAULT_HOUSEKEEPERS) {
 // ——— редактирование списка (MargaritavilleHousekeeperCatalog) ———
 const PALETTES = Object.keys(PALETTE_RGB);
 const DUPLICATE_GROUPS = [
-  ["ana", "anazine", "anazline"], ["bebita", "bebitha"], ["gurlene", "gurline"],
-  ["kerlange", "kerlande"], ["milodene", "omelenepm"], ["rosaire", "rosalie", "rosario"]
+  ["ana", "anazine", "anazline"], ["bebita", "bebitha"], ["gurlene", "gurline"], ["kettia", "ketty"],
+  ["kerlange", "kerlande"], ["miguerlene", "miguerline"], ["milodene", "omelenepm"], ["rosaire", "rosalie", "rosario"]
 ];
-const NAME_BY_ID = { anazline: "Ana", bebitha: "Bebita", gurline: "Gurlene", "omelene-pm": "Omelene PM", rosalie: "Rosaire" };
-const NAME_BY_KEY = { "ana|anazine|anazline": "Ana", "bebita|bebitha": "Bebita", "gurlene|gurline": "Gurlene", "kerlande|kerlange": "Kerlange", "milodene|omelenepm": "Omelene PM", "rosaire|rosalie|rosario": "Rosaire" };
+const NAME_BY_ID = { anazline: "Anazine", bebitha: "Bebita", gurline: "Gurlene", ketty: "Kettia", "omelene-pm": "Omelene PM", rosalie: "Rosaire" };
+const NAME_BY_KEY = { "ana|anazine|anazline": "Anazine", "bebita|bebitha": "Bebita", "gurlene|gurline": "Gurlene", "kettia|ketty": "Kettia", "kerlande|kerlange": "Kerlange", "miguerlene|miguerline": "Miguerline", "milodene|omelenepm": "Omelene PM", "rosaire|rosalie|rosario": "Rosaire" };
 
 const fold = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const token = (name) => fold(name).replace(/[^\p{L}\p{N}]/gu, "");

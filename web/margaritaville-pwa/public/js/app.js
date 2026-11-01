@@ -14,7 +14,7 @@ import { keepUpdated } from "./infra/updates.js";
 import { tr } from "./i18n/i18n.js";
 
 export const APP_VERSION = "1.0.0";
-export const APP_BUILD = 8;
+export const APP_BUILD = 9;
 
 const root = document.getElementById("app");
 const settings = new SettingsStore();
