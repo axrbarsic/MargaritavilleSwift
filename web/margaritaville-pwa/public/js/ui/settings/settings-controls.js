@@ -4,10 +4,12 @@ import { h } from "../dom.js";
 import { icon } from "../icons.js";
 import { tr } from "../../i18n/i18n.js";
 
-export function settingsPanel(title, subtitle, ...children) {
+/// Группа: подпись сверху, элементы, пояснение снизу (как секции в настройках iOS).
+export function settingsPanel(title, footer, ...children) {
   return h("section", { class: "settings-panel" },
-    h("div", { class: "settings-panel-head" }, h("div", { class: "settings-panel-title" }, title), h("div", { class: "settings-panel-subtitle" }, subtitle)),
-    h("div", { class: "settings-panel-body" }, ...children));
+    title ? h("div", { class: "settings-panel-title" }, title) : null,
+    h("div", { class: "settings-panel-body" }, ...children),
+    footer ? h("div", { class: "settings-panel-footer" }, footer) : null);
 }
 
 export function infoRow({ title, value, iconName, subtitle, onclick, trailing }) {
@@ -40,15 +42,14 @@ export function sliderRow(opts) {
     h("div", { class: "slider-line" }, input, reset));
 }
 
-export function toggleRow({ title, iconName, subtitle, value, onLabel = tr("Вкл"), offLabel = tr("Выкл"), onChange, feedback }) {
+export function toggleRow({ title, iconName, subtitle, value, onChange, feedback }) {
   const input = h("input", { type: "checkbox", class: "switch", role: "switch" });
   input.checked = value;
-  const valueLabel = h("span", { class: "info-value" }, value ? onLabel : offLabel);
-  input.addEventListener("change", () => { valueLabel.textContent = input.checked ? onLabel : offLabel; feedback?.confirm(); onChange(input.checked); });
+  input.addEventListener("change", () => { feedback?.confirm(); onChange(input.checked); });
   return h("label", { class: "info-row toggle-row" },
     h("span", { class: "info-icon" }, icon(iconName, 18, 2.6)),
     h("span", { class: "info-text" }, h("span", { class: "info-title" }, title), subtitle ? h("span", { class: "info-subtitle" }, subtitle) : null),
-    valueLabel, input);
+    input);
 }
 
 /// Сегментированный выбор: options — [{ value, label }].

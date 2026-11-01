@@ -73,7 +73,7 @@ export function backgroundSection(app, rerender) {
   if (mode === "camera") extra.push(cameraControls(app, rerender));
 
   const current = BACKGROUND_MODES.find((m) => m.id === mode) ?? BACKGROUND_MODES[0];
-  return settingsPanel(tr("Фон приложения"), tr("Живые Matrix, TV, Video, Brooklyn и камера как фон для всех экранов приложения."),
+  return settingsPanel(null, null,
     selectMenu(BACKGROUND_MODES.map((m) => ({ value: m.id, label: m.title })), mode, (v) => { feedback.confirm(); settings.set("appBackgroundMode", v); rerender(); }, tr("Заставка")),
     infoRow({ title: tr("Заставка"), value: current.description, iconName: "grid", subtitle: SUBTITLE[mode] }),
     ...extra);

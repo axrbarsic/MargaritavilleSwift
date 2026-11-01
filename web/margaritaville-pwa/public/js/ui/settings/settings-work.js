@@ -1,4 +1,4 @@
-// Раздел «Работа»: хранение, уборщицы, расходники тележки, каталог номеров, мульти-меню.
+// Экраны смены: уборщицы, расходники тележки, каталог номеров.
 // Источник: Features/Settings/SettingsWorkSection.swift, HousekeeperCatalogEditorSection.swift,
 // CartConsumableCatalogEditorSection.swift, MargaritavilleCatalogEditorSection.swift.
 import { h } from "../dom.js";
@@ -6,26 +6,10 @@ import { icon } from "../icons.js";
 import { PALETTE_RGB, paletteColor, makeHousekeeper, canonicalHousekeepers, DEFAULT_HOUSEKEEPERS } from "../../domain/housekeepers.js";
 import { makeCatalogItem, normalizedCatalog, DEFAULT_CONSUMABLE_CATALOG } from "../../domain/consumables.js";
 import { normalizeRoomID } from "../../domain/catalog.js";
-import { infoRow, messageLine, settingsPanel, textInputRow, toggleRow } from "./settings-controls.js";
+import { messageLine, settingsPanel, textInputRow } from "./settings-controls.js";
 import { tr } from "../../i18n/i18n.js";
 
-export function workSection(app, rerender) {
-  const { settings, feedback } = app;
-  return settingsPanel(tr("Работа"), tr("Поведение раздвижного меню ячейки и рабочие жесты на основном экране."),
-    infoRow({ title: tr("Хранение"), value: tr("Только телефон"), iconName: "box", subtitle: tr("Смена, медиа и настройки хранятся на этом устройстве и никуда не отправляются.") }),
-    housekeepersEditor(app, rerender),
-    consumablesEditor(app, rerender),
-    catalogEditor(app, rerender),
-    toggleRow({
-      title: tr("Мульти-меню"), iconName: "list", feedback,
-      subtitle: tr("По умолчанию открыто только одно меню ячейки; этот режим разрешает несколько."),
-      value: settings.get("summaryActionMenuAllowsMultiple"), onLabel: tr("Несколько"), offLabel: tr("Одно"),
-      onChange: (v) => settings.set("summaryActionMenuAllowsMultiple", v)
-    })
-  );
-}
-
-function housekeepersEditor(app, rerender) {
+export function housekeepersEditor(app, rerender) {
   const { settings, store, feedback } = app;
   const message = messageLine(app.ui.hkMessage ?? tr("Имена идут из свежих листов; список можно менять под смену."));
   const say = (text) => { app.ui.hkMessage = text; message.textContent = text; };
@@ -57,7 +41,7 @@ function housekeepersEditor(app, rerender) {
     return h("div", { class: "editor-row", style: { "--hk-line": paletteColor(hk.palette, 0.34) } }, palette, name, remove);
   });
 
-  return settingsPanel(tr("Уборщицы"), tr("Имена, цвета и назначения тележек для первого экрана Margaritaville."),
+  return settingsPanel(null, tr("Кружок слева меняет цвет, корзина удаляет уборщицу из списка."),
     textInputRow(tr("Имя"), (value, clear) => {
       const hk = makeHousekeeper(value, settings.get("housekeepers"));
       if (!hk) { feedback.holdWarning(); say(tr("Напиши имя перед добавлением.")); return; }
@@ -70,7 +54,7 @@ function housekeepersEditor(app, rerender) {
     message, ...rows);
 }
 
-function consumablesEditor(app, rerender) {
+export function consumablesEditor(app, rerender) {
   const { settings, feedback } = app;
   const message = messageLine(app.ui.consumableMessage ?? tr("Этот список используется в меню уборщицы для быстрого запроса на тележку."));
   const say = (text) => { app.ui.consumableMessage = text; message.textContent = text; };
@@ -92,7 +76,7 @@ function consumablesEditor(app, rerender) {
     } }, icon("trash", 15, 2.8));
     return h("div", { class: "editor-row" }, h("span", { class: "info-icon" }, icon("box", 18, 2.6)), name, remove);
   });
-  return settingsPanel(tr("Расходники тележки"), tr("Добавляй, удаляй и переименовывай позиции для меню уборщицы."),
+  return settingsPanel(null, tr("Добавляй, удаляй и переименовывай позиции для меню уборщицы."),
     textInputRow(tr("Название"), (value, clear) => {
       const item = makeCatalogItem(value, settings.get("cartConsumableCatalog"));
       if (!item) { feedback.holdWarning(); say(tr("Напиши название перед добавлением.")); return; }
@@ -105,7 +89,7 @@ function consumablesEditor(app, rerender) {
     message, ...rows);
 }
 
-function catalogEditor(app, rerender) {
+export function catalogEditor(app, rerender) {
   const { store, feedback } = app;
   const message = messageLine(app.ui.catalogMessage ?? tr("Добавь номер, и корпус/этаж определятся автоматически."));
   const say = (text) => { app.ui.catalogMessage = text; message.textContent = text; };
@@ -116,7 +100,7 @@ function catalogEditor(app, rerender) {
       if (result === "changed") { feedback.confirm(); say(tr("{room} удалён из каталога.", { room })); rerender(); }
       else { feedback.holdWarning(); say(result === "blockedActiveRoom" ? tr("{room} сейчас в активной смене, удалить нельзя.", { room }) : tr("Номер {room} не найден в каталоге.", { room })); }
     } }, room, icon("close", 9, 3.4))))));
-  return settingsPanel(tr("Каталог Margaritaville"), tr("Добавление и удаление номеров хранится в отдельной базе этого отеля."),
+  return settingsPanel(null, tr("Коснись номера, чтобы удалить его из каталога."),
     textInputRow(tr("Номер"), (value, clear) => {
       const result = store.addCatalogRoom(value);
       const messages = { duplicate: tr("Этот номер уже есть в каталоге."), invalidRoom: tr("Не могу определить корпус/этаж для этого номера."), blockedActiveRoom: tr("Этот номер сейчас используется в смене.") };

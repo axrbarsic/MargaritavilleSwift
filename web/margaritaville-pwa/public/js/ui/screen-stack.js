@@ -7,8 +7,10 @@ import { tr } from "../i18n/i18n.js";
 const stack = [];
 
 /// Пока открыт экран, главный экран под ним скрыт — виден только живой фон, как в iOS-листах.
+/// Экраны прозрачные, поэтому нижние экраны стека тоже прячутся — виден только верхний.
 function syncCovered() {
   document.getElementById("app")?.classList.toggle("covered", stack.some((e) => !e.closed));
+  stack.forEach((e, i) => e.layer.classList.toggle("buried", i < stack.length - 1));
 }
 
 export function pushScreen(build, { className = "", onClose } = {}) {
