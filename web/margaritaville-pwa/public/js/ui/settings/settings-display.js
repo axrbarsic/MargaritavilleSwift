@@ -4,7 +4,7 @@ import { h } from "../dom.js";
 import { icon } from "../icons.js";
 import { openSheet } from "../sheets.js";
 import { SETTINGS_EVENTS, SETTINGS_PALETTE, SOUND_ASSETS, assetFor } from "../../infra/feedback.js";
-import { infoRow, segmented, settingsPanel, toggleRow } from "./settings-controls.js";
+import { segmented, settingsPanel, toggleRow } from "./settings-controls.js";
 import { tr } from "../../i18n/i18n.js";
 
 export function cellsSections(app, rerender) {
@@ -46,7 +46,11 @@ export function soundSection(app, rerender) {
         }, icon(candidate === asset ? "check" : "speaker", 18, 2.6), h("span", {}, SOUND_ASSETS[candidate].title)))),
       h("button", { class: "action cancel", onclick: close }, tr("Отмена"))));
     return h("div", { class: "sound-row" },
-      infoRow({ title: event.title, value: SOUND_ASSETS[asset].title, iconName: "speaker", subtitle: event.subtitle, onclick: choose }),
+      h("button", { class: "info-row", onclick: choose },
+        h("span", { class: "info-text" },
+          h("span", { class: "info-title" }, event.title),
+          h("span", { class: "sound-name" }, SOUND_ASSETS[asset].title),
+          h("span", { class: "info-subtitle" }, event.subtitle))),
       h("button", { class: "play-button", "aria-label": tr("Прослушать {sound}", { sound: SOUND_ASSETS[asset].title }), onclick: () => feedback.preview(asset) }, icon("play", 16, 3)));
   });
   return settingsPanel(null, tr("Коснись строки, чтобы выбрать звук, или ▶, чтобы прослушать."), ...rows);

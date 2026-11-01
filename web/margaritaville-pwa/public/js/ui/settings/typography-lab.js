@@ -3,8 +3,9 @@
 // Источник: Features/Settings/CellTypographyLabScreen.swift, CellTypographyLabPreview.swift,
 // CellTypographyPresetStore.swift, SavedCellTypographyPresetPanel.swift.
 import { h } from "../dom.js";
-import { backButton, pushScreen } from "../screen-stack.js";
-import { segmented, settingsPanel, sliderRow, infoRow } from "./settings-controls.js";
+import { pushScreen } from "../screen-stack.js";
+import { pickerRow, segmented, settingsPanel, sliderRow, infoRow } from "./settings-controls.js";
+import { settingsScroller } from "./settings-page.js";
 import { attachVIPJelly } from "../vip-jelly.js";
 import { fitTileNumbers } from "../number-fit.js";
 import { currentLanguage, tr } from "../../i18n/i18n.js";
@@ -42,8 +43,6 @@ export function openTypographyLab(app) {
       h("div", { class: "lab-row", style: { "--cols": columns } }, SAMPLES.slice(0, columns).map(([s, n]) => tile(s, n, extra))));
     const paint = () => {
       preview.replaceChildren(
-        h("div", { class: "lab-heading" }, tr("Production-ячейки")),
-        h("div", { class: "info-subtitle" }, tr("То же выбранное число колонок, размеры и геометрия, что на главном экране.")),
         group(tr("Обычные статусы"), ""), group(tr("HDR-всплеск + rubber"), "hdr-pulse lab-loop"), group(tr("VIP-желе"), "vip-jelly"),
         group("VIP HDR", "vip-hdr"), group(tr("VIP-желе + HDR"), "vip-jelly vip-hdr"));
       // Тот же резиновый размер номера, что на главном экране.
@@ -61,15 +60,13 @@ export function openTypographyLab(app) {
     const controls = (title, prefix) => settingsPanel(title, tr("Все значения применяются ко всем preview-ячейкам сразу."),
       sliderRow({ title: tr("Размер"), iconName: "note", min: prefix === "roomNumber" ? 36 : 12, max: prefix === "roomNumber" ? 48 : 18, step: 1, defaultValue: PRODUCTION[`${prefix}Size`], value: t[`${prefix}Size`], label: (v) => `${v}`, onChange: (v) => { t[`${prefix}Size`] = v; paint(); } }),
       sliderRow({ title: tr("Смещение по Y"), iconName: "sliders", min: -8, max: 8, step: 1, defaultValue: PRODUCTION[`${prefix}Offset`], value: t[`${prefix}Offset`], label: (v) => `${v}`, onChange: (v) => { t[`${prefix}Offset`] = v; paint(); } }),
-      h("div", { class: "info-title" }, tr("Толщина")),
-      segmented(WEIGHTS, t[`${prefix}Weight`], (v) => { t[`${prefix}Weight`] = v; paint(); }, app.feedback));
+      pickerRow({ title: tr("Толщина"), iconName: "note", control: segmented(WEIGHTS, t[`${prefix}Weight`], (v) => { t[`${prefix}Weight`] = v; paint(); }, app.feedback) }));
 
     paint();
     paintSaved();
-    return h("main", { class: "detail-screen" },
-      h("div", { class: "detail-scroll" },
-        h("header", { class: "detail-header inline" }, backButton(close), h("div", {}, h("div", { class: "detail-big-title" }, tr("Типографика ячеек")), h("div", { class: "detail-cart-subtitle" }, tr("Только preview — основной экран не меняется")))),
-        preview,
+    return h("main", { class: "detail-screen settings-screen" },
+      settingsScroller(close, tr("Типографика ячеек"),
+        settingsPanel(tr("Production-ячейки"), h("span", {}, tr("То же выбранное число колонок, размеры и геометрия, что на главном экране."), " ", tr("Только preview — основной экран не меняется"), "."), preview),
         controls(tr("Основной номер"), "roomNumber"),
         controls(tr("Время активации"), "time"),
         settingsPanel(tr("Сохранение"), tr("Пресет хранится только для стенда и не меняет ячейки основного экрана."),

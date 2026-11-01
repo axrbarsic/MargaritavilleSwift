@@ -1,10 +1,23 @@
-// Экран «Изменения»: сборки PWA и история сборок iOS-приложения.
+// Экран «Что нового»: сборки PWA и история сборок iOS-приложения.
 // Источник: Features/Settings/BuildChangelogScreen.swift.
 import { h } from "../dom.js";
 import { icon } from "../icons.js";
-import { backButton, pushScreen } from "../screen-stack.js";
+import { pushScreen } from "../screen-stack.js";
+import { settingsScroller } from "./settings-page.js";
+import { tr } from "../../i18n/i18n.js";
 
 export const PWA_CHANGELOG = [
+  {
+    version: "PWA 1.0.0 (11)",
+    date: "2026-11-01",
+    changes: [
+      "Все вложенные экраны настроек приведены к одному стилю: строки собраны в карточки-группы с подписью сверху и пояснением снизу, как на главном экране настроек.",
+      "«Фон»: заставка выбирается из списка с галочкой вместо выпадающего меню, настройки режима — отдельной группой.",
+      "«Уборщицы», «Расходники» и «Номера отеля»: поле добавления отдельной группой, номера разбиты по корпусам.",
+      "«Звуки»: название звука под заголовком — на узких экранах строки больше не сжимаются.",
+      "«Что нового» и стенд типографики получили такую же шапку, как остальные экраны."
+    ]
+  },
   {
     version: "PWA 1.0.0 (10)",
     date: "2026-10-31",
@@ -101,10 +114,8 @@ const entryCard = (entry) => h("section", { class: "changelog-entry" },
 
 export function openChangelog() {
   pushScreen((close) => {
-    const list = h("div", { class: "detail-scroll" }, PWA_CHANGELOG.map(entryCard), h("div", { class: "changelog-divider" }, "Сборки iOS-приложения"));
+    const list = settingsScroller(close, tr("Что нового"), ...PWA_CHANGELOG.map(entryCard), h("div", { class: "menu-caption" }, "Сборки iOS-приложения"));
     fetch("data/ios-changelog.json").then((r) => r.json()).then((entries) => list.append(...entries.map(entryCard))).catch(() => {});
-    return h("main", { class: "detail-screen" },
-      h("header", { class: "detail-header" }, backButton(close), h("div", { class: "detail-big-title" }, "Изменения")),
-      list);
+    return h("main", { class: "detail-screen settings-screen" }, list);
   });
 }

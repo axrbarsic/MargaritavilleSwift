@@ -22,7 +22,7 @@ function effectsSection(app, rerender) {
     settings.get("developerVIPJellyEnabled") ? slider("developerVIPJellySpeed", tr("Скорость желе"), 0.2, 2.5, 0.75, (v) => `${v.toFixed(2)}x`) : null,
     toggle("developerVIPHDREnabled", tr("VIP HDR-свет"), "sparkle", tr("VIP-ячейка светится отдельно от общей яркости интерфейса.")),
     toggle("developerStatusHDRPulseEnabled", tr("HDR-всплеск статуса"), "bolt", tr("После смены статуса ячейка разгорается и две секунды плавно остывает из максимальной яркости нового цвета.")),
-    infoRow({ title: tr("Типографика ячеек"), value: tr("Стенд"), iconName: "note", subtitle: tr("Живой preview ячеек с отдельными настройками номера и времени."), onclick: () => { feedback.tap(); openTypographyLab(app); } }));
+    infoRow({ title: tr("Типографика ячеек"), value: tr("Стенд"), iconName: "note", subtitle: tr("Живой preview ячеек с отдельными настройками номера и времени."), chevron: true, onclick: () => { feedback.tap(); openTypographyLab(app); } }));
 }
 
 function testDataSection(app, rerender) {

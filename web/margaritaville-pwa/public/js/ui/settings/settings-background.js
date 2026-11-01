@@ -10,7 +10,7 @@ import { DONOR_HUE } from "../background/brooklyn.js";
 import { saveFile } from "../../store/db.js";
 import { CATEGORIES, EFFECTS, TUNING_DEFAULTS, categoryOf } from "../../camera/effects.js";
 import { renderControls } from "../../camera/controls.js";
-import { infoRow, segmented, selectMenu, settingsPanel, sliderRow } from "./settings-controls.js";
+import { choiceRow, infoRow, pickerRow, segmented, settingsPanel, sliderRow } from "./settings-controls.js";
 import { tr } from "../../i18n/i18n.js";
 
 const pct = (v) => `${Math.round(v * 100)}%`;
@@ -28,17 +28,19 @@ export function backgroundSection(app, rerender) {
   const mode = settings.get("appBackgroundMode");
   const slider = (key, title, iconName, min, max, def, label = pct) => sliderRow({ title, iconName, min, max, defaultValue: def, value: settings.get(key), label, onChange: (v) => settings.set(key, v) });
   const extra = [];
+  let footer = null;
+  let picker = null;
   if (mode === "matrixRain") extra.push(slider("matrixSpeed", tr("Скорость"), "bolt", 0.08, 3, 1, (v) => `${v.toFixed(2)}x`));
   if (mode === "tvStaticNoise") {
     const variant = TV_VARIANTS.find((v) => v.id === settings.get("tvStaticVariant")) ?? TV_VARIANTS[0];
     extra.push(
-      infoRow({ title: tr("Вариант шума"), value: variant.title, iconName: "film", subtitle: variant.description }),
-      segmented(TV_VARIANTS.map((v) => ({ value: v.id, label: v.title })), variant.id, (v) => { settings.set("tvStaticVariant", v); rerender(); }, feedback),
+      pickerRow({ title: tr("Вариант шума"), iconName: "film", subtitle: variant.description,
+        control: segmented(TV_VARIANTS.map((v) => ({ value: v.id, label: v.title })), variant.id, (v) => { settings.set("tvStaticVariant", v); rerender(); }, feedback) }),
       slider("tvStaticBrightness", tr("Яркость"), "sparkle", -1, 1, -0.08),
       slider("tvStaticGreenTint", tr("Зелёный"), "sparkle", 0, 1, 0));
   }
   if (mode === "video") {
-    const picker = h("input", { type: "file", accept: "video/*", hidden: true });
+    picker = h("input", { type: "file", accept: "video/*", hidden: true });
     picker.addEventListener("change", async () => {
       const file = picker.files?.[0];
       if (!file) return;
@@ -52,8 +54,8 @@ export function backgroundSection(app, rerender) {
         feedback.holdWarning();
       }
     });
-    extra.push(picker,
-      infoRow({ title: tr("Видео фона"), value: settings.get("backgroundVideoName") ? tr("Выбрано") : tr("Выбрать"), iconName: "film", subtitle: tr("Видео из галереи хранится только на этом устройстве."), onclick: () => picker.click() }),
+    extra.push(
+      infoRow({ title: tr("Видео фона"), value: settings.get("backgroundVideoName") ? tr("Выбрано") : tr("Выбрать"), iconName: "film", subtitle: tr("Видео из галереи хранится только на этом устройстве."), chevron: true, onclick: () => picker.click() }),
       slider("backgroundVideoBlur", tr("Матовость"), "sparkle", 0, 1, 0.28),
       slider("backgroundVideoBrightness", tr("Яркость"), "sparkle", -0.85, 0.85, 0.08),
       slider("backgroundVideoGreenTint", tr("Зелёный"), "sparkle", 0, 1, 0.34),
@@ -62,24 +64,26 @@ export function backgroundSection(app, rerender) {
   if (mode === "brooklyn") {
     const style = settings.get("brooklynSurfaceStyle");
     extra.push(
-      segmented([{ value: "donorExact", label: tr("Оригинал") }, { value: "enhanced", label: tr("Блики+") }], style, (v) => { settings.set("brooklynSurfaceStyle", v); rerender(); }, feedback),
-      infoRow({ title: tr("Материал Brooklyn"), value: style === "donorExact" ? tr("Оригинал") : tr("Блики+"), iconName: "grid", subtitle: style === "donorExact" ? tr("Точный материал исходника с текстурами и городским HDR.") : tr("Та же сцена и анимация с усиленными бликами.") }),
-      settingsPanel(tr("Вид Brooklyn"), tr("Размер, оттенок, яркость и контраст применяются к живой сцене сразу."),
-        slider("brooklynCellScale", tr("Размер ячеек"), "grid", 0.45, 1.25, 1),
-        slider("brooklynHue", tr("Оттенок"), "palette", 0, 1, DONOR_HUE, (v) => `${Math.round(v * 360)}°`),
-        slider("brooklynBrightness", tr("Яркость"), "sparkle", 0.45, 1.55, 1),
-        slider("brooklynContrast", tr("Контраст"), "sliders", -0.5, 0.5, 0, (v) => `${v >= 0 ? "+" : ""}${Math.round(v * 100)}%`)));
+      pickerRow({ title: tr("Материал Brooklyn"), iconName: "grid", subtitle: style === "donorExact" ? tr("Точный материал исходника с текстурами и городским HDR.") : tr("Та же сцена и анимация с усиленными бликами."),
+        control: segmented([{ value: "donorExact", label: tr("Оригинал") }, { value: "enhanced", label: tr("Блики+") }], style, (v) => { settings.set("brooklynSurfaceStyle", v); rerender(); }, feedback) }),
+      slider("brooklynCellScale", tr("Размер ячеек"), "grid", 0.45, 1.25, 1),
+      slider("brooklynHue", tr("Оттенок"), "palette", 0, 1, DONOR_HUE, (v) => `${Math.round(v * 360)}°`),
+      slider("brooklynBrightness", tr("Яркость"), "sparkle", 0.45, 1.55, 1),
+      slider("brooklynContrast", tr("Контраст"), "sliders", -0.5, 0.5, 0, (v) => `${v >= 0 ? "+" : ""}${Math.round(v * 100)}%`));
+    footer = tr("Размер, оттенок, яркость и контраст применяются к живой сцене сразу.");
   }
-  if (mode === "camera") extra.push(cameraControls(app, rerender));
 
   const current = BACKGROUND_MODES.find((m) => m.id === mode) ?? BACKGROUND_MODES[0];
-  return settingsPanel(null, null,
-    selectMenu(BACKGROUND_MODES.map((m) => ({ value: m.id, label: m.title })), mode, (v) => { feedback.confirm(); settings.set("appBackgroundMode", v); rerender(); }, tr("Заставка")),
-    infoRow({ title: tr("Заставка"), value: current.description, iconName: "grid", subtitle: SUBTITLE[mode] }),
-    ...extra);
+  const modes = settingsPanel(tr("Заставка"), SUBTITLE[mode], ...BACKGROUND_MODES.map((m) => choiceRow({
+    title: m.title, subtitle: m.description === m.title ? null : m.description, selected: m.id === mode,
+    onclick: () => { if (m.id === mode) return; feedback.confirm(); settings.set("appBackgroundMode", m.id); rerender(); }
+  })));
+  const options = extra.length ? settingsPanel(current.title, footer, ...extra) : null;
+  if (picker) options.append(picker);
+  return [modes, options, ...(mode === "camera" ? cameraSections(app, rerender) : [])];
 }
 
-function cameraControls(app, rerender) {
+function cameraSections(app, rerender) {
   const { settings, feedback } = app;
   const effectID = EFFECTS[settings.get("cameraEffect")] ? settings.get("cameraEffect") : "normal";
   const category = app.ui.cameraCategory ?? categoryOf(effectID).id;
@@ -108,9 +112,10 @@ function cameraControls(app, rerender) {
     rerender();
   } }, icon("reset", 16, 3), h("span", {}, tr("Сбросить настройки эффекта")));
 
-  return h("div", { class: "detail-stack" },
-    segmented([{ value: "environment", label: tr("Задняя") }, { value: "user", label: tr("Передняя") }], settings.get("cameraFacing"), (v) => settings.set("cameraFacing", v), feedback),
-    chips, grid,
-    infoRow({ title: tr("Эффект камеры"), value: EFFECTS[effectID].title, iconName: "camera", subtitle: EFFECTS[effectID].subtitle }),
-    controls, reset);
+  return [
+    settingsPanel(tr("Камера"), null,
+      segmented([{ value: "environment", label: tr("Задняя") }, { value: "user", label: tr("Передняя") }], settings.get("cameraFacing"), (v) => settings.set("cameraFacing", v), feedback)),
+    settingsPanel(tr("Эффект камеры"), EFFECTS[effectID].subtitle, h("div", { class: "effect-picker" }, chips, grid)),
+    settingsPanel(EFFECTS[effectID].title, null, controls, reset)
+  ];
 }

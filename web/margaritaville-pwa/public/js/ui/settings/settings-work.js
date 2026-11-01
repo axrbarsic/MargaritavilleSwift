@@ -38,11 +38,11 @@ export function housekeepersEditor(app, rerender) {
       say(tr("{name} удалена из списка.", { name: hk.displayName }));
       rerender();
     } }, icon("trash", 15, 2.8));
-    return h("div", { class: "editor-row", style: { "--hk-line": paletteColor(hk.palette, 0.34) } }, palette, name, remove);
+    return h("div", { class: "editor-row" }, palette, name, remove);
   });
 
-  return settingsPanel(null, tr("Кружок слева меняет цвет, корзина удаляет уборщицу из списка."),
-    textInputRow(tr("Имя"), (value, clear) => {
+  return [
+    settingsPanel(tr("Добавить"), message, textInputRow(tr("Имя"), (value, clear) => {
       const hk = makeHousekeeper(value, settings.get("housekeepers"));
       if (!hk) { feedback.holdWarning(); say(tr("Напиши имя перед добавлением.")); return; }
       save([...settings.get("housekeepers"), hk]);
@@ -50,8 +50,9 @@ export function housekeepersEditor(app, rerender) {
       say(tr("{name} добавлена.", { name: hk.displayName }));
       clear();
       rerender();
-    }, { autocapitalize: "words" }),
-    message, ...rows);
+    }, { autocapitalize: "words" })),
+    settingsPanel(tr("Уборщицы"), tr("Кружок слева меняет цвет, корзина удаляет уборщицу из списка."), ...rows)
+  ];
 }
 
 export function consumablesEditor(app, rerender) {
@@ -76,8 +77,8 @@ export function consumablesEditor(app, rerender) {
     } }, icon("trash", 15, 2.8));
     return h("div", { class: "editor-row" }, h("span", { class: "info-icon" }, icon("box", 18, 2.6)), name, remove);
   });
-  return settingsPanel(null, tr("Добавляй, удаляй и переименовывай позиции для меню уборщицы."),
-    textInputRow(tr("Название"), (value, clear) => {
+  return [
+    settingsPanel(tr("Добавить"), message, textInputRow(tr("Название"), (value, clear) => {
       const item = makeCatalogItem(value, settings.get("cartConsumableCatalog"));
       if (!item) { feedback.holdWarning(); say(tr("Напиши название перед добавлением.")); return; }
       settings.set("cartConsumableCatalog", [...settings.get("cartConsumableCatalog"), item]);
@@ -85,27 +86,28 @@ export function consumablesEditor(app, rerender) {
       say(tr("{name} добавлено.", { name: item.title }));
       clear();
       rerender();
-    }),
-    message, ...rows);
+    })),
+    settingsPanel(tr("Расходники"), tr("Добавляй, удаляй и переименовывай позиции для меню уборщицы."), ...rows)
+  ];
 }
 
 export function catalogEditor(app, rerender) {
   const { store, feedback } = app;
   const message = messageLine(app.ui.catalogMessage ?? tr("Добавь номер, и корпус/этаж определятся автоматически."));
   const say = (text) => { app.ui.catalogMessage = text; message.textContent = text; };
-  const cards = store.catalog.map((t) => h("div", { class: "catalog-card" },
-    h("div", { class: "catalog-head" }, h("span", {}, t.label), h("span", {}, String(t.rooms.length))),
+  const towers = store.catalog.map((t, index) => settingsPanel(`${t.label} · ${t.rooms.length}`, index === 0 ? tr("Коснись номера, чтобы удалить его из каталога.") : null,
     h("div", { class: "catalog-rooms" }, t.rooms.map((room) => h("button", { class: "catalog-room", onclick: () => {
       const result = store.removeCatalogRoom(room);
       if (result === "changed") { feedback.confirm(); say(tr("{room} удалён из каталога.", { room })); rerender(); }
       else { feedback.holdWarning(); say(result === "blockedActiveRoom" ? tr("{room} сейчас в активной смене, удалить нельзя.", { room }) : tr("Номер {room} не найден в каталоге.", { room })); }
     } }, room, icon("close", 9, 3.4))))));
-  return settingsPanel(null, tr("Коснись номера, чтобы удалить его из каталога."),
-    textInputRow(tr("Номер"), (value, clear) => {
+  return [
+    settingsPanel(tr("Добавить"), message, textInputRow(tr("Номер"), (value, clear) => {
       const result = store.addCatalogRoom(value);
       const messages = { duplicate: tr("Этот номер уже есть в каталоге."), invalidRoom: tr("Не могу определить корпус/этаж для этого номера."), blockedActiveRoom: tr("Этот номер сейчас используется в смене.") };
       if (result === "changed") { feedback.confirm(); say(tr("{room} добавлен.", { room: normalizeRoomID(value) ?? value })); clear(); rerender(); }
       else { feedback.holdWarning(); say(messages[result]); }
-    }, { inputMode: "text", autocapitalize: "characters" }),
-    message, ...cards);
+    }, { inputMode: "text", autocapitalize: "characters" })),
+    ...towers
+  ];
 }

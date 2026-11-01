@@ -2,7 +2,7 @@
 // Источник: Features/Settings/SettingsScreen.swift, SettingsCategory*.swift.
 import { h } from "../dom.js";
 import { icon } from "../icons.js";
-import { backButton, pushScreen } from "../screen-stack.js";
+import { openSettingsPage } from "./settings-page.js";
 import { openSheet } from "../sheets.js";
 import { BACKGROUND_MODES } from "../background/app-background.js";
 import { backgroundSection } from "./settings-background.js";
@@ -12,27 +12,6 @@ import { developerSections } from "./settings-developer.js";
 import { chooseLanguage } from "./settings-language.js";
 import { openChangelog } from "./changelog-screen.js";
 import { currentLanguage, tr } from "../../i18n/i18n.js";
-
-/// Экран настроек со шапкой «назад» и содержимым, которое перестраивается после изменений.
-export function openSettingsPage(app, title, build, { onClose } = {}) {
-  pushScreen((close, setRefresh) => {
-    const content = h("div", { class: "settings-content" });
-    const scroller = h("div", { class: "detail-scroll settings-scroll" },
-      h("header", { class: "settings-header" }, backButton(close), h("div", { class: "settings-title" }, title)),
-      content);
-    const rerender = () => {
-      const top = scroller.scrollTop;
-      content.replaceChildren(...build(rerender).filter(Boolean));
-      scroller.scrollTop = top;
-    };
-    setRefresh(() => {
-      // Не перестраиваем экран во время ввода текста или движения ползунка.
-      if (!content.contains(document.activeElement) || document.activeElement === document.body) rerender();
-    });
-    rerender();
-    return h("main", { class: "detail-screen settings-screen" }, scroller);
-  }, { onClose });
-}
 
 function navRow({ title, iconName, tint, value, onclick, destructive = false }) {
   return h("button", { class: `menu-row${destructive ? " destructive" : ""}`, onclick },
@@ -57,13 +36,13 @@ export function openSettings(app) {
     const background = BACKGROUND_MODES.find((m) => m.id === settings.get("appBackgroundMode")) ?? BACKGROUND_MODES[0];
     return [
       menuGroup(tr("Смена"), [
-        navRow({ title: tr("Уборщицы"), iconName: "user", tint: "#30d158", value: String(settings.get("housekeepers").length), onclick: page(tr("Уборщицы"), (r) => [housekeepersEditor(app, r)]) }),
-        navRow({ title: tr("Расходники"), iconName: "box", tint: "#ff9f0a", value: String(settings.get("cartConsumableCatalog").length), onclick: page(tr("Расходники"), (r) => [consumablesEditor(app, r)]) }),
-        navRow({ title: tr("Номера отеля"), iconName: "door", tint: "#0a84ff", value: String(rooms), onclick: page(tr("Номера отеля"), (r) => [catalogEditor(app, r)]) })
+        navRow({ title: tr("Уборщицы"), iconName: "user", tint: "#30d158", value: String(settings.get("housekeepers").length), onclick: page(tr("Уборщицы"), (r) => housekeepersEditor(app, r)) }),
+        navRow({ title: tr("Расходники"), iconName: "box", tint: "#ff9f0a", value: String(settings.get("cartConsumableCatalog").length), onclick: page(tr("Расходники"), (r) => consumablesEditor(app, r)) }),
+        navRow({ title: tr("Номера отеля"), iconName: "door", tint: "#0a84ff", value: String(rooms), onclick: page(tr("Номера отеля"), (r) => catalogEditor(app, r)) })
       ]),
       menuGroup(tr("Экран"), [
         navRow({ title: tr("Ячейки"), iconName: "grid", tint: "#64d2ff", value: tr("{count} в ряду", { count: settings.get("gridColumnCount") }), onclick: page(tr("Ячейки"), (r) => cellsSections(app, r)) }),
-        navRow({ title: tr("Фон"), iconName: "film", tint: "#bf5af2", value: background.title, onclick: page(tr("Фон"), (r) => [backgroundSection(app, r)]) }),
+        navRow({ title: tr("Фон"), iconName: "film", tint: "#bf5af2", value: background.title, onclick: page(tr("Фон"), (r) => backgroundSection(app, r)) }),
         navRow({ title: tr("Звуки"), iconName: "speaker", tint: "#ff375f", onclick: page(tr("Звуки"), (r) => [soundSection(app, r)]) }),
         navRow({ title: tr("Язык"), iconName: "globe", tint: "#5e5ce6", value: currentLanguage().name, onclick: () => { app.feedback.tap(); chooseLanguage(app); } })
       ]),

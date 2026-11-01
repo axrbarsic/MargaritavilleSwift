@@ -1,5 +1,5 @@
 // Элементы настроек: панель, информационная строка, ползунок со сбросом, переключатель,
-// сегменты и выпадающий список. Источник: Features/Settings/SettingsControls.swift.
+// сегменты, выбор из списка и поле добавления. Источник: Features/Settings/SettingsControls.swift.
 import { h } from "../dom.js";
 import { icon } from "../icons.js";
 import { tr } from "../../i18n/i18n.js";
@@ -12,12 +12,17 @@ export function settingsPanel(title, footer, ...children) {
     footer ? h("div", { class: "settings-panel-footer" }, footer) : null);
 }
 
-export function infoRow({ title, value, iconName, subtitle, onclick, trailing }) {
+const rowText = (title, subtitle) => h("span", { class: "info-text" },
+  h("span", { class: "info-title" }, title), subtitle ? h("span", { class: "info-subtitle" }, subtitle) : null);
+
+/// Строка группы; chevron — строка открывает отдельный экран или выбор.
+export function infoRow({ title, value, iconName, subtitle, onclick, trailing, chevron = false }) {
   const content = [
-    h("span", { class: "info-icon" }, icon(iconName, 18, 2.6)),
-    h("span", { class: "info-text" }, h("span", { class: "info-title" }, title), subtitle ? h("span", { class: "info-subtitle" }, subtitle) : null),
+    iconName ? h("span", { class: "info-icon" }, icon(iconName, 18, 2.6)) : null,
+    rowText(title, subtitle),
     value != null ? h("span", { class: "info-value" }, value) : null,
-    trailing ?? null
+    trailing ?? null,
+    chevron ? h("span", { class: "menu-chevron" }, icon("chevron", 16, 3)) : null
   ];
   return onclick ? h("button", { class: "info-row", onclick }, ...content) : h("div", { class: "info-row" }, ...content);
 }
@@ -48,8 +53,25 @@ export function toggleRow({ title, iconName, subtitle, value, onChange, feedback
   input.addEventListener("change", () => { feedback?.confirm(); onChange(input.checked); });
   return h("label", { class: "info-row toggle-row" },
     h("span", { class: "info-icon" }, icon(iconName, 18, 2.6)),
-    h("span", { class: "info-text" }, h("span", { class: "info-title" }, title), subtitle ? h("span", { class: "info-subtitle" }, subtitle) : null),
+    rowText(title, subtitle),
     input);
+}
+
+/// Вариант из списка с галочкой справа, как выбор в настройках iOS.
+export function choiceRow({ title, subtitle, selected, onclick }) {
+  return h("button", { class: `info-row choice-row${selected ? " selected" : ""}`, role: "radio", "aria-checked": String(selected), onclick },
+    rowText(title, subtitle),
+    h("span", { class: "choice-check" }, selected ? icon("check", 18, 3) : null));
+}
+
+/// Строка с подписью сверху и элементом управления (сегментами) под ней.
+export function pickerRow({ title, iconName, value, subtitle, control }) {
+  return h("div", { class: "slider-row" },
+    h("div", { class: "slider-head" },
+      iconName ? h("span", { class: "info-icon" }, icon(iconName, 18, 2.6)) : null,
+      rowText(title, subtitle),
+      value != null ? h("span", { class: "info-value" }, value) : null),
+    control);
 }
 
 /// Сегментированный выбор: options — [{ value, label }].
@@ -61,17 +83,6 @@ export function segmented(options, value, onChange, feedback) {
   }, o.label)));
   paint(value);
   return row;
-}
-
-export function selectMenu(options, value, onChange, label) {
-  const select = h("select", { class: "settings-select", "aria-label": label });
-  for (const o of options) {
-    const option = h("option", { value: o.value }, o.label);
-    if (o.value === value) option.selected = true;
-    select.append(option);
-  }
-  select.addEventListener("change", () => onChange(select.value));
-  return select;
 }
 
 export function textInputRow(placeholder, onAdd, { inputMode = "text", autocapitalize = "sentences" } = {}) {
