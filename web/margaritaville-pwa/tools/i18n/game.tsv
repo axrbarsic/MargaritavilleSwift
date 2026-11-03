@@ -1,0 +1,42 @@
+ru	en	uk	es	ht	jam
+VIP выехал из {room}	VIP checked out of {room}	VIP виїхав із {room}	El VIP dejó la {room}	VIP la soti nan {room}	VIP check out a {room}
+VIP приносит двойные очки.	VIP rooms score double.	VIP приносить подвійні очки.	Las VIP dan el doble de puntos.	VIP bay de fwa plis pwen.	VIP gi yuh double point.
+{name}: тележка пуста	{name}: cart is empty	{name}: візок порожній	{name}: carrito vacío	{name}: charyo a vid	{name}: cart empty
+Автопилот	Autopilot	Автопілот	Piloto automático	Otopilòt	Autopilot
+Автопилот ведёт смену	Autopilot is running the shift	Автопілот веде зміну	El piloto automático lleva el turno	Otopilòt ap mennen chif la	Autopilot a run di shift
+Автопилот: {room} → {name}	Autopilot: {room} → {name}	Автопілот: {room} → {name}	Piloto automático: {room} → {name}	Otopilòt: {room} → {name}	Autopilot: {room} → {name}
+Вовремя: {count}	On time: {count}	Вчасно: {count}	A tiempo: {count}	Alè: {count}	Pon time: {count}
+Выбери уборщицу, затем коснись жёлтого номера.	Pick a housekeeper, then tap a yellow room.	Обери покоївку, потім торкнися жовтого номера.	Elige una camarera y toca una habitación amarilla.	Chwazi yon fanm menaj, epi touche yon chanm jòn.	Pick a housekeeper, den touch a yellow room.
+Гости недовольны	Guests are unhappy	Гості незадоволені	Huéspedes descontentos	Envite yo pa kontan	Guess dem vex
+Гость {room} ждёт — минус звезда	Guest in {room} is waiting — minus a star	Гість {room} чекає — мінус зірка	Huésped de {room} espera: una estrella menos	Envite {room} ap tann — yon zetwal mwens	Guess inna {room} a wait — one star gone
+Готов	Ready	Готово	Lista	Pare	Ready
+Грязный	Dirty	Брудний	Sucia	Sal	Dutty
+Демо: смену ведёт автопилот. Коснись поля, чтобы играть самому.	Demo: autopilot runs the shift. Tap the board to play yourself.	Демо: зміну веде автопілот. Торкнися поля, щоб грати самому.	Demo: el piloto automático lleva el turno. Toca el tablero para jugar tú.	Demo: otopilòt ap mennen chif la. Touche tablo a pou jwe ou menm.	Demo: autopilot a run di shift. Touch di board fi play yuhself.
+Ещё раз	Play again	Ще раз	Otra vez	Ankò	Again
+Игра	Game	Гра	Juego	Jwèt	Game
+Играть	Play	Грати	Jugar	Jwe	Play
+Идёт в {room}	Heading to {room}	Іде в {room}	Va a {room}	Ap prale {room}	A go {room}
+К {time}	By {time}	До {time}	Para {time}	Pou {time}	By {time}
+Лучшая серия: {count}	Best streak: {count}	Найкраща серія: {count}	Mejor racha: {count}	Pi bon seri: {count}	Bes streak: {count}
+Нет расходников!	Out of supplies!	Немає витратних!	¡Sin insumos!	Pa gen pwovizyon!	No supplies!
+Новое демо через {seconds} с	New demo in {seconds} s	Нове демо через {seconds} с	Nueva demo en {seconds} s	Nouvo demo nan {seconds} s	New demo inna {seconds} s
+Новый рекорд!	New record!	Новий рекорд!	¡Nuevo récord!	Nouvo rekò!	New record!
+Пауза	Pause	Пауза	Pausa	Poz	Pause
+Пополнить тележку	Restock cart	Поповнити візок	Reponer carrito	Ranpli charyo	Stock up cart
+Пополняет тележку	Restocking cart	Поповнює візок	Reponiendo carrito	Ap ranpli charyo	A stock up cart
+Пустая тележка — коснись коробки на карточке уборщицы.	Empty cart — tap the box on the housekeeper's card.	Порожній візок — торкнися коробки на картці покоївки.	Carrito vacío: toca la caja en la tarjeta de la camarera.	Charyo vid — touche bwat la sou kat fanm menaj la.	Empty cart — touch di box pon di housekeeper card.
+Раздавай номера уборщицам и успей к заезду гостей. Есть демо, где играет автопилот.	Assign rooms to housekeepers and beat guest arrivals. Includes a demo played by autopilot.	Роздавай номери покоївкам і встигни до заїзду гостей. Є демо, де грає автопілот.	Reparte habitaciones y llega antes que los huéspedes. Hay una demo que juega el piloto automático.	Bay fanm menaj yo chanm epi fini anvan envite rive. Gen yon demo kote otopilòt jwe.	Share out room dem an beat di guess dem. Demo deh weh autopilot play.
+Рекорд: {score}	Record: {score}	Рекорд: {score}	Récord: {score}	Rekò: {score}	Record: {score}
+Розовый номер нужен к указанному времени, иначе минус звезда.	A pink room is needed by its time, or you lose a star.	Рожевий номер потрібен до вказаного часу, інакше мінус зірка.	La habitación rosa se necesita a su hora, si no pierdes una estrella.	Chanm woz la dwe pare alè, sinon ou pèdi yon zetwal.	Pink room fi ready by di time, or yuh lose a star.
+Свободна	Free	Вільна	Libre	Lib	Free
+Серия ×{count}	Streak ×{count}	Серія ×{count}	Racha ×{count}	Seri ×{count}	Streak ×{count}
+Серия! Звезда вернулась	Streak! A star is back	Серія! Зірка повернулася	¡Racha! Recuperas una estrella	Seri! Yon zetwal tounen	Streak! Star come back
+Смена окончена	Shift over	Зміну завершено	Turno terminado	Chif la fini	Shift done
+Смотреть демо	Watch demo	Дивитися демо	Ver demo	Gade demo	Watch demo
+Сначала выбери уборщицу	Pick a housekeeper first	Спершу обери покоївку	Primero elige una camarera	Chwazi yon fanm menaj anvan	Pick a housekeeper first
+Ты супервайзер. Раздавай номера уборщицам, следи за тележками и успей подготовить номера к заезду гостей.	You're the supervisor. Assign rooms, keep the carts stocked and get rooms ready before guests arrive.	Ти супервайзер. Роздавай номери покоївкам, стеж за візками й устигни підготувати номери до заїзду гостей.	Eres la supervisora. Reparte habitaciones, vigila los carritos y ten todo listo antes de que lleguen los huéspedes.	Ou se sipèvizè a. Bay chanm, veye charyo yo epi pare chanm yo anvan envite rive.	Yuh a di supervisor. Share out room, keep di cart dem stock an get room ready before guess reach.
+Убирает {room}	Cleaning {room}	Прибирає {room}	Limpia {room}	Ap netwaye {room}	A clean {room}
+Убрано номеров: {count}	Rooms cleaned: {count}	Прибрано номерів: {count}	Habitaciones limpias: {count}	Chanm netwaye: {count}	Room clean: {count}
+Управление твоё	You're in control	Керування твоє	Controlas tú	Se ou ki kontwole	Yuh inna control
+Управление твоё — автопилот выключен	You're in control — autopilot off	Керування твоє — автопілот вимкнено	Controlas tú: piloto automático apagado	Se ou ki kontwole — otopilòt etenn	Yuh inna control — autopilot off
+Серый номер ещё занят гостем — внизу время выезда.	A grey room still has a guest — checkout time below.	Сірий номер ще зайнятий гостем — внизу час виїзду.	La habitación gris aún tiene huésped; abajo, la hora de salida.	Chanm gri a gen envite toujou — lè depa anba.	Grey room still have guess — checkout time unda.

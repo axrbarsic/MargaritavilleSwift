@@ -11,6 +11,7 @@ import { cellsSections, soundSection } from "./settings-display.js";
 import { developerSections } from "./settings-developer.js";
 import { chooseLanguage } from "./settings-language.js";
 import { openChangelog } from "./changelog-screen.js";
+import { openShiftGame } from "../game/game-screen.js";
 import { currentLanguage, tr } from "../../i18n/i18n.js";
 
 function navRow({ title, iconName, tint, value, onclick, destructive = false }) {
@@ -46,6 +47,9 @@ export function openSettings(app) {
         navRow({ title: tr("Звуки"), iconName: "speaker", tint: "#ff375f", onclick: page(tr("Звуки"), (r) => [soundSection(app, r)]) }),
         navRow({ title: tr("Язык"), iconName: "globe", tint: "#5e5ce6", value: currentLanguage().name, onclick: () => { app.feedback.tap(); chooseLanguage(app); } })
       ]),
+      menuGroup(tr("Игра"), [
+        navRow({ title: tr("Смена"), iconName: "gamepad", tint: "#ff9f0a", value: tr("Играть"), onclick: () => { app.feedback.tap(); openShiftGame(app); } })
+      ], tr("Раздавай номера уборщицам и успей к заезду гостей. Есть демо, где играет автопилот.")),
       menuGroup(tr("Приложение"), [
         navRow({ title: tr("Что нового"), iconName: "list", tint: "#8e8e93", value: `${app.version} (${app.build})`, onclick: () => { app.feedback.tap(); openChangelog(); } }),
         navRow({ title: tr("Для разработчика"), iconName: "hammer", tint: "#8e8e93", onclick: page(tr("Для разработчика"), (r) => developerSections(app, r)) }),

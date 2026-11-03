@@ -1,0 +1,87 @@
+/* Игра «Смена»: поле на весь экран без прокрутки, цвета статусов из приложения. */
+.game-screen { position: relative; height: 100%; display: flex; flex-direction: column; gap: 8px; padding: calc(var(--safe-top) + 10px) 12px calc(var(--safe-bottom) + 10px); overflow: hidden; touch-action: manipulation; }
+.game-header { display: flex; align-items: center; gap: 10px; }
+.game-header .back-button { width: 44px; height: 44px; }
+.game-title { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.game-name { font-size: 22px; font-weight: 900; line-height: 1.1; }
+.game-clock { font-size: 14px; font-weight: 800; color: var(--secondary); font-variant-numeric: tabular-nums; }
+.game-scoreboard { display: flex; flex-direction: column; align-items: flex-end; }
+.game-score { font-size: 26px; font-weight: 900; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.game-stars { font-size: 14px; font-weight: 900; color: #ffd83d; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.game-ticker { min-height: 18px; padding: 0 4px; font-size: 13px; font-weight: 800; color: var(--secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.game-field { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* Уборщицы */
+.game-crew { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.crew-card { position: relative; min-width: 0; min-height: 62px; padding: 7px 7px 7px 10px; border-radius: 14px; display: flex; align-items: center; gap: 6px; text-align: left; cursor: pointer; background: rgba(var(--surface-rgb), calc(0.88 * var(--surface-a))); box-shadow: inset 0 0 0 1.5px var(--hk-soft); transition: background-color 0.2s, box-shadow 0.2s; }
+.crew-card.selected { background: var(--hk-soft); box-shadow: inset 0 0 0 2.5px var(--hk); }
+.crew-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.crew-head { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.crew-name { font-size: 16px; font-weight: 900; color: var(--hk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crew-queue { font-size: 12px; font-weight: 900; color: #fff; flex: 0 0 auto; }
+.crew-status { font-size: 12px; font-weight: 700; color: var(--secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crew-card.empty .crew-status { color: #ff9f0a; }
+.crew-card.empty { box-shadow: inset 0 0 0 2px #ff9f0a; }
+.crew-pips { display: flex; gap: 3px; }
+.crew-pips i { width: 12px; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.16); }
+.crew-pips i.on { background: var(--hk); }
+.crew-card.restocking .crew-pips i { animation: pipFill 0.8s ease-in-out infinite alternate; }
+.crew-cart { width: 36px; height: 36px; border-radius: 10px; background: rgba(var(--accent-rgb), 0.12); color: var(--accent); display: grid; place-items: center; flex: 0 0 auto; }
+.crew-cart:disabled { opacity: 0.3; }
+.crew-card.empty .crew-cart { background: #ff9f0a; color: #000; opacity: 1; }
+
+/* Номера */
+.game-rooms { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: 6px; }
+.game-room { --fill: var(--pending); position: relative; min-width: 0; min-height: 0; border-radius: 14px; background: var(--fill); color: var(--room-fg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; overflow: hidden; transition: background-color 0.25s, transform 0.15s; }
+.game-room:active { transform: scale(0.95); }
+.game-room.status-occupied { --fill: rgba(255, 255, 255, 0.07); color: rgba(255, 255, 255, 0.5); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.game-room.status-open { --fill: var(--open); }
+.game-room.status-ready { --fill: var(--ready); }
+.game-room.status-scheduled { --fill: var(--scheduled); }
+.game-room-number { font-size: clamp(20px, 7.2vw, 32px); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
+.game-room-sub { max-width: 100%; padding: 0 4px; font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.game-room-badge { display: none; position: absolute; top: 4px; left: 5px; padding: 1px 4px; border-radius: 5px; background: #ffd700; color: #000; font-size: 9px; font-weight: 900; letter-spacing: 0.04em; }
+.game-room.vip .game-room-badge { display: block; }
+.game-room.vip:not(.status-occupied) { box-shadow: inset 0 0 0 2px #ffd700; }
+.game-room-owner { display: none; position: absolute; top: 5px; right: 5px; width: 11px; height: 11px; border-radius: 50%; background: var(--owner); box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.7); }
+.game-room.has-owner .game-room-owner { display: block; }
+.game-room.queued { outline: 2.5px dashed rgba(0, 0, 0, 0.5); outline-offset: -5px; }
+.game-room-bar { display: none; position: absolute; left: 0; bottom: 0; width: 100%; height: 5px; background: rgba(0, 0, 0, 0.45); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.game-room.status-open .game-room-bar { display: block; }
+.game-room.urgent { animation: roomUrgent 0.6s ease-in-out infinite alternate; }
+.game-room.missed { box-shadow: inset 0 0 0 3px #ff3b30; }
+.game-glow { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; }
+.game-glow.on { animation: glowPick 0.7s ease-out; }
+.game-float { position: absolute; left: 0; right: 0; top: 34%; text-align: center; font-size: 17px; font-weight: 900; color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9); pointer-events: none; animation: floatUp 0.9s ease-out forwards; }
+
+/* Управление */
+.game-controls { display: flex; align-items: center; gap: 8px; }
+.game-auto { flex: 1; min-width: 0; height: 44px; border-radius: 12px; background: rgba(118, 118, 128, 0.24); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 15px; font-weight: 900; white-space: nowrap; }
+.game-auto.on { background: var(--accent); color: var(--room-fg); }
+.game-speed { flex: 0 0 auto; width: 118px; }
+.game-speed .segment { min-height: 40px; }
+.game-pause { width: 44px; height: 44px; border-radius: 12px; background: rgba(118, 118, 128, 0.24); display: grid; place-items: center; flex: 0 0 auto; }
+
+/* Заставка и итоги */
+.game-overlay { position: absolute; inset: 0; z-index: 5; padding: 16px; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.74); }
+.game-card { width: 100%; max-width: 360px; max-height: 100%; overflow-y: auto; padding: 20px; border-radius: 22px; display: flex; flex-direction: column; gap: 12px; background: rgb(var(--surface-rgb)); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.24); }
+.game-card h2 { margin: 0; font-size: 30px; font-weight: 900; }
+.game-lead { font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--secondary); }
+.game-rules, .game-stats { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.game-rules li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; line-height: 1.3; }
+.rule-swatch { width: 20px; height: 20px; border-radius: 6px; background: var(--c); flex: 0 0 auto; }
+.rule-swatch.vip { background: transparent; box-shadow: inset 0 0 0 3px var(--c); }
+.game-stats li { font-size: 15px; font-weight: 700; color: var(--secondary); }
+.game-best { font-size: 14px; font-weight: 800; color: var(--secondary); }
+.game-grade { font-size: 64px; font-weight: 900; line-height: 1; text-align: center; color: var(--accent); }
+.game-final-score { font-size: 30px; font-weight: 900; text-align: center; font-variant-numeric: tabular-nums; }
+.game-record { text-align: center; font-size: 16px; font-weight: 900; color: #ffd83d; }
+.game-primary { height: 52px; border-radius: 14px; background: var(--accent); color: var(--room-fg); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 18px; font-weight: 900; }
+.game-secondary { height: 48px; border-radius: 14px; background: rgba(118, 118, 128, 0.24); font-size: 16px; font-weight: 800; }
+
+@keyframes roomUrgent { from { filter: none; } to { filter: brightness(1.35); } }
+@keyframes glowPick { 0% { opacity: 1; box-shadow: inset 0 0 0 3px var(--flash), 0 0 14px var(--flash); } 100% { opacity: 0; box-shadow: inset 0 0 0 3px var(--flash), 0 0 0 transparent; } }
+@keyframes floatUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-26px); } }
+@keyframes pipFill { from { opacity: 0.35; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .game-room, .game-glow, .game-float, .crew-pips i { animation: none !important; } }
+@media (max-height: 640px) { .crew-card { min-height: 54px; padding-top: 5px; padding-bottom: 5px; } .game-name { font-size: 19px; } .game-score { font-size: 22px; } }

@@ -1,6 +1,6 @@
 // Сервис-воркер: держит оболочку приложения в кэше, чтобы оно открывалось без сети.
 // При обновлении версии старый кэш удаляется. Данные смены живут в IndexedDB.
-const CACHE = "margaritaville-pwa-v11";
+const CACHE = "margaritaville-pwa-v12";
 const SHELL = [
   "./",
   "brooklyn/BrooklynDonorMesh.bin",
@@ -31,6 +31,9 @@ const SHELL = [
   "js/domain/room.js",
   "js/domain/selection.js",
   "js/domain/summary-grouping.js",
+  "js/game/shift-ai.js",
+  "js/game/shift-sim.js",
+  "js/game/shift-state.js",
   "js/i18n/i18n.js",
   "js/infra/feedback.js",
   "js/infra/media-files.js",
@@ -51,6 +54,9 @@ const SHELL = [
   "js/ui/cart-details.js",
   "js/ui/consumables-view.js",
   "js/ui/dom.js",
+  "js/ui/game/game-board.js",
+  "js/ui/game/game-overlays.js",
+  "js/ui/game/game-screen.js",
   "js/ui/icons.js",
   "js/ui/media-views.js",
   "js/ui/number-fit.js",
@@ -99,6 +105,7 @@ const SHELL = [
   "sounds/xhotel_ui_rollover_tick.wav",
   "sounds/xhotel_ui_switch_deep.wav",
   "sounds/xhotel_ui_switch_light.wav",
+  "styles-game.css",
   "styles-screens.css",
   "styles-settings.css",
   "styles.css"
