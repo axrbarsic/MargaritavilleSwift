@@ -15,7 +15,7 @@
 .runner-row.done { --banner: var(--ready); }
 .runner-list.reordering .runner-row.dragging { transition: none; z-index: 2; position: relative; }
 .runner-row.dragging .runner-banner { box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55); transform: scale(1.03); }
-.runner-row.pressing .runner-banner { transform: scale(0.98); }
+.runner-banner.holding { transform: scale(0.96); }
 .runner-index { width: 38px; flex: 0 0 auto; border-radius: 10px; display: grid; place-items: center; background: rgba(255, 255, 255, 0.92); color: #111; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .runner-banner { flex: 1; min-width: 0; padding: 0 12px; border-radius: 12px; background: var(--banner); color: #111; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 22px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; transition: background-color 0.2s, transform 0.15s, box-shadow 0.15s; }
 .runner-grip { width: 44px; flex: 0 0 auto; border-radius: 12px; display: grid; place-items: center; background: rgba(var(--surface-rgb), calc(0.86 * var(--surface-a))); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.18); color: var(--secondary); touch-action: none; cursor: grab; }
@@ -28,6 +28,10 @@
 .runner-actions { display: flex; gap: 8px; padding: 0 16px calc(var(--safe-bottom) + 12px); }
 .runner-action { flex: 1; min-width: 0; height: 48px; padding: 0 10px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(118, 118, 128, 0.28); font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; }
 .runner-action span { overflow: hidden; text-overflow: ellipsis; }
+.runner-action { position: relative; isolation: isolate; }
+.runner-action::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(255, 255, 255, 0.24); transform: scaleX(0); transform-origin: left; }
+.runner-action.holding { transform: scale(0.97); }
+.runner-action.holding::after { transform: scaleX(1); transition: transform 0.46s linear; }
 .runner-action.primary { background: var(--accent); color: var(--room-fg); font-weight: 900; }
 
 /* Лист выбора имён */

@@ -1,9 +1,6 @@
-// Перестановка баннеров пальцем: за ручку ≡ сразу, за имя — после удержания 0,35 с,
-// чтобы обычная прокрутка списка не начинала перетаскивание. Пока строка в руке,
-// прокрутка страницы заблокирована, у краёв экрана список подкручивается сам.
+// Перестановка баннеров пальцем за ручку ≡ (удержание имени переключает цвет).
+// Пока строка в руке, прокрутка страницы заблокирована, у краёв экрана список подкручивается сам.
 
-const HOLD_MS = 350;
-const SLOP = 8;
 const EDGE = 64;
 const EDGE_SPEED = 9;
 
@@ -12,22 +9,7 @@ export function enableReorder(list, { onMove, feedback }) {
 
   for (const row of rows()) {
     const grip = row.querySelector(".runner-grip");
-    const banner = row.querySelector(".runner-banner");
     grip.addEventListener("pointerdown", (event) => { event.preventDefault(); begin(row, event.clientY); });
-
-    let timer = null;
-    let start = null;
-    const cancel = () => { clearTimeout(timer); timer = null; row.classList.remove("pressing"); };
-    banner.addEventListener("pointerdown", (event) => {
-      start = { x: event.clientX, y: event.clientY };
-      row.classList.add("pressing");
-      timer = setTimeout(() => { cancel(); begin(row, start.y); }, HOLD_MS);
-    });
-    banner.addEventListener("pointermove", (event) => {
-      if (timer && Math.hypot(event.clientX - start.x, event.clientY - start.y) > SLOP) cancel();
-    });
-    ["pointerup", "pointercancel", "pointerleave"].forEach((name) => banner.addEventListener(name, () => { if (timer) cancel(); }));
-    banner.addEventListener("contextmenu", (event) => event.preventDefault());
   }
 
   function begin(row, startY) {
@@ -76,8 +58,6 @@ export function enableReorder(list, { onMove, feedback }) {
       list.classList.remove("reordering");
       row.classList.remove("dragging");
       all.forEach((other) => { other.style.transform = ""; });
-      // Клик сразу после отпускания не должен переключать цвет баннера.
-      row.dataset.droppedAt = String(Date.now());
       if (target !== from) { feedback.confirm(); onMove(from, target); }
     };
 
