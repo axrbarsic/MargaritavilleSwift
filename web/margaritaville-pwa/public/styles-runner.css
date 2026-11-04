@@ -18,6 +18,10 @@
 .runner-banner.holding { transform: scale(0.96); }
 .runner-index { width: 38px; flex: 0 0 auto; border-radius: 10px; display: grid; place-items: center; background: rgba(255, 255, 255, 0.92); color: #111; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .runner-banner { flex: 1; min-width: 0; padding: 0 12px; border-radius: 12px; background: var(--banner); color: #111; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 22px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; transition: background-color 0.2s, transform 0.15s, box-shadow 0.15s; }
+/* «Живые 3D-ячейки» из «Для разработчика»: тот же объём и блик, что у ячеек Houseman. */
+.live-3d .runner-banner { background: linear-gradient(160deg, color-mix(in srgb, var(--banner) 70%, white) 0%, var(--banner) 38%, color-mix(in srgb, var(--banner) 75%, black) 100%); box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.45), inset 0 -4px 6px rgba(0, 0, 0, 0.28), 0 6px 10px rgba(0, 0, 0, 0.35); }
+.live-3d .runner-index { background: linear-gradient(160deg, #fff 0%, #e9e9e9 45%, #bdbdbd 100%); box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.6), inset 0 -3px 5px rgba(0, 0, 0, 0.22), 0 5px 8px rgba(0, 0, 0, 0.3); }
+.live-3d .runner-row.dragging .runner-banner { box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.45), inset 0 -4px 6px rgba(0, 0, 0, 0.28), 0 12px 26px rgba(0, 0, 0, 0.6); }
 .runner-grip { width: 44px; flex: 0 0 auto; border-radius: 12px; display: grid; place-items: center; background: rgba(var(--surface-rgb), calc(0.86 * var(--surface-a))); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.18); color: var(--secondary); touch-action: none; cursor: grab; }
 .runner-hint { padding: 0 4px; font-size: 13px; font-weight: 600; line-height: 1.3; color: rgba(var(--secondary-rgb), 0.82); }
 
