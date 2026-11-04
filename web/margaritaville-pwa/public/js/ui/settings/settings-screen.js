@@ -4,7 +4,7 @@ import { h } from "../dom.js";
 import { icon } from "../icons.js";
 import { openSettingsPage } from "./settings-page.js";
 import { openSheet } from "../sheets.js";
-import { BACKGROUND_MODES } from "../background/app-background.js";
+import { BACKGROUND_MODES, effectiveMode } from "../background/app-background.js";
 import { backgroundSection } from "./settings-background.js";
 import { housekeepersEditor, consumablesEditor, catalogEditor } from "./settings-work.js";
 import { cellsSections, soundSection } from "./settings-display.js";
@@ -35,7 +35,7 @@ export function openSettings(app) {
   openSettingsPage(app, tr("Настройки"), () => {
     const { settings, store } = app;
     const rooms = store.catalog.reduce((sum, tower) => sum + tower.rooms.length, 0);
-    const background = BACKGROUND_MODES.find((m) => m.id === settings.get("appBackgroundMode")) ?? BACKGROUND_MODES[0];
+    const background = BACKGROUND_MODES.find((m) => m.id === effectiveMode(settings)) ?? BACKGROUND_MODES[0];
     const mode = segmented([{ value: "houseman", label: "Houseman" }, { value: "runner", label: "Runner" }], settings.get("workMode"),
       (value) => settings.set("workMode", value), app.feedback);
     return [

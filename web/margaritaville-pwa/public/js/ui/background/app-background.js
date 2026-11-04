@@ -18,6 +18,18 @@ export const BACKGROUND_MODES = [
   { id: "camera", title: tr("Камера"), description: tr("Задняя камера") }
 ];
 
+/// Камера как фон — тестовая функция: без переключателя в «Для разработчика» её нет в списке.
+export const availableModes = (settings) =>
+  BACKGROUND_MODES.filter((m) => m.id !== "camera" || settings.get("cameraBackgroundEnabled"));
+
+/// Режим, который реально работает: выбранная камера при выключенной функции заменяется на Matrix,
+/// а сам выбор сохраняется — после включения камера вернётся.
+export function effectiveMode(settings) {
+  const mode = settings.get("appBackgroundMode");
+  if (!MODES[mode]) return "off";
+  return mode === "camera" && !settings.get("cameraBackgroundEnabled") ? "matrixRain" : mode;
+}
+
 export class AppBackground {
   constructor(container, settings) {
     this.container = container;
@@ -29,7 +41,7 @@ export class AppBackground {
   }
 
   update() {
-    const mode = MODES[this.settings.get("appBackgroundMode")] ? this.settings.get("appBackgroundMode") : "off";
+    const mode = effectiveMode(this.settings);
     if (mode !== this.mode) {
       this.layer?.destroy();
       this.layer = mode === "off" ? null : new MODES[mode](this.container, this.settings);

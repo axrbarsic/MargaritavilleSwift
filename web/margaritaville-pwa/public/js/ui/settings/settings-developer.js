@@ -6,7 +6,16 @@ import { openTypographyLab } from "./typography-lab.js";
 import { tr } from "../../i18n/i18n.js";
 
 export function developerSections(app, rerender) {
-  return [effectsSection(app, rerender), testDataSection(app, rerender)];
+  return [experimentsSection(app, rerender), effectsSection(app, rerender), testDataSection(app, rerender)];
+}
+
+/// Тестовые функции: спрятаны по умолчанию, включаются здесь.
+function experimentsSection(app, rerender) {
+  const { settings, feedback } = app;
+  return settingsPanel(tr("Тестовые функции"), tr("Пока функция выключена, её нет в приложении и она ничего не расходует."),
+    toggleRow({ title: tr("Камера как фон"), iconName: "camera", feedback, value: settings.get("cameraBackgroundEnabled"),
+      subtitle: tr("Режим «Камера» в разделе «Фон» со всеми эффектами. Выключено — камера не используется."),
+      onChange: (v) => { settings.set("cameraBackgroundEnabled", v); rerender(); } }));
 }
 
 function effectsSection(app, rerender) {

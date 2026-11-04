@@ -47,7 +47,8 @@ export const DEFAULT_SETTINGS = Object.freeze({
   housekeeperRosterVersion: ROSTER_VERSION,
   cartConsumableCatalog: DEFAULT_CONSUMABLE_CATALOG,
   language: null,
-  workMode: "houseman"
+  workMode: "houseman",
+  cameraBackgroundEnabled: false
 });
 
 /// Ключи, которые сброс настроек не трогает: язык и режим работы остаются выбранными.

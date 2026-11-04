@@ -3,7 +3,7 @@
 // CameraEffectControls.swift, CameraEffectPicker.swift.
 import { h } from "../dom.js";
 import { icon } from "../icons.js";
-import { BACKGROUND_MODES } from "../background/app-background.js";
+import { BACKGROUND_MODES, availableModes, effectiveMode } from "../background/app-background.js";
 import { BACKGROUND_VIDEO_KEY } from "../background/media-backgrounds.js";
 import { TV_VARIANTS } from "../background/tv-static.js";
 import { DONOR_HUE } from "../background/brooklyn.js";
@@ -25,7 +25,7 @@ const SUBTITLE = {
 
 export function backgroundSection(app, rerender) {
   const { settings, feedback } = app;
-  const mode = settings.get("appBackgroundMode");
+  const mode = effectiveMode(settings);
   const slider = (key, title, iconName, min, max, def, label = pct) => sliderRow({ title, iconName, min, max, defaultValue: def, value: settings.get(key), label, onChange: (v) => settings.set(key, v) });
   const extra = [];
   let footer = null;
@@ -74,7 +74,7 @@ export function backgroundSection(app, rerender) {
   }
 
   const current = BACKGROUND_MODES.find((m) => m.id === mode) ?? BACKGROUND_MODES[0];
-  const modes = settingsPanel(tr("Заставка"), SUBTITLE[mode], ...BACKGROUND_MODES.map((m) => choiceRow({
+  const modes = settingsPanel(tr("Заставка"), SUBTITLE[mode], ...availableModes(settings).map((m) => choiceRow({
     title: m.title, subtitle: m.description === m.title ? null : m.description, selected: m.id === mode,
     onclick: () => { if (m.id === mode) return; feedback.confirm(); settings.set("appBackgroundMode", m.id); rerender(); }
   })));

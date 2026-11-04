@@ -1,6 +1,6 @@
 // Сервис-воркер: держит оболочку приложения в кэше, чтобы оно открывалось без сети.
 // При обновлении версии старый кэш удаляется. Данные смены живут в IndexedDB.
-const CACHE = "margaritaville-pwa-v13";
+const CACHE = "margaritaville-pwa-v14";
 const SHELL = [
   "./",
   "brooklyn/BrooklynDonorMesh.bin",
