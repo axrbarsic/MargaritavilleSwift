@@ -163,6 +163,16 @@ button:focus-visible, [role="button"]:focus-visible, textarea:focus-visible, inp
 @keyframes rubber { 0% { transform: scale(1) translateY(0); } 30% { transform: scale(1.07) translateY(-5px); } 100% { transform: scale(1) translateY(0); } }
 .lab-loop.hdr-pulse .tile-body, .lab-loop.hdr-pulse { animation-iteration-count: infinite; }
 .live-3d .tile-body { background: linear-gradient(160deg, color-mix(in srgb, var(--fill) 70%, white) 0%, var(--fill) 38%, color-mix(in srgb, var(--fill) 75%, black) 100%); box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.45), inset 0 -4px 6px rgba(0, 0, 0, 0.28), 0 6px 10px rgba(0, 0, 0, 0.35); }
+/* VIP-желе в 3D: тот же объём, но по живому контуру. Коробка слоёв шире ячейки на 20 px, поэтому стопы градиента пересчитаны на саму ячейку. */
+.jelly-shadow, .jelly-soft { display: none; }
+.live-3d .jelly-shadow, .live-3d .jelly-soft { display: block; }
+.live-3d .tile.vip-jelly .tile-body { background: color-mix(in srgb, var(--fill) 62%, black); box-shadow: none; }
+.jelly-shadow, .jelly-solid, .jelly-soft, .jelly-rim, .jelly-face { position: absolute; inset: 0; }
+.jelly-shadow { inset: -20px; z-index: -2; filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.35)); will-change: transform; }
+.jelly-solid { background: var(--fill); }
+.jelly-soft { filter: blur(1.5px); }
+.jelly-rim { background: color-mix(in srgb, var(--fill) 45%, white); transform: translateY(-4px); }
+.jelly-face { background: linear-gradient(160deg, color-mix(in srgb, var(--fill) 70%, white) 14%, var(--fill) 41%, color-mix(in srgb, var(--fill) 75%, black) 86%); transform: translateY(6px); }
 @media (prefers-reduced-motion: reduce) { .tile, .tile .tile-body { animation: none !important; transition: none; } }
 
 /* Загрузка и ошибка */

@@ -53,14 +53,15 @@ function frame(now) {
     if (!entry.element.isConnected) tiles.delete(entry);
   }
   if (!tiles.size || document.hidden) return;
-  for (const { element, body, seed, speed } of tiles) {
+  for (const { element, body, shadow, clipped, seed, speed } of tiles) {
     const w = element.offsetWidth, h = element.offsetHeight;
     if (!w || !h) continue;
     const s = Math.min(Math.max(speed(), 0.2), 2.5);
     const t = (now / 1000) * s;
     const u = t + seed * 11;
-    body.style.clipPath = jellyPath(w, h, seed, t, 16 * (h / 98));
-    body.style.transform = `translate(${f(1.2 * Math.sin(u * 1.1))}px, ${f(0.8 * Math.cos(u * 1.3))}px) scale(${(1 + 0.012 * Math.sin(u * 1.7)).toFixed(4)}, ${(1 + 0.018 * Math.cos(u * 1.4)).toFixed(4)})`;
+    const path = jellyPath(w, h, seed, t, 16 * (h / 98));
+    for (const layer of clipped) layer.style.clipPath = path;
+    body.style.transform = shadow.style.transform = `translate(${f(1.2 * Math.sin(u * 1.1))}px, ${f(0.8 * Math.cos(u * 1.3))}px) scale(${(1 + 0.012 * Math.sin(u * 1.7)).toFixed(4)}, ${(1 + 0.018 * Math.cos(u * 1.4)).toFixed(4)})`;
   }
   raf = requestAnimationFrame(frame);
 }
@@ -71,11 +72,30 @@ function ensureRunning() {
 
 document.addEventListener("visibilitychange", ensureRunning);
 
+const span = (className, ...children) => {
+  const node = document.createElement("span");
+  node.className = className;
+  node.append(...children);
+  return node;
+};
+
+/// Слои объёма для «Живых 3D-ячеек»: обычные тени обрезаются контуром, поэтому блик, нижняя
+/// грань и тень — это тот же контур со сдвигом. Без режима 3D слои скрыты (styles.css).
+function addVolumeLayers(element, body) {
+  const solid = span("jelly-solid");
+  const shadow = span("jelly-shadow", solid);
+  const face = span("jelly-face");
+  const rim = span("jelly-rim", face);
+  element.prepend(shadow);
+  body.append(span("jelly-soft", rim));
+  return { shadow, clipped: [body, solid, rim, face] };
+}
+
 /// Подключить желе к ячейке. speed() читает текущую скорость из настроек.
 export function attachVIPJelly(element, seed, speed) {
   const body = element.querySelector(".tile-body");
   if (!body) return;
   element.classList.add("vip-jelly");
-  tiles.add({ element, body, seed, speed });
+  tiles.add({ element, body, seed, speed, ...addVolumeLayers(element, body) });
   ensureRunning();
 }
