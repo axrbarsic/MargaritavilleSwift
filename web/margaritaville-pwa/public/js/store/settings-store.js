@@ -46,11 +46,12 @@ export const DEFAULT_SETTINGS = Object.freeze({
   housekeepers: DEFAULT_HOUSEKEEPERS,
   housekeeperRosterVersion: ROSTER_VERSION,
   cartConsumableCatalog: DEFAULT_CONSUMABLE_CATALOG,
-  language: null
+  language: null,
+  workMode: "houseman"
 });
 
-/// Ключи, которые сброс настроек не трогает: язык интерфейса остаётся выбранным.
-const RESET_KEEPS = ["language"];
+/// Ключи, которые сброс настроек не трогает: язык и режим работы остаются выбранными.
+const RESET_KEEPS = ["language", "workMode"];
 
 export class SettingsStore {
   constructor(storage = globalThis.localStorage) {

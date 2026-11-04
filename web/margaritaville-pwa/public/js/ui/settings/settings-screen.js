@@ -12,6 +12,7 @@ import { developerSections } from "./settings-developer.js";
 import { chooseLanguage } from "./settings-language.js";
 import { openChangelog } from "./changelog-screen.js";
 import { openShiftGame } from "../game/game-screen.js";
+import { segmented } from "./settings-controls.js";
 import { currentLanguage, tr } from "../../i18n/i18n.js";
 
 function navRow({ title, iconName, tint, value, onclick, destructive = false }) {
@@ -35,7 +36,10 @@ export function openSettings(app) {
     const { settings, store } = app;
     const rooms = store.catalog.reduce((sum, tower) => sum + tower.rooms.length, 0);
     const background = BACKGROUND_MODES.find((m) => m.id === settings.get("appBackgroundMode")) ?? BACKGROUND_MODES[0];
+    const mode = segmented([{ value: "houseman", label: "Houseman" }, { value: "runner", label: "Runner" }], settings.get("workMode"),
+      (value) => settings.set("workMode", value), app.feedback);
     return [
+      menuGroup(tr("Режим"), [mode], tr("Houseman — утренняя работа с номерами. Runner — вечерний список уборщиц, которым готовят тележки на завтра.")),
       menuGroup(tr("Смена"), [
         navRow({ title: tr("Уборщицы"), iconName: "user", tint: "#30d158", value: String(settings.get("housekeepers").length), onclick: page(tr("Уборщицы"), (r) => housekeepersEditor(app, r)) }),
         navRow({ title: tr("Расходники"), iconName: "box", tint: "#ff9f0a", value: String(settings.get("cartConsumableCatalog").length), onclick: page(tr("Расходники"), (r) => consumablesEditor(app, r)) }),

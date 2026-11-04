@@ -2,10 +2,12 @@
 // назначенного времени и сервис-воркер для работы без сети. Источник: App/AppRootView.swift.
 import { SessionStore } from "./store/session-store.js";
 import { SettingsStore } from "./store/settings-store.js";
+import { RunnerStore } from "./store/runner-store.js";
 import { FeedbackService } from "./infra/feedback.js";
 import { ScheduleNotifications } from "./infra/notifications.js";
 import { renderSetup } from "./ui/setup-view.js";
 import { renderSummary } from "./ui/summary-view.js";
+import { renderRunner } from "./ui/runner/runner-view.js";
 import { refreshScreens } from "./ui/screen-stack.js";
 import { openSettings } from "./ui/settings/settings-screen.js";
 import { AppBackground } from "./ui/background/app-background.js";
@@ -14,17 +16,18 @@ import { keepUpdated } from "./infra/updates.js";
 import { tr } from "./i18n/i18n.js";
 
 export const APP_VERSION = "1.0.0";
-export const APP_BUILD = 12;
+export const APP_BUILD = 13;
 
 const root = document.getElementById("app");
 const settings = new SettingsStore();
 const store = new SessionStore(settings);
+const runner = new RunnerStore();
 const feedback = new FeedbackService(settings);
 const notifications = new ScheduleNotifications();
 const background = new AppBackground(document.getElementById("background"), settings);
 
 const app = {
-  store, settings, feedback, notifications, background,
+  store, settings, runner, feedback, notifications, background,
   ui: {},
   version: APP_VERSION,
   build: APP_BUILD,
@@ -45,6 +48,14 @@ function render() {
 }
 
 function draw() {
+  // Режим Runner не зависит от утренней смены: вечерний список открывается сразу.
+  if (settings.get("workMode") === "runner") {
+    const top = root.querySelector(".runner-scroll")?.scrollTop ?? 0;
+    renderRunner(root, app);
+    const scroller = root.querySelector(".runner-scroll");
+    if (scroller) scroller.scrollTop = top;
+    return;
+  }
   if (!store.loaded) {
     root.replaceChildren(h("main", { class: "screen loading" }, h("div", { class: "spinner", "aria-label": tr("Загрузка") })));
     return;
@@ -68,6 +79,7 @@ function draw() {
 }
 
 store.subscribe(() => { render(); refreshScreens(); });
+runner.subscribe(() => { render(); refreshScreens(); });
 settings.subscribe(() => { applySettings(); background.update(); render(); refreshScreens(); });
 window.addEventListener("resize", render);
 applySettings();

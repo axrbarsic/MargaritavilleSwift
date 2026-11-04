@@ -1,6 +1,6 @@
 // Сервис-воркер: держит оболочку приложения в кэше, чтобы оно открывалось без сети.
 // При обновлении версии старый кэш удаляется. Данные смены живут в IndexedDB.
-const CACHE = "margaritaville-pwa-v12";
+const CACHE = "margaritaville-pwa-v13";
 const SHELL = [
   "./",
   "brooklyn/BrooklynDonorMesh.bin",
@@ -29,6 +29,7 @@ const SHELL = [
   "js/domain/consumables.js",
   "js/domain/housekeepers.js",
   "js/domain/room.js",
+  "js/domain/runner-list.js",
   "js/domain/selection.js",
   "js/domain/summary-grouping.js",
   "js/game/shift-ai.js",
@@ -42,6 +43,7 @@ const SHELL = [
   "js/infra/updates.js",
   "js/infra/voice.js",
   "js/store/db.js",
+  "js/store/runner-store.js",
   "js/store/session-store-carts.js",
   "js/store/session-store.js",
   "js/store/settings-store.js",
@@ -63,6 +65,9 @@ const SHELL = [
   "js/ui/room-details.js",
   "js/ui/room-tile.js",
   "js/ui/room-zoom.js",
+  "js/ui/runner/runner-drag.js",
+  "js/ui/runner/runner-picker.js",
+  "js/ui/runner/runner-view.js",
   "js/ui/screen-stack.js",
   "js/ui/settings/changelog-screen.js",
   "js/ui/settings/settings-background.js",
@@ -106,6 +111,7 @@ const SHELL = [
   "sounds/xhotel_ui_switch_deep.wav",
   "sounds/xhotel_ui_switch_light.wav",
   "styles-game.css",
+  "styles-runner.css",
   "styles-screens.css",
   "styles-settings.css",
   "styles.css"

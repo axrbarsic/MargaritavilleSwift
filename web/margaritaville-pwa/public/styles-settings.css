@@ -42,6 +42,7 @@
 .menu-caption, .settings-panel-title { padding: 0 14px; font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--secondary); }
 .menu-footer, .settings-panel-footer { padding: 0 14px; font-size: 13px; font-weight: 600; line-height: 1.3; color: rgba(var(--secondary-rgb), 0.82); }
 .menu-group { overflow: hidden; }
+.menu-group > .segmented { margin: 8px; }
 .menu-row { width: 100%; min-height: 52px; padding: 8px 12px; display: flex; align-items: center; gap: 12px; text-align: left; color: #fff; position: relative; }
 .menu-row + .menu-row::before { content: ""; position: absolute; top: 0; left: 54px; right: 0; height: 0.5px; background: rgba(255, 255, 255, 0.14); }
 .menu-row:active { background: rgba(255, 255, 255, 0.08); }
